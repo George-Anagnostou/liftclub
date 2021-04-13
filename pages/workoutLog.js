@@ -26,9 +26,13 @@ export default function workoutLog() {
     // Check if workout exists
     if (dayData) {
       const workoutData = await getWorkoutFromDB(dayData.workout_id);
+      const idArr = workoutData.exercises.map((each) => each.exercise_id);
+      const exerciseData = await getExercisesFromIdArray(idArr);
 
-      workoutData.exercises.map((each, i) => (each.sets = dayData.exerciseData[i].sets));
-      console.log(workoutData);
+      workoutData.exercises.map((each, i) => {
+        each.exercise = exerciseData[i];
+        each.sets = dayData.exerciseData[i]?.sets || each.sets;
+      });
 
       setWorkout(workoutData);
       setCurrentDayData(dayData);
@@ -164,22 +168,16 @@ export default function workoutLog() {
     }
   };
 
-  const displaySavedWorkout = async (workout) => {
+  const displaySavedWorkout = async (clicked) => {
     // Grab all the exercise_ids from the workout
-    const idArr = workout.exercises.map((each) => each.exercise_id);
+    const idArr = clicked.exercises.map((each) => each.exercise_id);
     // Query for exercise data using the idArr
     const exerciseData = await getExercisesFromIdArray(idArr);
 
     // Create exercise key in each exercise to hold exercise data
-    workout.exercises.map((each, i) => {
-      // Ensure ids match
-      if (each.exercise_id === exerciseData[i]._id) {
-        each.exercise = exerciseData[i];
-      }
-      return each;
-    });
+    clicked.exercises.map((each, i) => (each.exercise = exerciseData[i]));
 
-    setWorkout(workout);
+    setWorkout(clicked);
   };
 
   // Set page state if user is logged in
