@@ -10,6 +10,7 @@ export function StoreProvider({ children }) {
   };
 
   const authUser = async (username, password) => {
+    // combine username & password into an object
     const loginCreds = { username, password };
     try {
       const res = await fetch("/api/users/login", {
