@@ -10,11 +10,11 @@ export function StoreProvider({ children }) {
   };
 
   const authUser = async (username, password) => {
+    const loginCreds = { username, password };
     try {
       const res = await fetch("/api/users/login", {
         method: "POST",
-        contentType: "application/json",
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify(loginCreds),
       });
       const userData = await res.json();
       setUser(userData);
