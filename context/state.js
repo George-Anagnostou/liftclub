@@ -14,8 +14,8 @@ export function StoreProvider({ children }) {
     try {
       const res = await fetch("/api/users/login", {
         method: "POST",
-        headers: new Headers({ "content-type": "application/json" }),
         body: JSON.stringify(loginCreds),
+        headers: { "Content-Type": "application/json" },
       });
       const userData = await res.json();
       setUser(userData);
