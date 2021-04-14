@@ -9,7 +9,7 @@ export default async (req, res) => {
     case "GET":
       break;
     case "POST":
-      const { username, password } = JSON.parse(`${req.body}`);
+      const { username, password } = req.body;
       // Get user from db with username they entered
       const user = await db.collection("users").findOne({ username: username });
 
