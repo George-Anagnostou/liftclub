@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+import useSWR from "swr";
 
-import { API_URL } from "../config";
 import Layout from "../components/Layout";
 import { useStoreContext } from "../context/state";
 import {
@@ -37,12 +37,16 @@ const motions = [
   "breathing",
 ];
 
-export default function workoutBuilder({ exercises }) {
+const fetcher = (url) => fetch(url).then((r) => r.json());
+
+export default function workoutBuilder() {
+  const { data, error } = useSWR("/api/exercises", fetcher);
+
   const { user } = useStoreContext();
 
   const [workoutSavedSuccessfuly, setWorkoutSavedSuccessfuly] = useState(null);
   const [userWorkouts, setUserWorkouts] = useState([]);
-  const [displayedExercises, setDisplayedExercises] = useState(exercises);
+  const [displayedExercises, setDisplayedExercises] = useState([]);
   const [customWorkoutExercises, setCustomWorkoutExercises] = useState([]);
   const [customWorkoutName, setCustomWorkoutName] = useState("New Workout");
 
@@ -206,6 +210,14 @@ export default function workoutBuilder({ exercises }) {
     }
   }, [user]);
 
+  // Set exercises once SWR fetches the exercise data
+  useEffect(() => {
+    if (data) setDisplayedExercises(data);
+  }, [data]);
+  // Used with SWR
+  if (error) return <div>failed to load</div>;
+  if (!data) return <div>loading...</div>;
+
   return (
     <Layout>
       <Container>
@@ -333,15 +345,6 @@ export default function workoutBuilder({ exercises }) {
       </Container>
     </Layout>
   );
-}
-
-export async function getStaticProps() {
-  const res = await fetch(`${API_URL}/api/exercises`);
-  const exercises = await res.json();
-
-  return {
-    props: { exercises },
-  };
 }
 
 /**
