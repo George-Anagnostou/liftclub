@@ -1,7 +1,7 @@
 import { MongoClient } from "mongodb";
 
-let uri = process.env.MONGODB_URI;
-let dbName = process.env.MONGODB_DB;
+let uri = process.env.NEXT_PUBLIC_MONGODB_URI;
+let dbName = process.env.NEXT_PUBLIC_MONGODB_DB;
 
 if (!uri) throw new Error("Missing environment variable MONGO_URI");
 if (!dbName) throw new Error("Missing environment variable MONGO_DB");
