@@ -35,9 +35,7 @@ export default async (req, res) => {
           { $set: { workoutLog: workoutLog } },
           { returnOriginal: false }
         );
-
-      console.log(userData.value);
-
+        
       res.json(userData.value);
       break;
   }
