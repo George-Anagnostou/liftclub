@@ -9,7 +9,7 @@ export function StoreProvider({ children }) {
     setUser(userData);
   };
 
-  const authUser = async (username, password) => {
+  const authenticateLogin = async (username, password) => {
     // combine username & password into an object
     const loginCreds = { username, password };
     try {
@@ -48,7 +48,7 @@ export function StoreProvider({ children }) {
   };
 
   return (
-    <StoreContext.Provider value={{ user, loginUser, logoutUser, authUser, setUserState }}>
+    <StoreContext.Provider value={{ user, loginUser, logoutUser, authenticateLogin, setUserState }}>
       {children}
     </StoreContext.Provider>
   );

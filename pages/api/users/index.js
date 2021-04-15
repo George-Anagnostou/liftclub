@@ -8,25 +8,28 @@ export default async (req, res) => {
 
   switch (httpMethod) {
     case "GET":
-      const users = await db.collection("users").findOne();
-      console.log(users);
-      res.json(users);
-
+      res.status(403).end();
       break;
     case "POST":
       // Hash password input
-      const { username, password } = JSON.parse(req.body);
+      const { username, password } = req.body;
       const hash = bcrypt.hashSync(password, saltRounds);
 
-      const userData = await db.collection("users").insertOne({
-        username: username,
-        password: hash,
-        savedWorkouts: [],
-        workoutLog: [],
-        daysLeftInRoutine: 0,
-      });
+      const existingUser = await db.collection("users").findOne({ username: username });
 
-      console.log(userData);
+      if (!existingUser) {
+        const userData = await db.collection("users").insertOne({
+          username: username,
+          password: hash,
+          savedWorkouts: [],
+          workoutLog: [],
+          daysLeftInRoutine: 0,
+        });
+
+        res.json(userData.ops[0]);
+      } else {
+        res.status(403).end();
+      }
       break;
     case "PUT":
       break;

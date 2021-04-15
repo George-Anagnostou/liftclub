@@ -236,7 +236,6 @@ export default function workoutLog() {
           <div>
             <h1>{workout.name || "No Workout"}</h1>
             <h5>{`${yearMonthDay.month + 1}/${yearMonthDay.day}/${yearMonthDay.year}`}</h5>
-            <h3>{currentDayData.completed ? "Completed" : "Incomplete"}</h3>
           </div>
           <button onClick={() => changeCurrentDayData("tomorrow")}>Forward 1 day</button>
         </HeaderContainer>
@@ -342,12 +341,17 @@ const TimerContainer = styled.div`
   align-items: center;
 
   border: 1px solid grey;
-  padding: 1rem;
+  padding: 0.5rem 0;
   width: 100%;
   max-width: 325px;
   margin: 2rem auto;
-  button {
-    margin: 0 0.5rem;
+  div {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    button {
+      margin: 0.5rem;
+    }
   }
 `;
 
