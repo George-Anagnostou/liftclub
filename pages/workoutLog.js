@@ -232,34 +232,13 @@ export default function workoutLog() {
     <Layout>
       <MainContainer>
         <HeaderContainer>
-          <button onClick={() => changeCurrentDayData("yesterday")}>Back 1 day</button>
+          <button onClick={() => changeCurrentDayData("yesterday")}>{"<"}</button>
           <div>
             <h1>{workout.name || "No Workout"}</h1>
             <h5>{`${yearMonthDay.month + 1}/${yearMonthDay.day}/${yearMonthDay.year}`}</h5>
           </div>
-          <button onClick={() => changeCurrentDayData("tomorrow")}>Forward 1 day</button>
+          <button onClick={() => changeCurrentDayData("tomorrow")}>{">"}</button>
         </HeaderContainer>
-
-        <TimerContainer>
-          <h3>{formatTime(timer)}</h3>
-          <div>
-            <button onClick={() => setTimerState("started")}>Start Timer</button>
-            <button onClick={() => setTimerState("paused")}>Pause Timer</button>
-            <button onClick={() => setTimerState("reset")}>Reset Timer</button>
-          </div>
-        </TimerContainer>
-
-        <UserMadeWorkouts>
-          <h3>Your Workouts</h3>
-          <ul>
-            {userMadeWorkouts.map((workout) => (
-              <li key={workout._id} onClick={() => displaySavedWorkout(workout)}>
-                <h4>{workout.name}</h4>
-                <p>{workout.exercises.length} exercises</p>
-              </li>
-            ))}
-          </ul>
-        </UserMadeWorkouts>
 
         <WorkoutList>
           {workout.exercises?.map(({ exercise, sets }) => (
@@ -274,7 +253,6 @@ export default function workoutLog() {
                     </p>
 
                     <div>
-                      <label htmlFor="weight">weight: </label>
                       <input
                         type="number"
                         name="weight"
@@ -294,7 +272,28 @@ export default function workoutLog() {
           ))}
         </WorkoutList>
 
-        <CompleteButton onClick={saveWorkout}>Complete Workout</CompleteButton>
+        <CompleteButton onClick={saveWorkout}>Save Workout</CompleteButton>
+
+        <UserMadeWorkouts>
+          <h3>Your Workouts</h3>
+          <ul>
+            {userMadeWorkouts.map((workout) => (
+              <li key={workout._id} onClick={() => displaySavedWorkout(workout)}>
+                <h4>{workout.name}</h4>
+                <p>{workout.exercises.length} exercises</p>
+              </li>
+            ))}
+          </ul>
+        </UserMadeWorkouts>
+
+        <TimerContainer>
+          <h3>{formatTime(timer)}</h3>
+          <div>
+            <button onClick={() => setTimerState("started")}>Start</button>
+            <button onClick={() => setTimerState("paused")}>Pause</button>
+            <button onClick={() => setTimerState("reset")}>Reset</button>
+          </div>
+        </TimerContainer>
       </MainContainer>
     </Layout>
   );
@@ -317,7 +316,7 @@ const MainContainer = styled.main`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
+  padding: 0.5rem;
 `;
 
 const HeaderContainer = styled.div`
@@ -332,26 +331,13 @@ const HeaderContainer = styled.div`
       text-transform: uppercase;
     }
   }
-`;
 
-const TimerContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  border: 1px solid grey;
-  padding: 0.5rem 0;
-  width: 100%;
-  max-width: 325px;
-  margin: 2rem auto;
-  div {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    button {
-      margin: 0.5rem;
-    }
+  button {
+    font-size: 3rem;
+    padding: 0.5rem;
+    background: transparent;
+    border: 1px solid grey;
+    border-radius: 3px;
   }
 `;
 
@@ -365,6 +351,7 @@ const WorkoutList = styled.ul`
 
   .exercise {
     border: 1px solid grey;
+    border-radius: 10px;
     padding: 0.5rem;
     max-width: 100%;
 
@@ -382,20 +369,38 @@ const WorkoutList = styled.ul`
       justify-content: center;
 
       .set {
-        padding: 1rem 0;
-        width: 250px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0.5rem 0;
+        width: fit-content;
+        margin: 1rem;
 
         p {
-          padding-bottom: 0.5rem;
+          padding-right: 3rem;
           span {
             font-weight: 700;
-            font-size: 2rem;
+            font-size: 3rem;
           }
         }
-      }
-      input {
-        width: 3rem;
-        font-size: 1.2rem;
+        div {
+          display: flex;
+          align-items: flex-end;
+          justify-content: center;
+          input {
+            width: 6.5rem;
+            font-size: 3rem;
+            font-weight: 200;
+          }
+          select {
+            margin-left: 0.2rem;
+            border: 1px solid grey;
+            border-radius: 2px;
+            font-size: 1.5rem;
+            option {
+            }
+          }
+        }
       }
     }
   }
@@ -409,6 +414,7 @@ const CompleteButton = styled.button`
 
 const UserMadeWorkouts = styled.div`
   border: 1px solid grey;
+  border-radius: 3px;
   max-width: 100%;
   text-align: center;
   margin-bottom: 2rem;
@@ -424,6 +430,7 @@ const UserMadeWorkouts = styled.div`
       margin: 0.5rem;
       padding: 0.5rem;
       border: 1px solid grey;
+      border-radius: 3px;
       &:hover {
         background: #ccc;
       }
@@ -432,6 +439,33 @@ const UserMadeWorkouts = styled.div`
         text-transform: capitalize;
         padding-bottom: 0.5rem;
       }
+    }
+  }
+`;
+
+const TimerContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  border: 1px solid grey;
+  border-radius: 3px;
+  padding: 0.5rem 0;
+  width: 100%;
+  max-width: 325px;
+  margin: 2rem auto;
+  h3 {
+    font-size: 2rem;
+  }
+  div {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    button {
+      margin: 0.5rem;
+      padding: 0.5rem;
+      height: 3rem;
     }
   }
 `;

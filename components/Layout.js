@@ -23,26 +23,26 @@ export default function Layout({ title = "Workout App", children }) {
         <h1>Anagnostou Lift Club</h1>
         <NavBar>
           <ul>
-            <li>
-              <Link href="/">
+            <Link href="/">
+              <li>
                 <a>Home</a>
-              </Link>
-            </li>
-            <li>
-              <Link href="/workoutLog">
+              </li>
+            </Link>
+            <Link href="/workoutLog">
+              <li>
                 <a>Workout Log</a>
-              </Link>
-            </li>
-            <li>
-              <Link href="/workoutBuilder">
+              </li>
+            </Link>
+            <Link href="/workoutBuilder">
+              <li>
                 <a>Workout Buider</a>
-              </Link>
-            </li>
-            <li>
-              <Link href="/schedule">
+              </li>
+            </Link>
+            <Link href="/schedule">
+              <li>
                 <a>Schedule</a>
-              </Link>
-            </li>
+              </li>
+            </Link>
           </ul>
         </NavBar>
         {children}
@@ -57,7 +57,13 @@ const NavBar = styled.nav`
     display: flex;
     list-style: none;
     li {
-      margin-right: 1rem;
+      width: 25%;
+      display: grid;
+      place-items: center;
+      border: 1px solid grey;
+      cursor: pointer;
+      padding: 0.5rem 0;
+      text-align: center;
     }
   }
 `;
