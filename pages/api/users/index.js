@@ -1,5 +1,5 @@
 import { connectToDatabase } from "../../../utils/mongodb";
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const saltRounds = 10;
 
 export default async (req, res) => {
@@ -18,15 +18,13 @@ export default async (req, res) => {
       const { username, password } = JSON.parse(req.body);
       const hash = bcrypt.hashSync(password, saltRounds);
 
-      const userData = await db
-        .collection("users")
-        .insertOne({
-          username: username,
-          password: hash,
-          savedWorkouts: [],
-          workoutLog: [],
-          daysLeftInRoutine: 0,
-        });
+      const userData = await db.collection("users").insertOne({
+        username: username,
+        password: hash,
+        savedWorkouts: [],
+        workoutLog: [],
+        daysLeftInRoutine: 0,
+      });
 
       console.log(userData);
       break;
