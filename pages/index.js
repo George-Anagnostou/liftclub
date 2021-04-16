@@ -139,9 +139,13 @@ const MainContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 50vh;
+  height: 70vh;
 
   form {
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 0 5px grey;
+    padding: 1rem;
     margin: 1rem 0.5rem;
     text-align: center;
     input {

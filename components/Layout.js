@@ -19,7 +19,7 @@ export default function Layout({ title = "Workout App", children }) {
   return (
     <>
       <SeoHead title={title} />
-      <main>
+      <MainContainer>
         <h1>Anagnostou Lift Club</h1>
         <NavBar>
           <ul>
@@ -46,10 +46,14 @@ export default function Layout({ title = "Workout App", children }) {
           </ul>
         </NavBar>
         {children}
-      </main>
+      </MainContainer>
     </>
   );
 }
+
+const MainContainer = styled.main`
+  text-align: center;
+`;
 
 const NavBar = styled.nav`
   ul {
@@ -57,12 +61,15 @@ const NavBar = styled.nav`
     display: flex;
     list-style: none;
     li {
+      border: none;
+      border-radius: 5px;
+      box-shadow: 0 0 2px grey;
+
       width: 25%;
       display: grid;
       place-items: center;
-      border: 1px solid grey;
       cursor: pointer;
-      padding: 0.5rem 0;
+      padding: 0.5rem 0.1rem;
       text-align: center;
     }
   }
