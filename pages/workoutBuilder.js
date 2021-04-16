@@ -154,7 +154,7 @@ export default function workoutBuilder() {
         name: customWorkoutName,
         creator_id: user._id,
         exercises: composedExerciseData,
-        isPublic: customWorkoutPublic,
+        isPublic: user.isAdmin ? customWorkoutPublic : false,
       };
 
       try {
