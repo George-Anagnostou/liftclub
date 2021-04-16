@@ -350,7 +350,7 @@ const WorkoutList = styled.ul`
   flex-wrap: wrap;
 
   .exercise {
-    border: 1px solid grey;
+    box-shadow: 0 0 5px grey;
     border-radius: 10px;
     padding: 0.5rem;
     max-width: 100%;
@@ -377,7 +377,8 @@ const WorkoutList = styled.ul`
         margin: 1rem;
 
         p {
-          padding-right: 3rem;
+          padding-right: 2rem;
+          font-size: 0.6rem;
           span {
             font-weight: 700;
             font-size: 3rem;
