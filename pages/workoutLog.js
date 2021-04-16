@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { formatTime } from "../utils/format";
 import { useStoreContext } from "../context/state";
 import Layout from "../components/Layout";
 import {
@@ -14,8 +13,6 @@ import {
 export default function workoutLog() {
   const { user, setUserState } = useStoreContext();
 
-  const [timer, setTimer] = useState(0);
-  const [timerState, setTimerState] = useState("reset"); // 'reset' || 'paused' || 'started'
   const [currentDayData, setCurrentDayData] = useState({}); // {isoDate, timeInSeconds, completed, workout_id}
   const [workout, setWorkout] = useState({}); // {exercises[], exercise_id, sets[]}
   const [yearMonthDay, setYearMonthDay] = useState({}); // {year, month, day}
@@ -34,6 +31,8 @@ export default function workoutLog() {
         each.sets = dayData.exerciseData[i]?.sets || each.sets;
       });
 
+      console.log(dayData);
+      console.log(workoutData);
       setWorkout(workoutData);
       setCurrentDayData(dayData);
     } else {
@@ -78,7 +77,7 @@ export default function workoutLog() {
   const saveWorkout = async () => {
     // Make sure there are exercises to save
     if (workout.exercises) {
-      // console.log(currentDayData, workout, yearMonthDay, timer);
+      // console.log(currentDayData, workout, yearMonthDay);
       const composedExercises = workout.exercises.map((each) => {
         return { exercise_id: each.exercise_id, sets: each.sets };
       });
@@ -97,7 +96,6 @@ export default function workoutLog() {
           ...user.workoutLog,
           {
             isoDate: new Date(year, month, day).toISOString(),
-            timeInSeconds: timer,
             completed: true,
             workout_id: workout._id,
             exerciseData: composedExercises,
@@ -205,29 +203,6 @@ export default function workoutLog() {
     }
   }, [user]);
 
-  // Controls for timer state
-  useEffect(() => {
-    let timerInterval;
-
-    switch (timerState) {
-      case "reset":
-        // Reset timer to 0
-        setTimer(0);
-        clearInterval(timerInterval);
-        break;
-      case "paused":
-        // Timer increments by 0
-        timerInterval = setInterval(() => setTimer((prev) => prev + 0), 1000);
-        break;
-      case "started":
-        // Timer increments by 1 every second
-        timerInterval = setInterval(() => setTimer((prev) => prev + 1), 1000);
-        break;
-    }
-
-    return () => clearInterval(timerInterval);
-  }, [timerState]);
-
   return (
     <Layout>
       <MainContainer>
@@ -285,15 +260,6 @@ export default function workoutLog() {
             ))}
           </ul>
         </UserMadeWorkouts>
-
-        <TimerContainer>
-          <h3>{formatTime(timer)}</h3>
-          <div>
-            <button onClick={() => setTimerState("started")}>Start</button>
-            <button onClick={() => setTimerState("paused")}>Pause</button>
-            <button onClick={() => setTimerState("reset")}>Reset</button>
-          </div>
-        </TimerContainer>
       </MainContainer>
     </Layout>
   );
@@ -336,8 +302,9 @@ const HeaderContainer = styled.div`
     font-size: 3rem;
     padding: 0.5rem;
     background: transparent;
-    border: 1px solid grey;
-    border-radius: 3px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 0 5px grey;
   }
 `;
 
@@ -411,14 +378,19 @@ const CompleteButton = styled.button`
   margin: 2rem auto;
   font-size: 1.5rem;
   padding: 0.5rem;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 0 5px grey;
 `;
 
 const UserMadeWorkouts = styled.div`
-  border: 1px solid grey;
-  border-radius: 3px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 0 5px grey;
   max-width: 100%;
   text-align: center;
   margin-bottom: 2rem;
+  padding: 1rem;
 
   ul {
     display: flex;
@@ -430,8 +402,8 @@ const UserMadeWorkouts = styled.div`
       cursor: pointer;
       margin: 0.5rem;
       padding: 0.5rem;
-      border: 1px solid grey;
-      border-radius: 3px;
+      border-radius: 5px;
+      box-shadow: 0 0 5px grey;
       &:hover {
         background: #ccc;
       }
@@ -440,33 +412,6 @@ const UserMadeWorkouts = styled.div`
         text-transform: capitalize;
         padding-bottom: 0.5rem;
       }
-    }
-  }
-`;
-
-const TimerContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  border: 1px solid grey;
-  border-radius: 3px;
-  padding: 0.5rem 0;
-  width: 100%;
-  max-width: 325px;
-  margin: 2rem auto;
-  h3 {
-    font-size: 2rem;
-  }
-  div {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    button {
-      margin: 0.5rem;
-      padding: 0.5rem;
-      height: 3rem;
     }
   }
 `;
