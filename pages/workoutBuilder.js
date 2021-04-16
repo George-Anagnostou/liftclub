@@ -49,6 +49,7 @@ export default function workoutBuilder() {
   const [displayedExercises, setDisplayedExercises] = useState([]);
   const [customWorkoutExercises, setCustomWorkoutExercises] = useState([]);
   const [customWorkoutName, setCustomWorkoutName] = useState("New Workout");
+  const [customWorkoutPublic, setCustomWorkoutPublic] = useState(false);
 
   const loadUserMadeWorkouts = async () => {
     const userMadeWorkouts = await getUserMadeWorkouts(user._id);
@@ -80,11 +81,16 @@ export default function workoutBuilder() {
   const clearCustomWorkout = () => {
     setCustomWorkoutExercises([]);
     setCustomWorkoutName("New Workout");
+    setCustomWorkoutPublic(false);
   };
 
   // Handles changes for customWorkoutName
   const handleWorkoutNameChange = (e) => {
     setCustomWorkoutName(e.target.value);
+  };
+
+  const handlePrivacyChange = (e) => {
+    setCustomWorkoutPublic((prev) => !prev);
   };
 
   //
@@ -145,7 +151,7 @@ export default function workoutBuilder() {
         name: customWorkoutName,
         creator_id: user._id,
         exercises: workoutForDB,
-        public: false,
+        public: customWorkoutPublic,
       };
 
       try {
@@ -192,6 +198,7 @@ export default function workoutBuilder() {
 
     setCustomWorkoutExercises(workout.exercises);
     setCustomWorkoutName(workout.name);
+    setCustomWorkoutPublic(workout.public);
   };
 
   // Remove saved successfully notification after 5 seconds
@@ -224,26 +231,35 @@ export default function workoutBuilder() {
         <CustomWorkout>
           <div className="workout-control">
             <div className="workout-header">
-              <h3>Custom Workout</h3>
               {workoutSavedSuccessfuly && (
                 <p style={{ color: "green" }}>Workout saved successfully</p>
               )}
               {Boolean(customWorkoutExercises.length) && (
-                <>
-                  <button onClick={saveWorkoutToDB}>Save</button>
-                  <button onClick={clearCustomWorkout}>Clear</button>
-                </>
+                <button onClick={saveWorkoutToDB}>Save</button>
+              )}
+              <h3>Custom Workout</h3>
+              {Boolean(customWorkoutExercises.length) && (
+                <button onClick={clearCustomWorkout}>Clear</button>
               )}
             </div>
-
-            <label htmlFor="workoutName">Workout Name:</label>
-            <input
-              type="text"
-              name="workoutName"
-              id="workoutName"
-              value={customWorkoutName}
-              onChange={handleWorkoutNameChange}
-            />
+            <div className="workout-data">
+              <label htmlFor="workoutName">Name: </label>
+              <input
+                type="text"
+                name="workoutName"
+                id="workoutName"
+                value={customWorkoutName}
+                onChange={handleWorkoutNameChange}
+              />
+              <label htmlFor="public">Public</label>
+              <input
+                type="checkbox"
+                name="public"
+                id="public"
+                checked={customWorkoutPublic}
+                onChange={handlePrivacyChange}
+              />
+            </div>
           </div>
 
           {customWorkoutExercises.map(({ exercise, sets }, i) => (
@@ -312,7 +328,7 @@ export default function workoutBuilder() {
           {displayedExercises.map((each) => (
             <li
               key={each._id}
-              style={isExerciseInCustomWorkout(each._id) ? { background: "#dddddd" } : {}}
+              style={isExerciseInCustomWorkout(each._id) ? { background: "#c9c9c9" } : {}}
             >
               <h3>{each.name}</h3>
               <p>
@@ -337,7 +353,11 @@ export default function workoutBuilder() {
         <UserWorkouts>
           <h3>Your Workouts</h3>
           {userWorkouts.map((each, i) => (
-            <li key={i} onClick={() => displaySavedWorkout(each)}>
+            <li
+              key={i}
+              onClick={() => displaySavedWorkout(each)}
+              style={customWorkoutName === each.name ? { background: "rgb(215, 221, 247)" } : {}}
+            >
               {each.name}
             </li>
           ))}
@@ -392,17 +412,39 @@ const CustomWorkout = styled.ul`
     .workout-header {
       margin-bottom: 1rem;
       button {
+        border: none;
+        box-shadow: 0 0 2px grey;
+        display: inline-block;
         margin: 0 0.5rem;
-        padding: 0.5rem;
+        padding: 0.75rem;
+      }
+      h3 {
+        display: inline-block;
       }
     }
-    input {
-      width: 50%;
+    .workout-data {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      label {
+        font-size: 0.8rem;
+      }
+      input[type="text"] {
+        width: 50%;
+        margin: 0.5rem;
+        font-size: 1.2rem;
+      }
+      input[type="checkbox"] {
+        margin: 0.5rem;
+        transform: scale(1.7);
+        border: none;
+      }
     }
   }
 
   li {
-    border: 1px solid grey;
+    border-radius: 5px;
+    box-shadow: 0 0 5px grey;
     background: rgb(215, 221, 247);
     width: 100%;
     max-width: 150px;
@@ -412,16 +454,30 @@ const CustomWorkout = styled.ul`
 
     display: flex;
     flex-direction: column;
-    input {
-      width: 3rem;
-    }
-    span {
-      font-weight: 300;
-      font-size: 0.7rem;
+    div {
+      margin: 0.2rem 0;
+      flex: 1;
+
+      input {
+        width: 3rem;
+      }
+      span {
+        font-weight: 300;
+        font-size: 0.7rem;
+      }
+      button {
+        cursor: pointer;
+        border: none;
+        border-radius: 3px;
+        margin: 0.15rem;
+      }
     }
     button {
+      padding: 0.2rem;
       margin-top: 0.5rem;
       cursor: pointer;
+      border: none;
+      border-radius: 0 0 5px 5px;
     }
   }
 
@@ -447,33 +503,39 @@ const ExerciseList = styled.ul`
   .exercise-control {
     position: sticky;
     top: 0;
-    background: #e2e2e2;
+    background: rgb(226, 226, 226);
     width: 100%;
+
     border-bottom: 1px solid black;
     text-align: center;
     div {
+      padding: 0.5rem 0;
       width: 50%;
       display: inline-block;
     }
   }
 
   li {
-    border: 1px solid grey;
+    border-radius: 5px;
+    box-shadow: 0 0 5px grey;
     width: 100%;
     max-width: 150px;
+    min-height: 250px;
     margin: 1rem;
     text-align: center;
     text-transform: capitalize;
+    background: rgba(245, 145, 83, 0.185);
 
     display: flex;
     flex-direction: column;
-
+    h3 {
+      padding: 0.5rem 0;
+    }
     p {
+      flex: 1;
       display: block;
       width: 100%;
-      background: #d9f0f0;
       border-bottom: 1px solid #d3d3d3;
-      text-align: left;
       font-weight: 300;
       span {
         font-weight: 100;
@@ -485,7 +547,11 @@ const ExerciseList = styled.ul`
     }
 
     button {
+      padding: 0.5rem 0;
       cursor: pointer;
+      background: inherit;
+      border: none;
+      border-radius: 0 0px 5px 5px;
     }
   }
 
@@ -519,7 +585,7 @@ const UserWorkouts = styled.ul`
     gap: 1rem;
 
     &:hover {
-      background: grey;
+      background: #c9c9c9;
     }
   }
 
