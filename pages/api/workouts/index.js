@@ -8,9 +8,9 @@ export default async (req, res) => {
   switch (httpMethod) {
     case "GET":
       const { creator_id } = req.query;
-      if (creator_id) {
-        req.query.creator_id = ObjectId(creator_id);
-      }
+      const { isPublic } = req.query;
+      if (creator_id) req.query.creator_id = ObjectId(creator_id);
+      if (isPublic) req.query.isPublic = Boolean(isPublic);
 
       const workouts = await db.collection("workouts").find(req.query).toArray();
       res.json(workouts);

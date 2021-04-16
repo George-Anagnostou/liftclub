@@ -6,6 +6,7 @@ import Layout from "../components/Layout";
 import { useStoreContext } from "../context/state";
 import {
   getExercisesFromIdArray,
+  getPublicWorkouts,
   getUserMadeWorkouts,
   postNewWorkout,
   updateExistingWorkout,
@@ -46,6 +47,7 @@ export default function workoutBuilder() {
 
   const [workoutSavedSuccessfuly, setWorkoutSavedSuccessfuly] = useState(null);
   const [userWorkouts, setUserWorkouts] = useState([]);
+  const [publicWorkouts, setPublicWorkouts] = useState([]);
   const [displayedExercises, setDisplayedExercises] = useState([]);
   const [customWorkoutExercises, setCustomWorkoutExercises] = useState([]);
   const [customWorkoutName, setCustomWorkoutName] = useState("New Workout");
@@ -89,7 +91,7 @@ export default function workoutBuilder() {
     setCustomWorkoutName(e.target.value);
   };
 
-  const handlePrivacyChange = (e) => {
+  const handlePrivacyChange = () => {
     setCustomWorkoutPublic((prev) => !prev);
   };
 
@@ -128,7 +130,7 @@ export default function workoutBuilder() {
 
   const saveWorkoutToDB = async () => {
     // Only take exercise_id and sets (exercise data not needed for DB)
-    const workoutForDB = customWorkoutExercises.map(({ exercise_id, sets }) => {
+    const composedExerciseData = customWorkoutExercises.map(({ exercise_id, sets }) => {
       return { exercise_id, sets };
     });
 
@@ -137,7 +139,8 @@ export default function workoutBuilder() {
 
     if (existingWorkout) {
       // Put exercises in correct format (without exercise data)
-      existingWorkout.exercises = workoutForDB;
+      existingWorkout.exercises = composedExerciseData;
+      existingWorkout.isPublic = customWorkoutPublic;
 
       try {
         const res = await updateExistingWorkout(existingWorkout);
@@ -150,8 +153,8 @@ export default function workoutBuilder() {
       const composedWorkout = {
         name: customWorkoutName,
         creator_id: user._id,
-        exercises: workoutForDB,
-        public: customWorkoutPublic,
+        exercises: composedExerciseData,
+        isPublic: customWorkoutPublic,
       };
 
       try {
@@ -198,7 +201,7 @@ export default function workoutBuilder() {
 
     setCustomWorkoutExercises(workout.exercises);
     setCustomWorkoutName(workout.name);
-    setCustomWorkoutPublic(workout.public);
+    setCustomWorkoutPublic(workout.isPublic);
   };
 
   // Remove saved successfully notification after 5 seconds
@@ -216,6 +219,16 @@ export default function workoutBuilder() {
       loadUserMadeWorkouts();
     }
   }, [user]);
+
+  // Get all public workouts on page mount
+  useEffect(() => {
+    const getAllPublicWorkouts = async () => {
+      const allPublicWorkouts = await getPublicWorkouts();
+      console.log(allPublicWorkouts);
+      setPublicWorkouts(allPublicWorkouts);
+    };
+    getAllPublicWorkouts();
+  }, []);
 
   // Set exercises once SWR fetches the exercise data
   useEffect(() => {
@@ -251,14 +264,18 @@ export default function workoutBuilder() {
                 value={customWorkoutName}
                 onChange={handleWorkoutNameChange}
               />
-              <label htmlFor="public">Public</label>
-              <input
-                type="checkbox"
-                name="public"
-                id="public"
-                checked={customWorkoutPublic}
-                onChange={handlePrivacyChange}
-              />
+              {user?.isAdmin && (
+                <>
+                  <label htmlFor="public">Public</label>
+                  <input
+                    type="checkbox"
+                    name="public"
+                    id="public"
+                    checked={customWorkoutPublic}
+                    onChange={handlePrivacyChange}
+                  />
+                </>
+              )}
             </div>
           </div>
 
@@ -292,8 +309,36 @@ export default function workoutBuilder() {
           ))}
         </CustomWorkout>
 
+        <UserWorkouts>
+          <ul>
+            <h3>Your Workouts</h3>
+            {userWorkouts.map((each, i) => (
+              <li
+                key={i}
+                onClick={() => displaySavedWorkout(each)}
+                style={customWorkoutName === each.name ? { background: "rgb(215, 221, 247)" } : {}}
+              >
+                {each.name}
+              </li>
+            ))}
+          </ul>
+          <ul>
+            <h3>Public Workouts</h3>
+            {publicWorkouts.map((each, i) => (
+              <li
+                key={i}
+                onClick={() => displaySavedWorkout(each)}
+                style={customWorkoutName === each.name ? { background: "rgb(215, 221, 247)" } : {}}
+              >
+                {each.name}
+              </li>
+            ))}
+          </ul>
+        </UserWorkouts>
+
         <ExerciseList>
           <div className="exercise-control">
+            <h3>Exercises</h3>
             <div>
               <label htmlFor="muscleGroup">Muscle Group: </label>
               <select
@@ -349,19 +394,6 @@ export default function workoutBuilder() {
             </li>
           ))}
         </ExerciseList>
-
-        <UserWorkouts>
-          <h3>Your Workouts</h3>
-          {userWorkouts.map((each, i) => (
-            <li
-              key={i}
-              onClick={() => displaySavedWorkout(each)}
-              style={customWorkoutName === each.name ? { background: "rgb(215, 221, 247)" } : {}}
-            >
-              {each.name}
-            </li>
-          ))}
-        </UserWorkouts>
       </Container>
     </Layout>
   );
@@ -380,11 +412,11 @@ export default function workoutBuilder() {
  *
  */
 const Container = styled.div`
-  height: 90vh;
   display: flex;
   align-items: flex-start;
   gap: 1rem;
   position: relative;
+  margin-top: 0.5rem;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -393,12 +425,10 @@ const Container = styled.div`
 `;
 
 const CustomWorkout = styled.ul`
-  border: 1px solid black;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 0 5px grey;
   width: 25%;
-  max-height: 100%;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  position: relative;
 
   display: flex;
   justify-content: center;
@@ -486,10 +516,54 @@ const CustomWorkout = styled.ul`
   }
 `;
 
+const UserWorkouts = styled.div`
+  text-align: center;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 0 5px grey;
+  width: 15%;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  ul {
+    width: 100%;
+
+    li {
+      border: none;
+      border-radius: 5px;
+      box-shadow: 0 0 5px grey;
+
+      cursor: pointer;
+      padding: 1rem;
+      margin: 1rem;
+      text-align: center;
+      text-transform: capitalize;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+
+      &:hover {
+        background: #c9c9c9;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+`;
+
 const ExerciseList = styled.ul`
-  border: 1px solid black;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 0 5px grey;
   width: 60%;
-  max-height: 100%;
+  max-height: 85vh;
   overflow-x: hidden;
   overflow-y: scroll;
   position: relative;
@@ -552,40 +626,6 @@ const ExerciseList = styled.ul`
       background: inherit;
       border: none;
       border-radius: 0 0px 5px 5px;
-    }
-  }
-
-  @media (max-width: 768px) {
-    width: 100%;
-  }
-`;
-
-const UserWorkouts = styled.ul`
-  border: 1px solid black;
-  width: 15%;
-
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  flex-wrap: wrap;
-
-  li {
-    cursor: pointer;
-    border: 1px solid grey;
-    padding: 1rem;
-    width: 100%;
-    margin: 1rem;
-    text-align: center;
-    text-transform: capitalize;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-
-    &:hover {
-      background: #c9c9c9;
     }
   }
 

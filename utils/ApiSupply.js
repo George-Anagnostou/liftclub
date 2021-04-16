@@ -99,6 +99,17 @@ export const getUserMadeWorkouts = async (user_id) => {
   }
 };
 
+export const getPublicWorkouts = async () => {
+  try {
+    const res = await fetch("/api/workouts?isPublic=true");
+
+    const publicWorkouts = await res.json();
+    return publicWorkouts;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 // Multiple
 export const getWorkoutsFromIdArray = async (idArr) => {
   try {
