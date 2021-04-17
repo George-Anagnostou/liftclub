@@ -13,6 +13,7 @@ import {
 export default function workoutLog() {
   const { user, setUserState } = useStoreContext();
 
+  const [loading, setLoading] = useState(false);
   const [currentDayData, setCurrentDayData] = useState({}); // {isoDate, timeInSeconds, completed, workout_id}
   const [workout, setWorkout] = useState({}); // {exercises[], exercise_id, sets[]}
   const [yearMonthDay, setYearMonthDay] = useState({}); // {year, month, day}
@@ -20,10 +21,15 @@ export default function workoutLog() {
 
   // Accepts a workout from user's workoutLog and sets workout and currentDay data
   const setPageState = async (dayData) => {
+    setLoading(true);
+
     // Check if workout exists
     if (dayData) {
+      // Get workout data from DB
       const workoutData = await getWorkoutFromDB(dayData.workout_id);
+      // Grab all exercise_ids from the workout
       const idArr = workoutData.exercises.map((each) => each.exercise_id);
+      // Get all exercise information
       const exerciseData = await getExercisesFromIdArray(idArr);
 
       workoutData.exercises.map((each, i) => {
@@ -31,14 +37,17 @@ export default function workoutLog() {
         each.sets = dayData.exerciseData[i]?.sets || each.sets;
       });
 
-      console.log(dayData);
       console.log(workoutData);
+      console.log(dayData);
+
       setWorkout(workoutData);
       setCurrentDayData(dayData);
     } else {
       setWorkout({});
       setCurrentDayData({});
     }
+
+    setLoading(false);
   };
 
   // Accepts an ISO date and finds the matching date in user.workoutLog
@@ -64,12 +73,11 @@ export default function workoutLog() {
     const newYear = date.getFullYear();
     const newMonth = date.getMonth();
     const newDay = date.getDate();
-    const newDate = new Date(newYear, newMonth, newDay).toISOString();
 
     setYearMonthDay({ year: newYear, month: newMonth, day: newDay });
 
     // Find the workout for the new date
-    const dayData = getDayDataFromWorkoutLog(newDate);
+    const dayData = getDayDataFromWorkoutLog(date.toISOString());
     setPageState(dayData);
   };
 
@@ -77,7 +85,6 @@ export default function workoutLog() {
   const saveWorkout = async () => {
     // Make sure there are exercises to save
     if (workout.exercises) {
-      // console.log(currentDayData, workout, yearMonthDay);
       const composedExercises = workout.exercises.map((each) => {
         return { exercise_id: each.exercise_id, sets: each.sets };
       });
@@ -120,7 +127,7 @@ export default function workoutLog() {
   };
 
   // Sets weight for a specific workout. Takes the event value and exercise name
-  const setWeightForExercise = (e, exercise, setIndex) => {
+  const handleWeightChange = (e, exercise, setIndex) => {
     // Cast value to number
     const num = Number(e.target.value);
 
@@ -206,46 +213,52 @@ export default function workoutLog() {
   return (
     <Layout>
       <MainContainer>
-        <HeaderContainer>
-          <button onClick={() => changeCurrentDayData("yesterday")}>{"<"}</button>
-          <div>
-            <h1>{workout.name || "No Workout"}</h1>
-            <h5>{`${yearMonthDay.month + 1}/${yearMonthDay.day}/${yearMonthDay.year}`}</h5>
-          </div>
-          <button onClick={() => changeCurrentDayData("tomorrow")}>{">"}</button>
-        </HeaderContainer>
+        {!loading ? (
+          <>
+            <HeaderContainer>
+              <button onClick={() => changeCurrentDayData("yesterday")}>{"<"}</button>
+              <div>
+                <h1>{workout.name || "No Workout"}</h1>
+                <h5>{`${yearMonthDay.month + 1}/${yearMonthDay.day}/${yearMonthDay.year}`}</h5>
+              </div>
+              <button onClick={() => changeCurrentDayData("tomorrow")}>{">"}</button>
+            </HeaderContainer>
 
-        <WorkoutList>
-          {workout.exercises?.map(({ exercise, sets }) => (
-            <li className="exercise" key={exercise._id}>
-              <h3 className="exercise-name">{exercise.name}</h3>
-              <p>{exercise.equipment}</p>
-              <ul>
-                {sets.map(({ reps, weight, weightUnit }, i) => (
-                  <li className="set" key={i}>
-                    <p>
-                      <span>{reps}</span> reps
-                    </p>
+            <WorkoutList>
+              {workout.exercises?.map(({ exercise, sets }) => (
+                <li className="exercise" key={exercise._id}>
+                  <h3 className="exercise-name">{exercise.name}</h3>
+                  <p>{exercise.equipment}</p>
+                  <ul>
+                    {sets.map(({ reps, weight, weightUnit }, i) => (
+                      <li className="set" key={i}>
+                        <p>
+                          <span>{reps}</span> reps
+                        </p>
 
-                    <div>
-                      <input
-                        type="number"
-                        name="weight"
-                        id="weight"
-                        value={weight || ""}
-                        onChange={(e) => setWeightForExercise(e, exercise, i)}
-                      />
-                      <select name="unit" id="unit" defaultValue={weightUnit}>
-                        <option value="lbs">lbs</option>
-                        <option value="pin">pin</option>
-                      </select>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ))}
-        </WorkoutList>
+                        <div>
+                          <input
+                            type="number"
+                            name="weight"
+                            id="weight"
+                            value={weight || ""}
+                            onChange={(e) => handleWeightChange(e, exercise, i)}
+                          />
+                          <select name="unit" id="unit" defaultValue={weightUnit}>
+                            <option value="lbs">lbs</option>
+                            <option value="pin">pin</option>
+                          </select>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ))}
+            </WorkoutList>
+          </>
+        ) : (
+          <h1>Loading...</h1>
+        )}
 
         <CompleteButton onClick={saveWorkout}>Save Workout</CompleteButton>
 
