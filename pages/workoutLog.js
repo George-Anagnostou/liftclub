@@ -15,9 +15,23 @@ export default function workoutLog() {
 
   const [loading, setLoading] = useState(false);
   const [currentDayData, setCurrentDayData] = useState({}); // {isoDate, timeInSeconds, completed, workout_id}
-  const [workout, setWorkout] = useState({}); // {exercises[], exercise_id, sets[]}
   const [yearMonthDay, setYearMonthDay] = useState({}); // {year, month, day}
   const [userMadeWorkouts, setUserMadeWorkouts] = useState([]);
+
+  const setDataToToday = () => {
+    const date = new Date();
+    const currYear = date.getFullYear();
+    const currMonth = date.getMonth();
+    const currDay = date.getDate();
+
+    setYearMonthDay({ year: currYear, month: currMonth, day: currDay });
+
+    const currIsoDate = new Date(currYear, currMonth, currDay).toISOString();
+
+    // Find the workout for today
+    const dayData = getDayDataFromWorkoutLog(currIsoDate);
+    setPageState(dayData);
+  };
 
   // Accepts a workout from user's workoutLog and sets workout and currentDay data
   const setPageState = async (dayData) => {
@@ -25,25 +39,17 @@ export default function workoutLog() {
 
     // Check if workout exists
     if (dayData) {
-      // Get workout data from DB
-      const workoutData = await getWorkoutFromDB(dayData.workout_id);
       // Grab all exercise_ids from the workout
-      const idArr = workoutData.exercises.map((each) => each.exercise_id);
+      const idArr = dayData.exerciseData.map((each) => each.exercise_id);
       // Get all exercise information
       const exerciseData = await getExercisesFromIdArray(idArr);
 
-      workoutData.exercises.map((each, i) => {
-        each.exercise = exerciseData[i];
-        each.sets = dayData.exerciseData[i]?.sets || each.sets;
+      dayData.exerciseData.map((each, i) => {
+        if (each.exercise_id === exerciseData[i]._id) each.exercise = exerciseData[i];
       });
 
-      console.log(workoutData);
-      console.log(dayData);
-
-      setWorkout(workoutData);
       setCurrentDayData(dayData);
     } else {
-      setWorkout({});
       setCurrentDayData({});
     }
 
@@ -84,41 +90,45 @@ export default function workoutLog() {
   // Posts currentDayData to DB
   const saveWorkout = async () => {
     // Make sure there are exercises to save
-    if (workout.exercises) {
-      const composedExercises = workout.exercises.map((each) => {
+    if (currentDayData.exerciseData) {
+      const composedExercises = currentDayData.exerciseData.map((each) => {
         return { exercise_id: each.exercise_id, sets: each.sets };
       });
 
+      // Get index of our currDayData
       const workoutIndexInLog = user.workoutLog.findIndex(
         (workout) => workout.isoDate === currentDayData.isoDate
       );
 
+      // Define log to send to DB
       let updatedWorkoutLog;
 
-      if (workoutIndexInLog === -1) {
+      if (workoutIndexInLog > 0) {
+        // Update existing workout
+        const newLog = [...user.workoutLog];
+
+        // // update the index of current workout
+        newLog[workoutIndexInLog] = {
+          ...currentDayData,
+          exerciseData: composedExercises,
+        };
+
+        updatedWorkoutLog = newLog;
+      } else {
         // Create new workoutLog entry
         const { year, month, day } = yearMonthDay;
+
         // Add new workout and sort by isoDate
         updatedWorkoutLog = [
           ...user.workoutLog,
           {
             isoDate: new Date(year, month, day).toISOString(),
             completed: true,
-            workout_id: workout._id,
+            workout_id: currentDayData.workout_id,
             exerciseData: composedExercises,
+            workoutName: currentDayData.workoutName,
           },
         ].sort((a, b) => a.isoDate.localeCompare(b.isoDate));
-      } else {
-        // Update existing workout
-        const newLog = [...user.workoutLog];
-        // update the index of current workout
-        newLog[workoutIndexInLog] = {
-          ...currentDayData,
-          exerciseData: composedExercises,
-          workout_id: workout._id,
-        };
-
-        updatedWorkoutLog = newLog;
       }
 
       const userData = await saveWorkoutLog(updatedWorkoutLog, user._id);
@@ -132,45 +142,17 @@ export default function workoutLog() {
     const num = Number(e.target.value);
 
     // Copy current exercises
-    const { exercises } = workout;
+    const { exerciseData } = currentDayData;
 
-    // Find the exercise being updated
-    exercises.map((item) => {
-      if (item.exercise_id === exercise._id) {
-        // set weight for specified set
-        item.sets[setIndex].weight = num;
-      }
-      return item;
+    const edit = exerciseData.find((item) => item.exercise_id === exercise._id);
+
+    edit.sets[setIndex].weight = num;
+
+    exerciseData.map((each) => {
+      if (each.exercise_id === edit.exercise_id) each = edit;
     });
 
-    // update workout state
-    setWorkout({ ...workout, exercises });
-  };
-
-  const getWorkoutFromDB = async (workout_id) => {
-    try {
-      // GET workout data
-      const workoutData = await getWorkoutFromId(workout_id);
-
-      // Get array of exercise ids
-      const exerciseIdArr = workoutData.exercises.map((each) => each.exercise_id);
-
-      // Translate exercise ids into data
-      const exerciseData = await getExercisesFromIdArray(exerciseIdArr);
-
-      // Create {exercise: exerciseData} in workoutData
-      workoutData.exercises.map((each, i) => {
-        // Ensure ids match
-        if (each.exercise_id === exerciseData[i]._id) {
-          each.exercise = exerciseData[i];
-        }
-        return each;
-      });
-
-      return workoutData;
-    } catch (e) {
-      console.log(e);
-    }
+    setCurrentDayData((prev) => ({ ...prev, exerciseData: exerciseData }));
   };
 
   const displaySavedWorkout = async (clicked) => {
@@ -182,7 +164,11 @@ export default function workoutLog() {
     // Create exercise key in each exercise to hold exercise data
     clicked.exercises.map((each, i) => (each.exercise = exerciseData[i]));
 
-    setWorkout(clicked);
+    setCurrentDayData((prev) => ({
+      ...prev,
+      workoutName: clicked.name,
+      exerciseData: clicked.exercises,
+    }));
   };
 
   // Set page state if user is logged in
@@ -195,11 +181,7 @@ export default function workoutLog() {
     setYearMonthDay({ year: currYear, month: currMonth, day: currDay });
 
     if (user) {
-      const currIsoDate = new Date(currYear, currMonth, currDay).toISOString();
-
-      // Find the workout for today
-      const dayData = getDayDataFromWorkoutLog(currIsoDate);
-      setPageState(dayData);
+      setDataToToday();
 
       // Get all workouts made by the user
       const getUserWorkouts = async () => {
@@ -213,20 +195,22 @@ export default function workoutLog() {
   return (
     <Layout>
       <MainContainer>
+        <HeaderContainer>
+          <button onClick={() => changeCurrentDayData("yesterday")}>{"<"}</button>
+          <div onClick={setDataToToday}>
+            <h1>{`${yearMonthDay.month + 1}/${yearMonthDay.day}/${yearMonthDay.year}`}</h1>
+            <h5>{currentDayData.workoutName || "No Workout"}</h5>
+          </div>
+          <button onClick={() => changeCurrentDayData("tomorrow")}>{">"}</button>
+        </HeaderContainer>
+
         {!loading ? (
           <>
-            <HeaderContainer>
-              <button onClick={() => changeCurrentDayData("yesterday")}>{"<"}</button>
-              <div>
-                <h1>{workout.name || "No Workout"}</h1>
-                <h5>{`${yearMonthDay.month + 1}/${yearMonthDay.day}/${yearMonthDay.year}`}</h5>
-              </div>
-              <button onClick={() => changeCurrentDayData("tomorrow")}>{">"}</button>
-            </HeaderContainer>
+            <CompleteButton onClick={saveWorkout}>Save Workout</CompleteButton>
 
             <WorkoutList>
-              {workout.exercises?.map(({ exercise, sets }) => (
-                <li className="exercise" key={exercise._id}>
+              {currentDayData.exerciseData?.map(({ exercise, exercise_id, sets }) => (
+                <li className="exercise" key={exercise_id}>
                   <h3 className="exercise-name">{exercise.name}</h3>
                   <p>{exercise.equipment}</p>
                   <ul>
@@ -259,8 +243,6 @@ export default function workoutLog() {
         ) : (
           <h1>Loading...</h1>
         )}
-
-        <CompleteButton onClick={saveWorkout}>Save Workout</CompleteButton>
 
         <UserMadeWorkouts>
           <h3>Your Workouts</h3>
@@ -306,7 +288,8 @@ const HeaderContainer = styled.div`
 
   div {
     margin: 0 1rem;
-    h1 {
+    h1,
+    h5 {
       text-transform: uppercase;
     }
   }
@@ -388,7 +371,7 @@ const WorkoutList = styled.ul`
 `;
 
 const CompleteButton = styled.button`
-  margin: 2rem auto;
+  margin: 1rem auto;
   font-size: 1.5rem;
   padding: 0.5rem;
   border: none;
