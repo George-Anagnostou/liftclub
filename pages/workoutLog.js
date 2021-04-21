@@ -414,7 +414,7 @@ const WorkoutNote = styled.div`
     padding: 0.5rem;
     border-radius: 5px;
     box-shadow: 0 0 5px #b9b9b9;
-    border: none;
+    border: 1px solid #b9b9b9;
     min-width: 200px;
     max-width: 85vw;
     font-size: 1.2rem;
