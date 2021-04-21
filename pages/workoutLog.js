@@ -416,6 +416,7 @@ const WorkoutNote = styled.div`
     box-shadow: 0 0 5px #b9b9b9;
     border: none;
     min-width: 200px;
+    max-width: 85vw;
     font-size: 1.2rem;
     font-family: inherit;
   }
