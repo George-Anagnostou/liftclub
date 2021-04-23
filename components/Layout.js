@@ -57,12 +57,13 @@ const MainContainer = styled.main`
 
 const NavBar = styled.nav`
   ul {
+    border-bottom: 4px solid grey;
     width: 100%;
     display: flex;
     list-style: none;
     li {
       border: none;
-      border-radius: 5px;
+      border-radius: 5px 5px 0 0;
       box-shadow: 0 0 2px grey;
 
       width: 25%;
