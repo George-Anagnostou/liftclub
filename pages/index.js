@@ -129,7 +129,6 @@ const Home = () => {
         {user && (
           <div>
             <h1>Welcome {user.username}</h1>
-            <p>You've logged {user.workoutLog.length} workouts.</p>
           </div>
         )}
       </MainContainer>
