@@ -3,12 +3,7 @@ import styled from "styled-components";
 
 import { useStoreContext } from "../context/state";
 import Layout from "../components/Layout";
-import {
-  getExercisesFromIdArray,
-  getUserMadeWorkouts,
-  getWorkoutFromId,
-  saveWorkoutLog,
-} from "../utils/ApiSupply";
+import { getExercisesFromIdArray, getUserMadeWorkouts, saveWorkoutLog } from "../utils/ApiSupply";
 
 export default function workoutLog() {
   const { user, setUserState } = useStoreContext();
@@ -17,6 +12,11 @@ export default function workoutLog() {
   const [currentDayData, setCurrentDayData] = useState({}); // {isoDate, timeInSeconds, completed, workout_id}
   const [yearMonthDay, setYearMonthDay] = useState({}); // {year, month, day}
   const [userMadeWorkouts, setUserMadeWorkouts] = useState([]);
+  const [workoutNote, setWorkoutNote] = useState("");
+
+  const handleWorkoutNoteChange = (e) => {
+    setWorkoutNote(e.target.value);
+  };
 
   const setDataToToday = () => {
     const date = new Date();
@@ -49,6 +49,7 @@ export default function workoutLog() {
       });
 
       setCurrentDayData(dayData);
+      setWorkoutNote(dayData.workoutNote || "");
     } else {
       setCurrentDayData({});
     }
@@ -91,29 +92,31 @@ export default function workoutLog() {
   const saveWorkout = async () => {
     // Make sure there are exercises to save
     if (currentDayData.exerciseData) {
+      // Make array of objects to enter into db
       const composedExercises = currentDayData.exerciseData.map((each) => {
         return { exercise_id: each.exercise_id, sets: each.sets };
       });
 
       // Get index of our currDayData
-      const workoutIndexInLog = user.workoutLog.findIndex(
+      const indexOfCurrDayData = user.workoutLog.findIndex(
         (workout) => workout.isoDate === currentDayData.isoDate
       );
 
       // Define log to send to DB
       let updatedWorkoutLog;
 
-      if (workoutIndexInLog > 0) {
+      if (indexOfCurrDayData > 0) {
         // Update existing workout
-        const newLog = [...user.workoutLog];
+        const workoutLogClone = [...user.workoutLog];
 
         // // update the index of current workout
-        newLog[workoutIndexInLog] = {
+        workoutLogClone[indexOfCurrDayData] = {
           ...currentDayData,
+          workoutNote: workoutNote,
           exerciseData: composedExercises,
         };
 
-        updatedWorkoutLog = newLog;
+        updatedWorkoutLog = workoutLogClone;
       } else {
         // Create new workoutLog entry
         const { year, month, day } = yearMonthDay;
@@ -127,12 +130,16 @@ export default function workoutLog() {
             workout_id: currentDayData.workout_id,
             exerciseData: composedExercises,
             workoutName: currentDayData.workoutName,
+            workoutNote: workoutNote,
           },
         ].sort((a, b) => a.isoDate.localeCompare(b.isoDate));
       }
 
       const userData = await saveWorkoutLog(updatedWorkoutLog, user._id);
       setUserState(userData);
+
+      //Clear the workout note
+      setWorkoutNote("");
     }
   };
 
@@ -169,6 +176,7 @@ export default function workoutLog() {
       workoutName: clicked.name,
       exerciseData: clicked.exercises,
     }));
+    setWorkoutNote("");
   };
 
   // Set page state if user is logged in
@@ -206,42 +214,62 @@ export default function workoutLog() {
 
         {!loading ? (
           <>
-            <CompleteButton onClick={saveWorkout}>Save Workout</CompleteButton>
+            {currentDayData.exerciseData ? (
+              <>
+                <CompleteButton onClick={saveWorkout}>Save Workout</CompleteButton>
 
-            <WorkoutList>
-              {currentDayData.exerciseData?.map(({ exercise, exercise_id, sets }) => (
-                <li className="exercise" key={exercise_id}>
-                  <h3 className="exercise-name">{exercise.name}</h3>
-                  <p>{exercise.equipment}</p>
-                  <ul>
-                    {sets.map(({ reps, weight, weightUnit }, i) => (
-                      <li className="set" key={i}>
-                        <p>
-                          <span>{reps}</span> reps
-                        </p>
+                <WorkoutList>
+                  {currentDayData.exerciseData?.map(({ exercise, exercise_id, sets }) => (
+                    <li className="exercise" key={exercise_id}>
+                      <h3 className="exercise-name">{exercise.name}</h3>
+                      <p>{exercise.equipment}</p>
+                      <ul>
+                        {sets.map(({ reps, weight, weightUnit }, i) => (
+                          <li className="set" key={i}>
+                            <p>
+                              <span>{reps}</span> reps
+                            </p>
 
-                        <div>
-                          <input
-                            type="number"
-                            name="weight"
-                            id="weight"
-                            value={weight || ""}
-                            onChange={(e) => handleWeightChange(e, exercise, i)}
-                          />
-                          <select name="unit" id="unit" defaultValue={weightUnit}>
-                            <option value="lbs">lbs</option>
-                            <option value="pin">pin</option>
-                          </select>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-              ))}
-            </WorkoutList>
+                            <div>
+                              <input
+                                type="number"
+                                name="weight"
+                                id="weight"
+                                value={weight || ""}
+                                onChange={(e) => handleWeightChange(e, exercise, i)}
+                              />
+                              <select name="unit" id="unit" defaultValue={weightUnit}>
+                                <option value="lbs">lbs</option>
+                                <option value="pin">pin</option>
+                              </select>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    </li>
+                  ))}
+                </WorkoutList>
+
+                <WorkoutNote>
+                  <h3>Notes:</h3>
+                  <textarea
+                    name=""
+                    id=""
+                    cols="30"
+                    rows="5"
+                    value={workoutNote}
+                    onChange={handleWorkoutNoteChange}
+                  ></textarea>
+                </WorkoutNote>
+              </>
+            ) : (
+              <FallbackText>
+                No Workout has been recored today. Select a workout from one of your workouts below.
+              </FallbackText>
+            )}
           </>
         ) : (
-          <h1>Loading...</h1>
+          <FallbackText>Loading...</FallbackText>
         )}
 
         <UserMadeWorkouts>
@@ -296,11 +324,16 @@ const HeaderContainer = styled.div`
 
   button {
     font-size: 3rem;
-    padding: 0.5rem;
+    padding: 0.5rem 1rem;
     background: transparent;
     border: none;
     border-radius: 5px;
     box-shadow: 0 0 5px grey;
+  }
+
+  @media (max-width: 500px) {
+    justify-content: space-between;
+    width: 100%;
   }
 `;
 
@@ -370,6 +403,25 @@ const WorkoutList = styled.ul`
   }
 `;
 
+const WorkoutNote = styled.div`
+  margin: 1rem auto 2rem;
+  border-radius: 5px;
+  box-shadow: 0 0 5px grey;
+  padding: 1rem;
+  text-align: left;
+
+  textarea {
+    padding: 0.5rem;
+    border-radius: 5px;
+    box-shadow: 0 0 5px #b9b9b9;
+    border: 1px solid #b9b9b9;
+    min-width: 200px;
+    max-width: 85vw;
+    font-size: 1.2rem;
+    font-family: inherit;
+  }
+`;
+
 const CompleteButton = styled.button`
   margin: 1rem auto;
   font-size: 1.5rem;
@@ -409,5 +461,18 @@ const UserMadeWorkouts = styled.div`
         padding-bottom: 0.5rem;
       }
     }
+  }
+`;
+
+const FallbackText = styled.h5`
+  border-radius: 5px;
+  box-shadow: 0 0 5px grey;
+  max-width: 300px;
+  margin: 2rem auto;
+  padding: 1rem;
+
+  @media (max-width: 500px) {
+    width: 100%;
+    max-width: 100%;
   }
 `;
