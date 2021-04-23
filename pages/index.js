@@ -126,7 +126,12 @@ const Home = () => {
             </form>
           </>
         )}
-        {user && <h1>Welcome {user.username}</h1>}
+        {user && (
+          <div>
+            <h1>Welcome {user.username}</h1>
+            <p>{user.workoutLog.length} workouts logged</p>
+          </div>
+        )}
       </MainContainer>
     </Layout>
   );
