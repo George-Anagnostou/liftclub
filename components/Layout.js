@@ -57,7 +57,7 @@ const MainContainer = styled.main`
 
 const NavBar = styled.nav`
   ul {
-    border-bottom: 4px solid grey;
+    border-bottom: 4px solid #cacaca;
     width: 100%;
     display: flex;
     list-style: none;
