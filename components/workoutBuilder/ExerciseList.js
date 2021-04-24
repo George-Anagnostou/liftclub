@@ -31,6 +31,7 @@ export default function ExerciseList({
   displayedExercises,
   isExerciseInCustomWorkout,
   addExercise,
+  removeExercise,
 }) {
   return (
     <ExercisesContainer>
@@ -87,7 +88,11 @@ export default function ExerciseList({
           <p>
             <span>equipment:</span> {each.equipment}
           </p>
-          <button onClick={() => addExercise(each)}>Add</button>
+          {isExerciseInCustomWorkout(each._id) ? (
+            <button onClick={() => removeExercise(each)}>Remove</button>
+          ) : (
+            <button onClick={() => addExercise(each)}>Add</button>
+          )}
         </li>
       ))}
     </ExercisesContainer>
@@ -138,19 +143,21 @@ const ExercisesContainer = styled.ul`
 
     display: flex;
     flex-direction: column;
+
     h3 {
       padding: 0.5rem 0;
     }
+
     p {
       flex: 1;
       display: block;
       width: 100%;
       border-bottom: 1px solid #d3d3d3;
       font-weight: 300;
+      
       span {
         font-weight: 100;
         display: block;
-        text-transform: uppercase;
         font-size: 0.6rem;
         width: 100%;
       }

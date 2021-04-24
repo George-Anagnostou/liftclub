@@ -201,7 +201,6 @@ export default function workoutBuilder() {
   useEffect(() => {
     const getAllPublicWorkouts = async () => {
       const allPublicWorkouts = await getPublicWorkouts();
-      console.log(allPublicWorkouts);
       setPublicWorkouts(allPublicWorkouts);
     };
     getAllPublicWorkouts();
@@ -219,6 +218,7 @@ export default function workoutBuilder() {
     <Layout>
       <Container>
         <CustomWorkout
+          user={user}
           workoutSavedSuccessfuly={workoutSavedSuccessfuly}
           customWorkoutExercises={customWorkoutExercises}
           customWorkoutName={customWorkoutName}
@@ -230,7 +230,6 @@ export default function workoutBuilder() {
           clearCustomWorkout={clearCustomWorkout}
           removeExercise={removeExercise}
           saveWorkoutToDB={saveWorkoutToDB}
-          user={user}
         />
 
         <UserWorkouts
@@ -245,6 +244,7 @@ export default function workoutBuilder() {
           displayedExercises={displayedExercises}
           isExerciseInCustomWorkout={isExerciseInCustomWorkout}
           addExercise={addExercise}
+          removeExercise={removeExercise}
         />
       </Container>
     </Layout>
