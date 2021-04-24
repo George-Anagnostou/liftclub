@@ -8,7 +8,6 @@
  *
  */
 export const saveWorkoutLog = async (workoutLog, user_id) => {
-  console.log(workoutLog);
   try {
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
@@ -67,13 +66,17 @@ export const postNewWorkout = async (workout) => {
 };
 
 export const updateExistingWorkout = async (workout) => {
-  const res = await fetch(`/api/workouts/${workout._id}`, {
-    method: "PUT",
-    contentType: "application/json",
-    body: JSON.stringify(workout),
-  });
+  try {
+    const res = await fetch(`/api/workouts/${workout._id}`, {
+      method: "PUT",
+      contentType: "application/json",
+      body: JSON.stringify(workout),
+    });
 
-  return { status: res.status };
+    return { status: res.status };
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 export const getWorkoutFromId = async (workout_id) => {
