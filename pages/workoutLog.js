@@ -18,6 +18,42 @@ export default function workoutLog() {
     setWorkoutNote(e.target.value);
   };
 
+  // Sets weight for a specific workout. Takes the event value and exercise name
+  const handleWeightChange = (e, exercise, setIndex) => {
+    // Cast value to number
+    const num = Number(e.target.value);
+
+    // Copy current exercises
+    const { exerciseData } = currentDayData;
+
+    const edit = exerciseData.find((item) => item.exercise_id === exercise._id);
+
+    edit.sets[setIndex].weight = num;
+
+    exerciseData.map((each) => {
+      if (each.exercise_id === edit.exercise_id) each = edit;
+    });
+
+    setCurrentDayData((prev) => ({ ...prev, exerciseData: exerciseData }));
+  };
+
+  const handleWeightUnitChange = (e, exercise, setIndex) => {
+    const unit = e.target.value;
+
+    // Copy current exercises
+    const { exerciseData } = currentDayData;
+
+    const edit = exerciseData.find((item) => item.exercise_id === exercise._id);
+
+    edit.sets[setIndex].weightUnit = unit;
+
+    exerciseData.map((each) => {
+      if (each.exercise_id === edit.exercise_id) each = edit;
+    });
+
+    setCurrentDayData((prev) => ({ ...prev, exerciseData: exerciseData }));
+  };
+
   const setDataToToday = () => {
     const date = new Date();
     const currYear = date.getFullYear();
@@ -143,25 +179,6 @@ export default function workoutLog() {
     }
   };
 
-  // Sets weight for a specific workout. Takes the event value and exercise name
-  const handleWeightChange = (e, exercise, setIndex) => {
-    // Cast value to number
-    const num = Number(e.target.value);
-
-    // Copy current exercises
-    const { exerciseData } = currentDayData;
-
-    const edit = exerciseData.find((item) => item.exercise_id === exercise._id);
-
-    edit.sets[setIndex].weight = num;
-
-    exerciseData.map((each) => {
-      if (each.exercise_id === edit.exercise_id) each = edit;
-    });
-
-    setCurrentDayData((prev) => ({ ...prev, exerciseData: exerciseData }));
-  };
-
   const displaySavedWorkout = async (clicked) => {
     // Grab all the exercise_ids from the workout
     const idArr = clicked.exercises.map((each) => each.exercise_id);
@@ -222,7 +239,6 @@ export default function workoutLog() {
                   {currentDayData.exerciseData?.map(({ exercise, exercise_id, sets }) => (
                     <li className="exercise" key={exercise_id}>
                       <h3 className="exercise-name">{exercise.name}</h3>
-                      <p>{exercise.equipment}</p>
                       <ul>
                         {sets.map(({ reps, weight, weightUnit }, i) => (
                           <li className="set" key={i}>
@@ -238,7 +254,12 @@ export default function workoutLog() {
                                 value={weight || ""}
                                 onChange={(e) => handleWeightChange(e, exercise, i)}
                               />
-                              <select name="unit" id="unit" defaultValue={weightUnit}>
+                              <select
+                                name="unit"
+                                id="unit"
+                                defaultValue={weightUnit}
+                                onChange={(e) => handleWeightUnitChange(e, exercise, i)}
+                              >
                                 <option value="lbs">lbs</option>
                                 <option value="pin">pin</option>
                               </select>
@@ -337,10 +358,27 @@ const HeaderContainer = styled.div`
     border: none;
     border-radius: 5px;
     box-shadow: 0 0 5px grey;
+
+    display: grid;
+    place-items: center;
   }
 
-  @media (max-width: 500px) {
+  @media (max-width: 425px) {
     justify-content: space-between;
+    width: 100%;
+  }
+`;
+
+const CompleteButton = styled.button`
+  margin: 1rem auto 0.5rem;
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  background: inherit;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 0 5px grey;
+
+  @media (max-width: 425px) {
     width: 100%;
   }
 `;
@@ -359,13 +397,13 @@ const WorkoutList = styled.ul`
     padding: 0.5rem;
     max-width: 100%;
 
-    margin: 1rem;
+    margin: 0.5rem 0;
     text-align: center;
 
-    > h3,
-    > p {
+    h3 {
       text-transform: uppercase;
     }
+
     ul {
       width: fit-content;
       display: flex;
@@ -376,9 +414,9 @@ const WorkoutList = styled.ul`
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 0.5rem 0;
+        padding: 0.5rem;
         width: fit-content;
-        margin: 1rem;
+        margin: 1rem auto;
 
         p {
           padding-right: 2rem;
@@ -409,15 +447,39 @@ const WorkoutList = styled.ul`
       }
     }
   }
+
+  @media (max-width: 425px) {
+    .exercise {
+      width: 100%;
+    }
+  }
 `;
 
-const CompleteButton = styled.button`
+const WorkoutNote = styled.div`
   margin: 1rem auto;
-  font-size: 1.5rem;
-  padding: 0.5rem;
-  border: none;
   border-radius: 5px;
   box-shadow: 0 0 5px grey;
+  padding: 1rem;
+  text-align: left;
+
+  textarea {
+    padding: 0.5rem;
+    border-radius: 5px;
+    box-shadow: 0 0 5px #b9b9b9;
+    border: 1px solid #b9b9b9;
+    min-width: 200px;
+    max-width: 85vw;
+    font-size: 1.2rem;
+    font-family: inherit;
+  }
+
+  @media (max-width: 425px) {
+    width: 100%;
+    textarea {
+      width: 100%;
+      max-width: unset;
+    }
+  }
 `;
 
 const UserMadeWorkouts = styled.div`
@@ -436,9 +498,10 @@ const UserMadeWorkouts = styled.div`
     flex-wrap: wrap;
 
     li {
+      width: 45%;
       cursor: pointer;
       margin: 0.5rem;
-      padding: 0.5rem;
+      padding: 0.5rem 0.2rem;
       border-radius: 5px;
       box-shadow: 0 0 5px grey;
       &:hover {
@@ -453,25 +516,6 @@ const UserMadeWorkouts = styled.div`
   }
 `;
 
-const WorkoutNote = styled.div`
-  margin: 1rem auto 2rem;
-  border-radius: 5px;
-  box-shadow: 0 0 5px grey;
-  padding: 1rem;
-  text-align: left;
-
-  textarea {
-    padding: 0.5rem;
-    border-radius: 5px;
-    box-shadow: 0 0 5px #b9b9b9;
-    border: 1px solid #b9b9b9;
-    min-width: 200px;
-    max-width: 85vw;
-    font-size: 1.2rem;
-    font-family: inherit;
-  }
-`;
-
 const FallbackText = styled.h5`
   border-radius: 5px;
   box-shadow: 0 0 5px grey;
@@ -479,7 +523,7 @@ const FallbackText = styled.h5`
   margin: 2rem auto;
   padding: 1rem;
 
-  @media (max-width: 500px) {
+  @media (max-width: 425px) {
     width: 100%;
     max-width: 100%;
   }
