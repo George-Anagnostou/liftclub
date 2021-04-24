@@ -156,7 +156,7 @@ const CustomWorkoutContainer = styled.ul`
       }
       button {
         cursor: pointer;
-        border: none;
+        border: 1px solid #acacac;
         border-radius: 3px;
         margin: 0.15rem;
       }
@@ -165,7 +165,7 @@ const CustomWorkoutContainer = styled.ul`
       padding: 0.2rem;
       margin-top: 0.5rem;
       cursor: pointer;
-      border: none;
+      border: 1px solid #acacac;
       border-radius: 0 0 5px 5px;
     }
   }
