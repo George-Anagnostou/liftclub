@@ -11,9 +11,8 @@ export default function Layout({ title = "Workout App", children }) {
   // Check local storage for username for persistant login
   useEffect(() => {
     const user_id = localStorage.getItem("workoutID");
-    if (user_id) {
-      loginUser(user_id);
-    }
+    // If local storage workoutID exists, logi user
+    if (user_id) loginUser(user_id);
   }, []);
 
   return (
