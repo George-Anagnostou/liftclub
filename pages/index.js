@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import styled from "styled-components";
 
-import Layout from "../components/Layout";
 import { useStoreContext } from "../context/state";
 
 const Home = () => {
-  const { authenticateLogin, user, setUserState } = useStoreContext();
+  const router = useRouter();
+  const { authenticateLogin, user, setUserState, loginUser } = useStoreContext();
 
   const [loginUsername, setLoginUsername] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
@@ -29,9 +30,13 @@ const Home = () => {
 
     const userData = await authenticateLogin(loginUsername, loginPassword);
 
-    userData
-      ? (localStorage.setItem("workoutID", userData._id), setInvalidLoginCreds(false))
-      : setInvalidLoginCreds(true);
+    if (userData) {
+      localStorage.setItem("workoutID", userData._id);
+      setInvalidLoginCreds(false);
+      router.push("/workoutLog");
+    } else {
+      setInvalidLoginCreds(true);
+    }
   };
 
   // CREATE ACCOUNT handlers
@@ -63,76 +68,86 @@ const Home = () => {
     }
   };
 
+  // Check local storage for username for persistant login
+  useEffect(() => {
+    const user_id = localStorage.getItem("workoutID");
+    // If local storage workoutID exists, logi user
+    if (user_id) {
+      loginUser(user_id);
+      setTimeout(() => {
+        router.push("/workoutLog");
+      }, 3000);
+    }
+  }, []);
+
   return (
-    <Layout>
-      <MainContainer>
-        {!user && (
-          <>
-            <form action="post" onSubmit={handleLogin}>
-              <h3>Login</h3>
-              {invalidLoginCreds && <p>Email or Password was incorrect</p>}
-              <div>
-                <label htmlFor="loginUsername">Username: </label>
-                <input
-                  type="text"
-                  name="loginUsername"
-                  id="loginUsername"
-                  value={loginUsername}
-                  onChange={handleLoginUsernameChange}
-                />
-              </div>
-              <div>
-                <label htmlFor="loginPassword">Password: </label>
-                <input
-                  type="text"
-                  name="loginPassword"
-                  id="loginPassword"
-                  value={loginPassword}
-                  onChange={handleLoginPasswordChange}
-                />
-              </div>
-              <button type="submit" onClick={handleLogin}>
-                Login
-              </button>
-            </form>
+    <MainContainer>
+      {!user && (
+        <>
+          <form action="post" onSubmit={handleLogin}>
+            <h3>Login</h3>
+            {invalidLoginCreds && <p>Email or Password was incorrect</p>}
+            <div>
+              <label htmlFor="loginUsername">Username: </label>
+              <input
+                type="text"
+                name="loginUsername"
+                id="loginUsername"
+                value={loginUsername}
+                onChange={handleLoginUsernameChange}
+              />
+            </div>
+            <div>
+              <label htmlFor="loginPassword">Password: </label>
+              <input
+                type="text"
+                name="loginPassword"
+                id="loginPassword"
+                value={loginPassword}
+                onChange={handleLoginPasswordChange}
+              />
+            </div>
+            <button type="submit" onClick={handleLogin}>
+              Login
+            </button>
+          </form>
 
-            <form action="post" onSubmit={handleLogin}>
-              <h3>Create Account</h3>
-              {usernameExists && <p>Username is already taken</p>}
+          <form action="post" onSubmit={handleLogin}>
+            <h3>Create Account</h3>
+            {usernameExists && <p>Username is already taken</p>}
 
-              <div>
-                <label htmlFor="createAccUsername">Username: </label>
-                <input
-                  type="text"
-                  name="createAccUsername"
-                  id="createAccUsername"
-                  value={createAccUsername}
-                  onChange={handleCreateAccUsernameChange}
-                />
-              </div>
-              <div>
-                <label htmlFor="createAccPassword">Password: </label>
-                <input
-                  type="text"
-                  name="createAccPassword"
-                  id="createAccPassword"
-                  value={createAccPassword}
-                  onChange={handleCreateAccPasswordChange}
-                />
-              </div>
-              <button type="submit" onClick={handleCreateAccount}>
-                Submit
-              </button>
-            </form>
-          </>
-        )}
-        {user && (
-          <div>
-            <h1>Welcome {user.username}</h1>
-          </div>
-        )}
-      </MainContainer>
-    </Layout>
+            <div>
+              <label htmlFor="createAccUsername">Username: </label>
+              <input
+                type="text"
+                name="createAccUsername"
+                id="createAccUsername"
+                value={createAccUsername}
+                onChange={handleCreateAccUsernameChange}
+              />
+            </div>
+            <div>
+              <label htmlFor="createAccPassword">Password: </label>
+              <input
+                type="text"
+                name="createAccPassword"
+                id="createAccPassword"
+                value={createAccPassword}
+                onChange={handleCreateAccPasswordChange}
+              />
+            </div>
+            <button type="submit" onClick={handleCreateAccount}>
+              Submit
+            </button>
+          </form>
+        </>
+      )}
+      {user && (
+        <div>
+          <h1>Welcome {user.username}</h1>
+        </div>
+      )}
+    </MainContainer>
   );
 };
 
