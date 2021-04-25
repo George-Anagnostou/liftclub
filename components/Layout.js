@@ -22,11 +22,6 @@ export default function Layout({ title = "Workout App", children }) {
         <h1>Anagnostou Lift Club</h1>
         <NavBar>
           <ul>
-            <Link href="/">
-              <li>
-                <a>Home</a>
-              </li>
-            </Link>
             <Link href="/workoutLog">
               <li>
                 <a>Workout Log</a>
@@ -35,11 +30,6 @@ export default function Layout({ title = "Workout App", children }) {
             <Link href="/workoutBuilder">
               <li>
                 <a>Workout Buider</a>
-              </li>
-            </Link>
-            <Link href="/schedule">
-              <li>
-                <a>Schedule</a>
               </li>
             </Link>
           </ul>
@@ -65,7 +55,7 @@ const NavBar = styled.nav`
       border-radius: 5px 5px 0 0;
       box-shadow: 0 0 2px grey;
 
-      width: 25%;
+      flex: 1;
       display: grid;
       place-items: center;
       cursor: pointer;
