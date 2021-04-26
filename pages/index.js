@@ -143,9 +143,10 @@ const Home = () => {
         </>
       )}
       {user && (
-        <div>
+        <WelcomeMessage>
           <h1>Welcome {user.username}</h1>
-        </div>
+          <p>You have logged {user.workoutLog.length} workouts.</p>
+        </WelcomeMessage>
       )}
     </MainContainer>
   );
@@ -174,4 +175,8 @@ const MainContainer = styled.div`
       padding: 0.5rem;
     }
   }
+`;
+
+const WelcomeMessage = styled.div`
+  text-align: center;
 `;
