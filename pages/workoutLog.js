@@ -223,7 +223,7 @@ export default function workoutLog() {
       <MainContainer>
         <HeaderContainer>
           <button onClick={() => changeCurrentDayData("yesterday")}>{"<"}</button>
-          <div onClick={setDataToToday}>
+          <div className="date" onClick={setDataToToday}>
             <h1>{`${yearMonthDay.month + 1}/${yearMonthDay.day}/${yearMonthDay.year}`}</h1>
             <h5>{currentDayData.workoutName || "No Workout"}</h5>
           </div>
@@ -335,13 +335,16 @@ const HeaderContainer = styled.div`
   align-items: center;
   text-align: center;
 
-  div {
+  .date {
     margin: 0 1rem;
     height: 70px;
     padding: 0 1rem;
     cursor: pointer;
     border-radius: 5px;
     box-shadow: 0 0 5px grey;
+
+    display: grid;
+    place-items: center;
 
     h1,
     h5 {
