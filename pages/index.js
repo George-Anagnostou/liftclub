@@ -82,7 +82,12 @@ const Home = () => {
 
   return (
     <MainContainer>
-      {!user && (
+      {user ? (
+        <WelcomeMessage>
+          <h1>Welcome {user.username}</h1>
+          <p>You have logged {user.workoutLog.length} workouts.</p>
+        </WelcomeMessage>
+      ) : (
         <>
           <form action="post" onSubmit={handleLogin}>
             <h3>Login</h3>
@@ -141,12 +146,6 @@ const Home = () => {
             </button>
           </form>
         </>
-      )}
-      {user && (
-        <WelcomeMessage>
-          <h1>Welcome {user.username}</h1>
-          <p>You have logged {user.workoutLog.length} workouts.</p>
-        </WelcomeMessage>
       )}
     </MainContainer>
   );
