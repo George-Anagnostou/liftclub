@@ -211,45 +211,48 @@ export default function workoutBuilder() {
     if (data) setDisplayedExercises(data);
   }, [data]);
   // Used with SWR
-  if (error) return <div>failed to load</div>;
-  if (!data) return <div>loading...</div>;
+  if (error) return <h1>failed to load</h1>;
 
   return (
     <Layout>
-      <Container>
-        <section>
-          <CustomWorkout
-            user={user}
-            workoutSavedSuccessfuly={workoutSavedSuccessfuly}
-            customWorkoutExercises={customWorkoutExercises}
-            customWorkoutName={customWorkoutName}
-            customWorkoutPublic={customWorkoutPublic}
-            handleWorkoutNameChange={handleWorkoutNameChange}
-            handlePrivacyChange={handlePrivacyChange}
-            handleRepChange={handleRepChange}
-            changeSetLength={changeSetLength}
-            clearCustomWorkout={clearCustomWorkout}
+      {data ? (
+        <Container>
+          <section>
+            <CustomWorkout
+              user={user}
+              workoutSavedSuccessfuly={workoutSavedSuccessfuly}
+              customWorkoutExercises={customWorkoutExercises}
+              customWorkoutName={customWorkoutName}
+              customWorkoutPublic={customWorkoutPublic}
+              handleWorkoutNameChange={handleWorkoutNameChange}
+              handlePrivacyChange={handlePrivacyChange}
+              handleRepChange={handleRepChange}
+              changeSetLength={changeSetLength}
+              clearCustomWorkout={clearCustomWorkout}
+              removeExercise={removeExercise}
+              saveWorkoutToDB={saveWorkoutToDB}
+            />
+
+            <UserWorkouts
+              userWorkouts={userWorkouts}
+              displaySavedWorkout={displaySavedWorkout}
+              customWorkoutName={customWorkoutName}
+              publicWorkouts={publicWorkouts}
+            />
+          </section>
+
+          <ExerciseList
+            filterExercisesBy={filterExercisesBy}
+            displayedExercises={displayedExercises}
+            isExerciseInCustomWorkout={isExerciseInCustomWorkout}
+            addExercise={addExercise}
             removeExercise={removeExercise}
-            saveWorkoutToDB={saveWorkoutToDB}
+            user={user}
           />
-
-          <UserWorkouts
-            userWorkouts={userWorkouts}
-            displaySavedWorkout={displaySavedWorkout}
-            customWorkoutName={customWorkoutName}
-            publicWorkouts={publicWorkouts}
-          />
-        </section>
-
-        <ExerciseList
-          filterExercisesBy={filterExercisesBy}
-          displayedExercises={displayedExercises}
-          isExerciseInCustomWorkout={isExerciseInCustomWorkout}
-          addExercise={addExercise}
-          removeExercise={removeExercise}
-          user={user}
-        />
-      </Container>
+        </Container>
+      ) : (
+        <h1>Loading...</h1>
+      )}
     </Layout>
   );
 }
