@@ -20,6 +20,7 @@ export default function UserWorkouts({
           </li>
         ))}
       </ul>
+
       <ul>
         <h3>Public Workouts</h3>
         {publicWorkouts.map((each, i) => (
@@ -42,11 +43,12 @@ const UserWorkoutsContainer = styled.div`
   border-radius: 5px;
   box-shadow: 0 0 5px grey;
   width: 15%;
+  margin: 0.5rem 0;
 
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  flex-wrap: wrap;
+  flex-direction: column;
   ul {
     width: 100%;
 
@@ -56,7 +58,7 @@ const UserWorkoutsContainer = styled.div`
       box-shadow: 0 0 5px grey;
 
       cursor: pointer;
-      padding: 1rem;
+      padding: 0.5rem;
       margin: 1rem;
       text-align: center;
       text-transform: capitalize;
@@ -75,5 +77,6 @@ const UserWorkoutsContainer = styled.div`
 
   @media (max-width: 768px) {
     width: 100%;
+    flex-direction: row;
   }
 `;

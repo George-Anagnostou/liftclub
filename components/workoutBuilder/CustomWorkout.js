@@ -27,6 +27,7 @@ export default function CustomWorkout({
             <button onClick={clearCustomWorkout}>Clear</button>
           )}
         </div>
+
         <div className="workout-data">
           <label htmlFor="workoutName">Name: </label>
           <input
@@ -52,7 +53,7 @@ export default function CustomWorkout({
       </div>
 
       {customWorkoutExercises.map(({ exercise, sets }, i) => (
-        <li key={exercise._id}>
+        <li key={exercise._id} className="exercise">
           <p>
             <span>{i + 1}.</span> {exercise.name}
           </p>
@@ -87,7 +88,8 @@ const CustomWorkoutContainer = styled.ul`
   border: none;
   border-radius: 5px;
   box-shadow: 0 0 5px grey;
-  width: 25%;
+  width: 85%;
+  margin: 0.5rem 0;
 
   display: flex;
   justify-content: center;
@@ -131,12 +133,14 @@ const CustomWorkoutContainer = styled.ul`
     }
   }
 
-  li {
+  .exercise {
     border-radius: 5px;
     box-shadow: 0 0 5px grey;
-    background: rgb(215, 221, 247);
+    background: rgba(168, 182, 255, 0.24);
     width: 100%;
-    max-width: 150px;
+    flex: 1;
+    min-width: 150px;
+    max-width: 160px;
     margin: 0.5rem;
     text-align: center;
     text-transform: capitalize;
@@ -159,14 +163,15 @@ const CustomWorkoutContainer = styled.ul`
         border: 1px solid #acacac;
         border-radius: 3px;
         margin: 0.15rem;
+        padding: 0.25rem;
       }
     }
     button {
-      padding: 0.2rem;
-      margin-top: 0.5rem;
-      cursor: pointer;
       border: 1px solid #acacac;
-      border-radius: 0 0 5px 5px;
+      padding: 0.5rem 0;
+      cursor: pointer;
+      background: inherit;
+      border-radius: 0 0px 5px 5px;
     }
   }
 

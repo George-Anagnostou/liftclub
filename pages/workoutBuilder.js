@@ -88,7 +88,7 @@ export default function workoutBuilder() {
   };
 
   const changeSetLength = (method, exerciseIndex) => {
-    // Copy  state
+    // Copy state
     const customExercisesCopy = [...customWorkoutExercises];
 
     switch (method) {
@@ -217,27 +217,29 @@ export default function workoutBuilder() {
   return (
     <Layout>
       <Container>
-        <CustomWorkout
-          user={user}
-          workoutSavedSuccessfuly={workoutSavedSuccessfuly}
-          customWorkoutExercises={customWorkoutExercises}
-          customWorkoutName={customWorkoutName}
-          customWorkoutPublic={customWorkoutPublic}
-          handleWorkoutNameChange={handleWorkoutNameChange}
-          handlePrivacyChange={handlePrivacyChange}
-          handleRepChange={handleRepChange}
-          changeSetLength={changeSetLength}
-          clearCustomWorkout={clearCustomWorkout}
-          removeExercise={removeExercise}
-          saveWorkoutToDB={saveWorkoutToDB}
-        />
+        <section>
+          <CustomWorkout
+            user={user}
+            workoutSavedSuccessfuly={workoutSavedSuccessfuly}
+            customWorkoutExercises={customWorkoutExercises}
+            customWorkoutName={customWorkoutName}
+            customWorkoutPublic={customWorkoutPublic}
+            handleWorkoutNameChange={handleWorkoutNameChange}
+            handlePrivacyChange={handlePrivacyChange}
+            handleRepChange={handleRepChange}
+            changeSetLength={changeSetLength}
+            clearCustomWorkout={clearCustomWorkout}
+            removeExercise={removeExercise}
+            saveWorkoutToDB={saveWorkoutToDB}
+          />
 
-        <UserWorkouts
-          userWorkouts={userWorkouts}
-          displaySavedWorkout={displaySavedWorkout}
-          customWorkoutName={customWorkoutName}
-          publicWorkouts={publicWorkouts}
-        />
+          <UserWorkouts
+            userWorkouts={userWorkouts}
+            displaySavedWorkout={displaySavedWorkout}
+            customWorkoutName={customWorkoutName}
+            publicWorkouts={publicWorkouts}
+          />
+        </section>
 
         <ExerciseList
           filterExercisesBy={filterExercisesBy}
@@ -252,27 +254,24 @@ export default function workoutBuilder() {
   );
 }
 
-/**
- *
- *
- *
- *
- * START CSS
- *
- *
- *
- *
- *
- */
 const Container = styled.div`
   display: flex;
-  align-items: flex-start;
-  gap: 1rem;
+  flex-direction: column;
+
   position: relative;
   margin-top: 0.5rem;
+  padding: 0.5rem;
+
+  section {
+    display: flex;
+  }
 
   @media (max-width: 768px) {
     flex-direction: column;
     height: fit-content;
+
+    section {
+      flex-direction: column;
+    }
   }
 `;

@@ -61,19 +61,23 @@ export default function ExerciseList({
       {displayedExercises.map((each) => (
         <li
           key={each._id}
-          style={isExerciseInCustomWorkout(each._id) ? { background: "#c9c9c9" } : {}}
+          className="exercise"
+          style={isExerciseInCustomWorkout(each._id) ? { background: "#cccccc" } : {}}
         >
           <h3>{each.name}</h3>
 
           <p>
             <span>muscle group:</span> {each.muscleGroup}
           </p>
+
           <p>
             <span>muscle worked:</span> {each.muscleWorked}
           </p>
+
           <p>
             <span>equipment:</span> {each.equipment}
           </p>
+
           {isExerciseInCustomWorkout(each._id) ? (
             <button onClick={() => removeExercise(each)}>Remove</button>
           ) : (
@@ -89,10 +93,9 @@ const ExercisesContainer = styled.ul`
   border: none;
   border-radius: 5px;
   box-shadow: 0 0 5px grey;
-  width: 60%;
-  max-height: 85vh;
+  width: 100%;
+  margin: 0.5rem 0;
   overflow-x: hidden;
-  overflow-y: scroll;
   position: relative;
 
   flex: 1;
@@ -116,11 +119,13 @@ const ExercisesContainer = styled.ul`
     }
   }
 
-  li {
+  .exercise {
     border-radius: 5px;
     box-shadow: 0 0 5px grey;
     width: 100%;
-    max-width: 150px;
+    flex: 1;
+    min-width: 140px;
+    max-width: 160px;
     min-height: 200px;
     margin: 1rem;
     text-align: center;
