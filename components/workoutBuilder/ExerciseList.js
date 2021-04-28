@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
+import CreateExerciseModul from "./CreateExerciseModul";
 
 const muscleGroups = [
   "all",
@@ -15,18 +16,6 @@ const muscleGroups = [
   "core",
 ];
 
-const motions = [
-  "all",
-  "pulling",
-  "pushing",
-  "thrusting",
-  "curling",
-  "squatting",
-  "rotating",
-  "crunching",
-  "breathing",
-];
-
 export default function ExerciseList({
   filterExercisesBy,
   displayedExercises,
@@ -36,15 +25,6 @@ export default function ExerciseList({
   user,
 }) {
   const [showCreateExerciseModal, setShowCreateExerciseModal] = useState(false);
-
-  const toggleExerciseModul = (e) => {
-    if (showCreateExerciseModal) {
-      // if modul is open, only close the modul when the shadow is clicked
-      if (e.target.classList.contains("modul-shadow")) setShowCreateExerciseModal(false);
-    } else {
-      setShowCreateExerciseModal(true);
-    }
-  };
 
   return (
     <ExercisesContainer>
@@ -65,27 +45,18 @@ export default function ExerciseList({
           </select>
         </div>
 
-        <div>
-          <label htmlFor="motion">Motion: </label>
-          <select
-            name="motion"
-            id="motion"
-            onChange={(e) => filterExercisesBy({ field: "motion", value: e.target.value })}
-          >
-            {motions.map((motion) => (
-              <option key={motion} value={motion}>
-                {motion}
-              </option>
-            ))}
-          </select>
-        </div>
-
         {user?.isAdmin && (
-          <CreateExcerciseButton onClick={toggleExerciseModul}>
+          <CreateExcerciseButton onClick={() => setShowCreateExerciseModal(true)}>
             Create Exercise
           </CreateExcerciseButton>
         )}
       </div>
+      {showCreateExerciseModal && (
+        <CreateExerciseModul
+          muscleGroups={muscleGroups}
+          setShowModul={setShowCreateExerciseModal}
+        />
+      )}
 
       {displayedExercises.map((each) => (
         <li
@@ -93,10 +64,6 @@ export default function ExerciseList({
           style={isExerciseInCustomWorkout(each._id) ? { background: "#c9c9c9" } : {}}
         >
           <h3>{each.name}</h3>
-          <p>
-            <span>motion:</span>
-            {each.motion}
-          </p>
 
           <p>
             <span>muscle group:</span> {each.muscleGroup}
@@ -114,36 +81,6 @@ export default function ExerciseList({
           )}
         </li>
       ))}
-
-      {showCreateExerciseModal && (
-        <CreateExerciseModal onClick={toggleExerciseModul} className="modul-shadow">
-          <div className="modul">
-            <form action="POST">
-              <h3>Create a New Exercise</h3>
-              <div>
-                <label htmlFor="name">Name</label>
-                <input type="text" name="name" />
-              </div>
-              <div>
-                <label htmlFor="equipment">Equipment</label>
-                <input type="text" name="equipment" />
-              </div>
-              <div>
-                <label htmlFor="muscleGroup">Muscle Group</label>
-                <input type="text" name="muscleGroup" />
-              </div>
-              <div>
-                <label htmlFor="motion">Motion</label>
-                <input type="text" name="motion" />
-              </div>
-              <div>
-                <label htmlFor="muscleWorked">Muscle Worked</label>
-                <input type="text" name="muscleWorked" />
-              </div>
-            </form>
-          </div>
-        </CreateExerciseModal>
-      )}
     </ExercisesContainer>
   );
 }
@@ -173,8 +110,8 @@ const ExercisesContainer = styled.ul`
     border-bottom: 1px solid black;
     text-align: center;
     div {
-      padding: 0.5rem 0;
-      width: 50%;
+      flex: 1;
+      padding: 0.5rem;
       display: inline-block;
     }
   }
@@ -184,7 +121,7 @@ const ExercisesContainer = styled.ul`
     box-shadow: 0 0 5px grey;
     width: 100%;
     max-width: 150px;
-    min-height: 250px;
+    min-height: 200px;
     margin: 1rem;
     text-align: center;
     text-transform: capitalize;
@@ -226,34 +163,7 @@ const ExercisesContainer = styled.ul`
   }
 `;
 
-const CreateExcerciseButton = styled.button``;
-
-const CreateExerciseModal = styled.div`
-  height: 100vh;
-  width: 100vw;
-  background: rgba(0, 0, 0, 0.2);
-
-  position: fixed;
-  top: 0;
-  left: 0;
-
-  display: grid;
-  place-items: center;
-
-  .modul {
-    height: 70%;
-    width: 95%;
-    max-width: 500px;
-    background: white;
-
-    display: grid;
-    place-items: center;
-
-    form {
-      height: 100%;
-      display: flex;
-      justify-content: space-around;
-      flex-direction: column;
-    }
-  }
+const CreateExcerciseButton = styled.button`
+  padding: 0.5rem;
+  margin: 0.5rem;
 `;
