@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 
 const muscleGroups = [
@@ -32,7 +33,19 @@ export default function ExerciseList({
   isExerciseInCustomWorkout,
   addExercise,
   removeExercise,
+  user,
 }) {
+  const [showCreateExerciseModal, setShowCreateExerciseModal] = useState(false);
+
+  const toggleExerciseModul = (e) => {
+    if (showCreateExerciseModal) {
+      // if modul is open, only close the modul when the shadow is clicked
+      if (e.target.classList.contains("modul-shadow")) setShowCreateExerciseModal(false);
+    } else {
+      setShowCreateExerciseModal(true);
+    }
+  };
+
   return (
     <ExercisesContainer>
       <div className="exercise-control">
@@ -66,6 +79,12 @@ export default function ExerciseList({
             ))}
           </select>
         </div>
+
+        {user?.isAdmin && (
+          <CreateExcerciseButton onClick={toggleExerciseModul}>
+            Create Exercise
+          </CreateExcerciseButton>
+        )}
       </div>
 
       {displayedExercises.map((each) => (
@@ -95,6 +114,36 @@ export default function ExerciseList({
           )}
         </li>
       ))}
+
+      {showCreateExerciseModal && (
+        <CreateExerciseModal onClick={toggleExerciseModul} className="modul-shadow">
+          <div className="modul">
+            <form action="POST">
+              <h3>Create a New Exercise</h3>
+              <div>
+                <label htmlFor="name">Name</label>
+                <input type="text" name="name" />
+              </div>
+              <div>
+                <label htmlFor="equipment">Equipment</label>
+                <input type="text" name="equipment" />
+              </div>
+              <div>
+                <label htmlFor="muscleGroup">Muscle Group</label>
+                <input type="text" name="muscleGroup" />
+              </div>
+              <div>
+                <label htmlFor="motion">Motion</label>
+                <input type="text" name="motion" />
+              </div>
+              <div>
+                <label htmlFor="muscleWorked">Muscle Worked</label>
+                <input type="text" name="muscleWorked" />
+              </div>
+            </form>
+          </div>
+        </CreateExerciseModal>
+      )}
     </ExercisesContainer>
   );
 }
@@ -154,7 +203,7 @@ const ExercisesContainer = styled.ul`
       width: 100%;
       border-bottom: 1px solid #d3d3d3;
       font-weight: 300;
-      
+
       span {
         font-weight: 100;
         display: block;
@@ -174,5 +223,37 @@ const ExercisesContainer = styled.ul`
 
   @media (max-width: 768px) {
     width: 100%;
+  }
+`;
+
+const CreateExcerciseButton = styled.button``;
+
+const CreateExerciseModal = styled.div`
+  height: 100vh;
+  width: 100vw;
+  background: rgba(0, 0, 0, 0.2);
+
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  display: grid;
+  place-items: center;
+
+  .modul {
+    height: 70%;
+    width: 95%;
+    max-width: 500px;
+    background: white;
+
+    display: grid;
+    place-items: center;
+
+    form {
+      height: 100%;
+      display: flex;
+      justify-content: space-around;
+      flex-direction: column;
+    }
   }
 `;

@@ -245,6 +245,7 @@ export default function workoutBuilder() {
           isExerciseInCustomWorkout={isExerciseInCustomWorkout}
           addExercise={addExercise}
           removeExercise={removeExercise}
+          user={user}
         />
       </Container>
     </Layout>
