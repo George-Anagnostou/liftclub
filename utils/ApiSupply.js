@@ -33,7 +33,7 @@ export const saveWorkoutLog = async (workoutLog, user_id) => {
  */
 export const getExercisesFromIdArray = async (idArr) => {
   try {
-    const res = await fetch("/api/exercises", {
+    const res = await fetch("/api/exercises/queryMultiple", {
       method: "POST",
       contentType: "application/json",
       body: JSON.stringify(idArr),
@@ -41,6 +41,20 @@ export const getExercisesFromIdArray = async (idArr) => {
 
     const exercises = await res.json();
     return exercises;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const createExercise = async (exercise) => {
+  try {
+    const res = await fetch("/api/exercises", {
+      method: "POST",
+      contentType: "application/json",
+      body: JSON.stringify(exercise),
+    });
+
+    return { status: res.status };
   } catch (e) {
     console.log(e);
   }

@@ -1,5 +1,4 @@
 import { connectToDatabase } from "../../../utils/mongodb";
-import { ObjectId } from "mongodb";
 
 export default async (req, res) => {
   const httpMethod = req.method;
@@ -11,15 +10,12 @@ export default async (req, res) => {
       res.json(exercises);
       break;
     case "POST":
-      const idArr = JSON.parse(req.body);
+      const exercise = JSON.parse(req.body);
 
-      const foundExercises = await db
-        .collection("exercises")
-        .find({
-          _id: { $in: idArr.map((_id) => ObjectId(_id)) },
-        })
-        .toArray();
-      res.json(foundExercises);
+      const added = await db.collection("exercises").insertOne(exercise);
+
+      added.insertedId ? res.status(201).end() : res.status(404).end();
+
       break;
     case "PUT":
       break;
