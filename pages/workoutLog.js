@@ -21,37 +21,23 @@ export default function workoutLog() {
   };
 
   // Sets weight for a specific workout. Takes the event value and exercise name
-  const handleWeightChange = (e, exercise, setIndex) => {
+  const handleWeightChange = (e, exerciseIndex, setIndex) => {
     // Cast value to number
-    const num = Number(e.target.value);
+    const num = e.target.value === "" ? "" : Number(e.target.value);
 
-    // Copy current exercises
     const { exerciseData } = currentDayData;
 
-    const edit = exerciseData.find((item) => item.exercise_id === exercise._id);
-
-    edit.sets[setIndex].weight = num;
-
-    exerciseData.map((each) => {
-      if (each.exercise_id === edit.exercise_id) each = edit;
-    });
+    exerciseData[exerciseIndex].sets[setIndex].weight = num;
 
     setCurrentDayData((prev) => ({ ...prev, exerciseData: exerciseData }));
   };
 
-  const handleWeightUnitChange = (e, exercise, setIndex) => {
+  const handleWeightUnitChange = (e, exerciseIndex, setIndex) => {
     const unit = e.target.value;
 
-    // Copy current exercises
     const { exerciseData } = currentDayData;
 
-    const edit = exerciseData.find((item) => item.exercise_id === exercise._id);
-
-    edit.sets[setIndex].weightUnit = unit;
-
-    exerciseData.map((each) => {
-      if (each.exercise_id === edit.exercise_id) each = edit;
-    });
+    exerciseData[exerciseIndex].sets[setIndex].weightUnit = unit;
 
     setCurrentDayData((prev) => ({ ...prev, exerciseData: exerciseData }));
   };
@@ -101,19 +87,26 @@ export default function workoutLog() {
     return dayData;
   };
 
-  // Change to tomorrow's or yesterday's workout data
-  const changeCurrentDayData = (direction) => {
-    const { year, month, day } = yearMonthDay;
-    const date = new Date(year, month, day);
+  const formatDate = (numOfDaysToShift) => {
+    const date = new Date();
 
-    switch (direction) {
-      case "tomorrow":
-        date.setDate(date.getDate() + 1);
-        break;
-      case "yesterday":
-        date.setDate(date.getDate() - 1);
-        break;
-    }
+    date.setDate(date.getDate() + numOfDaysToShift);
+
+    return (
+      <>
+        <h5>{String(date).substring(0, 3)}</h5>
+        <h3>{String(date).substring(8, 11)}</h3>
+        {date.getDate() === 1 && <h2>{String(date).substring(3, 7)}</h2>}
+      </>
+    );
+  };
+
+  // Change to tomorrow's or yesterday's workout data
+  const changeCurrentDayData = (numOfDaysToShift) => {
+    const currDate = new Date();
+    const date = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate());
+
+    date.setDate(date.getDate() + numOfDaysToShift);
 
     const newYear = date.getFullYear();
     const newMonth = date.getMonth();
@@ -223,14 +216,17 @@ export default function workoutLog() {
   return (
     <Layout>
       <MainContainer>
-        <HeaderContainer>
-          <button onClick={() => changeCurrentDayData("yesterday")}>{"<"}</button>
-          <div className="date" onClick={setDataToToday}>
-            <h1>{`${yearMonthDay.month + 1}/${yearMonthDay.day}/${yearMonthDay.year}`}</h1>
-            <h5>{currentDayData.workoutName || "No Workout"}</h5>
-          </div>
-          <button onClick={() => changeCurrentDayData("tomorrow")}>{">"}</button>
-        </HeaderContainer>
+        <DateBar>
+          {[-2, -1, ...Array(90).keys()].map((x) => (
+            <li
+              className={x ? "date" : "date today"}
+              onClick={() => changeCurrentDayData(-x)}
+              key={-x}
+            >
+              {formatDate(-x)}
+            </li>
+          ))}
+        </DateBar>
 
         {loading ? (
           <FallbackText>Loading...</FallbackText>
@@ -279,49 +275,50 @@ const MainContainer = styled.main`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 0.5rem;
+  padding: 0.5rem 0;
 `;
 
-const HeaderContainer = styled.div`
+const DateBar = styled.ul`
   display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+  flex-direction: row-reverse;
+
+  width: 100%;
+  padding: 0.25rem;
+  overflow-x: scroll;
 
   .date {
-    margin: 0 1rem;
-    height: 70px;
-    padding: 0 1rem;
+    min-width: 60px;
+    padding: 0 0.5rem;
+    margin: 0 0.5rem;
     cursor: pointer;
     border-radius: 5px;
     box-shadow: 0 0 5px grey;
+    position: relative;
+    height: fit-content;
+    text-align: center;
 
-    display: grid;
-    place-items: center;
-
-    h1,
+    h4,
     h5 {
-      text-transform: uppercase;
+      font-weight: 500;
+      margin: 0.25rem;
+    }
+    h2 {
+      color: #c1d7f7;
     }
   }
 
-  button {
-    flex: 1;
-    font-size: 3rem;
-    height: 70px;
-    padding: 0 0.5rem;
-    background: transparent;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 0 0 5px grey;
-
-    display: grid;
-    place-items: center;
+  .today {
+    background: #dddddd;
   }
 
   @media (max-width: 500px) {
-    justify-content: space-between;
     width: 100%;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 `;
 
@@ -329,7 +326,7 @@ const FallbackText = styled.h5`
   border-radius: 5px;
   box-shadow: 0 0 5px grey;
   max-width: 300px;
-  margin: 2rem auto;
+  margin: 1rem auto;
   padding: 1rem;
 
   @media (max-width: 500px) {
