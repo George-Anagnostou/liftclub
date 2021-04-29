@@ -105,8 +105,7 @@ const ExercisesContainer = styled.ul`
   flex-wrap: wrap;
 
   .exercise-control {
-    position: sticky;
-    top: 0;
+
     background: rgb(226, 226, 226);
     width: 100%;
 
