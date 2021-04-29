@@ -13,12 +13,12 @@ export default function Workout({
       <SaveWorkoutButton onClick={saveWorkout}>Save Workout</SaveWorkoutButton>
 
       <WorkoutList>
-        {currentDayData.exerciseData?.map(({ exercise, exercise_id, sets }) => (
+        {currentDayData.exerciseData?.map(({ exercise, exercise_id, sets }, i) => (
           <li className="exercise" key={exercise_id}>
             <h3 className="exercise-name">{exercise.name}</h3>
             <ul>
-              {sets.map(({ reps, weight, weightUnit }, i) => (
-                <li className="set" key={i}>
+              {sets.map(({ reps, weight, weightUnit }, j) => (
+                <li className="set" key={`${exercise_id} ${j}`}>
                   <p>
                     <span>{reps}</span> reps
                   </p>
@@ -29,13 +29,13 @@ export default function Workout({
                       name="weight"
                       id="weight"
                       value={weight || ""}
-                      onChange={(e) => handleWeightChange(e, exercise, i)}
+                      onChange={(e) => handleWeightChange(e, i, j)}
                     />
                     <select
                       name="unit"
                       id="unit"
                       defaultValue={weightUnit}
-                      onChange={(e) => handleWeightUnitChange(e, exercise, i)}
+                      onChange={(e) => handleWeightUnitChange(e, i, j)}
                     >
                       <option value="lbs">lbs</option>
                       <option value="pin">pin</option>
