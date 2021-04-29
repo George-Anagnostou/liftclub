@@ -75,7 +75,7 @@ const SaveWorkoutButton = styled.button`
   box-shadow: 0 0 5px grey;
 
   @media (max-width: 500px) {
-    width: 100%;
+    width: 98%;
   }
 `;
 
@@ -149,7 +149,7 @@ const WorkoutList = styled.ul`
 
   @media (max-width: 500px) {
     .exercise {
-      width: 100%;
+      width: 98%;
 
       ul {
         width: 100%;
@@ -181,7 +181,7 @@ const WorkoutNote = styled.div`
   }
 
   @media (max-width: 500px) {
-    width: 100%;
+    width: 98%;
     textarea {
       width: 100%;
       max-width: unset;

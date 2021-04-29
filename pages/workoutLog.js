@@ -88,16 +88,21 @@ export default function workoutLog() {
   };
 
   const formatDate = (numOfDaysToShift) => {
+    // Shift todays date by a specified number of days
     const date = new Date();
-
     date.setDate(date.getDate() + numOfDaysToShift);
 
+    const { year, month, day } = yearMonthDay;
+
+    const dateCurrentlyDisplayed =
+      date.getFullYear() === year && date.getMonth() === month && date.getDate() === day;
+
     return (
-      <>
+      <div style={dateCurrentlyDisplayed ? { color: "#4B83B0" } : null}>
+        {date.getDate() === 1 && <h2>{String(date).substring(3, 7)}</h2>}
         <h5>{String(date).substring(0, 3)}</h5>
         <h3>{String(date).substring(8, 11)}</h3>
-        {date.getDate() === 1 && <h2>{String(date).substring(3, 7)}</h2>}
-      </>
+      </div>
     );
   };
 
@@ -192,8 +197,8 @@ export default function workoutLog() {
     setWorkoutNote("");
   };
 
-  // Set page state if user is logged in
   useEffect(() => {
+    // Set yearMonthDay to today
     const date = new Date();
     const currYear = date.getFullYear();
     const currMonth = date.getMonth();
@@ -201,6 +206,7 @@ export default function workoutLog() {
 
     setYearMonthDay({ year: currYear, month: currMonth, day: currDay });
 
+    // Set page state if user is logged in
     if (user) {
       setDataToToday();
 
@@ -217,7 +223,7 @@ export default function workoutLog() {
     <Layout>
       <MainContainer>
         <DateBar>
-          {[-2, -1, ...Array(90).keys()].map((x) => (
+          {[...Array(90).keys()].map((x) => (
             <li
               className={x ? "date" : "date today"}
               onClick={() => changeCurrentDayData(-x)}
@@ -275,11 +281,11 @@ const MainContainer = styled.main`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 0.5rem 0;
 `;
 
 const DateBar = styled.ul`
   display: flex;
+  align-items: flex-end;
   flex-direction: row-reverse;
 
   width: 100%;
@@ -288,7 +294,7 @@ const DateBar = styled.ul`
 
   .date {
     min-width: 60px;
-    padding: 0 0.5rem;
+    padding: 0.5rem;
     margin: 0 0.5rem;
     cursor: pointer;
     border-radius: 5px;
@@ -303,16 +309,13 @@ const DateBar = styled.ul`
       margin: 0.25rem;
     }
     h2 {
-      color: #c1d7f7;
+      color: #4b83b0;
+      font-weight: 400;
     }
   }
 
-  .today {
-    background: #dddddd;
-  }
-
   @media (max-width: 500px) {
-    width: 100%;
+    /* Remove scroll bar on mobile */
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
 
@@ -326,11 +329,11 @@ const FallbackText = styled.h5`
   border-radius: 5px;
   box-shadow: 0 0 5px grey;
   max-width: 300px;
-  margin: 1rem auto;
+  margin: 1rem 0.25rem;
   padding: 1rem;
 
   @media (max-width: 500px) {
-    width: 100%;
+    width: 98%;
     max-width: 100%;
   }
 `;
