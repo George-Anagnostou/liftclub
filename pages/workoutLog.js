@@ -83,22 +83,28 @@ export default function workoutLog() {
 
   // Accepts an ISO date and finds the matching date in user.workoutLog
   const getDayDataFromWorkoutLog = (targetIsoDate) => {
-    const dayData = user.workoutLog.find((item) => item.isoDate === targetIsoDate);
+    const dayData = user?.workoutLog.find((item) => item.isoDate === targetIsoDate);
     return dayData;
   };
 
   const formatDate = (numOfDaysToShift) => {
+    const currDate = new Date();
+    const date = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate());
+
     // Shift todays date by a specified number of days
-    const date = new Date();
     date.setDate(date.getDate() + numOfDaysToShift);
 
-    const { year, month, day } = yearMonthDay;
+    const dayData = getDayDataFromWorkoutLog(date.toISOString());
 
-    const dateCurrentlyDisplayed =
+    const { year, month, day } = yearMonthDay;
+    const dayIsDisplayed =
       date.getFullYear() === year && date.getMonth() === month && date.getDate() === day;
 
+    const colorStyle = dayIsDisplayed ? { padding: ".9rem .5rem", color: '#122975' } : { color: "#555F81" };
+    const backgroundStyle = dayData ? { background: "#e3f7ff" } : {};
+
     return (
-      <div style={dateCurrentlyDisplayed ? { color: "#4B83B0" } : null}>
+      <div style={{ ...colorStyle, ...backgroundStyle }}>
         {date.getDate() === 1 && <h2>{String(date).substring(3, 7)}</h2>}
         <h5>{String(date).substring(0, 3)}</h5>
         <h3>{String(date).substring(8, 11)}</h3>
@@ -223,13 +229,13 @@ export default function workoutLog() {
     <Layout>
       <MainContainer>
         <DateBar>
-          {[...Array(90).keys()].map((x) => (
+          {[...Array(90).keys()].map((numDays) => (
             <li
-              className={x ? "date" : "date today"}
-              onClick={() => changeCurrentDayData(-x)}
-              key={-x}
+              className={numDays ? "date" : "date today"}
+              onClick={() => changeCurrentDayData(-numDays)}
+              key={-numDays}
             >
-              {formatDate(-x)}
+              {formatDate(-numDays)}
             </li>
           ))}
         </DateBar>
@@ -294,23 +300,26 @@ const DateBar = styled.ul`
 
   .date {
     min-width: 60px;
-    padding: 0.5rem;
     margin: 0 0.5rem;
     cursor: pointer;
     border-radius: 5px;
     box-shadow: 0 0 5px grey;
-    position: relative;
     height: fit-content;
     text-align: center;
 
-    h4,
-    h5 {
-      font-weight: 500;
-      margin: 0.25rem;
-    }
-    h2 {
-      color: #4b83b0;
-      font-weight: 400;
+    div {
+      transition: all 0.1s ease-in-out;
+      padding: 0.5rem;
+
+      h4,
+      h5 {
+        font-weight: 500;
+        margin: 0.25rem;
+      }
+      h2 {
+        color: #4b83b0;
+        font-weight: 400;
+      }
     }
   }
 
