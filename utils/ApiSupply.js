@@ -70,13 +70,18 @@ export const createExercise = async (exercise) => {
  *
  */
 export const postNewWorkout = async (workout) => {
-  const res = await fetch(`/api/workouts`, {
-    method: "POST",
-    contentType: "application/json",
-    body: JSON.stringify(workout),
-  });
+  try {
+    const res = await fetch(`/api/workouts`, {
+      method: "POST",
+      contentType: "application/json",
+      body: JSON.stringify(workout),
+    });
 
-  return { status: res.status };
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
 };
 
 export const updateExistingWorkout = async (workout) => {
