@@ -46,8 +46,8 @@ const UserWorkoutsContainer = styled.div`
   margin: 0.5rem 0;
 
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  justify-content: flex-start;
+  align-items: center;
   flex-direction: column;
   ul {
     width: 100%;
