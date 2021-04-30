@@ -10,10 +10,12 @@ export default function Workout({
 }) {
   return (
     <>
+      {currentDayData.workoutName && <WorkoutName>{currentDayData.workoutName}</WorkoutName>}
+
       <SaveWorkoutButton onClick={saveWorkout}>Save Workout</SaveWorkoutButton>
 
       <WorkoutList>
-        {currentDayData.exerciseData?.map(({ exercise, exercise_id, sets }, i) => (
+        {currentDayData.exerciseData.map(({ exercise, exercise_id, sets }, i) => (
           <li className="exercise" key={exercise_id}>
             <h3 className="exercise-name">{exercise.name}</h3>
             <ul>
@@ -64,6 +66,11 @@ export default function Workout({
     </>
   );
 }
+
+const WorkoutName = styled.h1`
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+`;
 
 const SaveWorkoutButton = styled.button`
   margin: 1rem auto;
