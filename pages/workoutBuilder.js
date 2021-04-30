@@ -94,7 +94,7 @@ export default function workoutBuilder() {
     switch (method) {
       case "add":
         // Add empty set to spedified exercise
-        customExercisesCopy[exerciseIndex].sets.push({ reps: 0, weight: 0, weightUnit: "lbs" });
+        customExercisesCopy[exerciseIndex].sets.push({ reps: 0, weight: 0 });
         break;
       case "remove":
         // Remove last set from spedified exercise
@@ -134,12 +134,8 @@ export default function workoutBuilder() {
         isPublic: user.isAdmin ? customWorkoutPublic : false,
       };
 
-      try {
-        const res = await postNewWorkout(composedWorkout);
-        setWorkoutSavedSuccessfuly(res.status === 201);
-      } catch (e) {
-        console.log(e);
-      }
+      const savedSuccessfully = await postNewWorkout(composedWorkout);
+      setWorkoutSavedSuccessfuly(savedSuccessfully);
     }
 
     clearCustomWorkout();

@@ -4,7 +4,6 @@ export default function Workout({
   saveWorkout,
   currentDayData,
   handleWeightChange,
-  handleWeightUnitChange,
   handleWorkoutNoteChange,
   workoutNote,
 }) {
@@ -19,29 +18,20 @@ export default function Workout({
           <li className="exercise" key={exercise_id}>
             <h3 className="exercise-name">{exercise.name}</h3>
             <ul>
-              {sets.map(({ reps, weight, weightUnit }, j) => (
+              {sets.map(({ reps, weight }, j) => (
                 <li className="set" key={`${exercise_id} ${j}`}>
-                  <p>
-                    <span>{reps}</span> reps
-                  </p>
+                  <div className="reps">
+                    <p>{reps}</p>
+                    <span>reps</span>
+                  </div>
 
-                  <div>
+                  <div className="weight">
                     <input
                       type="number"
-                      name="weight"
-                      id="weight"
                       value={weight || ""}
                       onChange={(e) => handleWeightChange(e, i, j)}
                     />
-                    <select
-                      name="unit"
-                      id="unit"
-                      defaultValue={weightUnit}
-                      onChange={(e) => handleWeightUnitChange(e, i, j)}
-                    >
-                      <option value="lbs">lbs</option>
-                      <option value="pin">pin</option>
-                    </select>
+                    <span>lbs</span>
                   </div>
                 </li>
               ))}
@@ -61,8 +51,6 @@ export default function Workout({
           onChange={handleWorkoutNoteChange}
         ></textarea>
       </WorkoutNote>
-
-      <SaveWorkoutButton onClick={saveWorkout}>Save Workout</SaveWorkoutButton>
     </>
   );
 }
@@ -73,10 +61,12 @@ const WorkoutName = styled.h1`
 `;
 
 const SaveWorkoutButton = styled.button`
+  position: sticky;
+  top: 1rem;
   margin: 1rem auto;
   font-size: 1.5rem;
   padding: 0.5rem;
-  background: inherit;
+  background: white;
   border: none;
   border-radius: 5px;
   box-shadow: 0 0 5px grey;
@@ -122,33 +112,36 @@ const WorkoutList = styled.ul`
         width: fit-content;
         margin: 1rem;
 
-        p {
-          padding-right: 2rem;
-          font-size: 0.6rem;
-          span {
-            font-weight: 700;
-            font-size: 3rem;
-          }
-        }
         div {
           display: flex;
           align-items: flex-end;
-          justify-content: center;
+        }
 
+        .reps {
+          margin-right: 2rem;
+
+          p {
+            font-weight: 600;
+            font-size: 3rem;
+          }
+          span {
+            margin-bottom: 0.5rem;
+          }
+        }
+
+        .weight {
           input {
-            width: 6.5rem;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 6rem;
             font-size: 3rem;
             font-weight: 200;
           }
+        }
 
-          select {
-            margin-left: 0.2rem;
-            border: 1px solid grey;
-            border-radius: 2px;
-            font-size: 1.5rem;
-            option {
-            }
-          }
+        span {
+          font-size: 1rem;
         }
       }
     }

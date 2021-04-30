@@ -32,16 +32,6 @@ export default function workoutLog() {
     setCurrentDayData((prev) => ({ ...prev, exerciseData: exerciseData }));
   };
 
-  const handleWeightUnitChange = (e, exerciseIndex, setIndex) => {
-    const unit = e.target.value;
-
-    const { exerciseData } = currentDayData;
-
-    exerciseData[exerciseIndex].sets[setIndex].weightUnit = unit;
-
-    setCurrentDayData((prev) => ({ ...prev, exerciseData: exerciseData }));
-  };
-
   const setDataToToday = () => {
     const date = new Date();
     const currYear = date.getFullYear();
@@ -87,20 +77,21 @@ export default function workoutLog() {
     return dayData;
   };
 
+  // Format the date for the DateBar
   const formatDate = (numOfDaysToShift) => {
     const currDate = new Date();
     const date = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate());
 
-    // Shift todays date by a specified number of days
     date.setDate(date.getDate() + numOfDaysToShift);
 
     const dayData = getDayDataFromWorkoutLog(date.toISOString());
 
     const { year, month, day } = yearMonthDay;
-    const dayIsDisplayed =
+    const dayIsSelected =
       date.getFullYear() === year && date.getMonth() === month && date.getDate() === day;
 
-    const colorStyle = dayIsDisplayed ? { padding: ".9rem .5rem", color: '#122975' } : { color: "#555F81" };
+    // Styles
+    const colorStyle = dayIsSelected ? {} : { color: "#aaa" };
     const backgroundStyle = dayData ? { background: "#e3f7ff" } : {};
 
     return (
@@ -112,22 +103,24 @@ export default function workoutLog() {
     );
   };
 
-  // Change to tomorrow's or yesterday's workout data
+  // Set page state when a new date is selected
   const changeCurrentDayData = (numOfDaysToShift) => {
     const currDate = new Date();
     const date = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate());
 
     date.setDate(date.getDate() + numOfDaysToShift);
 
-    const newYear = date.getFullYear();
-    const newMonth = date.getMonth();
-    const newDay = date.getDate();
+    // Selected date must be different than the current
+    if (date.toISOString() !== currentDayData.isoDate) {
+      const newYear = date.getFullYear();
+      const newMonth = date.getMonth();
+      const newDay = date.getDate();
+      setYearMonthDay({ year: newYear, month: newMonth, day: newDay });
 
-    setYearMonthDay({ year: newYear, month: newMonth, day: newDay });
-
-    // Find the workout for the new date
-    const dayData = getDayDataFromWorkoutLog(date.toISOString());
-    setPageState(dayData);
+      // Find the workout for the new date
+      const dayData = getDayDataFromWorkoutLog(date.toISOString());
+      setPageState(dayData);
+    }
   };
 
   // Posts currentDayData to DB
@@ -229,12 +222,8 @@ export default function workoutLog() {
     <Layout>
       <MainContainer>
         <DateBar>
-          {[...Array(90).keys()].map((numDays) => (
-            <li
-              className={numDays ? "date" : "date today"}
-              onClick={() => changeCurrentDayData(-numDays)}
-              key={-numDays}
-            >
+          {[...Array(32).keys()].map((numDays) => (
+            <li onClick={() => changeCurrentDayData(-numDays)} className="date" key={-numDays}>
               {formatDate(-numDays)}
             </li>
           ))}
@@ -249,7 +238,6 @@ export default function workoutLog() {
                 saveWorkout={saveWorkout}
                 currentDayData={currentDayData}
                 handleWeightChange={handleWeightChange}
-                handleWeightUnitChange={handleWeightUnitChange}
                 handleWorkoutNoteChange={handleWorkoutNoteChange}
                 workoutNote={workoutNote}
               />
