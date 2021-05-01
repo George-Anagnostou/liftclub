@@ -22,6 +22,23 @@ export const saveWorkoutLog = async (workoutLog, user_id) => {
   }
 };
 
+// Multiple
+export const getUsernamesFromIdArr = async (idArr) => {
+  try {
+    const res = await fetch(`api/users/queryMultiple`, {
+      method: "POST",
+      contentType: "application/json",
+      body: JSON.stringify(idArr),
+    });
+
+    const data = await res.json();
+    const usernames = data.map((each) => each.username);
+    return usernames;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 /*
  *
  *
