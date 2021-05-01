@@ -43,8 +43,7 @@ export default function Workout({
       <WorkoutNote>
         <h3>Notes:</h3>
         <textarea
-          name=""
-          id=""
+          name="workoutNote"
           cols="30"
           rows="5"
           value={workoutNote}
@@ -62,7 +61,7 @@ const WorkoutName = styled.h1`
 
 const SaveWorkoutButton = styled.button`
   position: sticky;
-  top: 1rem;
+  top: 0.5rem;
   margin: 1rem auto;
   font-size: 1.5rem;
   padding: 0.5rem;
@@ -178,6 +177,7 @@ const WorkoutNote = styled.div`
     max-width: 85vw;
     font-size: 1.2rem;
     font-family: inherit;
+    resize: none;
   }
 
   @media (max-width: 500px) {

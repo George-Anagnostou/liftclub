@@ -91,11 +91,11 @@ export default function workoutLog() {
       date.getFullYear() === year && date.getMonth() === month && date.getDate() === day;
 
     // Styles
-    const colorStyle = dayIsSelected ? {} : { color: "#aaa" };
+    const fontStyle = dayIsSelected ? { boxShadow: "0 0 10px grey" } : { color: "#aaa" };
     const backgroundStyle = dayData ? { background: "#e3f7ff" } : {};
 
     return (
-      <div style={{ ...colorStyle, ...backgroundStyle }}>
+      <div style={{ ...fontStyle, ...backgroundStyle }}>
         {date.getDate() === 1 && <h2>{String(date).substring(3, 7)}</h2>}
         <h5>{String(date).substring(0, 3)}</h5>
         <h3>{String(date).substring(8, 11)}</h3>
@@ -283,19 +283,20 @@ const DateBar = styled.ul`
   flex-direction: row-reverse;
 
   width: 100%;
-  padding: 0.25rem;
+  padding: 10px;
   overflow-x: scroll;
 
   .date {
     min-width: 60px;
     margin: 0 0.5rem;
     cursor: pointer;
-    border-radius: 5px;
-    box-shadow: 0 0 5px grey;
+    border-radius: 10px;
     height: fit-content;
     text-align: center;
 
     div {
+      box-shadow: 0 0 5px grey;
+      border-radius: 10px;
       transition: all 0.1s ease-in-out;
       padding: 0.5rem;
 
