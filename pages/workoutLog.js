@@ -91,7 +91,9 @@ export default function workoutLog() {
       date.getFullYear() === year && date.getMonth() === month && date.getDate() === day;
 
     // Styles
-    const fontStyle = dayIsSelected ? { boxShadow: "0 0 10px grey" } : { color: "#aaa" };
+    const fontStyle = dayIsSelected
+      ? { boxShadow: "0 0 10px grey" }
+      : { color: "#aaa", transform: "scale(.9)" };
     const backgroundStyle = dayData ? { background: "#e3f7ff" } : {};
 
     return (
@@ -230,7 +232,17 @@ export default function workoutLog() {
         </DateBar>
 
         {loading ? (
-          <FallbackText>Loading...</FallbackText>
+          <LoadingWorkout>
+            {[...new Array(5)].map((i) => (
+              <li className="exercise" key={i}>
+                <ul>
+                  <li className="set"></li>
+                  <li className="set"></li>
+                  <li className="set"></li>
+                </ul>
+              </li>
+            ))}
+          </LoadingWorkout>
         ) : (
           <>
             {currentDayData.exerciseData ? (
@@ -333,5 +345,52 @@ const FallbackText = styled.h5`
   @media (max-width: 500px) {
     width: 98%;
     max-width: 100%;
+  }
+`;
+
+const LoadingWorkout = styled.ul`
+  width: 100%;
+  padding-top: 7rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+
+  .exercise {
+    box-shadow: 0 0 5px grey;
+    border-radius: 10px;
+    padding: 0.5rem;
+    min-width: 55%;
+    max-width: 100%;
+
+    margin: 0.5rem 0;
+
+    ul {
+      width: fit-content;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+
+      .set {
+        margin: 1rem;
+        padding: 3rem;
+      }
+    }
+  }
+
+  @media (max-width: 500px) {
+    .exercise {
+      width: 98%;
+
+      ul {
+        width: 100%;
+
+        .set {
+          width: 100%;
+        }
+      }
+    }
   }
 `;
