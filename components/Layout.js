@@ -1,12 +1,21 @@
 import { useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import styled from "styled-components";
 
 import SeoHead from "./SeoHead";
 
 import { useStoreDispatch, loginUser } from "../store";
 
+const routes = [
+  { pathname: "/workoutLog", linkTitle: "Log" },
+  { pathname: "/workoutBuilder", linkTitle: "Builder" },
+  { pathname: "/workoutFeed", linkTitle: "Feed" },
+];
+
 export default function Layout({ title = "Workout App", children }) {
+  const { pathname } = useRouter();
+
   const dispatch = useStoreDispatch();
 
   // Check local storage for user_id for persistant login
@@ -24,16 +33,13 @@ export default function Layout({ title = "Workout App", children }) {
         <h1>Anagnostou Lift Club</h1>
         <NavBar>
           <ul>
-            <Link href="/workoutLog">
-              <li>
-                <a>Workout Log</a>
-              </li>
-            </Link>
-            <Link href="/workoutBuilder">
-              <li>
-                <a>Workout Buider</a>
-              </li>
-            </Link>
+            {routes.map((route) => (
+              <Link href={route.pathname} key={route.pathname}>
+                <li style={pathname === route.pathname ? { background: "#e3f7ff" } : null}>
+                  <a>{route.linkTitle}</a>
+                </li>
+              </Link>
+            ))}
           </ul>
         </NavBar>
         {children}
