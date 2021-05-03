@@ -109,9 +109,10 @@ export const updateExistingWorkout = async (workout) => {
       body: JSON.stringify(workout),
     });
 
-    return { status: res.status };
+    return res.status === 204;
   } catch (e) {
     console.log(e);
+    return false;
   }
 };
 

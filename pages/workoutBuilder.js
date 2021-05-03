@@ -119,23 +119,19 @@ export default function workoutBuilder() {
       existingWorkout.exercises = composedExerciseData;
       existingWorkout.isPublic = customWorkoutPublic;
 
-      try {
-        const res = await updateExistingWorkout(existingWorkout);
-        setWorkoutSavedSuccessfuly(res.status === 204);
-      } catch (e) {
-        console.log(e);
-      }
+      const saveStatus = await updateExistingWorkout(existingWorkout);
+      setWorkoutSavedSuccessfuly(saveStatus);
     } else {
       // Create workout obj to send to DB
       const composedWorkout = {
         name: customWorkoutName,
         creator_id: user._id,
         exercises: composedExerciseData,
-        isPublic: user.isAdmin ? customWorkoutPublic : false,
+        isPublic: customWorkoutPublic,
       };
 
-      const savedSuccessfully = await postNewWorkout(composedWorkout);
-      setWorkoutSavedSuccessfuly(savedSuccessfully);
+      const saveStatus = await postNewWorkout(composedWorkout);
+      setWorkoutSavedSuccessfuly(saveStatus);
     }
 
     clearCustomWorkout();
@@ -165,11 +161,7 @@ export default function workoutBuilder() {
 
     // Create exercise key in each exercise to hold exercise data
     workout.exercises.map((each, i) => {
-      // Ensure ids match
-      if (each.exercise_id === exerciseData[i]._id) {
-        each.exercise = exerciseData[i];
-      }
-      return each;
+      each.exercise = exerciseData[i];
     });
 
     setCustomWorkoutExercises(workout.exercises);
