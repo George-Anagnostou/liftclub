@@ -6,7 +6,6 @@ import Layout from "../components/Layout";
 import ExerciseList from "../components/workoutBuilder/ExerciseList";
 import UserWorkouts from "../components/workoutBuilder/UserWorkouts";
 import CustomWorkout from "../components/workoutBuilder/CustomWorkout";
-import { useStoreContext } from "../context/state";
 import {
   getExercisesFromIdArray,
   getPublicWorkouts,
@@ -15,12 +14,15 @@ import {
   updateExistingWorkout,
 } from "../utils/ApiSupply";
 
+import { useStoreState, useStoreDispatch } from "../store";
+
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
 export default function workoutBuilder() {
   const { data, error } = useSWR("/api/exercises", fetcher);
 
-  const { user } = useStoreContext();
+  const dispatch = useStoreDispatch();
+  const { user } = useStoreState();
 
   const [workoutSavedSuccessfuly, setWorkoutSavedSuccessfuly] = useState(null);
   const [userWorkouts, setUserWorkouts] = useState([]);
@@ -127,7 +129,7 @@ export default function workoutBuilder() {
         name: customWorkoutName,
         creator_id: user._id,
         exercises: composedExerciseData,
-        isPublic: customWorkoutPublic,
+        isPublic: user.isAdmin ? customWorkoutPublic : false, // protects non-admins from saving admin-made workouts that are public
       };
 
       const saveStatus = await postNewWorkout(composedWorkout);
@@ -156,8 +158,12 @@ export default function workoutBuilder() {
   const displaySavedWorkout = async (workout) => {
     // Grab all the exercise_ids from the workout
     const idArr = workout.exercises.map((each) => each.exercise_id);
+    
     // Query for exercise data using the idArr
     const exerciseData = await getExercisesFromIdArray(idArr);
+
+    // Sort the array based on the order of the idArr
+    exerciseData.sort((a, b) => idArr.indexOf(a._id) - idArr.indexOf(b._id));
 
     // Create exercise key in each exercise to hold exercise data
     workout.exercises.map((each, i) => {

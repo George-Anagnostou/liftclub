@@ -18,25 +18,38 @@ export default async (req, res) => {
     case "POST":
       break;
     case "PUT":
-      // Push new workout to user savedWorkouts
-      const workoutLog = JSON.parse(req.body);
-      // Cast id strings to ObjIds
-      workoutLog.map((entry) => {
-        entry.workout_id = ObjectId(entry.workout_id);
-        entry.exerciseData?.map((each) => (each.exercise_id = ObjectId(each.exercise_id)));
-        // Cast isoDate string to Date()
-        entry.isoDate = new Date(entry.isoDate);
-      });
+      let fieldToUpdate;
 
-      userData = await db
-        .collection("users")
-        .findOneAndUpdate(
-          { _id: ObjectId(user_id) },
-          { $set: { workoutLog: workoutLog } },
-          { returnOriginal: false }
-        );
-        
-      res.json(userData.value);
+      const { workoutLog } = JSON.parse(req.body);
+      if (workoutLog) fieldToUpdate = "workoutLog";
+      const { savedWorkouts } = JSON.parse(req.body);
+      if (savedWorkouts) fieldToUpdate = "savedWorkouts";
+
+      switch (fieldToUpdate) {
+        case "workoutLog":
+          // Cast id strings to ObjIds
+          workoutLog.map((entry) => {
+            entry.workout_id = ObjectId(entry.workout_id);
+            entry.exerciseData?.map((each) => (each.exercise_id = ObjectId(each.exercise_id)));
+            // Cast isoDate string to Date()
+            entry.isoDate = new Date(entry.isoDate);
+          });
+
+          userData = await db
+            .collection("users")
+            .findOneAndUpdate(
+              { _id: ObjectId(user_id) },
+              { $set: { workoutLog: workoutLog } },
+              { returnOriginal: false }
+            );
+
+          res.json(userData.value);
+          break;
+        case "savedWorkouts":
+          throw new Error("savedWorkouts update not defined in api/users/[user_id].js");
+          break;
+      }
+
       break;
   }
 };

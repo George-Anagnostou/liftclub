@@ -1,5 +1,5 @@
 import SeoHead from "../components/SeoHead";
-import { StoreProvider } from "../context/state";
+import { StoreProvider } from "../store";
 import "../styles/globals.css";
 
 const MyApp = ({ Component, pageProps }) => {

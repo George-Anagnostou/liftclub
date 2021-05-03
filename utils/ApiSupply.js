@@ -7,20 +7,6 @@
  *
  *
  */
-export const saveWorkoutLog = async (workoutLog, user_id) => {
-  try {
-    const res = await fetch(`/api/users/${user_id}`, {
-      method: "PUT",
-      contentType: "application/json",
-      body: JSON.stringify(workoutLog),
-    });
-
-    const userData = await res.json();
-    return userData;
-  } catch (e) {
-    console.log(e);
-  }
-};
 
 // Multiple
 export const getUsernamesFromIdArr = async (idArr) => {
@@ -94,7 +80,7 @@ export const postNewWorkout = async (workout) => {
       body: JSON.stringify(workout),
     });
 
-    return true;
+    return res.status === 201;
   } catch (e) {
     console.log(e);
     return false;

@@ -2,17 +2,19 @@ import { useEffect } from "react";
 import Link from "next/link";
 import styled from "styled-components";
 
-import { useStoreContext } from "../context/state";
 import SeoHead from "./SeoHead";
 
-export default function Layout({ title = "Workout App", children }) {
-  const { loginUser } = useStoreContext();
+import { useStoreDispatch, loginUser } from "../store";
 
-  // Check local storage for username for persistant login
+export default function Layout({ title = "Workout App", children }) {
+  const dispatch = useStoreDispatch();
+
+  // Check local storage for user_id for persistant login
   useEffect(() => {
     const user_id = localStorage.getItem("workoutID");
-    // If local storage workoutID exists, logi user
-    if (user_id) loginUser(user_id);
+
+    // If local storage workoutID exists, login user
+    if (user_id) loginUser(dispatch, user_id);
   }, []);
 
   return (

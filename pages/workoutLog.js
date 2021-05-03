@@ -1,19 +1,22 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-
-import { useStoreContext } from "../context/state";
+// Components
 import Layout from "../components/Layout";
-import { getExercisesFromIdArray, getUserMadeWorkouts, saveWorkoutLog } from "../utils/ApiSupply";
 import Workout from "../components/workoutLog/Workout";
 import UserWorkouts from "../components/workoutLog/UserWorkouts";
+// Utils
+import { getExercisesFromIdArray } from "../utils/ApiSupply";
+import { getCurrYearMonthDay } from "../utils/general";
+// Context
+import { useStoreState, useStoreDispatch, saveWorkoutLog } from "../store";
 
 export default function workoutLog() {
-  const { user, setUserState } = useStoreContext();
+  const dispatch = useStoreDispatch();
+  const { user } = useStoreState();
 
   const [loading, setLoading] = useState(false);
   const [currentDayData, setCurrentDayData] = useState({}); // {isoDate, timeInSeconds, completed, workout_id}
   const [yearMonthDay, setYearMonthDay] = useState({}); // {year, month, day}
-  const [userMadeWorkouts, setUserMadeWorkouts] = useState([]);
   const [workoutNote, setWorkoutNote] = useState("");
 
   const handleWorkoutNoteChange = (e) => {
@@ -33,14 +36,11 @@ export default function workoutLog() {
   };
 
   const setDataToToday = () => {
-    const date = new Date();
-    const currYear = date.getFullYear();
-    const currMonth = date.getMonth();
-    const currDay = date.getDate();
+    const { year, month, day } = getCurrYearMonthDay();
 
-    setYearMonthDay({ year: currYear, month: currMonth, day: currDay });
+    setYearMonthDay({ year, month, day });
 
-    const currIsoDate = new Date(currYear, currMonth, currDay).toISOString();
+    const currIsoDate = new Date(year, month, day).toISOString();
 
     // Find the workout for today
     const dayData = getDayDataFromWorkoutLog(currIsoDate);
@@ -127,64 +127,62 @@ export default function workoutLog() {
 
   // Posts currentDayData to DB
   const saveWorkout = async () => {
-    // Make sure there are exercises to save
-    if (currentDayData.exerciseData) {
-      // Make array for exerciseData in DB
-      const composedExercises = currentDayData.exerciseData.map((each) => {
-        return { exercise_id: each.exercise_id, sets: each.sets };
-      });
+    // Make array for exerciseData in DB
+    const composedExercises = currentDayData.exerciseData.map((each) => {
+      return { exercise_id: each.exercise_id, sets: each.sets };
+    });
 
-      // Get index of our currDayData
-      const indexOfCurrDayData = user.workoutLog.findIndex(
-        (workout) => workout.isoDate === currentDayData.isoDate
-      );
+    // Get index of our currDayData
+    const indexOfCurrDayData = user.workoutLog.findIndex(
+      (workout) => workout.isoDate === currentDayData.isoDate
+    );
 
-      // Define log to send to DB
-      let updatedWorkoutLog;
+    // Define log to send to DB
+    let updatedWorkoutLog;
 
-      if (indexOfCurrDayData > 0) {
-        // Update existing workout
-        const workoutLogClone = [...user.workoutLog];
+    if (indexOfCurrDayData > 0) {
+      // Update existing workout
+      user.workoutLog[indexOfCurrDayData] = {
+        ...currentDayData,
+        workoutNote: workoutNote,
+        exerciseData: composedExercises,
+      };
 
-        // // update the index of current workout
-        workoutLogClone[indexOfCurrDayData] = {
-          ...currentDayData,
-          workoutNote: workoutNote,
+      updatedWorkoutLog = user.workoutLog;
+    } else {
+      // Create new workoutLog entry
+      const { year, month, day } = yearMonthDay;
+
+      // Add new workout and sort by isoDate
+      updatedWorkoutLog = [
+        ...user.workoutLog,
+        {
+          isoDate: new Date(year, month, day).toISOString(),
+          completed: true,
+          workout_id: currentDayData.workout_id,
           exerciseData: composedExercises,
-        };
-
-        updatedWorkoutLog = workoutLogClone;
-      } else {
-        // Create new workoutLog entry
-        const { year, month, day } = yearMonthDay;
-
-        // Add new workout and sort by isoDate
-        updatedWorkoutLog = [
-          ...user.workoutLog,
-          {
-            isoDate: new Date(year, month, day).toISOString(),
-            completed: true,
-            workout_id: currentDayData.workout_id,
-            exerciseData: composedExercises,
-            workoutName: currentDayData.workoutName,
-            workoutNote: workoutNote,
-          },
-        ].sort((a, b) => a.isoDate.localeCompare(b.isoDate));
-      }
-
-      const userData = await saveWorkoutLog(updatedWorkoutLog, user._id);
-      setUserState(userData);
-
-      // Clear the workout note
-      setWorkoutNote("");
+          workoutName: currentDayData.workoutName,
+          workoutNote: workoutNote,
+        },
+      ].sort((a, b) => a.isoDate.localeCompare(b.isoDate));
     }
+
+    const saved = await saveWorkoutLog(dispatch, updatedWorkoutLog, user._id);
+    console.log(saved);
+
+    // Clear the workout note
+    setWorkoutNote("");
   };
 
-  const displaySavedWorkout = async (clicked) => {
+  const displayWorkout = async (clicked) => {
     // Grab all the exercise_ids from the workout
     const idArr = clicked.exercises.map((each) => each.exercise_id);
+
     // Query for exercise data using the idArr
     const exerciseData = await getExercisesFromIdArray(idArr);
+
+    // Sort the array based on the order of the idArr
+    exerciseData.sort((a, b) => idArr.indexOf(a._id) - idArr.indexOf(b._id));
 
     // Create exercise key in each exercise to hold exercise data
     clicked.exercises.map((each, i) => (each.exercise = exerciseData[i]));
@@ -200,23 +198,12 @@ export default function workoutLog() {
 
   useEffect(() => {
     // Set yearMonthDay to today
-    const date = new Date();
-    const currYear = date.getFullYear();
-    const currMonth = date.getMonth();
-    const currDay = date.getDate();
-
-    setYearMonthDay({ year: currYear, month: currMonth, day: currDay });
+    const { year, month, day } = getCurrYearMonthDay();
+    setYearMonthDay({ year, month, day });
 
     // Set page state if user is logged in
     if (user) {
       setDataToToday();
-
-      // Get all workouts made by the user
-      const getUserWorkouts = async () => {
-        const userWorkouts = await getUserMadeWorkouts(user._id);
-        setUserMadeWorkouts(userWorkouts);
-      };
-      getUserWorkouts();
     }
   }, [user]);
 
@@ -233,12 +220,12 @@ export default function workoutLog() {
 
         {loading ? (
           <LoadingWorkout>
-            {[...new Array(5)].map((i) => (
+            {[...new Array(5).keys()].map((i) => (
               <li className="exercise" key={i}>
                 <ul>
-                  <li className="set"></li>
-                  <li className="set"></li>
-                  <li className="set"></li>
+                  <li className="set" key={"set1"}></li>
+                  <li className="set" key={"set2"}></li>
+                  <li className="set" key={"set3"}></li>
                 </ul>
               </li>
             ))}
@@ -261,10 +248,7 @@ export default function workoutLog() {
           </>
         )}
 
-        <UserWorkouts
-          userMadeWorkouts={userMadeWorkouts}
-          displaySavedWorkout={displaySavedWorkout}
-        />
+        <UserWorkouts displayWorkout={displayWorkout} />
       </MainContainer>
     </Layout>
   );

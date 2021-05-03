@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 
-import { useStoreContext } from "../context/state";
+import { useStoreState, useStoreDispatch, loginUser, authLogin, createAccount } from "../store";
 
 const Home = () => {
   const router = useRouter();
-  const { authenticateLogin, user, setUserState, loginUser } = useStoreContext();
+
+  const dispatch = useStoreDispatch();
+  const { user } = useStoreState();
 
   const [loginUsername, setLoginUsername] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
@@ -15,6 +17,13 @@ const Home = () => {
   const [createAccUsername, setCreateAccUsername] = useState("");
   const [createAccPassword, setCreateAccPassword] = useState("");
   const [usernameExists, setUsernameExists] = useState(false);
+
+  // Route to workoutLog
+  const routeToWorkoutLog = () => {
+    setTimeout(() => {
+      router.push("/workoutLog");
+    }, 3000);
+  };
 
   // LOGIN handlers
   const handleLoginUsernameChange = (e) => {
@@ -28,12 +37,12 @@ const Home = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    const userData = await authenticateLogin(loginUsername, loginPassword);
+    const userData = await authLogin(dispatch, loginUsername, loginPassword);
 
     if (userData) {
       localStorage.setItem("workoutID", userData._id);
       setInvalidLoginCreds(false);
-      router.push("/workoutLog");
+      routeToWorkoutLog();
     } else {
       setInvalidLoginCreds(true);
     }
@@ -50,33 +59,28 @@ const Home = () => {
   const handleCreateAccount = async (e) => {
     e.preventDefault();
 
-    try {
-      const res = await fetch("/api/users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: createAccUsername, password: createAccPassword }),
-      });
+    const userData = await createAccount(dispatch, createAccUsername, createAccPassword);
 
-      // Response status if username is already taken
-      if (res.status === 403) setUsernameExists(true);
-
-      const userData = await res.json();
+    if (userData) {
+      setUsernameExists(false);
       localStorage.setItem("workoutID", userData._id);
-      setUserState(userData);
-    } catch (e) {
-      console.log(e);
+      routeToWorkoutLog();
+    } else {
+      setUsernameExists(true);
     }
+  };
+
+  const persistLogin = async (user_id) => {
+    const loginSuccess = await loginUser(dispatch, user_id);
+    if (loginSuccess) routeToWorkoutLog();
   };
 
   // Check local storage for username for persistant login
   useEffect(() => {
     const user_id = localStorage.getItem("workoutID");
-    // If local storage workoutID exists, logi user
+    // If local storage workoutID exists, login user
     if (user_id) {
-      loginUser(user_id);
-      setTimeout(() => {
-        router.push("/workoutLog");
-      }, 3000);
+      persistLogin(user_id);
     }
   }, []);
 
