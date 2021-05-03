@@ -70,6 +70,10 @@ const SaveWorkoutButton = styled.button`
   border-radius: 5px;
   box-shadow: 0 0 5px grey;
 
+  &:hover {
+    background: #e3f7ff;
+  }
+
   @media (max-width: 500px) {
     width: 98%;
   }
