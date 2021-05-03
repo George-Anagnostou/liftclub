@@ -55,8 +55,12 @@ export default function workoutLog() {
     if (dayData) {
       // Grab all exercise_ids from the workout
       const idArr = dayData.exerciseData.map((each) => each.exercise_id);
+
       // Get all exercise information
       const exerciseData = await getExercisesFromIdArray(idArr);
+
+      // Sort the array based on the order of the idArr
+      exerciseData.sort((a, b) => idArr.indexOf(a._id) - idArr.indexOf(b._id));
 
       dayData.exerciseData.map((each, i) => {
         if (each.exercise_id === exerciseData[i]._id) each.exercise = exerciseData[i];
@@ -107,8 +111,8 @@ export default function workoutLog() {
 
   // Set page state when a new date is selected
   const changeCurrentDayData = (numOfDaysToShift) => {
-    const currDate = new Date();
-    const date = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate());
+    const { year, month, day } = getCurrYearMonthDay();
+    const date = new Date(year, month, day);
 
     date.setDate(date.getDate() + numOfDaysToShift);
 
@@ -168,7 +172,6 @@ export default function workoutLog() {
     }
 
     const saved = await saveWorkoutLog(dispatch, updatedWorkoutLog, user._id);
-    console.log(saved);
 
     // Clear the workout note
     setWorkoutNote("");
