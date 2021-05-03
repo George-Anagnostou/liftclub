@@ -16,7 +16,7 @@ export default function Workout({
       <WorkoutList>
         {currentDayData.exerciseData.map(({ exercise, exercise_id, sets }, i) => (
           <li className="exercise" key={exercise_id}>
-            <h3 className="exercise-name">{exercise.name}</h3>
+            <h3 className="exercise-name">{exercise?.name}</h3>
             <ul>
               {sets.map(({ reps, weight }, j) => (
                 <li className="set" key={`${exercise_id} ${j}`}>
