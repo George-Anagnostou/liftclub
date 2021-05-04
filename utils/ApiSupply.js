@@ -9,7 +9,7 @@
  */
 
 // Multiple
-export const getUsernamesFromIdArr = async (idArr) => {
+export const getUsersFromIdArr = async (idArr) => {
   try {
     const res = await fetch(`api/users/queryMultiple`, {
       method: "POST",
@@ -17,9 +17,8 @@ export const getUsernamesFromIdArr = async (idArr) => {
       body: JSON.stringify(idArr),
     });
 
-    const data = await res.json();
-    const usernames = data.map((each) => each.username);
-    return usernames;
+    const users = await res.json();
+    return users;
   } catch (e) {
     console.log(e);
   }
@@ -93,6 +92,20 @@ export const updateExistingWorkout = async (workout) => {
       method: "PUT",
       contentType: "application/json",
       body: JSON.stringify(workout),
+    });
+
+    return res.status === 204;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
+export const deleteWorkout = async (workout_id) => {
+  try {
+    const res = await fetch(`/api/workouts/${workout_id}`, {
+      method: "DELETE",
+      contentType: "application/json",
     });
 
     return res.status === 204;

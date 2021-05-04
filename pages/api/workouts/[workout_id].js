@@ -29,6 +29,8 @@ export default async (req, res) => {
 
       break;
     case "DELETE":
+      const deleted = await db.collection("workouts").deleteOne({ _id: ObjectId(workout_id) });
+      deleted.deletedCount ? res.status(204).end() : res.status(400).end();
       break;
   }
 };
