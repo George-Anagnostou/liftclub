@@ -11,12 +11,12 @@ export default function UserWorkouts({ displayWorkout }) {
   const [userMadeWorkouts, setUserMadeWorkouts] = useState([]);
   const [userSavedWorkouts, setUserSavedWorkouts] = useState([]);
 
-  const getUserBuiltWorkouts = async () => {
+  const loadUserMadeWorkouts = async () => {
     const madeWorkouts = await getUserMadeWorkouts(user._id);
     setUserMadeWorkouts(madeWorkouts);
   };
 
-  const getUserSavedWorkouts = async () => {
+  const loadUserSavedWorkouts = async () => {
     const savedWorkouts = await getWorkoutsFromIdArray(user.savedWorkouts);
     setUserSavedWorkouts(savedWorkouts);
   };
@@ -24,32 +24,41 @@ export default function UserWorkouts({ displayWorkout }) {
   useEffect(() => {
     if (user) {
       // Get all workouts made by the user
-      getUserBuiltWorkouts();
+      loadUserMadeWorkouts();
       // Get all workotus saved by the user
-      getUserSavedWorkouts();
+      loadUserSavedWorkouts();
     }
   }, [user]);
+
   return (
     <UserWorkoutsContainer>
-      <h3>Saved Workouts</h3>
-      <ul>
-        {userSavedWorkouts.map((workout) => (
-          <li key={workout._id} onClick={() => displayWorkout(workout)}>
-            <h4>{workout.name}</h4>
-            <p>{workout.exercises.length} exercises</p>
-          </li>
-        ))}
-      </ul>
+      {Boolean(userSavedWorkouts.length) && (
+        <>
+          <h3>Saved Workouts</h3>
+          <ul>
+            {userSavedWorkouts.map((workout) => (
+              <li key={workout._id} onClick={() => displayWorkout(workout)}>
+                <h4>{workout.name}</h4>
+                <p>{workout.exercises.length} exercises</p>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
 
-      <h3>Your Workouts</h3>
-      <ul>
-        {userMadeWorkouts.map((workout) => (
-          <li key={workout._id} onClick={() => displayWorkout(workout)}>
-            <h4>{workout.name}</h4>
-            <p>{workout.exercises.length} exercises</p>
-          </li>
-        ))}
-      </ul>
+      {Boolean(userMadeWorkouts.length) && (
+        <>
+          <h3>Your Workouts</h3>
+          <ul>
+            {userMadeWorkouts.map((workout) => (
+              <li key={workout._id} onClick={() => displayWorkout(workout)}>
+                <h4>{workout.name}</h4>
+                <p>{workout.exercises.length} exercises</p>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
     </UserWorkoutsContainer>
   );
 }
