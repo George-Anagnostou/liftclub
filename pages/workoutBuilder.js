@@ -70,13 +70,12 @@ export default function workoutBuilder() {
     });
   };
 
-  //
+  // Update the reps for specified set
   const handleRepChange = (e, exerciseIndex, setIndex) => {
     const num = Number(e.target.value);
 
     const { exercises } = customWorkout;
 
-    // Update the reps for specified set
     exercises[exerciseIndex].sets[setIndex].reps = num;
 
     setCustomWorkout((prev) => {
@@ -135,12 +134,17 @@ export default function workoutBuilder() {
 
     if (composedWorkout.creator_id === user._id) {
       // Workout owner is editing existing workout
+
       const saveStatus = await updateExistingWorkout(composedWorkout);
       setWorkoutSavedSuccessfuly(saveStatus);
     } else {
       // User is editing a non-user-owned workout or building a new workout
+
+      // Current user set to creator
       composedWorkout.creator_id = user._id;
+      // Only allow admins to save public workouts
       if (!user.isAdmin) composedWorkout.isPublic = false;
+      // Remove any existing _id
       delete composedWorkout._id;
 
       const saveStatus = await postNewWorkout(composedWorkout);
