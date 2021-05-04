@@ -35,7 +35,7 @@ export default function Layout({ title = "Workout App", children }) {
           <ul>
             {routes.map((route) => (
               <Link href={route.pathname} key={route.pathname}>
-                <li style={pathname === route.pathname ? { background: "#e3f7ff" } : null}>
+                <li style={pathname === route.pathname ? { background: "#EAEEFF" } : null}>
                   <a>{route.linkTitle}</a>
                 </li>
               </Link>
@@ -54,7 +54,7 @@ const MainContainer = styled.main`
 
 const NavBar = styled.nav`
   ul {
-    border-bottom: 4px solid #cacaca;
+    border-bottom: 4px solid #e9e9e9;
     width: 100%;
     display: flex;
     list-style: none;

@@ -69,10 +69,15 @@ export default function workoutFeed() {
           {publicWorkouts.map((workout) => (
             <li key={"public" + workout._id}>
               {workout.name}
+
               {workoutIsSaved(workout) ? (
-                <button onClick={() => removeFromSavedWorkouts(workout)}>-</button>
+                <button className="remove" onClick={() => removeFromSavedWorkouts(workout)}>
+                  -
+                </button>
               ) : (
-                <button onClick={() => addToSavedWorkouts(workout)}>+</button>
+                <button className="add" onClick={() => addToSavedWorkouts(workout)}>
+                  +
+                </button>
               )}
             </li>
           ))}
@@ -82,7 +87,11 @@ export default function workoutFeed() {
           <h3>Saved Workouts</h3>
           {savedWorkouts.map((workout) => (
             <li key={"saved" + workout._id}>
-              {workout.name} <button onClick={() => removeFromSavedWorkouts(workout)}>-</button>
+              {workout.name}
+
+              <button className="remove" onClick={() => removeFromSavedWorkouts(workout)}>
+                -
+              </button>
             </li>
           ))}
         </SavedWorkoutsContainer>
@@ -94,6 +103,13 @@ export default function workoutFeed() {
 const WorkoutFeedContainer = styled.div`
   display: flex;
   justify-content: center;
+
+  .remove {
+    background: #fdebdf;
+  }
+  .add {
+    background: #eaeeff;
+  }
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -122,10 +138,6 @@ const SavedWorkoutsContainer = styled.ul`
       height: 100%;
       width: 50px;
       font-size: 2rem;
-
-      &:hover {
-        background: #c9c9c9;
-      }
     }
   }
 

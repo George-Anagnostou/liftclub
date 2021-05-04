@@ -98,7 +98,7 @@ export default function workoutLog() {
     const fontStyle = dayIsSelected
       ? { boxShadow: "0 0 10px grey" }
       : { color: "#aaa", transform: "scale(.9)" };
-    const backgroundStyle = dayData ? { background: "#e3f7ff" } : {};
+    const backgroundStyle = dayData ? { background: "#EAEEFF" } : {};
 
     return (
       <div style={{ ...fontStyle, ...backgroundStyle }}>
