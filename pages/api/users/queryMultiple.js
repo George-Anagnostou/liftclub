@@ -11,14 +11,14 @@ export default async (req, res) => {
     case "POST":
       const idArr = JSON.parse(req.body);
 
-      const foundWorkouts = await db
-        .collection("workouts")
+      const foundUsers = await db
+        .collection("users")
         .find({
           _id: { $in: idArr.map((_id) => ObjectId(_id)) },
         })
         .toArray();
 
-      res.json(foundWorkouts);
+      res.json(foundUsers);
       break;
     case "PUT":
       break;
