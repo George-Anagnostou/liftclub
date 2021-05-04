@@ -46,7 +46,17 @@ export default async (req, res) => {
           res.json(userData.value);
           break;
         case "savedWorkouts":
-          throw new Error("savedWorkouts update not defined in api/users/[user_id].js");
+          const ObjIdArr = savedWorkouts.map((id) => ObjectId(id));
+
+          userData = await db
+            .collection("users")
+            .findOneAndUpdate(
+              { _id: ObjectId(user_id) },
+              { $set: { savedWorkouts: ObjIdArr } },
+              { returnOriginal: false }
+            );
+
+          res.json(userData.value);
           break;
       }
 

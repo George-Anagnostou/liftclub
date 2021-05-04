@@ -8,6 +8,28 @@
  *
  */
 
+/**
+ *
+ * @param {array} savedWorkouts
+ * @param {ObjectId} user_id
+ * @returns updated user document
+ */
+export const saveSavedWorkouts = async (savedWorkouts, user_id) => {
+  try {
+    const res = await fetch(`/api/users/${user_id}`, {
+      method: "PUT",
+      contentType: "application/json",
+      body: JSON.stringify({ savedWorkouts }),
+    });
+
+    // const userData = await res.json();
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
 // Multiple
 export const getUsersFromIdArr = async (idArr) => {
   try {

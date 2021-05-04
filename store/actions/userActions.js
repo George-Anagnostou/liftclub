@@ -70,7 +70,7 @@ export const saveWorkoutLog = async (dispatch, workoutLog, user_id) => {
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
       contentType: "application/json",
-      body: JSON.stringify({workoutLog}),
+      body: JSON.stringify({ workoutLog }),
     });
 
     const userData = await res.json();
@@ -81,3 +81,5 @@ export const saveWorkoutLog = async (dispatch, workoutLog, user_id) => {
     return false;
   }
 };
+
+
