@@ -101,6 +101,7 @@ const ModulContainer = styled.div`
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 99;
 
   display: grid;
   place-items: center;
@@ -119,10 +120,11 @@ const ModulContainer = styled.div`
 
     .close-btn {
       position: absolute;
-      top: 0.5rem;
-      right: 0.5rem;
-
-      padding: 0.25rem;
+      top: 2px;
+      right: 2px;
+      height: 15px;
+      width: 15px;
+      font-size: 10px;
     }
 
     form {

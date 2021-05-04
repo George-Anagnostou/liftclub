@@ -1,35 +1,76 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+// Utils
+import { getUserMadeWorkouts, getWorkoutsFromIdArray } from "../../utils/ApiSupply";
+// Context
+import { useStoreState } from "../../store";
+import DeleteWorkoutModul from "./DeleteWorkoutModul";
 
 export default function UserWorkouts({
-  userWorkouts,
   displaySavedWorkout,
-  customWorkoutName,
-  publicWorkouts,
+  customWorkout,
+  workoutSavedSuccessfuly,
+  clearCustomWorkout,
 }) {
+  const { user } = useStoreState();
+
+  const [userMadeWorkouts, setUserMadeWorkouts] = useState([]);
+  const [userSavedWorkouts, setUserSavedWorkouts] = useState([]);
+  const [workoutToDelete, setWorkoutToDelete] = useState(null);
+
+  const loadUserMadeWorkouts = async () => {
+    const madeWorkouts = await getUserMadeWorkouts(user._id);
+    setUserMadeWorkouts(madeWorkouts);
+  };
+
+  const loadUserSavedWorkouts = async () => {
+    const savedWorkouts = await getWorkoutsFromIdArray(user.savedWorkouts);
+    setUserSavedWorkouts(savedWorkouts);
+  };
+
+  useEffect(() => {
+    if (user) {
+      // Get all workouts made by the user
+      loadUserMadeWorkouts();
+      // Get all workotus saved by the user
+      loadUserSavedWorkouts();
+    }
+  }, [user, workoutSavedSuccessfuly, workoutToDelete]);
+
   return (
     <UserWorkoutsContainer>
+      {workoutToDelete && (
+        <DeleteWorkoutModul
+          workout={workoutToDelete}
+          setWorkoutToDelete={setWorkoutToDelete}
+          clearCustomWorkout={clearCustomWorkout}
+        />
+      )}
+
       <ul>
         <h3>Your Workouts</h3>
-        {userWorkouts.map((each, i) => (
+        {userMadeWorkouts.map((workout, i) => (
           <li
             key={i}
-            onClick={() => displaySavedWorkout(each)}
-            style={customWorkoutName === each.name ? { background: "rgb(215, 221, 247)" } : {}}
+            onClick={() => displaySavedWorkout(workout)}
+            style={customWorkout._id === workout._id ? { background: "rgb(215, 221, 247)" } : {}}
           >
-            {each.name}
+            {workout.name}
+
+            <button onClick={() => setWorkoutToDelete(workout)}>X</button>
           </li>
         ))}
       </ul>
 
       <ul>
-        <h3>Public Workouts</h3>
-        {publicWorkouts.map((each, i) => (
+        <h3>Saved Workouts</h3>
+        {userSavedWorkouts.map((workout, i) => (
           <li
             key={i}
-            onClick={() => displaySavedWorkout(each)}
-            style={customWorkoutName === each.name ? { background: "rgb(215, 221, 247)" } : {}}
+            onClick={() => displaySavedWorkout(workout)}
+            style={customWorkout._id === workout._id ? { background: "rgb(215, 221, 247)" } : {}}
           >
-            {each.name}
+            {workout.name}
           </li>
         ))}
       </ul>
@@ -62,15 +103,19 @@ const UserWorkoutsContainer = styled.div`
       margin: 1rem;
       text-align: center;
       text-transform: capitalize;
-
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 1rem;
+      position: relative;
 
       &:hover {
         background: #c9c9c9;
+      }
+
+      button {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        height: 15px;
+        width: 15px;
+        font-size: 10px;
       }
     }
   }

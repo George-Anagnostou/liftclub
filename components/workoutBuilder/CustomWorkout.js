@@ -1,17 +1,15 @@
 import styled from "styled-components";
 
 export default function CustomWorkout({
+  customWorkout,
   workoutSavedSuccessfuly,
-  customWorkoutExercises,
   clearCustomWorkout,
-  customWorkoutName,
   handleWorkoutNameChange,
-  customWorkoutPublic,
   handlePrivacyChange,
   handleRepChange,
-  changeSetLength,
+  handleSetChange,
   removeExercise,
-  saveWorkoutToDB,
+  saveCustomWorkout,
   user,
 }) {
   return (
@@ -19,11 +17,11 @@ export default function CustomWorkout({
       <div className="workout-control">
         <div className="workout-header">
           {workoutSavedSuccessfuly && <p style={{ color: "green" }}>Workout saved successfully</p>}
-          {Boolean(customWorkoutExercises.length) && (
-            <button onClick={saveWorkoutToDB}>Save</button>
+          {Boolean(customWorkout.exercises.length) && (
+            <button onClick={saveCustomWorkout}>Save</button>
           )}
           <h3>Custom Workout</h3>
-          {Boolean(customWorkoutExercises.length) && (
+          {Boolean(customWorkout.exercises.length) && (
             <button onClick={clearCustomWorkout}>Clear</button>
           )}
         </div>
@@ -34,7 +32,7 @@ export default function CustomWorkout({
             type="text"
             name="workoutName"
             id="workoutName"
-            value={customWorkoutName}
+            value={customWorkout.name}
             onChange={handleWorkoutNameChange}
           />
           {user?.isAdmin && (
@@ -44,7 +42,7 @@ export default function CustomWorkout({
                 type="checkbox"
                 name="public"
                 id="public"
-                checked={customWorkoutPublic}
+                checked={customWorkout.isPublic}
                 onChange={handlePrivacyChange}
               />
             </>
@@ -52,7 +50,7 @@ export default function CustomWorkout({
         </div>
       </div>
 
-      {customWorkoutExercises.map(({ exercise, sets }, i) => (
+      {customWorkout.exercises.map(({ exercise, sets }, i) => (
         <li key={exercise._id} className="exercise">
           <p>
             <span>{i + 1}.</span> {exercise.name}
@@ -66,15 +64,15 @@ export default function CustomWorkout({
                 name="reps"
                 id="reps"
                 value={reps}
-                onChange={(e) => handleRepChange(e, exercise._id, j)}
+                onChange={(e) => handleRepChange(e, i, j)}
               />{" "}
               <span>reps</span>
             </div>
           ))}
 
           <div>
-            <button onClick={() => changeSetLength("add", i)}>Add set</button>
-            <button onClick={() => changeSetLength("remove", i)}>Remove set</button>
+            <button onClick={() => handleSetChange("add", i)}>Add set</button>
+            <button onClick={() => handleSetChange("remove", i)}>Remove set</button>
           </div>
 
           <button onClick={() => removeExercise(exercise)}>Remove</button>

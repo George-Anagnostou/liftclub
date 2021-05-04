@@ -1,6 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
+import useSWR from "swr";
+// Components
 import CreateExerciseModul from "./CreateExerciseModul";
+// Context
+import { useStoreState } from "../../store";
 
 const muscleGroups = [
   "all",
@@ -15,16 +19,38 @@ const muscleGroups = [
   "lower leg",
   "core",
 ];
+// SWR fetcher
+const fetcher = (url) => fetch(url).then((r) => r.json());
 
-export default function ExerciseList({
-  filterExercisesBy,
-  displayedExercises,
-  isExerciseInCustomWorkout,
-  addExercise,
-  removeExercise,
-  user,
-}) {
+export default function ExerciseList({ isExerciseInCustomWorkout, addExercise, removeExercise }) {
+  const { data, error } = useSWR("/api/exercises", fetcher);
+
+  const { user } = useStoreState();
+
+  const [displayedExercises, setDisplayedExercises] = useState([]);
   const [showCreateExerciseModal, setShowCreateExerciseModal] = useState(false);
+
+  const filterExercisesBy = async ({ field, value }) => {
+    try {
+      let res;
+      // Don't use "field" and "value" for searching by "all"
+      value === "all"
+        ? (res = await fetch(`/api/exercises`))
+        : (res = await fetch(`/api/exercises?${field}=${value}`));
+
+      const queried = await res.json();
+      setDisplayedExercises(queried);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  // Set exercises once SWR fetches the exercise data
+  useEffect(() => {
+    if (data) setDisplayedExercises(data);
+  }, [data]);
+  // Used with SWR
+  if (error) return <h1>failed to load</h1>;
 
   return (
     <ExercisesContainer>
@@ -51,6 +77,7 @@ export default function ExerciseList({
           </CreateExcerciseButton>
         )}
       </div>
+
       {showCreateExerciseModal && (
         <CreateExerciseModul
           muscleGroups={muscleGroups}
@@ -58,33 +85,37 @@ export default function ExerciseList({
         />
       )}
 
-      {displayedExercises.map((each) => (
-        <li
-          key={each._id}
-          className="exercise"
-          style={isExerciseInCustomWorkout(each._id) ? { background: "#cccccc" } : {}}
-        >
-          <h3>{each.name}</h3>
+      {data && (
+        <>
+          {displayedExercises.map((each) => (
+            <li
+              key={each._id}
+              className="exercise"
+              style={isExerciseInCustomWorkout(each._id) ? { background: "#cccccc" } : {}}
+            >
+              <h3>{each.name}</h3>
 
-          <p>
-            <span>muscle group:</span> {each.muscleGroup}
-          </p>
+              <p>
+                <span>muscle group:</span> {each.muscleGroup}
+              </p>
 
-          <p>
-            <span>muscle worked:</span> {each.muscleWorked}
-          </p>
+              <p>
+                <span>muscle worked:</span> {each.muscleWorked}
+              </p>
 
-          <p>
-            <span>equipment:</span> {each.equipment}
-          </p>
+              <p>
+                <span>equipment:</span> {each.equipment}
+              </p>
 
-          {isExerciseInCustomWorkout(each._id) ? (
-            <button onClick={() => removeExercise(each)}>Remove</button>
-          ) : (
-            <button onClick={() => addExercise(each)}>Add</button>
-          )}
-        </li>
-      ))}
+              {isExerciseInCustomWorkout(each._id) ? (
+                <button onClick={() => removeExercise(each)}>Remove</button>
+              ) : (
+                <button onClick={() => addExercise(each)}>Add</button>
+              )}
+            </li>
+          ))}
+        </>
+      )}
     </ExercisesContainer>
   );
 }
@@ -105,7 +136,6 @@ const ExercisesContainer = styled.ul`
   flex-wrap: wrap;
 
   .exercise-control {
-
     background: rgb(226, 226, 226);
     width: 100%;
 
