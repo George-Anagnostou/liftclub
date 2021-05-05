@@ -3,22 +3,50 @@ import styled from "styled-components";
 // Components
 import Layout from "../components/Layout";
 // Utils
-import { getPublicWorkouts, getWorkoutsFromIdArray, saveSavedWorkouts } from "../utils/ApiSupply";
+import {
+  getExercisesFromIdArray,
+  getPublicWorkouts,
+  getWorkoutsFromIdArray,
+  saveSavedWorkouts,
+} from "../utils/ApiSupply";
 // Context
 import { useStoreState } from "../store";
+import WorkoutList from "../components/workoutFeed/WorkoutList";
 
 export default function workoutFeed() {
   const { user } = useStoreState();
 
   const [savedWorkouts, setSavedWorkouts] = useState([]);
   const [publicWorkouts, setPublicWorkouts] = useState([]);
+  const [workoutsInViewMode, setWorkoutsInViewMode] = useState([]);
 
+  // Returns boolean for if a workout is in savedWorkouts
   const workoutIsSaved = (workout) => {
     return savedWorkouts.map((each) => each._id).includes(workout._id);
   };
 
+  // Returns boolean for if a workout_id is in workoutsInViewMode
+  const workoutIsInViewMode = (uid) => {
+    return workoutsInViewMode.includes(uid);
+  };
+
+  // Sets state for opening and closing specific workout view mode
+  const toggleWorkoutView = ({ section, workout, workoutIndex }) => {
+    // Create a unique string to identify which workouts from which columns are in view mode
+    const uid = String(section + " " + workout._id);
+
+    if (workoutIsInViewMode(uid)) {
+      // Close view mode
+      setWorkoutsInViewMode((prev) => prev.filter((each) => each !== uid));
+    } else {
+      // Open view mode
+      setWorkoutsInViewMode((prev) => [...prev, uid]);
+      getExerciseDataForWorkout(section, workout, workoutIndex);
+    }
+  };
+
   const updateStateAndSaveToDB = (workoutArr) => {
-    // Update State
+    // Update local state
     setSavedWorkouts(workoutArr);
     // Grab workout ids and save to DB
     const idArr = workoutArr.map((each) => each._id);
@@ -51,12 +79,37 @@ export default function workoutFeed() {
     setPublicWorkouts(workouts);
   };
 
+  const getExerciseDataForWorkout = async (section, workout, workoutIndex) => {
+    const idArr = workout.exercises.map((each) => each.exercise_id);
+    const exerciseData = await getExercisesFromIdArray(idArr);
+
+    // Sort the array based on the order of the idArr
+    exerciseData.sort((a, b) => idArr.indexOf(a._id) - idArr.indexOf(b._id));
+
+    switch (section) {
+      case "public":
+        const clonePW = [...publicWorkouts];
+        clonePW[workoutIndex].exercises.map((each, i) => (each.exercise = exerciseData[i]));
+
+        setPublicWorkouts(clonePW);
+        break;
+
+      case "saved":
+        const cloneSW = [...savedWorkouts];
+        cloneSW[workoutIndex].exercises.map((each, i) => (each.exercise = exerciseData[i]));
+
+        setSavedWorkouts(cloneSW);
+        break;
+    }
+  };
+
   useEffect(() => {
+    // Get all public workouts
+    getAllPublicWorkouts();
+
     if (user) {
       // Get all workotus saved by the user
       getSavedWorkouts();
-      // Get all public workouts
-      getAllPublicWorkouts();
     }
   }, [user]);
 
@@ -64,37 +117,24 @@ export default function workoutFeed() {
     <Layout>
       <h2>Workout Feed</h2>
       <WorkoutFeedContainer>
-        <PublicWorkoutsContainer>
-          <h3>Public Workouts</h3>
-          {publicWorkouts.map((workout) => (
-            <li key={"public" + workout._id}>
-              {workout.name}
-
-              {workoutIsSaved(workout) ? (
-                <button className="remove" onClick={() => removeFromSavedWorkouts(workout)}>
-                  -
-                </button>
-              ) : (
-                <button className="add" onClick={() => addToSavedWorkouts(workout)}>
-                  +
-                </button>
-              )}
-            </li>
-          ))}
-        </PublicWorkoutsContainer>
-
-        <SavedWorkoutsContainer>
-          <h3>Saved Workouts</h3>
-          {savedWorkouts.map((workout) => (
-            <li key={"saved" + workout._id}>
-              {workout.name}
-
-              <button className="remove" onClick={() => removeFromSavedWorkouts(workout)}>
-                -
-              </button>
-            </li>
-          ))}
-        </SavedWorkoutsContainer>
+        <WorkoutList
+          section="public"
+          workouts={publicWorkouts}
+          toggleWorkoutView={toggleWorkoutView}
+          workoutIsSaved={workoutIsSaved}
+          removeFromSavedWorkouts={removeFromSavedWorkouts}
+          addToSavedWorkouts={addToSavedWorkouts}
+          workoutIsInViewMode={workoutIsInViewMode}
+        />
+        <WorkoutList
+          section="saved"
+          workouts={savedWorkouts}
+          toggleWorkoutView={toggleWorkoutView}
+          workoutIsSaved={workoutIsSaved}
+          removeFromSavedWorkouts={removeFromSavedWorkouts}
+          addToSavedWorkouts={addToSavedWorkouts}
+          workoutIsInViewMode={workoutIsInViewMode}
+        />
       </WorkoutFeedContainer>
     </Layout>
   );
@@ -104,79 +144,7 @@ const WorkoutFeedContainer = styled.div`
   display: flex;
   justify-content: center;
 
-  .remove {
-    background: #fdebdf;
-  }
-  .add {
-    background: #eaeeff;
-  }
-
   @media (max-width: 768px) {
     flex-direction: column;
-  }
-`;
-const SavedWorkoutsContainer = styled.ul`
-  width: 50%;
-
-  li {
-    border: none;
-    border-radius: 5px;
-    box-shadow: 0 0 5px grey;
-
-    padding: 0.5rem;
-    margin: 1rem;
-    text-transform: capitalize;
-    position: relative;
-
-    button {
-      cursor: pointer;
-      border-radius: 5px;
-      border: none;
-      position: absolute;
-      top: 0px;
-      right: 0px;
-      height: 100%;
-      width: 50px;
-      font-size: 2rem;
-    }
-  }
-
-  @media (max-width: 768px) {
-    width: 100%;
-  }
-`;
-
-const PublicWorkoutsContainer = styled.ul`
-  width: 50%;
-
-  li {
-    border: none;
-    border-radius: 5px;
-    box-shadow: 0 0 5px grey;
-
-    padding: 0.5rem;
-    margin: 1rem;
-    text-transform: capitalize;
-    position: relative;
-
-    button {
-      cursor: pointer;
-      border-radius: 5px;
-      border: none;
-      position: absolute;
-      top: 0px;
-      right: 0px;
-      height: 100%;
-      width: 50px;
-      font-size: 2rem;
-
-      &:hover {
-        background: #c9c9c9;
-      }
-    }
-  }
-
-  @media (max-width: 768px) {
-    width: 100%;
   }
 `;
