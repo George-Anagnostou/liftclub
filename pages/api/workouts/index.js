@@ -19,6 +19,7 @@ export default async (req, res) => {
       const newWorkout = JSON.parse(req.body);
 
       // Cast all string ids to ObjectIds
+      newWorkout.date_created = new Date(newWorkout.date_created);
       newWorkout.creator_id = ObjectId(newWorkout.creator_id);
       newWorkout.exercises.map((each) => (each.exercise_id = ObjectId(each.exercise_id)));
 

@@ -138,7 +138,7 @@ export default function workoutBuilder() {
       const saveStatus = await updateExistingWorkout(composedWorkout);
       setWorkoutSavedSuccessfuly(saveStatus);
     } else {
-      // User is editing a non-user-owned workout or building a new workout
+      // User is saving their version of a saved workout or building a new workout
 
       // Current user set to creator
       composedWorkout.creator_id = user._id;
@@ -146,6 +146,8 @@ export default function workoutBuilder() {
       if (!user.isAdmin) composedWorkout.isPublic = false;
       // Remove any existing _id
       delete composedWorkout._id;
+      // Add date created
+      composedWorkout.date_created = new Date().toISOString();
 
       const saveStatus = await postNewWorkout(composedWorkout);
       setWorkoutSavedSuccessfuly(saveStatus);
