@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { timeSince } from "../../utils/general";
 
 export default function WorkoutList({
   section,
@@ -10,7 +11,7 @@ export default function WorkoutList({
   workoutIsInViewMode,
 }) {
   return (
-    <WorkoutsListContainer>
+    <WorkoutListContainer>
       <h3>{section} Workouts</h3>
 
       {workouts.map((workout, i) => (
@@ -20,7 +21,9 @@ export default function WorkoutList({
               View
             </button>
 
-            <p>{workout.name}</p>
+            <p>
+              {workout.name} {timeSince(new Date(workout.date_created))}
+            </p>
 
             {workoutIsSaved(workout) ? (
               <button className="remove" onClick={() => removeFromSavedWorkouts(workout)}>
@@ -45,11 +48,11 @@ export default function WorkoutList({
             ))}
         </li>
       ))}
-    </WorkoutsListContainer>
+    </WorkoutListContainer>
   );
 }
 
-const WorkoutsListContainer = styled.ul`
+const WorkoutListContainer = styled.ul`
   width: 50%;
 
   .workout {
