@@ -4,7 +4,7 @@ import styled from "styled-components";
 import SavedWorkoutTile from "./SavedWorkoutTile";
 
 export default function SavedWorkouts({ workouts, removeFromSavedWorkouts }) {
-  const [showSavedWorkouts, setShowSavedWorkouts] = useState(true);
+  const [showSavedWorkouts, setShowSavedWorkouts] = useState(false);
 
   const toggleShow = () => {
     setShowSavedWorkouts((prev) => !prev);
