@@ -130,8 +130,8 @@ const WorkoutTile = styled.li`
       border: none;
       padding: 0.5rem;
       margin-left: 0.25rem;
-
       min-width: 40px;
+      background: #d7d7d7;
     }
 
     .remove {
@@ -144,6 +144,10 @@ const WorkoutTile = styled.li`
 
   .workoutInfo {
     text-align: left;
+    transform-origin: top;
+    -webkit-animation: open 0.5s ease forwards; /* Safari */
+    animation: open 0.5s ease forwards;
+
     .creator {
       font-size: 0.7rem;
       color: grey;
@@ -153,6 +157,29 @@ const WorkoutTile = styled.li`
       text-transform: capitalize;
       display: flex;
       justify-content: space-between;
+    }
+
+    /* Safari */
+    @-webkit-keyframes open {
+      0% {
+        opacity: 0;
+        transform: rotate3d(1, 0, 0, 45deg);
+      }
+      100% {
+        opacity: 1;
+        transform: rotate3d(0);
+      }
+    }
+
+    @keyframes open {
+      0% {
+        opacity: 0;
+        transform: rotate3d(1, 0, 0, 45deg);
+      }
+      100% {
+        opacity: 1;
+        transform: rotate3d(0);
+      }
     }
   }
 `;
