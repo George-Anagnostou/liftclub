@@ -4,7 +4,8 @@ const SeoHead = ({ title }) => {
   return (
     <Head>
       <title>{title}</title>
-      <link rel="icon" href="/favicon.ico" />
+      <link rel="icon" href="/favicon.jpeg" />
+      <link rel="apple-touch-icon" href="/favicon.jpeg" />
     </Head>
   );
 };
