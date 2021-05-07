@@ -72,7 +72,7 @@ export default function workoutBuilder() {
 
   // Update the reps for specified set
   const handleRepChange = (e, exerciseIndex, setIndex) => {
-    const num = Number(e.target.value);
+    const num = e.target.value === "" ? "" : Number(e.target.value);
 
     const { exercises } = customWorkout;
 
@@ -89,7 +89,7 @@ export default function workoutBuilder() {
     switch (method) {
       case "add":
         // Add empty set to spedified exercise
-        exercises[exerciseIndex].sets.push({ reps: 0, weight: 0 });
+        exercises[exerciseIndex].sets.push({ reps: 0, weight: -1 });
         break;
       case "remove":
         // Remove last set from spedified exercise

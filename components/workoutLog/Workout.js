@@ -28,7 +28,7 @@ export default function Workout({
                   <div className="weight">
                     <input
                       type="number"
-                      value={weight || ""}
+                      value={weight >= 0 ? weight : ""}
                       onChange={(e) => handleWeightChange(e, i, j)}
                     />
                     <span>lbs</span>
