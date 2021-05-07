@@ -7,6 +7,16 @@
  *
  *
  */
+export const getUserData = async (user_id) => {
+  try {
+    const res = await fetch(`/api/users/${user_id}`);
+    const userData = await res.json();
+    return userData;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
 
 /**
  *
