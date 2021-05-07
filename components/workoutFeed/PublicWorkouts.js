@@ -27,6 +27,12 @@ export default function PublicWorkouts({
 
 const WorkoutList = styled.ul`
   width: 50%;
+  margin-bottom: 70px;
+
+  h3 {
+    margin-top: 0.5rem;
+    font-size: 1.5rem;
+  }
 
   @media (max-width: 768px) {
     width: 100%;

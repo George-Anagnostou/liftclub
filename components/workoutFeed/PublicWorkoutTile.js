@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+// Components
+import LoadingSpinner from "../LoadingSpinner";
 // Utils
 import { getExercisesFromIdArray, getUserData } from "../../utils/ApiSupply";
 import { timeSince } from "../../utils/general";
@@ -32,6 +34,7 @@ export default function PublicWorkoutTile({
     setWorkoutExercises(clone.exercises);
   };
 
+  // Get creator username
   const getCreator = async () => {
     const creatorData = await getUserData(workout.creator_id);
     setCreator(creatorData.username);
@@ -49,15 +52,16 @@ export default function PublicWorkoutTile({
 
   return (
     <WorkoutTile>
-      <div className="heading">
+      <div className="tile-heading">
         <div>
           <h3>{workout.name}</h3>
+
           <p>
             Posted <span>{timeSince(new Date(workout.date_created))}</span>
           </p>
         </div>
 
-        {loading && <Loader />}
+        {loading && <LoadingSpinner />}
 
         <div>
           <button onClick={toggleWorkoutInfo}>{showWorkoutInfo ? "close" : "view"} info</button>
@@ -107,7 +111,7 @@ const WorkoutTile = styled.li`
     color: #515151;
   }
 
-  .heading {
+  .tile-heading {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -180,35 +184,6 @@ const WorkoutTile = styled.li`
         opacity: 1;
         transform: rotate3d(0);
       }
-    }
-  }
-`;
-
-const Loader = styled.div`
-  border: 3px solid #eee;
-  border-radius: 50%;
-  border-top: 3px solid #555;
-  width: 25px;
-  height: 25px;
-  -webkit-animation: spin 0.5s linear infinite; /* Safari */
-  animation: spin 0.5s linear infinite;
-
-  /* Safari */
-  @-webkit-keyframes spin {
-    0% {
-      -webkit-transform: rotate(0deg);
-    }
-    100% {
-      -webkit-transform: rotate(360deg);
-    }
-  }
-
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
     }
   }
 `;

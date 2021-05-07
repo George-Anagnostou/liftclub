@@ -12,7 +12,6 @@ import { useStoreState } from "../store";
 export default function workoutFeed() {
   const { user } = useStoreState();
 
-  const [showSavedWorkouts, setShowSavedWorkouts] = useState(false);
   const [savedWorkouts, setSavedWorkouts] = useState([]);
   const [publicWorkouts, setPublicWorkouts] = useState([]);
 
@@ -75,12 +74,7 @@ export default function workoutFeed() {
           addToSavedWorkouts={addToSavedWorkouts}
         />
 
-        {showSavedWorkouts && (
-          <SavedWorkouts
-            workouts={savedWorkouts}
-            removeFromSavedWorkouts={removeFromSavedWorkouts}
-          />
-        )}
+        <SavedWorkouts workouts={savedWorkouts} removeFromSavedWorkouts={removeFromSavedWorkouts} />
       </WorkoutFeedContainer>
     </Layout>
   );
