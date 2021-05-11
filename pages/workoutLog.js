@@ -20,6 +20,7 @@ export default function workoutLog() {
   const [yearMonthDay, setYearMonthDay] = useState({}); // {year, month, day}
   const [workoutNote, setWorkoutNote] = useState("");
   const [prevBestData, setPrevBestData] = useState(null);
+  const [savedNotification, setSavedNotification] = useState(null);
 
   const handleWorkoutNoteChange = (e) => {
     setWorkoutNote(e.target.value);
@@ -197,7 +198,7 @@ export default function workoutLog() {
     }
 
     const saved = await saveWorkoutLog(dispatch, updatedWorkoutLog, user._id);
-
+    setSavedNotification(saved);
     // Clear the workout note
     setWorkoutNote("");
   };
@@ -230,6 +231,10 @@ export default function workoutLog() {
 
     setWorkoutNote("");
   };
+
+  useEffect(() => {
+    setTimeout(() => setSavedNotification(null), 3000);
+  }, [savedNotification]);
 
   useEffect(() => {
     // Set yearMonthDay to today
@@ -265,6 +270,7 @@ export default function workoutLog() {
                 handleWorkoutNoteChange={handleWorkoutNoteChange}
                 workoutNote={workoutNote}
                 prevBestData={prevBestData}
+                savedNotification={savedNotification}
               />
             ) : (
               <FallbackText>

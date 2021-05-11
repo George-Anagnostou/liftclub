@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Checkmark from "../Checkmark";
 
 export default function Workout({
   saveWorkout,
@@ -7,10 +8,16 @@ export default function Workout({
   handleWorkoutNoteChange,
   workoutNote,
   prevBestData,
+  savedNotification,
 }) {
   return (
     <>
-      <SaveWorkoutButton onClick={saveWorkout}>Save Workout</SaveWorkoutButton>
+      <SaveWorkoutButton onClick={saveWorkout}>
+        Save Workout
+        {savedNotification && (
+          <Checkmark position={{ position: "absolute", top: "15px", right: "15px" }} />
+        )}
+      </SaveWorkoutButton>
 
       {currentDayData.workoutName && (
         <WorkoutName>
@@ -46,11 +53,11 @@ export default function Workout({
                   </div>
 
                   <div>
-                    <p>
-                      {prevBestData?.exerciseData[i]?.sets[j]?.weight >= 0
-                        ? prevBestData?.exerciseData[i]?.sets[j]?.weight
-                        : "none"}
-                    </p>
+                    {prevBestData?.exerciseData[i]?.sets[j]?.weight >= 0 ? (
+                      <p>{prevBestData?.exerciseData[i]?.sets[j]?.weight}</p>
+                    ) : (
+                      <span>None</span>
+                    )}
                   </div>
                 </li>
               ))}

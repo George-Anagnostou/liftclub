@@ -74,12 +74,10 @@ export const saveWorkoutLog = async (dispatch, workoutLog, user_id) => {
     });
 
     const userData = await res.json();
-    dispatch({ type: "SET_USER", payload: { userData } });
+    // dispatch({ type: "SET_USER", payload: { userData } });
     return true;
   } catch (e) {
     console.log(e);
     return false;
   }
 };
-
-
