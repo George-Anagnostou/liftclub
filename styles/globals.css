@@ -4,12 +4,14 @@ body {
     Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
+html {
+  /* background: #292B4D; */
+}
+
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  /* background: #272636 !important;
-  color: white; */
 }
 
 ul {
