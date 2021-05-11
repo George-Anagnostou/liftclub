@@ -33,7 +33,7 @@ export default function UserWorkouts({ displayWorkout }) {
   return (
     <UserWorkoutsContainer>
       {Boolean(userSavedWorkouts.length) && (
-        <>
+        <div>
           <h3>Saved Workouts</h3>
           <ul>
             {userSavedWorkouts.map((workout) => (
@@ -43,11 +43,11 @@ export default function UserWorkouts({ displayWorkout }) {
               </li>
             ))}
           </ul>
-        </>
+        </div>
       )}
 
       {Boolean(userMadeWorkouts.length) && (
-        <>
+        <div>
           <h3>Your Workouts</h3>
           <ul>
             {userMadeWorkouts.map((workout) => (
@@ -57,48 +57,46 @@ export default function UserWorkouts({ displayWorkout }) {
               </li>
             ))}
           </ul>
-        </>
+        </div>
       )}
     </UserWorkoutsContainer>
   );
 }
 
 const UserWorkoutsContainer = styled.div`
+  width: 98%;
   border: none;
   border-radius: 5px;
-  box-shadow: 0 0 5px grey;
-  max-width: 100%;
   text-align: center;
   margin-bottom: 2rem;
-  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  div {
+    flex: 1;
+    ul {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
 
-  ul {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
+      li {
+        word-wrap: break-word;
+        width: 100%;
+        cursor: pointer;
+        margin: 0.5rem;
+        padding: 0.5rem;
+        border-radius: 5px;
+        box-shadow: 0 0 5px grey;
 
-    li {
-      flex: 1;
-      min-width: 90%;
-      cursor: pointer;
-      margin: 0.5rem;
-      padding: 0.5rem 0.2rem;
-      border-radius: 5px;
-      box-shadow: 0 0 5px grey;
+        &:hover {
+          background: #ccc;
+        }
 
-      &:hover {
-        background: #ccc;
-      }
-
-      h4 {
-        text-transform: capitalize;
-        padding-bottom: 0.5rem;
+        h4 {
+          text-transform: capitalize;
+          padding-bottom: 0.5rem;
+        }
       }
     }
-  }
-
-  @media (max-width: 500px) {
-    width: 98%;
   }
 `;

@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Layout from "../components/Layout";
 import Workout from "../components/workoutLog/Workout";
 import UserWorkouts from "../components/workoutLog/UserWorkouts";
+import LoadingSpinner from "../components/LoadingSpinner";
 // Utils
 import { getExercisesFromIdArray } from "../utils/ApiSupply";
 import { getCurrYearMonthDay } from "../utils/general";
@@ -15,9 +16,10 @@ export default function workoutLog() {
   const { user } = useStoreState();
 
   const [loading, setLoading] = useState(false);
-  const [currentDayData, setCurrentDayData] = useState({}); // {isoDate, timeInSeconds, completed, workout_id}
+  const [currentDayData, setCurrentDayData] = useState({}); // {isoDate, completed, workout_id}
   const [yearMonthDay, setYearMonthDay] = useState({}); // {year, month, day}
   const [workoutNote, setWorkoutNote] = useState("");
+  const [prevBestData, setPrevBestData] = useState(null);
 
   const handleWorkoutNoteChange = (e) => {
     setWorkoutNote(e.target.value);
@@ -47,12 +49,35 @@ export default function workoutLog() {
     setPageState(dayData);
   };
 
+  const findPrevBestData = (dayData) => {
+    let indexOfWorkout = user.workoutLog.length - 1; // Default with last index
+
+    // If the workout has a been saved set index to the previous of it
+    if (dayData.isoDate) {
+      indexOfWorkout =
+        user.workoutLog.findIndex((workout) => workout.isoDate === dayData.isoDate) - 1;
+    }
+
+    for (let i = indexOfWorkout; i >= 0; i--) {
+      if (user.workoutLog[i].workout_id == dayData.workout_id) {
+        setPrevBestData(user.workoutLog[i]);
+        return;
+      }
+    }
+
+    //If no prev best has been found
+    setPrevBestData(null);
+  };
+
   // Accepts a workout from user's workoutLog and sets workout and currentDay data
   const setPageState = async (dayData) => {
     setLoading(true);
 
     // Check if workout exists
     if (dayData) {
+      // Search for previous best for dayData.workout_id;
+      findPrevBestData(dayData);
+
       // Grab all exercise_ids from the workout
       const idArr = dayData.exerciseData.map((each) => each.exercise_id);
 
@@ -190,11 +215,18 @@ export default function workoutLog() {
     // Create exercise key in each exercise to hold exercise data
     clicked.exercises.map((each, i) => (each.exercise = exerciseData[i]));
 
-    setCurrentDayData((prev) => ({
-      ...prev,
+    const composedData = {
       workoutName: clicked.name,
       exerciseData: clicked.exercises,
+      workout_id: clicked._id,
+    };
+
+    setCurrentDayData((prev) => ({
+      ...prev,
+      ...composedData,
     }));
+
+    findPrevBestData(composedData);
 
     setWorkoutNote("");
   };
@@ -222,17 +254,7 @@ export default function workoutLog() {
         </DateBar>
 
         {loading ? (
-          <LoadingWorkout>
-            {[...new Array(5).keys()].map((i) => (
-              <li className="exercise" key={i}>
-                <ul>
-                  <li className="set" key={"set1"}></li>
-                  <li className="set" key={"set2"}></li>
-                  <li className="set" key={"set3"}></li>
-                </ul>
-              </li>
-            ))}
-          </LoadingWorkout>
+          <LoadingSpinner />
         ) : (
           <>
             {currentDayData.exerciseData ? (
@@ -242,16 +264,17 @@ export default function workoutLog() {
                 handleWeightChange={handleWeightChange}
                 handleWorkoutNoteChange={handleWorkoutNoteChange}
                 workoutNote={workoutNote}
+                prevBestData={prevBestData}
               />
             ) : (
               <FallbackText>
                 No Workout has been recored today. Select a workout from one of your workouts below.
               </FallbackText>
             )}
+
+            <UserWorkouts displayWorkout={displayWorkout} />
           </>
         )}
-
-        <UserWorkouts displayWorkout={displayWorkout} />
       </MainContainer>
     </Layout>
   );
@@ -272,7 +295,7 @@ export default function workoutLog() {
 const MainContainer = styled.main`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 `;
 
@@ -311,7 +334,7 @@ const DateBar = styled.ul`
     }
   }
 
-  @media (max-width: 500px) {
+  @media (max-width: 425px) {
     /* Remove scroll bar on mobile */
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
@@ -325,59 +348,8 @@ const DateBar = styled.ul`
 const FallbackText = styled.h5`
   border-radius: 5px;
   box-shadow: 0 0 5px grey;
-  max-width: 300px;
   margin: 1rem 0.25rem;
   padding: 1rem;
-
-  @media (max-width: 500px) {
-    width: 98%;
-    max-width: 100%;
-  }
-`;
-
-const LoadingWorkout = styled.ul`
-  width: 100%;
-  padding-top: 7rem;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  flex-wrap: wrap;
-
-  .exercise {
-    box-shadow: 0 0 5px grey;
-    border-radius: 10px;
-    padding: 0.5rem;
-    min-width: 55%;
-    max-width: 100%;
-
-    margin: 0.5rem 0;
-
-    ul {
-      width: fit-content;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-
-      .set {
-        margin: 1rem;
-        padding: 3rem;
-      }
-    }
-  }
-
-  @media (max-width: 500px) {
-    .exercise {
-      width: 98%;
-
-      ul {
-        width: 100%;
-
-        .set {
-          width: 100%;
-        }
-      }
-    }
-  }
+  width: 98%;
+  max-width: 100%;
 `;

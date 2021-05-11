@@ -6,23 +6,34 @@ export default function Workout({
   handleWeightChange,
   handleWorkoutNoteChange,
   workoutNote,
+  prevBestData,
 }) {
   return (
     <>
-      {currentDayData.workoutName && <WorkoutName>{currentDayData.workoutName}</WorkoutName>}
-
       <SaveWorkoutButton onClick={saveWorkout}>Save Workout</SaveWorkoutButton>
+
+      {currentDayData.workoutName && (
+        <WorkoutName>
+          <h2>{currentDayData.workoutName}</h2>
+          <p>{currentDayData.exerciseData.length} exercises</p>
+        </WorkoutName>
+      )}
 
       <WorkoutList>
         {currentDayData.exerciseData.map(({ exercise, exercise_id, sets }, i) => (
           <li className="exercise" key={exercise_id}>
             <h3 className="exercise-name">{exercise.name}</h3>
             <ul>
+              <li className="set-title">
+                <p>Reps</p>
+                <p>Weight</p>
+                <p>Previous</p>
+              </li>
+
               {sets.map(({ reps, weight }, j) => (
                 <li className="set" key={`${exercise_id} ${j}`}>
                   <div className="reps">
                     <p>{reps}</p>
-                    <span>reps</span>
                   </div>
 
                   <div className="weight">
@@ -32,6 +43,14 @@ export default function Workout({
                       onChange={(e) => handleWeightChange(e, i, j)}
                     />
                     <span>lbs</span>
+                  </div>
+
+                  <div>
+                    <p>
+                      {prevBestData?.exerciseData[i]?.sets[j]?.weight >= 0
+                        ? prevBestData?.exerciseData[i]?.sets[j]?.weight
+                        : "none"}
+                    </p>
                   </div>
                 </li>
               ))}
@@ -54,28 +73,30 @@ export default function Workout({
   );
 }
 
-const WorkoutName = styled.h1`
-  text-transform: uppercase;
-  margin-top: 0.5rem;
+const WorkoutName = styled.div`
+  display: flex;
+  width: 98%;
+  justify-content: space-around;
+  align-items: flex-end;
+  h2 {
+    text-transform: uppercase;
+  }
 `;
 
 const SaveWorkoutButton = styled.button`
+  width: 98%;
   position: sticky;
   top: 0.5rem;
   margin: 1rem auto;
   font-size: 1.5rem;
-  padding: 0.5rem;
+  padding: 1rem 0.5rem;
   background: white;
   border: none;
   border-radius: 5px;
   box-shadow: 0 0 5px grey;
 
   &:hover {
-    background: #e3f7ff;
-  }
-
-  @media (max-width: 500px) {
-    width: 98%;
+    background: #eaeeff;
   }
 `;
 
@@ -91,7 +112,7 @@ const WorkoutList = styled.ul`
   .exercise {
     box-shadow: 0 0 5px grey;
     border-radius: 10px;
-    padding: 0.5rem;
+    padding: 0.5rem 0;
     max-width: 100%;
 
     margin: 0.5rem 0;
@@ -99,6 +120,7 @@ const WorkoutList = styled.ul`
 
     h3 {
       text-transform: uppercase;
+      border-bottom: 2px solid #eaeeff;
     }
 
     ul {
@@ -107,29 +129,36 @@ const WorkoutList = styled.ul`
       flex-wrap: wrap;
       justify-content: center;
 
+      .set-title {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: flex-end;
+        width: 100%;
+        margin: 0.5rem 0;
+        p {
+          flex: 1;
+          text-align: center;
+        }
+      }
+
       .set {
         display: flex;
-        justify-content: center;
-        align-items: center;
+        justify-content: space-evenly;
+        align-items: flex-end;
 
-        width: fit-content;
-        margin: 1rem;
+        width: 100%;
+        margin: 0.5rem 0;
 
         div {
+          flex: 1;
           display: flex;
+          justify-content: center;
           align-items: flex-end;
         }
 
-        .reps {
-          margin-right: 2rem;
-
-          p {
-            font-weight: 600;
-            font-size: 3rem;
-          }
-          span {
-            margin-bottom: 0.5rem;
-          }
+        p {
+          font-weight: 300;
+          font-size: 2rem;
         }
 
         .weight {
@@ -137,20 +166,16 @@ const WorkoutList = styled.ul`
             text-align: center;
             border: 1px solid #ccc;
             border-radius: 5px;
-            width: 6rem;
-            font-size: 3rem;
+            width: 5rem;
+            font-size: 2rem;
             font-weight: 200;
           }
-        }
-
-        span {
-          font-size: 1rem;
         }
       }
     }
   }
 
-  @media (max-width: 500px) {
+  @media (max-width: 425px) {
     .exercise {
       width: 98%;
 
@@ -184,7 +209,7 @@ const WorkoutNote = styled.div`
     resize: none;
   }
 
-  @media (max-width: 500px) {
+  @media (max-width: 425px) {
     width: 98%;
     textarea {
       width: 100%;
