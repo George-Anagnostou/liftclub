@@ -84,7 +84,8 @@ const WorkoutFeedContainer = styled.div`
   display: flex;
   justify-content: center;
 
-  @media (max-width: 768px) {
+  @media (max-width: 425px) {
+    margin-top: 55px;
     flex-direction: column;
   }
 `;

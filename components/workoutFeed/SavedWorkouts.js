@@ -11,19 +11,15 @@ export default function SavedWorkouts({ workouts, removeFromSavedWorkouts }) {
   };
 
   return (
-    <WorkoutList style={showSavedWorkouts ? { top: "10%" } : null}>
-      <div className="list-heading">
-        <h3>Saved Workouts</h3>
-        <button
-          className="toggle-btn"
-          onClick={toggleShow}
-          style={showSavedWorkouts ? { transform: "rotate(180deg)" } : null}
-        >
-          ^
-        </button>
-      </div>
-
+    <WorkoutList style={showSavedWorkouts ? { top: "0%" } : null}>
       <div className="tile-container">
+        {!Boolean(workouts.length) && (
+          <>
+            <h3 className="tip">You haven't saved any workouts yet.</h3>
+            <p className="tip"> Tip: Try pressing the + button on a workout to save it.</p>
+          </>
+        )}
+
         {workouts.map((workout, i) => (
           <SavedWorkoutTile
             key={`saved ${workout._id}`}
@@ -32,23 +28,44 @@ export default function SavedWorkouts({ workouts, removeFromSavedWorkouts }) {
           />
         ))}
       </div>
+
+      <div className="list-heading">
+        <h3>Saved Workouts</h3>
+        <button
+          className="toggle-btn"
+          onClick={toggleShow}
+          style={showSavedWorkouts ? { transform: "rotate(0deg)" } : null}
+        >
+          ^
+        </button>
+      </div>
     </WorkoutList>
   );
 }
 
 const WorkoutList = styled.ul`
   width: 50%;
-  height: 91%;
+  height: 85%;
   position: fixed;
-  top: calc(100% - 60px);
+  top: calc(-85% + 50px);
   background: #f8f8f8;
-  border: 1px solid #adadad;
+  box-shadow: 0 5px 5px #ccc;
 
-  border-radius: 10px 10px 0 0;
+  border-radius: 0px 0px 10px 10px;
+  overflow: hidden;
   transition: all 0.3s ease-in-out;
 
+  .tile-container {
+    height: calc(100% - 50px);
+    overflow: scroll;
+
+    .tip {
+      margin: 1rem;
+    }
+  }
+
   .list-heading {
-    height: 60px;
+    height: 50px;
     box-shadow: 0 2px 5px grey;
     position: relative;
     z-index: 99;
@@ -63,27 +80,24 @@ const WorkoutList = styled.ul`
 
     .toggle-btn {
       position: absolute;
-      top: 10px;
+      top: 8px;
       right: 2rem;
       background: #eaeeff;
       box-shadow: 0 0 5px grey;
       border-radius: 50%;
       border: none;
-      width: 40px;
-      height: 40px;
+      width: 35px;
+      height: 35px;
 
       font-weight: bold;
       font-size: 1.5rem;
       padding-top: 7px;
+
+      transform: rotate(180deg);
     }
   }
 
-  .tile-container {
-    height: calc(100% - 67px);
-    overflow: scroll;
-  }
-
-  @media (max-width: 768px) {
+  @media (max-width: 425px) {
     width: 100%;
   }
 `;

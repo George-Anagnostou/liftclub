@@ -10,7 +10,7 @@ export default function PublicWorkouts({
 }) {
   return (
     <WorkoutList>
-      <h3>Public Workouts</h3>
+      <p>Tip: Want to try out a workout? Click the + icon to add it to your saved workouts.</p>
 
       {workouts.map((workout) => (
         <PublicWorkoutTile
@@ -26,15 +26,9 @@ export default function PublicWorkouts({
 }
 
 const WorkoutList = styled.ul`
-  width: 50%;
-  margin-bottom: 70px;
+  width: 100%;
 
-  h3 {
+  p {
     margin-top: 0.5rem;
-    font-size: 1.5rem;
-  }
-
-  @media (max-width: 768px) {
-    width: 100%;
   }
 `;
