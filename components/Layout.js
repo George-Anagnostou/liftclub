@@ -30,7 +30,6 @@ export default function Layout({ title = "Workout App", children }) {
     <>
       <SeoHead title={title} />
       <MainContainer>
-        <h1>Anagnostou Lift Club</h1>
         <NavBar>
           <ul>
             {routes.map((route) => (
@@ -50,25 +49,31 @@ export default function Layout({ title = "Workout App", children }) {
 
 const MainContainer = styled.main`
   text-align: center;
+  margin-bottom: 10vh;
 `;
 
 const NavBar = styled.nav`
-  ul {
-    border-bottom: 4px solid #e9e9e9;
-    width: 100%;
-    display: flex;
-    list-style: none;
-    li {
-      border: none;
-      border-radius: 5px 5px 0 0;
-      box-shadow: 0 0 2px grey;
+  background: white;
 
-      flex: 1;
-      display: grid;
-      place-items: center;
-      cursor: pointer;
-      padding: 0.5rem 0.1rem;
-      text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+
+  z-index: 99;
+
+  ul {
+    box-shadow: 0 -5px 5px #ccc;
+    height: 8vh;
+    width: 100%;
+
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    li {
+      border: 1px solid #ccc;
+      margin: 0 0.5rem;
+      border-radius: 5px;
+      padding: 1rem 1.5rem;
     }
   }
 `;
