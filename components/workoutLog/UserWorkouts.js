@@ -86,10 +86,10 @@ const UserWorkoutsContainer = styled.div`
         margin: 0.5rem;
         padding: 0.5rem;
         border-radius: 5px;
-        box-shadow: 0 0 5px grey;
+        box-shadow: 0 2px 5px #757575;
 
         &:hover {
-          background: #ccc;
+          background: #eaeeff;
         }
 
         h4 {

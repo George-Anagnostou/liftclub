@@ -122,7 +122,7 @@ export default function workoutLog() {
 
     // Styles
     const fontStyle = dayIsSelected
-      ? { boxShadow: "0 0 10px grey" }
+      ? { boxShadow: "0 3px 5px #757575" }
       : { color: "#aaa", transform: "scale(.9)" };
     const backgroundStyle = dayData ? { background: "#EAEEFF" } : {};
 
@@ -323,7 +323,8 @@ const DateBar = styled.ul`
     text-align: center;
 
     div {
-      box-shadow: 0 0 5px grey;
+      box-shadow: none;
+      border: 1px solid #ccc;
       border-radius: 10px;
       transition: all 0.1s ease-in-out;
       padding: 0.5rem;

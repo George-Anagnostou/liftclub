@@ -62,7 +62,7 @@ const NavBar = styled.nav`
   z-index: 99;
 
   ul {
-    box-shadow: 0 -5px 5px #ccc;
+    box-shadow: 0 -3px 10px #ccc;
     height: 8vh;
     width: 100%;
 

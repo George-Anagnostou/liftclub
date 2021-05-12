@@ -19,12 +19,10 @@ export default function Workout({
         )}
       </SaveWorkoutButton>
 
-      {currentDayData.workoutName && (
-        <WorkoutName>
-          <h2>{currentDayData.workoutName}</h2>
-          <p>{currentDayData.exerciseData.length} exercises</p>
-        </WorkoutName>
-      )}
+      <WorkoutName>
+        <h1>{currentDayData.workoutName}</h1>
+        <h3>{currentDayData.exerciseData.length} exercises</h3>
+      </WorkoutName>
 
       <WorkoutList>
         {currentDayData.exerciseData.map(({ exercise, exercise_id, sets }, i) => (
@@ -83,9 +81,10 @@ export default function Workout({
 const WorkoutName = styled.div`
   display: flex;
   width: 98%;
-  justify-content: space-around;
+  justify-content: space-evenly;
   align-items: flex-end;
-  h2 {
+  width: 100%;
+  h1 {
     text-transform: uppercase;
   }
 `;
@@ -98,9 +97,9 @@ const SaveWorkoutButton = styled.button`
   font-size: 1.5rem;
   padding: 1rem 0.5rem;
   background: white;
-  border: none;
+  border: 1px solid #ccc;
   border-radius: 5px;
-  box-shadow: 0 0 5px grey;
+  box-shadow: 0 2px 5px #aaaaaa;
 
   &:hover {
     background: #eaeeff;
@@ -117,17 +116,15 @@ const WorkoutList = styled.ul`
   flex-wrap: wrap;
 
   .exercise {
-    box-shadow: 0 0 5px grey;
     border-radius: 10px;
     padding: 0.5rem 0;
     max-width: 100%;
 
-    margin: 0.5rem 0;
+    margin: 0.75rem 0;
     text-align: center;
 
     h3 {
       text-transform: uppercase;
-      border-bottom: 2px solid #eaeeff;
     }
 
     ul {
@@ -171,11 +168,19 @@ const WorkoutList = styled.ul`
         .weight {
           input {
             text-align: center;
+            box-shadow: none;
             border: 1px solid #ccc;
             border-radius: 5px;
             width: 5rem;
             font-size: 2rem;
             font-weight: 200;
+            transition: all 0.1s ease-in-out;
+
+            &:focus {
+              outline: none;
+              transform: scale(1.1);
+              box-shadow: 0 2px 4px #8f8f8f;
+            }
           }
         }
       }
@@ -200,20 +205,26 @@ const WorkoutList = styled.ul`
 const WorkoutNote = styled.div`
   margin: 1rem auto;
   border-radius: 5px;
-  box-shadow: 0 0 5px grey;
   padding: 1rem;
   text-align: left;
 
   textarea {
     padding: 0.5rem;
     border-radius: 5px;
-    box-shadow: 0 0 5px #b9b9b9;
+    box-shadow: none;
     border: 1px solid #b9b9b9;
     min-width: 200px;
     max-width: 85vw;
     font-size: 1.2rem;
     font-family: inherit;
     resize: none;
+    transition: all 0.1s ease-in-out;
+
+    &:focus {
+      outline: none;
+      transform: scale(1.02);
+      box-shadow: 0 5px 8px #757575;
+    }
   }
 
   @media (max-width: 425px) {
