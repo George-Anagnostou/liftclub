@@ -199,8 +199,6 @@ export default function workoutLog() {
 
     const saved = await saveWorkoutLog(dispatch, updatedWorkoutLog, user._id);
     setSavedNotification(saved);
-    // Clear the workout note
-    setWorkoutNote("");
   };
 
   const displayWorkout = async (clicked) => {
