@@ -83,9 +83,7 @@ export default function workoutFeed() {
 const WorkoutFeedContainer = styled.div`
   display: flex;
   justify-content: center;
-
-  @media (max-width: 425px) {
-    margin-top: 55px;
-    flex-direction: column;
-  }
+  flex-direction: column;
+  
+  margin-top: 55px;
 `;

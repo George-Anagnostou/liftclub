@@ -29,14 +29,10 @@ export default function SavedWorkouts({ workouts, removeFromSavedWorkouts }) {
         ))}
       </div>
 
-      <div className="list-heading">
+      <div className="list-heading" onClick={toggleShow}>
         <h3>Saved Workouts</h3>
-        <button
-          className="toggle-btn"
-          onClick={toggleShow}
-          style={showSavedWorkouts ? { transform: "rotate(0deg)" } : null}
-        >
-          ^
+        <button className="toggle-btn">
+          <p style={showSavedWorkouts ? { transform: "rotate(0deg)" } : null}>^</p>
         </button>
       </div>
     </WorkoutList>
@@ -44,7 +40,7 @@ export default function SavedWorkouts({ workouts, removeFromSavedWorkouts }) {
 }
 
 const WorkoutList = styled.ul`
-  width: 50%;
+  width: 100%;
   height: 85%;
   position: fixed;
   top: calc(-85% + 50px);
@@ -83,7 +79,7 @@ const WorkoutList = styled.ul`
       top: 8px;
       right: 2rem;
       background: #eaeeff;
-      box-shadow: 0 0 5px grey;
+      box-shadow: 0 2px 5px grey;
       border-radius: 50%;
       border: none;
       width: 35px;
@@ -91,13 +87,12 @@ const WorkoutList = styled.ul`
 
       font-weight: bold;
       font-size: 1.5rem;
-      padding-top: 7px;
 
-      transform: rotate(180deg);
+      p {
+        transform: rotate(180deg);
+        width: 35px;
+        height: 19px;
+      }
     }
-  }
-
-  @media (max-width: 425px) {
-    width: 100%;
   }
 `;
