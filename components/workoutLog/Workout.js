@@ -177,8 +177,6 @@ const WorkoutList = styled.ul`
             transition: all 0.1s ease-in-out;
 
             &:focus {
-              outline: none;
-              transform: scale(1.1);
               box-shadow: 0 2px 4px #8f8f8f;
             }
           }
@@ -221,8 +219,6 @@ const WorkoutNote = styled.div`
     transition: all 0.1s ease-in-out;
 
     &:focus {
-      outline: none;
-      transform: scale(1.02);
       box-shadow: 0 5px 8px #757575;
     }
   }
