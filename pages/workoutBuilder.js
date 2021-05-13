@@ -5,9 +5,10 @@ import Layout from "../components/Layout";
 import ExerciseList from "../components/workoutBuilder/ExerciseList";
 import UserWorkouts from "../components/workoutBuilder/UserWorkouts";
 import CustomWorkout from "../components/workoutBuilder/CustomWorkout";
-import { getExercisesFromIdArray, postNewWorkout, updateExistingWorkout } from "../utils/ApiSupply";
+import { postNewWorkout, updateExistingWorkout } from "../utils/ApiSupply";
 
 import { useStoreState } from "../store";
+import { addExerciseDataToWorkout } from "../utils/general";
 
 export default function workoutBuilder() {
   const { user } = useStoreState();
@@ -103,21 +104,8 @@ export default function workoutBuilder() {
   };
 
   const displaySavedWorkout = async (workout) => {
-    // Grab all the exercise_ids from the workout
-    const idArr = workout.exercises.map((each) => each.exercise_id);
-
-    // Query for exercise data using the idArr
-    const exerciseData = await getExercisesFromIdArray(idArr);
-
-    // Sort the array based on the order of the idArr
-    exerciseData.sort((a, b) => idArr.indexOf(a._id) - idArr.indexOf(b._id));
-
-    // Create exercise key in each exercise to hold exercise data
-    workout.exercises.map((each, i) => {
-      each.exercise = exerciseData[i];
-    });
-
-    setCustomWorkout(workout);
+    const mergedData = await addExerciseDataToWorkout(workout);
+    setCustomWorkout(mergedData);
   };
 
   const saveCustomWorkout = async () => {

@@ -6,8 +6,11 @@ import Workout from "../components/workoutLog/Workout";
 import UserWorkouts from "../components/workoutLog/UserWorkouts";
 import LoadingSpinner from "../components/LoadingSpinner";
 // Utils
-import { getExercisesFromIdArray } from "../utils/ApiSupply";
-import { getCurrYearMonthDay } from "../utils/general";
+import {
+  getCurrYearMonthDay,
+  addExerciseDataToLoggedWorkout,
+  addExerciseDataToWorkout,
+} from "../utils/general";
 // Context
 import { useStoreState, useStoreDispatch, saveWorkoutLog } from "../store";
 
@@ -16,7 +19,7 @@ export default function workoutLog() {
   const { user } = useStoreState();
 
   const [loading, setLoading] = useState(false);
-  const [currentDayData, setCurrentDayData] = useState({}); // {isoDate, completed, workout_id}
+  const [currentDayData, setCurrentDayData] = useState({});
   const [yearMonthDay, setYearMonthDay] = useState({}); // {year, month, day}
   const [workoutNote, setWorkoutNote] = useState("");
   const [prevBestData, setPrevBestData] = useState(null);
@@ -79,21 +82,10 @@ export default function workoutLog() {
       // Search for previous best for dayData.workout_id;
       findPrevBestData(dayData);
 
-      // Grab all exercise_ids from the workout
-      const idArr = dayData.exerciseData.map((each) => each.exercise_id);
+      const mergedData = await addExerciseDataToLoggedWorkout(dayData);
 
-      // Get all exercise information
-      const exerciseData = await getExercisesFromIdArray(idArr);
-
-      // Sort the array based on the order of the idArr
-      exerciseData.sort((a, b) => idArr.indexOf(a._id) - idArr.indexOf(b._id));
-
-      dayData.exerciseData.map((each, i) => {
-        if (each.exercise_id === exerciseData[i]._id) each.exercise = exerciseData[i];
-      });
-
-      setCurrentDayData(dayData);
-      setWorkoutNote(dayData.workoutNote || "");
+      setCurrentDayData(mergedData);
+      setWorkoutNote(mergedData.workoutNote || "");
     } else {
       setCurrentDayData({});
     }
@@ -197,27 +189,22 @@ export default function workoutLog() {
       ].sort((a, b) => a.isoDate.localeCompare(b.isoDate));
     }
 
+    // Remove any remaining exerciseData.exercise
+    updatedWorkoutLog.map((day) => {
+      day.exerciseData.map((each) => delete each.exercise);
+    });
+
     const saved = await saveWorkoutLog(dispatch, updatedWorkoutLog, user._id);
     setSavedNotification(saved);
   };
 
   const displayWorkout = async (clicked) => {
-    // Grab all the exercise_ids from the workout
-    const idArr = clicked.exercises.map((each) => each.exercise_id);
-
-    // Query for exercise data using the idArr
-    const exerciseData = await getExercisesFromIdArray(idArr);
-
-    // Sort the array based on the order of the idArr
-    exerciseData.sort((a, b) => idArr.indexOf(a._id) - idArr.indexOf(b._id));
-
-    // Create exercise key in each exercise to hold exercise data
-    clicked.exercises.map((each, i) => (each.exercise = exerciseData[i]));
+    const mergedData = await addExerciseDataToWorkout(clicked);
 
     const composedData = {
-      workoutName: clicked.name,
-      exerciseData: clicked.exercises,
-      workout_id: clicked._id,
+      workoutName: mergedData.name,
+      exerciseData: mergedData.exercises,
+      workout_id: mergedData._id,
     };
 
     setCurrentDayData((prev) => ({

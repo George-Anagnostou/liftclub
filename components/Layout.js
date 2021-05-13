@@ -11,6 +11,7 @@ const routes = [
   { pathname: "/workoutLog", linkTitle: "Log" },
   { pathname: "/workoutBuilder", linkTitle: "Builder" },
   { pathname: "/workoutFeed", linkTitle: "Feed" },
+  { pathname: "/myProfile", linkTitle: "Profile" },
 ];
 
 export default function Layout({ title = "Workout App", children }) {
@@ -70,10 +71,15 @@ const NavBar = styled.nav`
     justify-content: space-evenly;
     align-items: center;
     li {
+      flex: 1;
       border: 1px solid #ccc;
       margin: 0 0.5rem;
       border-radius: 5px;
-      padding: 1rem 1.5rem;
+      height: 80%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 `;
