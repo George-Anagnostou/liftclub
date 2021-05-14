@@ -15,7 +15,7 @@ const routes = [
 ];
 
 export default function Layout({ title = "Workout App", children }) {
-  const { pathname } = useRouter();
+  const router = useRouter();
 
   const dispatch = useStoreDispatch();
 
@@ -24,7 +24,7 @@ export default function Layout({ title = "Workout App", children }) {
     const user_id = localStorage.getItem("workoutID");
 
     // If local storage workoutID exists, login user
-    if (user_id) loginUser(dispatch, user_id);
+    user_id ? loginUser(dispatch, user_id) : router.push("/");
   }, []);
 
   return (
@@ -35,7 +35,7 @@ export default function Layout({ title = "Workout App", children }) {
           <ul>
             {routes.map((route) => (
               <Link href={route.pathname} key={route.pathname}>
-                <li style={pathname === route.pathname ? { background: "#EAEEFF" } : null}>
+                <li style={router.pathname === route.pathname ? { background: "#EAEEFF" } : null}>
                   <a>{route.linkTitle}</a>
                 </li>
               </Link>
