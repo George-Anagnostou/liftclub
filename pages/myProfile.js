@@ -10,7 +10,7 @@ import { addExerciseDataToLoggedWorkout, round } from "../utils";
 import { useStoreState } from "../store";
 import WorkoutSelect from "../components/myProfile/WorkoutSelect";
 import ExerciseSelect from "../components/myProfile/ExerciseSelect";
-import Chart from "../components/myProfile/chart";
+import Chart from "../components/myProfile/Chart";
 
 export default function myProfile() {
   const { user } = useStoreState();
