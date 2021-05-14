@@ -8,13 +8,13 @@ export default function Workout({
   handleWorkoutNoteChange,
   workoutNote,
   prevBestData,
-  savedNotification,
+  savedSuccessfully,
 }) {
   return (
     <>
       <SaveWorkoutButton onClick={saveWorkout}>
         Save Workout
-        {savedNotification && (
+        {savedSuccessfully && (
           <Checkmark position={{ position: "absolute", top: "15px", right: "15px" }} />
         )}
       </SaveWorkoutButton>

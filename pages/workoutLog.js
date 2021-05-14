@@ -10,7 +10,7 @@ import {
   getCurrYearMonthDay,
   addExerciseDataToLoggedWorkout,
   addExerciseDataToWorkout,
-} from "../utils/general";
+} from "../utils";
 // Context
 import { useStoreState, useStoreDispatch, saveWorkoutLog } from "../store";
 
@@ -23,7 +23,7 @@ export default function workoutLog() {
   const [yearMonthDay, setYearMonthDay] = useState({}); // {year, month, day}
   const [workoutNote, setWorkoutNote] = useState("");
   const [prevBestData, setPrevBestData] = useState(null);
-  const [savedNotification, setSavedNotification] = useState(null);
+  const [savedSuccessfully, setSavedSuccessfully] = useState(null);
 
   const handleWorkoutNoteChange = (e) => {
     setWorkoutNote(e.target.value);
@@ -195,7 +195,7 @@ export default function workoutLog() {
     });
 
     const saved = await saveWorkoutLog(dispatch, updatedWorkoutLog, user._id);
-    setSavedNotification(saved);
+    setSavedSuccessfully(saved);
   };
 
   const displayWorkout = async (clicked) => {
@@ -218,8 +218,9 @@ export default function workoutLog() {
   };
 
   useEffect(() => {
-    setTimeout(() => setSavedNotification(null), 3000);
-  }, [savedNotification]);
+    const reset = setTimeout(() => setSavedSuccessfully(null), 3000);
+    return () => clearTimeout(reset);
+  }, [savedSuccessfully]);
 
   useEffect(() => {
     // Set yearMonthDay to today
@@ -255,7 +256,7 @@ export default function workoutLog() {
                 handleWorkoutNoteChange={handleWorkoutNoteChange}
                 workoutNote={workoutNote}
                 prevBestData={prevBestData}
-                savedNotification={savedNotification}
+                savedSuccessfully={savedSuccessfully}
               />
             ) : (
               <FallbackText>

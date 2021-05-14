@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-
+// Components
 import Layout from "../components/Layout";
 import ExerciseList from "../components/workoutBuilder/ExerciseList";
 import UserWorkouts from "../components/workoutBuilder/UserWorkouts";
 import CustomWorkout from "../components/workoutBuilder/CustomWorkout";
-import { postNewWorkout, updateExistingWorkout } from "../utils/ApiSupply";
-
+// Context
 import { useStoreState } from "../store";
-import { addExerciseDataToWorkout } from "../utils/general";
+// Utils
+import { postNewWorkout, updateExistingWorkout } from "../utils/api";
+import { addExerciseDataToWorkout } from "../utils";
 
 export default function workoutBuilder() {
   const { user } = useStoreState();

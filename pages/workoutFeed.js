@@ -5,7 +5,7 @@ import Layout from "../components/Layout";
 import SavedWorkouts from "../components/workoutFeed/SavedWorkouts";
 import PublicWorkouts from "../components/workoutFeed/PublicWorkouts";
 // Utils
-import { getPublicWorkouts, getWorkoutsFromIdArray, saveSavedWorkouts } from "../utils/ApiSupply";
+import { getPublicWorkouts, getWorkoutsFromIdArray, saveSavedWorkouts } from "../utils/api";
 // Context
 import { useStoreState } from "../store";
 
@@ -84,6 +84,6 @@ const WorkoutFeedContainer = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
-  
+
   margin-top: 55px;
 `;

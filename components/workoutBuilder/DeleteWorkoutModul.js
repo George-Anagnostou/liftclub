@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { deleteWorkout } from "../../utils/ApiSupply";
+import { deleteWorkout } from "../../utils/api";
 
 export default function DeleteWorkoutModul({ workout, setWorkoutToDelete, clearCustomWorkout }) {
   const handleDeleteWorkout = async () => {

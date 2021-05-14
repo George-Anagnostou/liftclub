@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 // Utils
-import { getUserData } from "../../utils/ApiSupply";
-import { addExerciseDataToWorkout, timeSince } from "../../utils/general";
+import { getUserData } from "../../utils/api";
+import { addExerciseDataToWorkout, timeSince } from "../../utils";
 // Components
 import LoadingSpinner from "../LoadingSpinner";
 

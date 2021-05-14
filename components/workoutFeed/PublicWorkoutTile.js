@@ -3,8 +3,8 @@ import styled from "styled-components";
 // Components
 import LoadingSpinner from "../LoadingSpinner";
 // Utils
-import { getUserData } from "../../utils/ApiSupply";
-import { addExerciseDataToWorkout, timeSince } from "../../utils/general";
+import { getUserData } from "../../utils/api";
+import { addExerciseDataToWorkout, timeSince } from "../../utils";
 
 export default function PublicWorkoutTile({
   workout,

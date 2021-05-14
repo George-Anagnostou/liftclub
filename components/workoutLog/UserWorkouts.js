@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 // Utils
-import { getUserMadeWorkouts, getWorkoutsFromIdArray } from "../../utils/ApiSupply";
+import { getUserMadeWorkouts, getWorkoutsFromIdArray } from "../../utils/api";
 // Context
 import { useStoreState } from "../../store";
 
