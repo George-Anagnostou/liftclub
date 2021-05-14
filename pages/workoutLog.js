@@ -237,7 +237,7 @@ export default function workoutLog() {
     <Layout>
       <MainContainer>
         <DateBar>
-          {[...Array(32).keys()].map((numDays) => (
+          {[...Array(90).keys()].map((numDays) => (
             <li onClick={() => changeCurrentDayData(-numDays)} className="date" key={-numDays}>
               {formatDate(-numDays)}
             </li>
