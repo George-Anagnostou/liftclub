@@ -16,31 +16,56 @@ export default function myProfile() {
   const { user } = useStoreState();
 
   const [workoutOptions, setWorkoutOptions] = useState([]); // Used in WorkoutSelect
-  const [workoutsSelected, setWorkoutsSelected] = useState([]); // Workouts that match workout selected
+  const [filteredWorkouts, setFilteredWorkouts] = useState([]); // Workouts that match workout selected
   const [exerciseOptions, setExerciseOptions] = useState([]); // Exercise id and name options in Exercise Select
   const [statOption, setStatOption] = useState("avgWeight"); // Stat to chart
   const [selectedExerciseId, setSelectedExerciseId] = useState(null);
-  const [chartData, setChartData] = useState(null);
+  const [chartData, setChartData] = useState([{ date: "", value: 0 }]);
 
-  const handleWorkoutOptionChange = (e) => {
-    // Filter all workouts that match the id selected
-    const filtered = user.workoutLog.filter((workout) => workout.workout_id === e.target.value);
-    setWorkoutsSelected(filtered);
+  /**
+   * 1. Set workout options to workouts that the user has logged
+   */
+  useEffect(() => {
+    if (user) getWorkoutOptions();
+  }, [user]);
+
+  const getWorkoutOptions = async () => {
+    const idArr = user.workoutLog.map((each) => each.workout_id);
+    // Returns all unique workouts
+    const workouts = await getWorkoutsFromIdArray(idArr);
+    setWorkoutOptions(workouts);
   };
 
-  const handleExerciseOptionChange = (e) => {
-    setSelectedExerciseId(e.target.value);
+  /**
+   * 2. Once user selects a workout, get the exercise options from that workout
+   */
+  useEffect(() => {
+    if (filteredWorkouts.length) getExerciseOptions();
+  }, [filteredWorkouts]);
+
+  const getExerciseOptions = async () => {
+    // Only need to use one workout to get the exercise ids and names
+    const workout = await addExerciseDataToLoggedWorkout(filteredWorkouts[0]);
+
+    // exerciseOptions is an arr of {exercise_id, exerciseName}
+    const options = workout.exerciseData.map(({ exercise }) => {
+      return { exercise_id: exercise._id, exerciseName: exercise.name };
+    });
+
+    setExerciseOptions(options);
   };
 
-  const handleStatOptionChange = (e) => setStatOption(e.target.value);
+  /**
+   *
+   * @param {string} targetExId for exercise to chart
+   * @param {string} stat to chart
+   */
+  const chartExercise = (targetExId, stat) => {
+    const avgWeight = (sets) => round(sets.reduce((a, b) => a + b.weight || 0, 0) / sets.length, 1);
 
-  const chartExercise = (targetId, stat = "avgWeight") => {
-    const getAvgWeight = (sets) =>
-      round(sets.reduce((a, b) => a + b.weight || 0, 0) / sets.length, 1);
+    const totalWeight = (sets) => sets.reduce((a, b) => a + b.weight || 0, 0);
 
-    const getTotalWeight = (sets) => sets.reduce((a, b) => a + b.weight || 0, 0);
-
-    const getMaxWeight = (sets) => Math.max(...sets.map((a) => a.weight));
+    const maxWeight = (sets) => Math.max(...sets.map((a) => a.weight));
 
     const formatDate = (isoDate) => {
       const date = new Date(isoDate);
@@ -49,18 +74,18 @@ export default function myProfile() {
 
     const data = [];
 
-    workoutsSelected.map(({ exerciseData, isoDate }) => {
+    filteredWorkouts.map(({ exerciseData, isoDate }) => {
       return exerciseData.map(({ exercise_id, sets }) => {
-        if (exercise_id === targetId) {
+        if (exercise_id === targetExId) {
           switch (stat) {
             case "avgWeight":
-              data.push({ date: formatDate(isoDate), value: getAvgWeight(sets) });
+              data.push({ date: formatDate(isoDate), value: avgWeight(sets) });
               break;
             case "totalWeight":
-              data.push({ date: formatDate(isoDate), value: getTotalWeight(sets) });
+              data.push({ date: formatDate(isoDate), value: totalWeight(sets) });
               break;
             case "maxWeight":
-              data.push({ date: formatDate(isoDate), value: getMaxWeight(sets) });
+              data.push({ date: formatDate(isoDate), value: maxWeight(sets) });
               break;
           }
         }
@@ -75,34 +100,20 @@ export default function myProfile() {
     selectedExerciseId ? chartExercise(selectedExerciseId, statOption) : setChartData(null);
   }, [selectedExerciseId, statOption]);
 
-  const getExerciseOptions = async () => {
-    // Only need to get the exercise data once
-    const workout = await addExerciseDataToLoggedWorkout(workoutsSelected[0]);
-
-    // exerciseOptions is an arr of {exercise_id, exerciseName}
-    const options = workout.exerciseData.map(({ exercise }) => {
-      return { exercise_id: exercise._id, exerciseName: exercise.name };
-    });
-
-    setExerciseOptions(options);
+  /**
+   * Input handlers
+   */
+  const handleWorkoutOptionChange = (e) => {
+    setExerciseOptions([]);
+    setSelectedExerciseId(null);
+    // Filter all workouts that match the id selected
+    const filtered = user.workoutLog.filter((workout) => workout.workout_id === e.target.value);
+    setFilteredWorkouts(filtered);
   };
 
-  const getWorkoutOptions = async () => {
-    const idArr = user.workoutLog.map((each) => each.workout_id);
-    // Returns all unique workouts
-    const workouts = await getWorkoutsFromIdArray(idArr);
-    setWorkoutOptions(workouts);
-  };
+  const handleExerciseOptionChange = (e) => setSelectedExerciseId(e.target.value);
 
-  // Trigger when user selects a workout
-  useEffect(() => {
-    if (workoutsSelected.length) getExerciseOptions();
-  }, [workoutsSelected]);
-
-  // Get workout options on mount
-  useEffect(() => {
-    if (user) getWorkoutOptions();
-  }, [user]);
+  const handleStatOptionChange = (e) => setStatOption(e.target.value);
 
   return (
     <Layout>
@@ -161,7 +172,7 @@ export default function myProfile() {
               </button>
             </Buttons>
 
-            {chartData && <Chart data={chartData} />}
+            <Chart data={chartData} />
           </>
         ) : (
           <LoadingSpinner />
@@ -207,8 +218,16 @@ const SelectContainer = styled.div`
     }
 
     select {
-      max-width: 90%;
+      width: 90%;
       text-transform: capitalize;
+      padding: 0.5rem;
+      margin-top: 0.25rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+
+      &:hover {
+        background: #eaeeff;
+      }
     }
   }
 `;
@@ -222,7 +241,7 @@ const Buttons = styled.div`
     margin: 0.5rem;
     padding: 0.2rem 0.5rem;
     border-radius: 5px;
-    border: none;
+    border: 1px solid #ccc;
 
     &:hover {
       background: #eaeeff;
