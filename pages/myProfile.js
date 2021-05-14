@@ -7,13 +7,12 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import { getWorkoutsFromIdArray } from "../utils/api";
 import { addExerciseDataToLoggedWorkout, round } from "../utils";
 // Context
-import { useStoreState, useStoreDispatch } from "../store";
+import { useStoreState } from "../store";
 import WorkoutSelect from "../components/myProfile/WorkoutSelect";
 import ExerciseSelect from "../components/myProfile/ExerciseSelect";
 import Chart from "../components/myProfile/chart";
 
 export default function myProfile() {
-  const dispatch = useStoreDispatch();
   const { user } = useStoreState();
 
   const [workoutOptions, setWorkoutOptions] = useState([]); // Used in WorkoutSelect
