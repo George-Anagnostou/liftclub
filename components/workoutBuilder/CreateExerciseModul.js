@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
 
-import { createExercise } from "../../utils/ApiSupply";
+import { createExercise } from "../../utils/api";
 
 export default function CreateExerciseModul({ muscleGroups, setShowModul }) {
   const [name, setName] = useState("");

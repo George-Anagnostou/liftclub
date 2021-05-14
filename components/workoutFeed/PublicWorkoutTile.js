@@ -3,8 +3,8 @@ import styled from "styled-components";
 // Components
 import LoadingSpinner from "../LoadingSpinner";
 // Utils
-import { getExercisesFromIdArray, getUserData } from "../../utils/ApiSupply";
-import { timeSince } from "../../utils/general";
+import { getUserData } from "../../utils/api";
+import { addExerciseDataToWorkout, timeSince } from "../../utils";
 
 export default function PublicWorkoutTile({
   workout,
@@ -22,16 +22,8 @@ export default function PublicWorkoutTile({
   };
 
   const getWorkoutExercises = async () => {
-    const idArr = workout.exercises.map((each) => each.exercise_id);
-    const exerciseData = await getExercisesFromIdArray(idArr);
-
-    // Sort the array based on the order of the idArr
-    exerciseData.sort((a, b) => idArr.indexOf(a._id) - idArr.indexOf(b._id));
-
-    const clone = { ...workout };
-    clone.exercises.map((each, i) => (each.exercise = exerciseData[i]));
-
-    setWorkoutExercises(clone.exercises);
+    const mergedData = await addExerciseDataToWorkout(workout);
+    setWorkoutExercises(mergedData.exercises);
   };
 
   // Get creator username

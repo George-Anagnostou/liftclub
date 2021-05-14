@@ -11,10 +11,11 @@ const routes = [
   { pathname: "/workoutLog", linkTitle: "Log" },
   { pathname: "/workoutBuilder", linkTitle: "Builder" },
   { pathname: "/workoutFeed", linkTitle: "Feed" },
+  { pathname: "/myProfile", linkTitle: "Profile" },
 ];
 
 export default function Layout({ title = "Workout App", children }) {
-  const { pathname } = useRouter();
+  const router = useRouter();
 
   const dispatch = useStoreDispatch();
 
@@ -23,7 +24,7 @@ export default function Layout({ title = "Workout App", children }) {
     const user_id = localStorage.getItem("workoutID");
 
     // If local storage workoutID exists, login user
-    if (user_id) loginUser(dispatch, user_id);
+    user_id ? loginUser(dispatch, user_id) : router.push("/");
   }, []);
 
   return (
@@ -34,7 +35,7 @@ export default function Layout({ title = "Workout App", children }) {
           <ul>
             {routes.map((route) => (
               <Link href={route.pathname} key={route.pathname}>
-                <li style={pathname === route.pathname ? { background: "#EAEEFF" } : null}>
+                <li style={router.pathname === route.pathname ? { background: "#EAEEFF" } : null}>
                   <a>{route.linkTitle}</a>
                 </li>
               </Link>
@@ -70,10 +71,15 @@ const NavBar = styled.nav`
     justify-content: space-evenly;
     align-items: center;
     li {
+      flex: 1;
       border: 1px solid #ccc;
       margin: 0 0.5rem;
       border-radius: 5px;
-      padding: 1rem 1.5rem;
+      height: 80%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 `;
