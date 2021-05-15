@@ -3,14 +3,16 @@ import styled from "styled-components";
 // Components
 import Layout from "../components/Layout";
 import LoadingSpinner from "../components/LoadingSpinner";
+import WorkoutSelect from "../components/myProfile/WorkoutSelect";
+import ExerciseSelect from "../components/myProfile/ExerciseSelect";
+import Chart from "../components/myProfile/Chart";
+import StatButtons from "../components/myProfile/StatButtons";
+import WeightInput from "../components/myProfile/WeightInput";
 // Utils
 import { getWorkoutsFromIdArray } from "../utils/api";
 import { addExerciseDataToLoggedWorkout, round } from "../utils";
 // Context
 import { useStoreState } from "../store";
-import WorkoutSelect from "../components/myProfile/WorkoutSelect";
-import ExerciseSelect from "../components/myProfile/ExerciseSelect";
-import Chart from "../components/myProfile/Chart";
 
 export default function myProfile() {
   const { user } = useStoreState();
@@ -113,8 +115,6 @@ export default function myProfile() {
 
   const handleExerciseOptionChange = (e) => setSelectedExerciseId(e.target.value);
 
-  const handleStatOptionChange = (e) => setStatOption(e.target.value);
-
   return (
     <Layout>
       <ProfileContainer>
@@ -148,31 +148,11 @@ export default function myProfile() {
               </div>
             </SelectContainer>
 
-            <Buttons>
-              <button
-                onClick={handleStatOptionChange}
-                value="avgWeight"
-                style={statOption === "avgWeight" ? { background: "#eaeeff" } : null}
-              >
-                Average Weight
-              </button>
-              <button
-                onClick={handleStatOptionChange}
-                value="totalWeight"
-                style={statOption === "totalWeight" ? { background: "#eaeeff" } : null}
-              >
-                Total Weight
-              </button>
-              <button
-                onClick={handleStatOptionChange}
-                value="maxWeight"
-                style={statOption === "maxWeight" ? { background: "#eaeeff" } : null}
-              >
-                Max Weight
-              </button>
-            </Buttons>
+            <StatButtons setStatOption={setStatOption} statOption={statOption} />
 
             <Chart data={chartData} />
+
+            {/* <WeightInput /> */}
           </>
         ) : (
           <LoadingSpinner />
@@ -228,23 +208,6 @@ const SelectContainer = styled.div`
       &:hover {
         background: #eaeeff;
       }
-    }
-  }
-`;
-
-const Buttons = styled.div`
-  display: flex;
-  width: 100%;
-  button {
-    flex: 1;
-    cursor: pointer;
-    margin: 0.5rem;
-    padding: 0.2rem 0.5rem;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-
-    &:hover {
-      background: #eaeeff;
     }
   }
 `;
