@@ -22,7 +22,6 @@ export default function Chart({ data }) {
           </defs>
           <XAxis dataKey="date" />
           <YAxis />
-          <CartesianGrid strokeDasharray="3 3" />
           <Tooltip />
           <Area
             type="monotone"
