@@ -72,6 +72,7 @@ const WorkoutList = styled.ul`
 
     h3 {
       font-size: 1.5rem;
+      font-weight: 300;
     }
 
     .toggle-btn {
@@ -79,9 +80,8 @@ const WorkoutList = styled.ul`
       top: 8px;
       right: 2rem;
       background: #eaeeff;
-      box-shadow: 0 2px 5px grey;
       border-radius: 50%;
-      border: none;
+      border: 1px solid #ccc;
       width: 35px;
       height: 35px;
 
@@ -90,7 +90,7 @@ const WorkoutList = styled.ul`
 
       p {
         transform: rotate(180deg);
-        width: 35px;
+        width: 33px;
         height: 19px;
       }
     }
