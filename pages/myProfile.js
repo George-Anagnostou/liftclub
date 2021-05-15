@@ -7,7 +7,6 @@ import WorkoutSelect from "../components/myProfile/WorkoutSelect";
 import ExerciseSelect from "../components/myProfile/ExerciseSelect";
 import Chart from "../components/myProfile/Chart";
 import StatButtons from "../components/myProfile/StatButtons";
-import WeightInput from "../components/myProfile/WeightInput";
 // Utils
 import { getWorkoutsFromIdArray } from "../utils/api";
 import { addExerciseDataToLoggedWorkout, round } from "../utils";
@@ -151,8 +150,6 @@ export default function myProfile() {
             <StatButtons setStatOption={setStatOption} statOption={statOption} />
 
             <Chart data={chartData} />
-
-            {/* <WeightInput /> */}
           </>
         ) : (
           <LoadingSpinner />
