@@ -260,7 +260,7 @@ export default function workoutLog() {
               />
             ) : (
               <FallbackText>
-                No Workout has been recored today. Select a workout from one of your workouts below.
+                No logged workout. Select a workout from one of your workouts below.
               </FallbackText>
             )}
 
@@ -338,9 +338,8 @@ const DateBar = styled.ul`
   }
 `;
 
-const FallbackText = styled.h5`
+const FallbackText = styled.h3`
   border-radius: 5px;
-  box-shadow: 0 0 5px grey;
   margin: 1rem 0.25rem;
   padding: 1rem;
   width: 98%;
