@@ -81,3 +81,20 @@ export const saveWorkoutLog = async (dispatch, workoutLog, user_id) => {
     return false;
   }
 };
+
+export const saveWeight = async (weight) => {
+  try {
+    const res = await fetch(`/api/users/${user_id}`, {
+      method: "PUT",
+      contentType: "application/json",
+      body: JSON.stringify({ weight }),
+    });
+
+    const userData = await res.json();
+    // dispatch({ type: "SET_USER", payload: { userData } });
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};

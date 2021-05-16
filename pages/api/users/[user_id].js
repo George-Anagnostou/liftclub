@@ -24,6 +24,8 @@ export default async (req, res) => {
       if (workoutLog) fieldToUpdate = "workoutLog";
       const { savedWorkouts } = JSON.parse(req.body);
       if (savedWorkouts) fieldToUpdate = "savedWorkouts";
+      const { weight } = JSON.parse(req.body);
+      if (weight) fieldToUpdate = "weight";
 
       switch (fieldToUpdate) {
         case "workoutLog":
@@ -53,6 +55,17 @@ export default async (req, res) => {
             .findOneAndUpdate(
               { _id: ObjectId(user_id) },
               { $set: { savedWorkouts: ObjIdArr } },
+              { returnOriginal: false }
+            );
+
+          res.json(userData.value);
+          break;
+        case "weight":
+          userData = await db
+            .collection("users")
+            .findOneAndUpdate(
+              { _id: ObjectId(user_id) },
+              { $push: { weight: weight } },
               { returnOriginal: false }
             );
 
