@@ -47,10 +47,9 @@ export default function Workout({
                       value={weight >= 0 ? weight : ""}
                       onChange={(e) => handleWeightChange(e, i, j)}
                     />
-                    <span>lbs</span>
                   </div>
 
-                  <div>
+                  <div className="prev">
                     {prevBestData?.exerciseData[i]?.sets[j]?.weight >= 0 ? (
                       <p>{prevBestData?.exerciseData[i]?.sets[j]?.weight}</p>
                     ) : (
@@ -179,6 +178,15 @@ const WorkoutList = styled.ul`
             &:focus {
               box-shadow: 0 2px 4px #8f8f8f;
             }
+          }
+          &::after {
+            content: "lbs";
+            width: 0;
+          }
+        }
+
+        .prev {
+          p {
           }
         }
       }
