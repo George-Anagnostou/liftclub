@@ -17,6 +17,7 @@ export default function StatButtons({ setStatOption, statOption }) {
     <Buttons>
       {options.map(({ value, text }) => (
         <button
+          key={value}
           onClick={handleButtonClick}
           value={value}
           style={statOption === value ? activeStyles : null}
