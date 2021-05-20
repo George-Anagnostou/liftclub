@@ -19,11 +19,13 @@ export default function WeightInput({ user }) {
   const handleSave = async (e) => {
     e.preventDefault();
 
+    // sent POST req
     const isSaved = await saveWeight(inputWeight, user._id);
+
     setSaved(isSaved);
     // if saved successfully, notify user
     if (isSaved) {
-      setWeightDiff(weightDiff - (displayWeight - inputWeight));
+      if (user.weight) setWeightDiff(weightDiff - (displayWeight - inputWeight));
       setDisplayWeight(inputWeight);
     }
 
