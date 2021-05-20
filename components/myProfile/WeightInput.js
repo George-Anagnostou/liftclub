@@ -14,21 +14,25 @@ export default function WeightInput({ user }) {
   const [displayWeight, setDisplayWeight] = useState(0);
   const [weightDiff, setWeightDiff] = useState(0);
 
-  const handleWeightChange = (e) => setInputWeight(Number(e.target.value));
+  const handleWeightChange = (e) => setInputWeight(e.target.value);
 
   const handleSave = async (e) => {
     e.preventDefault();
 
-    // sent POST req
+    // send POST req
     const isSaved = await saveWeight(inputWeight, user._id);
 
-    setSaved(isSaved);
     // if saved successfully, notify user
+    setSaved(isSaved);
+
     if (isSaved) {
-      if (user.weight) setWeightDiff(weightDiff - (displayWeight - inputWeight));
+      // update weightDiff only if user has weight defined
+      if (displayWeight) setWeightDiff(weightDiff - (displayWeight - inputWeight));
+      // change displayWeight to newly inputWeight
       setDisplayWeight(inputWeight);
     }
 
+    // Clear weight input
     setInputWeight("");
   };
 
