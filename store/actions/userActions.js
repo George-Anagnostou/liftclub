@@ -82,7 +82,7 @@ export const saveWorkoutLog = async (dispatch, workoutLog, user_id) => {
   }
 };
 
-export const saveWeight = async (weight) => {
+export const saveWeight = async (weight, user_id) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",

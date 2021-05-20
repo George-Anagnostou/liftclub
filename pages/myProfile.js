@@ -12,6 +12,7 @@ import { getWorkoutsFromIdArray } from "../utils/api";
 import { addExerciseDataToLoggedWorkout, round } from "../utils";
 // Context
 import { useStoreState } from "../store";
+import WeightInput from "../components/myProfile/WeightInput";
 
 export default function myProfile() {
   const { user } = useStoreState();
@@ -128,6 +129,7 @@ export default function myProfile() {
                 account type: <span>{user.isAdmin ? "Admin" : "Member"}</span>
               </p>
             </Heading>
+            <WeightInput user={user} />
 
             <SelectContainer>
               <div>

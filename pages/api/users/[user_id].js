@@ -65,7 +65,7 @@ export default async (req, res) => {
             .collection("users")
             .findOneAndUpdate(
               { _id: ObjectId(user_id) },
-              { $push: { weight: weight } },
+              { $push: { weight: Number(weight) } },
               { returnOriginal: false }
             );
 
