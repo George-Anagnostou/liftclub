@@ -44,9 +44,9 @@ export default async (req, res) => {
               { $set: { workoutLog: workoutLog } },
               { returnOriginal: false }
             );
-
           res.json(userData.value);
           break;
+
         case "savedWorkouts":
           const ObjIdArr = savedWorkouts.map((id) => ObjectId(id));
 
@@ -57,9 +57,9 @@ export default async (req, res) => {
               { $set: { savedWorkouts: ObjIdArr } },
               { returnOriginal: false }
             );
-
           res.json(userData.value);
           break;
+
         case "weight":
           userData = await db
             .collection("users")
@@ -68,7 +68,6 @@ export default async (req, res) => {
               { $push: { weight: Number(weight) } },
               { returnOriginal: false }
             );
-
           res.json(userData.value);
           break;
       }
