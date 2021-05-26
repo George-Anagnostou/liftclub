@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import styled from "styled-components";
 // Components
 import Layout from "../components/Layout";
@@ -11,11 +12,13 @@ import StatButtons from "../components/myProfile/StatButtons";
 import { getWorkoutsFromIdArray } from "../utils/api";
 import { addExerciseDataToLoggedWorkout, round } from "../utils";
 // Context
-import { useStoreState } from "../store";
+import { useStoreState, useStoreDispatch, logoutUser } from "../store";
 import WeightInput from "../components/myProfile/WeightInput";
 
 export default function myProfile() {
+  const dispatch = useStoreDispatch();
   const { user } = useStoreState();
+  const router = useRouter();
 
   const [workoutOptions, setWorkoutOptions] = useState([]); // Used in WorkoutSelect
   const [filteredWorkouts, setFilteredWorkouts] = useState([]); // Workouts that match workout selected
@@ -115,6 +118,11 @@ export default function myProfile() {
 
   const handleExerciseOptionChange = (e) => setSelectedExerciseId(e.target.value);
 
+  const handleLogoutClick = () => {
+    logoutUser(dispatch);
+    router.push("/");
+  };
+
   return (
     <Layout>
       <ProfileContainer>
@@ -122,6 +130,7 @@ export default function myProfile() {
         {user ? (
           <>
             <Heading>
+              <button onClick={handleLogoutClick}>Logout</button>
               <p>
                 username: <span>{user.username}</span>
               </p>

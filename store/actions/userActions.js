@@ -13,7 +13,7 @@ export const loginUser = async (dispatch, user_id) => {
 };
 
 export const logoutUser = async (dispatch) => {
-  dispatch("LOGOUT");
+  dispatch({ type: "LOGOUT" });
   localStorage.removeItem("workoutID");
 };
 
