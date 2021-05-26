@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import Link from "next/link";
 // Components
 import LoadingSpinner from "../LoadingSpinner";
 // Utils
@@ -72,7 +73,11 @@ export default function PublicWorkoutTile({
       {showWorkoutInfo && creator && (
         <div className="workoutInfo">
           <p className="creator">
-            By: <span>{creator}</span>
+            <Link href={`users/${workout.creator_id}`}>
+              <a>
+                By: <span>{creator}</span>
+              </a>
+            </Link>
           </p>
 
           {workoutExercises.map(({ sets, exercise_id, exercise }) => (
@@ -147,6 +152,11 @@ const WorkoutTile = styled.li`
     .creator {
       font-size: 0.7rem;
       color: grey;
+
+      &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
     }
     .exercise {
       margin: 0.25rem 0;
