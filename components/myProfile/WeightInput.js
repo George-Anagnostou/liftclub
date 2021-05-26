@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 
-import { saveWeight } from "../../store/actions/userActions";
+import { saveWeight } from "../../store";
 import Checkmark from "../Checkmark";
 
 const CheckmarkPosition = {
