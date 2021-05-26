@@ -130,14 +130,17 @@ export default function myProfile() {
         {user ? (
           <>
             <Heading>
-              <button onClick={handleLogoutClick}>Logout</button>
+              <button onClick={handleLogoutClick}>sign out</button>
+
               <p>
                 username: <span>{user.username}</span>
               </p>
+
               <p>
                 account type: <span>{user.isAdmin ? "Admin" : "Member"}</span>
               </p>
             </Heading>
+
             <WeightInput user={user} />
 
             <SelectContainer>
@@ -186,6 +189,15 @@ const Heading = styled.header`
   span {
     font-weight: bold;
     font-size: 1.2rem;
+  }
+
+  button {
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+    font-size: inherit;
+    color: inherit;
+    margin: 0 0.5rem;
   }
 `;
 

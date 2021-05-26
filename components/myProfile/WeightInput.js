@@ -54,23 +54,34 @@ export default function WeightInput({ user }) {
 
   return (
     <WeightContainer>
+      <p className="title">Weight</p>
+
       <form method="post" onSubmit={handleSave}>
-        <label htmlFor="weight">Bodyweight:</label>
+        <label htmlFor="weight">Current:</label>
         <input type="number" name="weight" onChange={handleWeightChange} value={inputWeight} />
 
         <button type="submit">save</button>
         {saved && <Checkmark position={CheckmarkPosition} />}
       </form>
 
-      <div className="displayWeight">
-        <p>Last weight: {displayWeight} lbs</p>
-      </div>
-      <div className="weightDiff">
-        {weightDiff > 0 ? (
-          <p>You have gained {weightDiff} lbs</p>
-        ) : (
-          <p>You have lost {Math.abs(weightDiff)} lbs</p>
-        )}
+      <div className="container">
+        <div className="weightDiff">
+          {weightDiff > 0 ? (
+            <p>
+              You have gained <span>{weightDiff}</span> lbs
+            </p>
+          ) : (
+            <p>
+              You have lost <span>{Math.abs(weightDiff)}</span> lbs
+            </p>
+          )}
+        </div>
+
+        <div className="displayWeight">
+          <p>
+            previous: <span>{displayWeight}</span> lbs
+          </p>
+        </div>
       </div>
     </WeightContainer>
   );
@@ -87,7 +98,18 @@ const WeightContainer = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
 
+  .container {
+    display: flex;
+  }
+
+  .title {
+    font-weight: thin;
+    font-size: 1.35rem;
+    color: grey;
+  }
+
   form {
+    align-self: center;
     display: flex;
     align-items: center;
 
@@ -113,16 +135,21 @@ const WeightContainer = styled.div`
     }
   }
 
-  .displayWeight {
-    display: flex;
-    align-items: center;
+  span {
+    font-weight: thin;
+    font-size: 2rem;
+  }
 
+  .displayWeight {
+    margin: 0 0.5rem;
     p {
       margin: 0.5rem 0;
     }
   }
 
   .weightDiff {
+    margin: 0 0.5rem;
+
     p {
       margin: 0.5rem 0;
     }
