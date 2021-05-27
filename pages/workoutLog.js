@@ -113,10 +113,8 @@ export default function workoutLog() {
       date.getFullYear() === year && date.getMonth() === month && date.getDate() === day;
 
     // Styles
-    const fontStyle = dayIsSelected
-      ? { boxShadow: "0 3px 5px #757575" }
-      : { color: "#aaa", transform: "scale(.9)" };
-    const backgroundStyle = dayData ? { background: "#EAEEFF" } : {};
+    const fontStyle = dayIsSelected ? {} : { transform: "scale(.9)" };
+    const backgroundStyle = dayData ? { background: "#5d78ee" } : {};
 
     return (
       <div style={{ ...fontStyle, ...backgroundStyle }}>
@@ -315,13 +313,17 @@ const DateBar = styled.ul`
       transition: all 0.1s ease-in-out;
       padding: 0.5rem;
 
+      color: ${({ theme }) => theme.text};
+      background: ${({ theme }) => theme.buttonLight};
+      border: 1px solid ${({ theme }) => theme.accent};
+      box-shadow: 0 2px 5px ${({ theme }) => theme.boxShadow};
+
       h4,
       h5 {
         font-weight: 500;
         margin: 0.25rem;
       }
       h2 {
-        color: #4b83b0;
         font-weight: 400;
       }
     }

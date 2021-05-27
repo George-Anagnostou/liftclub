@@ -95,14 +95,12 @@ const SaveWorkoutButton = styled.button`
   margin: 1rem auto;
   font-size: 1.5rem;
   padding: 1rem 0.5rem;
-  background: white;
-  border: 1px solid #ccc;
   border-radius: 5px;
-  box-shadow: 0 2px 5px #aaaaaa;
 
-  &:hover {
-    background: #eaeeff;
-  }
+  color: ${({ theme }) => theme.text};
+  background: ${({ theme }) => theme.buttonLight};
+  border: 1px solid ${({ theme }) => theme.border};
+  box-shadow: 0 2px 5px ${({ theme }) => theme.boxShadow};
 `;
 
 const WorkoutList = styled.ul`
@@ -168,12 +166,14 @@ const WorkoutList = styled.ul`
           input {
             text-align: center;
             box-shadow: none;
-            border: 1px solid #ccc;
+            border: 1px solid ${({ theme }) => theme.border};
             border-radius: 5px;
             width: 5rem;
             font-size: 2rem;
             font-weight: 200;
             transition: all 0.1s ease-in-out;
+            background: inherit;
+            color: inherit;
 
             &:focus {
               box-shadow: 0 2px 4px #8f8f8f;
@@ -218,13 +218,15 @@ const WorkoutNote = styled.div`
     padding: 0.5rem;
     border-radius: 5px;
     box-shadow: none;
-    border: 1px solid #b9b9b9;
+    border: 1px solid ${({ theme }) => theme.border};
     min-width: 200px;
     max-width: 85vw;
     font-size: 1.2rem;
     font-family: inherit;
     resize: none;
     transition: all 0.1s ease-in-out;
+    background: inherit;
+    color: inherit;
 
     &:focus {
       box-shadow: 0 5px 8px #757575;

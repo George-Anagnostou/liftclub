@@ -86,11 +86,11 @@ const UserWorkoutsContainer = styled.div`
         margin: 0.5rem;
         padding: 0.5rem;
         border-radius: 5px;
-        box-shadow: 0 2px 5px #757575;
 
-        &:hover {
-          background: #eaeeff;
-        }
+        color: ${({ theme }) => theme.text};
+        background: ${({ theme }) => theme.buttonLight};
+        border: 1px solid ${({ theme }) => theme.border};
+        box-shadow: 0 2px 5px ${({ theme }) => theme.boxShadow};
 
         h4 {
           text-transform: capitalize;
