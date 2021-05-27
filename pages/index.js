@@ -25,7 +25,7 @@ const Home = () => {
     }, 3000);
   };
 
-  // LOGIN handlers
+  // Login handlers
   const handleLoginUsernameChange = (e) => {
     setLoginUsername(e.target.value);
   };
