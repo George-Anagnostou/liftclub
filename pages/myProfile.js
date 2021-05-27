@@ -8,17 +8,21 @@ import WorkoutSelect from "../components/myProfile/WorkoutSelect";
 import ExerciseSelect from "../components/myProfile/ExerciseSelect";
 import Chart from "../components/myProfile/Chart";
 import StatButtons from "../components/myProfile/StatButtons";
+import WeightInput from "../components/myProfile/WeightInput";
+import { useThemeToggler } from "../components/useThemeToggler";
+import ThemeToggle from "../components/ThemeToggle";
 // Utils
 import { getWorkoutsFromIdArray } from "../utils/api";
 import { addExerciseDataToLoggedWorkout, round } from "../utils";
 // Context
 import { useStoreState, useStoreDispatch, logoutUser } from "../store";
-import WeightInput from "../components/myProfile/WeightInput";
 
 export default function myProfile() {
   const dispatch = useStoreDispatch();
-  const { user } = useStoreState();
+  const { user, themeMode } = useStoreState();
   const router = useRouter();
+
+  const themeToggler = useThemeToggler();
 
   const [workoutOptions, setWorkoutOptions] = useState([]); // Used in WorkoutSelect
   const [filteredWorkouts, setFilteredWorkouts] = useState([]); // Workouts that match workout selected
@@ -130,15 +134,19 @@ export default function myProfile() {
         {user ? (
           <>
             <Heading>
-              <button onClick={handleLogoutClick}>sign out</button>
-
-              <p>
+              <div className="line">
+                Night Mode:
+                <span>
+                  <ThemeToggle themeMode={themeMode} toggleTheme={themeToggler} />
+                </span>
+              </div>
+              <div className="line">
                 username: <span>{user.username}</span>
-              </p>
-
-              <p>
+              </div>
+              <div className="line">
                 account type: <span>{user.isAdmin ? "Admin" : "Member"}</span>
-              </p>
+              </div>
+              <button onClick={handleLogoutClick}>sign out</button>
             </Heading>
 
             <WeightInput user={user} />
@@ -178,26 +186,43 @@ const ProfileContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  padding: 1rem 0.5rem;
 `;
 
 const Heading = styled.header`
-  width: 100%;
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   justify-content: space-evenly;
-  font-size: 0.7rem;
 
-  span {
-    font-weight: bold;
-    font-size: 1.2rem;
+  width: 100%;
+  position: relative;
+  font-size: 0.7rem;
+  color: ${({ theme }) => theme.text};
+
+  .line {
+    display: flex;
+    align-items: center;
+    margin: 0.5rem 0;
+
+    span {
+      margin-left: 0.5rem;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
   }
 
   button {
-    border-radius: 5px;
-    border: 1px solid #ccc;
+    position: absolute;
+    top: 0%;
+    right: 0;
+    border-radius: 2px;
     padding: 0.5rem;
     font-size: inherit;
-    color: inherit;
-    margin: 0 0.5rem;
+    border: ${({ theme }) => theme.border};
+    color: ${({ theme }) => theme.textLight};
+    background: ${({ theme }) => theme.buttonLight};
   }
 `;
 

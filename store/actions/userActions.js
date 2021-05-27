@@ -3,7 +3,7 @@ export const loginUser = async (dispatch, user_id) => {
     const res = await fetch(`/api/users/${user_id}`);
     const userData = await res.json();
 
-    dispatch({ type: "LOGIN", payload: { userData } });
+    dispatch({ type: "SET_USER", payload: { userData } });
 
     return true;
   } catch (e) {
@@ -28,7 +28,7 @@ export const authLogin = async (dispatch, username, password) => {
     });
     const userData = await res.json();
 
-    dispatch({ type: "LOGIN", payload: { userData } });
+    dispatch({ type: "SET_USER", payload: { userData } });
 
     return userData;
   } catch (e) {
@@ -50,7 +50,7 @@ export const createAccount = async (dispatch, username, password) => {
 
     const userData = await res.json();
 
-    dispatch({ type: "LOGIN", payload: { userData } });
+    dispatch({ type: "SET_USER", payload: { userData } });
 
     return userData;
   } catch (e) {

@@ -9,7 +9,11 @@ import Builder from "../public/navIcons/Builder";
 import Feed from "../public/navIcons/Feed";
 import Stats from "../public/navIcons/Stats";
 // Context
-import { useStoreDispatch, loginUser } from "../store";
+import { useStoreDispatch, loginUser, useStoreState } from "../store";
+// Theme
+import { ThemeProvider } from "styled-components";
+import { GlobalStyles } from "./GlobalStyles";
+import { lightTheme, darkTheme } from "./Themes";
 
 const routes = [
   { pathname: "/workoutLog", icon: <Notebook /> },
@@ -23,6 +27,9 @@ export default function Layout({ title = "Workout App", children }) {
 
   const dispatch = useStoreDispatch();
 
+  const { themeMode } = useStoreState();
+  const themes = themeMode === "light" ? lightTheme : darkTheme;
+
   const [showIcons, setShowIcons] = useState(false);
 
   // Check local storage for user_id for persistant login
@@ -34,38 +41,37 @@ export default function Layout({ title = "Workout App", children }) {
   }, []);
 
   return (
-    <>
-      <SeoHead title={title} />
-      <MainContainer>
-        <NavBar>
-          <NavBurger
-            onClick={() => setShowIcons((prev) => !prev)}
-            className={showIcons ? "burgOpen" : "burgClosed"}
-          >
-            <div />
-            <div />
-            <div />
-          </NavBurger>
+    <ThemeProvider theme={themes}>
+      <>
+        <GlobalStyles />
 
-          <NavIcons className={showIcons ? "navOpen" : "navClosed"}>
-            {routes.map((route) => (
-              <Link href={route.pathname} key={route.pathname}>
-                <li
-                  style={
-                    router.pathname === route.pathname
-                      ? { fill: "black", boxShadow: " 0 2px 10px #888888" }
-                      : null
-                  }
-                >
-                  <a>{route.icon}</a>
-                </li>
-              </Link>
-            ))}
-          </NavIcons>
-        </NavBar>
-        {children}
-      </MainContainer>
-    </>
+        <SeoHead title={title} />
+
+        <MainContainer>
+          <NavBar>
+            <NavBurger
+              onClick={() => setShowIcons((prev) => !prev)}
+              className={showIcons ? "burgOpen" : "burgClosed"}
+            >
+              <div />
+              <div />
+              <div />
+            </NavBurger>
+
+            <NavIcons className={showIcons ? "navOpen" : "navClosed"}>
+              {routes.map((route) => (
+                <Link href={route.pathname} key={route.pathname}>
+                  <li className={router.pathname === route.pathname ? "selected" : ""}>
+                    <a>{route.icon}</a>
+                  </li>
+                </Link>
+              ))}
+            </NavIcons>
+          </NavBar>
+          {children}
+        </MainContainer>
+      </>
+    </ThemeProvider>
   );
 }
 
@@ -94,7 +100,7 @@ const NavBar = styled.nav`
       width: 40%;
       height: 3px;
       border-radius: 5px;
-      background: #ccc;
+      background: ${({ theme }) => theme.textLight};
     }
   }
   .burgOpen {
@@ -102,7 +108,7 @@ const NavBar = styled.nav`
       width: 40%;
       height: 3px;
       border-radius: 5px;
-      background: grey;
+      background: ${({ theme }) => theme.textLight};
 
       &:nth-child(1) {
         transform: rotate(45deg) translateX(6px) translateY(6px);
@@ -120,12 +126,13 @@ const NavBar = styled.nav`
 `;
 
 const NavBurger = styled.div`
-  border: 1px solid #ccc;
-  background: transparent;
+  color: ${({ theme }) => theme.text};
+  background: ${({ theme }) => theme.buttonLight};
+  border: 1px solid ${({ theme }) => theme.border};
+  box-shadow: 0 -2px 4px ${({ theme }) => theme.boxShadow};
+
   height: 100px;
   width: 100px;
-  box-shadow: 0 -2px 4px #ccc;
-  background: white;
   border-radius: 50% 50% 0 0;
   padding-top: 10px;
   padding-bottom: 65px;
@@ -154,16 +161,17 @@ const NavIcons = styled.ul`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+
   li {
     border-radius: 50%;
     height: 65px;
     width: 65px;
-    background: white;
-    border: 1px solid #eee;
-    box-shadow: 0 2px 6px #ccc;
-    fill: grey;
-
     pointer-events: visible;
+
+    fill: ${({ theme }) => theme.text};
+    background: ${({ theme }) => theme.buttonLight};
+    border: 1px solid ${({ theme }) => theme.border};
+    box-shadow: 0 2px 6px ${({ theme }) => theme.boxShadow};
 
     display: flex;
     align-items: center;

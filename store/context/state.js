@@ -19,10 +19,15 @@ export function useStoreDispatch() {
 }
 
 export const StoreProvider = ({ children }) => {
-  const [user, dispatch] = useReducer(userReducer, {});
+  const theme = typeof window !== "undefined" ? localStorage.getItem("theme") || "dark" : "dark";
+  
+  const [{ user, themeMode }, dispatch] = useReducer(userReducer, {
+    themeMode: theme,
+    user: undefined,
+  });
 
   return (
-    <StoreStateContext.Provider value={user}>
+    <StoreStateContext.Provider value={{ user, themeMode }}>
       <StoreDispatchContext.Provider value={dispatch}>{children}</StoreDispatchContext.Provider>
     </StoreStateContext.Provider>
   );
