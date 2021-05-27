@@ -6,24 +6,33 @@ import { getUserData } from "../../utils/api";
 import Layout from "../../components/Layout";
 import LoadingSpinner from "../../components/LoadingSpinner";
 
-export default function User() {
+export default function User_id() {
   const router = useRouter();
-  const { user } = router.query;
+  const { user_id } = router.query;
 
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
     const getData = async () => {
-      const data = await getUserData(user);
+      const data = await getUserData(user_id);
       setUserData(data);
     };
 
     getData();
-  }, [user]);
+  }, [user_id]);
 
   return (
     <Layout>
-      <div>{userData ? <p>{userData.username}</p> : <LoadingSpinner />}</div>
+      <div>
+        {userData ? (
+          <div>
+            <p>{userData.username}</p>
+            <p>Workouts completed: {userData.workoutLog.length}</p>
+          </div>
+        ) : (
+          <LoadingSpinner />
+        )}
+      </div>
     </Layout>
   );
 }
