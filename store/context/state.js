@@ -19,10 +19,8 @@ export function useStoreDispatch() {
 }
 
 export const StoreProvider = ({ children }) => {
-  const theme = typeof window !== "undefined" ? localStorage.getItem("theme") || "light" : "light";
-
   const [{ user, themeMode }, dispatch] = useReducer(userReducer, {
-    themeMode: theme,
+    themeMode: "light",
     user: undefined,
   });
 
