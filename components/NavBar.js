@@ -23,10 +23,7 @@ export default function NavBar() {
 
   return (
     <Nav>
-      <NavBurger
-        className={`burger ${showNav ? "" : "closed"}`}
-        onClick={() => setShowNav(!showNav)}
-      >
+      <NavBurger className={`burger ${showNav ? "open" : ""}`} onClick={() => setShowNav(!showNav)}>
         <span />
         <span />
         <span />
