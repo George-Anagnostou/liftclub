@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
-export default function ThemeToggle({ themeMode, toggleTheme }) {
+export default function ThemeToggle({ toggleTheme }) {
+  const themeMode = localStorage.getItem("theme") || "light";
   return (
     <Switch>
       <input type="checkbox" defaultChecked={themeMode === "dark"} />

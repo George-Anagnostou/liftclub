@@ -19,7 +19,7 @@ import { useStoreState, useStoreDispatch, logoutUser } from "../store";
 
 export default function myProfile() {
   const dispatch = useStoreDispatch();
-  const { user, themeMode } = useStoreState();
+  const { user } = useStoreState();
   const router = useRouter();
 
   const themeToggler = useThemeToggler();
@@ -137,7 +137,7 @@ export default function myProfile() {
               <div className="line">
                 Night Mode:
                 <span>
-                  <ThemeToggle themeMode={themeMode} toggleTheme={themeToggler} />
+                  <ThemeToggle toggleTheme={themeToggler} />
                 </span>
               </div>
               <div className="line">

@@ -20,13 +20,11 @@ export default function NavBar() {
   const router = useRouter();
 
   const [showNav, setShowNav] = useState(false);
+  const toggleNav = () => setShowNav(!showNav);
 
   return (
     <Nav>
-      <NavBurger
-        onClick={() => setShowNav(!showNav)}
-        className={`burger ${showNav ? "open" : "closed"}`}
-      >
+      <NavBurger onClick={toggleNav} className={`burger ${showNav ? "" : "closed"}`}>
         <span />
         <span />
         <span />
@@ -52,7 +50,7 @@ const Nav = styled.nav`
   z-index: 99;
 `;
 
-const NavBurger = styled.div`
+const NavBurger = styled.nav`
   color: ${({ theme }) => theme.text};
   background: ${({ theme }) => theme.buttonLight};
   border: 1px solid ${({ theme }) => theme.border};
@@ -73,20 +71,10 @@ const NavBurger = styled.div`
 
   span {
     transition: all 0.2s ease;
-  }
-
-  &.burger {
-    span {
-      width: 40%;
-      height: 3px;
-      border-radius: 5px;
-      background: ${({ theme }) => theme.textLight};
-    }
-  }
-
-  &.closed {
-    span {
-    }
+    width: 40%;
+    height: 3px;
+    border-radius: 5px;
+    background: ${({ theme }) => theme.textLight};
   }
 
   &.open {
