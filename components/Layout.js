@@ -29,16 +29,14 @@ export default function Layout({ title = "Workout App", children }) {
 
   return (
     <ThemeProvider theme={themes}>
-      <>
-        <GlobalStyles />
+      <GlobalStyles />
 
-        <SeoHead title={title} />
+      <SeoHead title={title} />
 
-        <MainContainer>
-          <NavBar />
-          {children}
-        </MainContainer>
-      </>
+      <MainContainer>
+        <NavBar />
+        {children}
+      </MainContainer>
     </ThemeProvider>
   );
 }

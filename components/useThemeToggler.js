@@ -16,7 +16,7 @@ export const useThemeToggler = () => {
 
   useEffect(() => {
     const localTheme = window.localStorage.getItem("theme");
-    if (!localTheme) setMode("light");
+    localTheme ? setMode(localTheme) : setMode("light");
   }, []);
 
   return themeToggler;
