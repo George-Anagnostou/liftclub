@@ -9,7 +9,6 @@ import ExerciseSelect from "../components/myProfile/ExerciseSelect";
 import Chart from "../components/myProfile/Chart";
 import StatButtons from "../components/myProfile/StatButtons";
 import WeightInput from "../components/myProfile/WeightInput";
-import { useThemeToggler } from "../components/useThemeToggler";
 import ThemeToggle from "../components/ThemeToggle";
 // Utils
 import { getWorkoutsFromIdArray } from "../utils/api";
@@ -21,8 +20,6 @@ export default function myProfile() {
   const dispatch = useStoreDispatch();
   const { user } = useStoreState();
   const router = useRouter();
-
-  const themeToggler = useThemeToggler();
 
   const [workoutOptions, setWorkoutOptions] = useState([]); // Used in WorkoutSelect
   const [filteredWorkouts, setFilteredWorkouts] = useState([]); // Workouts that match workout selected
@@ -137,7 +134,7 @@ export default function myProfile() {
               <div className="line">
                 Night Mode:
                 <span>
-                  <ThemeToggle toggleTheme={themeToggler} />
+                  <ThemeToggle />
                 </span>
               </div>
               <div className="line">

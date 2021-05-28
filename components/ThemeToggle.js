@@ -1,11 +1,16 @@
+import { useContext, useState } from "react";
 import styled from "styled-components";
+import { ThemeToggleContext } from "./useThemeState";
 
-export default function ThemeToggle({ toggleTheme }) {
-  const themeMode = localStorage.getItem("theme") || "light";
+export default function ThemeToggle() {
+  const themeToggler = useContext(ThemeToggleContext);
+
+  const [checked, setChecked] = useState(localStorage.getItem("theme") === "dark");
+
   return (
     <Switch>
-      <input type="checkbox" defaultChecked={themeMode === "dark"} />
-      <div onClick={toggleTheme}>
+      <input type="checkbox" defaultChecked={checked} />
+      <div onClick={themeToggler}>
         <span></span>
       </div>
     </Switch>

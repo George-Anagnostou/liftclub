@@ -1,22 +1,23 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 // Components
 import SeoHead from "./SeoHead";
 import NavBar from "./NavBar";
 // Context
-import { useStoreDispatch, loginUser, useStoreState } from "../store";
+import { useStoreDispatch, loginUser } from "../store";
 // Theme
 import { ThemeProvider } from "styled-components";
 import { GlobalStyles } from "./GlobalStyles";
 import { lightTheme, darkTheme } from "./Themes";
+import { useThemeState, ThemeToggleContext } from "./useThemeState";
 
 export default function Layout({ title = "Workout App", children }) {
   const router = useRouter();
 
   const dispatch = useStoreDispatch();
 
-  const { themeMode } = useStoreState();
+  const { themeMode, themeToggler } = useThemeState();
   const themes = themeMode === "light" ? lightTheme : darkTheme;
 
   // Check local storage for user_id for persistant login
@@ -29,14 +30,16 @@ export default function Layout({ title = "Workout App", children }) {
 
   return (
     <ThemeProvider theme={themes}>
-      <GlobalStyles />
+      <ThemeToggleContext.Provider value={themeToggler}>
+        <GlobalStyles />
 
-      <SeoHead title={title} />
+        <SeoHead title={title} />
 
-      <MainContainer>
-        <NavBar />
-        {children}
-      </MainContainer>
+        <MainContainer>
+          <NavBar />
+          {children}
+        </MainContainer>
+      </ThemeToggleContext.Provider>
     </ThemeProvider>
   );
 }
