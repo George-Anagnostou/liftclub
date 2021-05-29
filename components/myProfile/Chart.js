@@ -1,13 +1,5 @@
 import styled from "styled-components";
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
 export default function Chart({ data }) {
   return (
@@ -29,6 +21,7 @@ export default function Chart({ data }) {
             stroke="#8884d8"
             fillOpacity={1}
             fill="url(#colorUv)"
+            dot={{ stroke: "#8a84f7", strokeWidth: 3 }}
           />
         </AreaChart>
       </ResponsiveContainer>
@@ -39,4 +32,8 @@ export default function Chart({ data }) {
 const ChartContainer = styled.div`
   height: 200px;
   width: 100vw;
+
+  .recharts-default-tooltip {
+    background: ${({ theme }) => theme.body} !important;
+  }
 `;
