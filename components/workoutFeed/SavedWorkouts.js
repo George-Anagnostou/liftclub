@@ -13,14 +13,9 @@ export default function SavedWorkouts({ workouts, removeFromSavedWorkouts }) {
   return (
     <WorkoutList style={showSavedWorkouts ? { top: "0%" } : null}>
       <div className="tile-container">
-        {!Boolean(workouts.length) && (
-          <>
-            <h3 className="tip">You haven't saved any workouts yet.</h3>
-            <p className="tip"> Tip: Try pressing the + button on a workout to save it.</p>
-          </>
-        )}
+        {!Boolean(workouts.length) && <h3 className="tip">You haven't saved any workouts yet.</h3>}
 
-        {workouts.map((workout, i) => (
+        {workouts.map((workout) => (
           <SavedWorkoutTile
             key={`saved ${workout._id}`}
             workout={workout}
@@ -44,8 +39,8 @@ const WorkoutList = styled.ul`
   height: 85%;
   position: fixed;
   top: calc(-85% + 50px);
-  background: #f8f8f8;
-  box-shadow: 0 5px 5px #ccc;
+  background: ${({ theme }) => theme.body};
+  box-shadow: 0 5px 5px ${({ theme }) => theme.boxShadow};
 
   border-radius: 0px 0px 10px 10px;
   overflow: hidden;
@@ -53,16 +48,20 @@ const WorkoutList = styled.ul`
 
   .tile-container {
     height: calc(100% - 50px);
-    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: scroll;
 
     .tip {
-      margin: 1rem;
+      margin: 50% 1rem 0;
+      font-weight: 300;
+      color: ${({ theme }) => theme.textLight};
     }
   }
 
   .list-heading {
     height: 50px;
-    box-shadow: 0 2px 5px grey;
+    box-shadow: 0 -2px 5px ${({ theme }) => theme.boxShadow};
+    color: ${({ theme }) => theme.textLight};
     position: relative;
     z-index: 99;
 
@@ -79,9 +78,10 @@ const WorkoutList = styled.ul`
       position: absolute;
       top: 8px;
       right: 2rem;
-      background: #eaeeff;
+      background: ${({ theme }) => theme.buttonLight};
+      color: ${({ theme }) => theme.textLight};
+      border: none;
       border-radius: 50%;
-      border: 1px solid #ccc;
       width: 35px;
       height: 35px;
 
@@ -90,7 +90,7 @@ const WorkoutList = styled.ul`
 
       p {
         transform: rotate(180deg);
-        width: 33px;
+        width: 35px;
         height: 19px;
       }
     }

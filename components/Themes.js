@@ -2,10 +2,11 @@ export const lightTheme = {
   body: "#FFF",
   text: "#363537",
   textLight: "#6e6e6e",
-  border: "#FFF",
+  border: "#f3f3f3",
   boxShadow: "#AAA",
   background: "#DDD",
   buttonLight: "#e6e6e6",
+  buttonMed: "#d4d4d4",
   accent: "#4361ee",
   accentSoft: "#5d78ee",
 
@@ -31,6 +32,7 @@ export const darkTheme = {
   boxShadow: "#222222",
   background: "#999",
   buttonLight: "#4b4b4b",
+  buttonMed: "#363636",
   accent: "#4361ee",
   accentSoft: "#5d78ee",
 

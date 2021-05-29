@@ -38,14 +38,15 @@ const SearchContainer = styled.div`
   align-items: center;
 
   width: 100%;
-  color: #575757;
-  fill: #575757;
+  color: ${({ theme }) => theme.text};
+  fill: ${({ theme }) => theme.text};
 
   .searchBar {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #eee;
+    background: ${({ theme }) => theme.buttonLight};
+
     width: fit-content;
     margin: 0.5rem;
     padding: 0 1rem;
@@ -65,7 +66,8 @@ const SearchContainer = styled.div`
     border: none;
     padding: 0.5rem;
     font-size: inherit;
-    background: inherit;
-    color: inherit;
+    color: ${({ theme }) => theme.textLight};
+    background: ${({ theme }) => theme.buttonLight};
+    border-radius: 10px;
   }
 `;

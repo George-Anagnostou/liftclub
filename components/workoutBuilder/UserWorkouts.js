@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { getUserMadeWorkouts, getWorkoutsFromIdArray } from "../../utils/api";
 // Context
 import { useStoreState } from "../../store";
-import DeleteWorkoutModul from "./DeleteWorkoutModul";
+import DeleteWorkoutModal from "./DeleteWorkoutModal";
 
 export default function UserWorkouts({
   displaySavedWorkout,
@@ -40,7 +40,7 @@ export default function UserWorkouts({
   return (
     <UserWorkoutsContainer>
       {workoutToDelete && (
-        <DeleteWorkoutModul
+        <DeleteWorkoutModal
           workout={workoutToDelete}
           setWorkoutToDelete={setWorkoutToDelete}
           clearCustomWorkout={clearCustomWorkout}
@@ -53,7 +53,7 @@ export default function UserWorkouts({
           <li
             key={i}
             onClick={() => displaySavedWorkout(workout)}
-            style={customWorkout._id === workout._id ? { background: "rgb(215, 221, 247)" } : {}}
+            className={customWorkout._id === workout._id ? "highlight" : ""}
           >
             {workout.name}
 
@@ -68,7 +68,7 @@ export default function UserWorkouts({
           <li
             key={i}
             onClick={() => displaySavedWorkout(workout)}
-            style={customWorkout._id === workout._id ? { background: "rgb(215, 221, 247)" } : {}}
+            className={customWorkout._id === workout._id ? "highlight" : ""}
           >
             {workout.name}
           </li>
@@ -81,22 +81,20 @@ export default function UserWorkouts({
 const UserWorkoutsContainer = styled.div`
   text-align: center;
   border: none;
-  border-radius: 5px;
-  box-shadow: 0 0 5px grey;
-  width: 15%;
+  width: 100%;
   margin: 0.5rem 0;
 
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  flex-direction: column;
+  flex-direction: row;
   ul {
     width: 100%;
 
     li {
-      border: none;
+      background: ${({ theme }) => theme.buttonLight};
+      box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
       border-radius: 5px;
-      box-shadow: 0 0 5px grey;
 
       cursor: pointer;
       padding: 0.5rem;
@@ -105,11 +103,11 @@ const UserWorkoutsContainer = styled.div`
       text-transform: capitalize;
       position: relative;
 
-      &:hover {
-        background: #c9c9c9;
-      }
-
       button {
+        background: ${({ theme }) => theme.buttonMed};
+        color: ${({ theme }) => theme.textLight};
+        border: none;
+        border-radius: 3px;
         position: absolute;
         top: 2px;
         right: 2px;
@@ -117,11 +115,10 @@ const UserWorkoutsContainer = styled.div`
         width: 15px;
         font-size: 10px;
       }
-    }
-  }
 
-  @media (max-width: 768px) {
-    width: 100%;
-    flex-direction: row;
+      &.highlight {
+        background: ${({ theme }) => theme.accentSoft};
+      }
+    }
   }
 `;

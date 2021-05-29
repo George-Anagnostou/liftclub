@@ -18,8 +18,11 @@ export const GlobalStyles = createGlobalStyle`
   a:visited,
   a:hover,
   a:active {
-    text-decoration: underline;
     color: inherit;
+  }
+
+  a{
+    text-decoration: none;
   }
 
   ul {

@@ -60,11 +60,11 @@ export default function PublicWorkoutTile({
           <button onClick={toggleWorkoutInfo}>{showWorkoutInfo ? "close" : "view"} info</button>
           {workoutIsSaved(workout) ? (
             <button className="remove" onClick={() => removeFromSavedWorkouts(workout)}>
-              -
+              saved
             </button>
           ) : (
             <button className="add" onClick={() => addToSavedWorkouts(workout)}>
-              +
+              save
             </button>
           )}
         </div>
@@ -97,16 +97,12 @@ export default function PublicWorkoutTile({
 }
 
 const WorkoutTile = styled.li`
-  border: none;
+  border: 1px solid ${({ theme }) => theme.border};
   border-radius: 5px;
-  box-shadow: 0 0 5px grey;
+  box-shadow: 0 0 5px ${({ theme }) => theme.boxShadow};
 
   padding: 0.5rem;
   margin: 1rem;
-
-  span {
-    color: #515151;
-  }
 
   .tile-heading {
     display: flex;
@@ -132,14 +128,15 @@ const WorkoutTile = styled.li`
       padding: 0.5rem;
       margin-left: 0.25rem;
       min-width: 40px;
-      background: #d7d7d7;
+      background: ${({ theme }) => theme.buttonLight};
+      color: ${({ theme }) => theme.textLight};
     }
 
     .remove {
-      background: #fdebdf;
+      background: ${({ theme }) => theme.border};
     }
     .add {
-      background: #eaeeff;
+      background: ${({ theme }) => theme.border};
     }
   }
 
@@ -156,6 +153,8 @@ const WorkoutTile = styled.li`
       &:hover {
         text-decoration: underline;
         cursor: pointer;
+
+        color: ${({ theme }) => theme.textLight};
       }
     }
     .exercise {

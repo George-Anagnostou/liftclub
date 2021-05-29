@@ -37,7 +37,7 @@ const WorkoutList = styled.ul`
   .listTitle {
     margin-left: 1.5rem;
     text-align: left;
-    color: #ccc;
+    color: ${({ theme }) => theme.textLight};
     font-weight: 400;
   }
 `;

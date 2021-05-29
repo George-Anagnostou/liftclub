@@ -19,7 +19,7 @@ const SVG = styled.div`
     stroke-dashoffset: 166;
     stroke-width: 2;
     stroke-miterlimit: 10;
-    stroke: #bcccfc;
+    stroke: ${({ theme }) => theme.accentSoft};
     fill: none;
     animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
   }
@@ -32,7 +32,6 @@ const SVG = styled.div`
     stroke-width: 2;
     stroke: #fff;
     stroke-miterlimit: 10;
-    box-shadow: inset 0px 0px 0px #bcccfc;
     animation: fill 0.4s ease-in-out 0.4s forwards, scale 0.3s ease-in-out 0.9s both;
   }
 
@@ -59,7 +58,7 @@ const SVG = styled.div`
   }
   @keyframes fill {
     100% {
-      box-shadow: inset 0px 0px 0px 30px #bcccfc;
+      box-shadow: inset 0px 0px 0px 30px ${({ theme }) => theme.accentSoft};
     }
   }
 `;

@@ -112,12 +112,12 @@ export default function workoutLog() {
     const dayIsSelected =
       date.getFullYear() === year && date.getMonth() === month && date.getDate() === day;
 
-    // Styles
-    const fontStyle = dayIsSelected ? {} : { transform: "scale(.9)" };
-    const backgroundStyle = dayData ? { background: "#5d78ee" } : {};
-
     return (
-      <div style={{ ...fontStyle, ...backgroundStyle }}>
+      <div
+        className={`${dayIsSelected ? "selected" : "notSelected"} ${
+          dayData ? "hasDayData" : "noDayData"
+        }`}
+      >
         {date.getDate() === 1 && <h2>{String(date).substring(3, 7)}</h2>}
         <h5>{String(date).substring(0, 3)}</h5>
         <h3>{String(date).substring(8, 11)}</h3>
@@ -257,9 +257,7 @@ export default function workoutLog() {
                 savedSuccessfully={savedSuccessfully}
               />
             ) : (
-              <FallbackText>
-                No logged workout. Select a workout from one of your workouts below.
-              </FallbackText>
+              <FallbackText>To start a workout, select a workout from below.</FallbackText>
             )}
 
             <UserWorkouts displayWorkout={displayWorkout} />
@@ -309,14 +307,14 @@ const DateBar = styled.ul`
     div {
       box-shadow: none;
       border: 1px solid #ccc;
-      border-radius: 10px;
-      transition: all 0.1s ease-in-out;
+      border-radius: 5px;
       padding: 0.5rem;
+      transition: all 0.2s ease-in-out;
 
       color: ${({ theme }) => theme.text};
       background: ${({ theme }) => theme.buttonLight};
-      border: 1px solid ${({ theme }) => theme.accent};
-      box-shadow: 0 2px 5px ${({ theme }) => theme.boxShadow};
+      border: 1px solid ${({ theme }) => theme.border};
+      box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
 
       h4,
       h5 {
@@ -325,6 +323,20 @@ const DateBar = styled.ul`
       }
       h2 {
         font-weight: 400;
+      }
+
+      &.selected {
+        box-shadow: 0 4px 8px ${({ theme }) => theme.boxShadow};
+      }
+      &.notSelected {
+        transform: scale(0.85);
+        background: ${({ theme }) => theme.buttonMed};
+      }
+      &.hasDayData {
+        background: ${({ theme }) => theme.accentSoft};
+        color: ${({ theme }) => theme.shades[1]};
+      }
+      &.noDayData {
       }
     }
   }
@@ -341,9 +353,8 @@ const DateBar = styled.ul`
 `;
 
 const FallbackText = styled.h3`
-  border-radius: 5px;
-  margin: 1rem 0.25rem;
-  padding: 1rem;
-  width: 98%;
+  color: ${({ theme }) => theme.textLight};
+  font-weight: 300;
+  margin: 2rem 1rem;
   max-width: 100%;
 `;

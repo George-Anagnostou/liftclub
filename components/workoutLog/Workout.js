@@ -180,7 +180,7 @@ const WorkoutList = styled.ul`
             }
           }
           &::after {
-            content: "lbs";
+            content: " lbs";
             width: 0;
           }
         }

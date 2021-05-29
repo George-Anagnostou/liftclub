@@ -3,7 +3,7 @@ import { useState } from "react";
 
 import { createExercise } from "../../utils/api";
 
-export default function CreateExerciseModul({ muscleGroups, setShowModul }) {
+export default function CreateExerciseModal({ muscleGroups, setShowModal }) {
   const [name, setName] = useState("");
   const [equipment, setEquipment] = useState("");
   const [muscleGroup, setMuscleGroup] = useState("");
@@ -33,15 +33,15 @@ export default function CreateExerciseModul({ muscleGroups, setShowModul }) {
     setMuscleWorked(e.target.value);
   };
 
-  const handleModulShadowClick = (e) => {
-    // Only close the modul when the shadow is clicked
-    if (e.target.classList.contains("modul-shadow")) setShowModul(false);
+  const handleModalShadowClick = (e) => {
+    // Only close the modal when the shadow is clicked
+    if (e.target.classList.contains("modal-shadow")) setShowModal(false);
   };
 
   return (
-    <ModulContainer className="modul-shadow" onClick={handleModulShadowClick}>
-      <div className="modul">
-        <button className="close-btn" onClick={() => setShowModul(false)}>
+    <ModalContainer className="modal-shadow" onClick={handleModalShadowClick}>
+      <div className="modal">
+        <button className="close-btn" onClick={() => setShowModal(false)}>
           X
         </button>
 
@@ -89,14 +89,14 @@ export default function CreateExerciseModul({ muscleGroups, setShowModul }) {
           <button type="submit">Add Exercise</button>
         </form>
       </div>
-    </ModulContainer>
+    </ModalContainer>
   );
 }
 
-const ModulContainer = styled.div`
+const ModalContainer = styled.div`
   height: 100vh;
   width: 100vw;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.5);
 
   position: fixed;
   top: 0;
@@ -106,19 +106,24 @@ const ModulContainer = styled.div`
   display: grid;
   place-items: center;
 
-  .modul {
+  .modal {
     position: relative;
     height: 50%;
     width: 95%;
     max-width: 350px;
-    background: white;
     border-radius: 5px;
-    box-shadow: 0 0 5px grey;
+    background: ${({ theme }) => theme.buttonLight};
+    border: 3px solid ${({ theme }) => theme.accentSoft};
+    box-shadow: 0 0 10px ${({ theme }) => theme.boxShadow};
 
     display: grid;
     place-items: center;
 
     .close-btn {
+      background: ${({ theme }) => theme.buttonMed};
+      color: ${({ theme }) => theme.textLight};
+      border: none;
+      border-radius: 3px;
       position: absolute;
       top: 2px;
       right: 2px;
@@ -139,12 +144,49 @@ const ModulContainer = styled.div`
       div {
         width: 100%;
         display: flex;
-        justify-content: space-between;
+        text-align: left;
+        justify-content: center;
+        align-items: flex-start;
+        flex-direction: column;
+
+        label {
+          font-size: 0.8rem;
+          color: ${({ theme }) => theme.textLight};
+          text-transform: uppercase;
+        }
+
+        input {
+          width: 100%;
+          margin: 0.5rem 0;
+          padding: 0.5rem;
+          font-size: 1rem;
+          border: none;
+          border-radius: 5px;
+          color: ${({ theme }) => theme.text};
+          background: ${({ theme }) => theme.buttonMed};
+        }
+
+        select {
+          width: 50%;
+          margin: 0.5rem 0;
+          padding: 0.5rem;
+          font-size: 1rem;
+          border: none;
+          border-radius: 5px;
+          color: ${({ theme }) => theme.text};
+          background: ${({ theme }) => theme.buttonMed};
+        }
       }
 
       button {
-        margin: 0 auto;
-        padding: 0.5rem;
+        background: ${({ theme }) => theme.buttonLight};
+        box-shadow: 0 2px 5px ${({ theme }) => theme.boxShadow};
+        color: inherit;
+        border: none;
+        border-radius: 3px;
+        margin: 1rem 2rem;
+        padding: 0.5rem 1rem;
+        font-size: 1.1rem;
       }
     }
   }
