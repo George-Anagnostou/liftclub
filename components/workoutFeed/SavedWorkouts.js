@@ -1,18 +1,22 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import styled from "styled-components";
-import SwipeBox from "../hooks/SwipeBox";
+import useTouchSwipe from "../hooks/useTouchSwipe";
 // Components
 import SavedWorkoutTile from "./SavedWorkoutTile";
 
 export default function SavedWorkouts({ workouts, removeFromSavedWorkouts }) {
+  const header = useRef(null);
+  const container = useRef(null);
+
+  useTouchSwipe(header, "down", () => toggleShow(true));
+  useTouchSwipe(container, "up", () => toggleShow(false));
+
   const [showSavedWorkouts, setShowSavedWorkouts] = useState(false);
 
-  const toggleShow = () => {
-    setShowSavedWorkouts((prev) => !prev);
-  };
+  const toggleShow = () => setShowSavedWorkouts((prev) => !prev);
 
   return (
-    <WorkoutList style={showSavedWorkouts ? { top: "0%" } : null}>
+    <WorkoutList ref={container} style={showSavedWorkouts ? { top: "0%" } : null}>
       <div className="tile-container">
         {!Boolean(workouts.length) && <h3 className="tip">You haven't saved any workouts yet.</h3>}
 
@@ -25,14 +29,12 @@ export default function SavedWorkouts({ workouts, removeFromSavedWorkouts }) {
         ))}
       </div>
 
-      <SwipeBox toggler={toggleShow} targetDirection={["down", "up"]}>
-        <div className="list-heading" onClick={toggleShow}>
-          <h3>Saved Workouts</h3>
-          <button className="toggle-btn">
-            <p style={showSavedWorkouts ? { transform: "rotate(0deg)" } : null}>^</p>
-          </button>
-        </div>
-      </SwipeBox>
+      <div ref={header} className="list-heading" onClick={toggleShow}>
+        <h3>Saved Workouts</h3>
+        <button className="toggle-btn">
+          <p style={showSavedWorkouts ? { transform: "rotate(0deg)" } : null}>^</p>
+        </button>
+      </div>
     </WorkoutList>
   );
 }

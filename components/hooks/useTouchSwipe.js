@@ -1,21 +1,23 @@
-import { useRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function SwipeBox({ children, targetDirection, toggler }) {
-  const wrapper = useRef();
-
+/**
+ *
+ * @param {element} ref
+ * @param {string} targetDirection
+ * @param {function} callback
+ */
+export default function useTouchSwipe(ref, targetDirection, callback) {
   const [isSwipping, setIsSwipping] = useState(false);
   const [startPos, setStartPos] = useState(null);
   const [direction, setDirection] = useState(null);
 
   const isOutsideBox = ({ target }) => {
-    if (wrapper.current && !wrapper.current.contains(target)) return true;
+    if (ref.current && !ref.current.contains(target)) return true;
   };
 
   const touchStart = (e) => {
     if (isOutsideBox(e)) return;
-
     setIsSwipping(true);
-
     setStartPos({ x: e.touches[0].clientX, y: e.touches[0].clientY });
   };
 
@@ -23,19 +25,20 @@ export default function SwipeBox({ children, targetDirection, toggler }) {
     if (isOutsideBox(e)) return;
     const currPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
 
-    if (startPos.x < currPos.x && startPos.y < currPos.y && direction === null)
+    if (startPos && startPos.x < currPos.x && startPos.y < currPos.y && direction === null)
       setDirection(["right", "down"]);
-    if (startPos.x > currPos.x && startPos.y < currPos.y && direction === null)
+    if (startPos && startPos.x > currPos.x && startPos.y < currPos.y && direction === null)
       setDirection(["left", "down"]);
-    if (startPos.x < currPos.x && startPos.y > currPos.y && direction === null)
+    if (startPos && startPos.x < currPos.x && startPos.y > currPos.y && direction === null)
       setDirection(["right", "up"]);
-    if (startPos.x > currPos.x && startPos.y > currPos.y && direction === null)
+    if (startPos && startPos.x > currPos.x && startPos.y > currPos.y && direction === null)
       setDirection(["left", "up"]);
   };
 
-  const touchEnd = (e) => {
+  const touchEnd = () => {
     if (isSwipping) {
       setIsSwipping(false);
+      setStartPos(null);
       setDirection(null);
     }
   };
@@ -53,10 +56,6 @@ export default function SwipeBox({ children, targetDirection, toggler }) {
   }, [touchStart, touchEnd]);
 
   useEffect(() => {
-    if (isSwipping && targetDirection.some((val) => direction.indexOf(val) >= 0)) {
-      toggler((prev) => !prev);
-    }
-  }, [direction]);
-
-  return <div ref={wrapper}>{children}</div>;
+    if (isSwipping && direction && direction.includes(targetDirection)) callback();
+  }, [direction, isSwipping]);
 }
