@@ -1,16 +1,12 @@
 import { useEffect, useState, createContext } from "react";
 import { lightTheme, darkTheme } from "./Themes";
 
-export const useThemeState = (setThemes) => {
+export const useThemeState = () => {
   const [themeMode, setThemeMode] = useState("light");
 
   const setMode = (mode) => {
     window.localStorage.setItem("theme", mode);
     setThemeMode(mode);
-
-    if (setThemes) {
-      setThemes(mode === "light" ? lightTheme : darkTheme);
-    }
   };
 
   const themeToggler = () => {

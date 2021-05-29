@@ -9,7 +9,7 @@ import ExerciseSelect from "../components/myProfile/ExerciseSelect";
 import Chart from "../components/myProfile/Chart";
 import StatButtons from "../components/myProfile/StatButtons";
 import WeightInput from "../components/myProfile/WeightInput";
-import ThemeToggle from "../components/ThemeToggle";
+import ThemeToggle from "../components/Themes/ThemeToggle";
 // Utils
 import { getWorkoutsFromIdArray } from "../utils/api";
 import { addExerciseDataToLoggedWorkout, round } from "../utils";

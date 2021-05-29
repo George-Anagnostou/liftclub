@@ -9,8 +9,8 @@ import { useStoreDispatch, loginUser } from "../store";
 // Theme
 import { ThemeProvider } from "styled-components";
 import { GlobalStyles } from "./GlobalStyles";
-import { lightTheme, darkTheme } from "./Themes";
-import { useThemeState, ThemeToggleContext } from "./useThemeState";
+import { lightTheme, darkTheme } from "./Themes/Themes";
+import { useThemeState, ThemeToggleContext } from "./Themes/useThemeState";
 
 export default function Layout({ title = "Workout App", children }) {
   const router = useRouter();
