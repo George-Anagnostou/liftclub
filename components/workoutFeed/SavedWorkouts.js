@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
+import SwipeBox from "../hooks/SwipeBox";
 // Components
 import SavedWorkoutTile from "./SavedWorkoutTile";
 
@@ -24,12 +25,14 @@ export default function SavedWorkouts({ workouts, removeFromSavedWorkouts }) {
         ))}
       </div>
 
-      <div className="list-heading" onClick={toggleShow}>
-        <h3>Saved Workouts</h3>
-        <button className="toggle-btn">
-          <p style={showSavedWorkouts ? { transform: "rotate(0deg)" } : null}>^</p>
-        </button>
-      </div>
+      <SwipeBox toggler={toggleShow} targetDirection={["down", "up"]}>
+        <div className="list-heading" onClick={toggleShow}>
+          <h3>Saved Workouts</h3>
+          <button className="toggle-btn">
+            <p style={showSavedWorkouts ? { transform: "rotate(0deg)" } : null}>^</p>
+          </button>
+        </div>
+      </SwipeBox>
     </WorkoutList>
   );
 }
