@@ -54,7 +54,7 @@ export default function ExerciseList({ isExerciseInCustomWorkout, addExercise, r
 
   return (
     <ExercisesContainer>
-      <div className="exercise-control">
+      <header>
         <div>
           <label htmlFor="muscleGroup">Muscle Group: </label>
           <select
@@ -71,7 +71,7 @@ export default function ExerciseList({ isExerciseInCustomWorkout, addExercise, r
         </div>
 
         {user?.isAdmin && <button onClick={() => setShowCreateExerciseModal(true)}>Add New</button>}
-      </div>
+      </header>
 
       {showCreateExerciseModal && (
         <CreateExerciseModal
@@ -127,7 +127,7 @@ const ExercisesContainer = styled.ul`
   align-items: flex-start;
   flex-wrap: wrap;
 
-  .exercise-control {
+  header {
     background: ${({ theme }) => theme.buttonLight};
     width: 100%;
     border-radius: 5px;
