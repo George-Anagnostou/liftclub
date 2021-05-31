@@ -1,7 +1,5 @@
 import styled from "styled-components";
 
-const activeStyles = { background: "#eaeeff" };
-
 const options = [
   { value: "avgWeight", text: "Average Weight" },
   { value: "totalWeight", text: "Total Weight" },
@@ -20,7 +18,7 @@ export default function StatButtons({ setStatOption, statOption }) {
           key={value}
           onClick={handleButtonClick}
           value={value}
-          style={statOption === value ? activeStyles : null}
+          className={statOption === value ? "highlight" : ""}
         >
           {text}
         </button>
@@ -35,13 +33,15 @@ const Buttons = styled.div`
   button {
     flex: 1;
     cursor: pointer;
-    margin: 0.5rem;
+    margin: 0.35rem;
     padding: 0.2rem 0.5rem;
     border-radius: 5px;
-    border: 1px solid #ccc;
+    color: ${({ theme }) => theme.text};
+    border: 1px solid ${({ theme }) => theme.border};
+    background: ${({ theme }) => theme.body};
 
-    &:hover {
-      background: #eaeeff;
+    &.highlight {
+      background: ${({ theme }) => theme.accentSoft};
     }
   }
 `;

@@ -67,18 +67,24 @@ export default function myProfile() {
    * @param {string} stat to chart
    */
   const chartExercise = (targetExId, stat) => {
-    const avgWeight = (sets) => round(sets.reduce((a, b) => a + b.weight || 0, 0) / sets.length, 1);
+    // Data to send as prop to chart component
+    const data = [];
 
-    const totalWeight = (sets) => sets.reduce((a, b) => a + b.weight || 0, 0);
+    // Days without weight added by user (-1 weight) is replaced by 0
+    const formatWeight = (item) => (item.weight >= 0 ? item.weight : 0);
 
-    const maxWeight = (sets) => Math.max(...sets.map((a) => a.weight));
-
+    // Format date for X axis labels
     const formatDate = (isoDate) => {
       const date = new Date(isoDate);
       return date.getMonth() + 1 + "/" + date.getDate();
     };
 
-    const data = [];
+    const avgWeight = (sets) =>
+      round(sets.reduce((a, b) => a + formatWeight(b) || 0, 0) / sets.length, 1);
+
+    const totalWeight = (sets) => sets.reduce((a, b) => a + formatWeight(b) || 0, 0);
+
+    const maxWeight = (sets) => Math.max(...sets.map((a) => formatWeight(a)));
 
     filteredWorkouts.map(({ exerciseData, isoDate }) => {
       return exerciseData.map(({ exercise_id, sets }) => {
@@ -127,43 +133,40 @@ export default function myProfile() {
   return (
     <Layout>
       <ProfileContainer>
-        <h2>Your profile</h2>
+        <h2>Your Profile</h2>
         {user ? (
           <>
             <Heading>
               <div className="line">
-                Night Mode:
+                <p>Night Mode</p>
                 <span>
                   <ThemeToggle />
                 </span>
               </div>
               <div className="line">
-                username: <span>{user.username}</span>
+                <p>Username</p>
+                <span>{user.username}</span>
               </div>
               <div className="line">
-                account type: <span>{user.isAdmin ? "Admin" : "Member"}</span>
+                <p>Account Type</p>
+                <span>{user.isAdmin ? "Admin" : "Member"}</span>
               </div>
               <button onClick={handleLogoutClick}>sign out</button>
             </Heading>
 
             <WeightInput user={user} />
 
+            <h3>Track your progress</h3>
             <SelectContainer>
-              <div>
-                <p>Select a workout:</p>
-                <WorkoutSelect
-                  workoutOptions={workoutOptions}
-                  handleWorkoutOptionChange={handleWorkoutOptionChange}
-                />
-              </div>
+              <WorkoutSelect
+                workoutOptions={workoutOptions}
+                handleWorkoutOptionChange={handleWorkoutOptionChange}
+              />
 
-              <div>
-                <p>Select an exercise:</p>
-                <ExerciseSelect
-                  exerciseOptions={exerciseOptions}
-                  handleExerciseOptionChange={handleExerciseOptionChange}
-                />
-              </div>
+              <ExerciseSelect
+                exerciseOptions={exerciseOptions}
+                handleExerciseOptionChange={handleExerciseOptionChange}
+              />
             </SelectContainer>
 
             <StatButtons setStatOption={setStatOption} statOption={statOption} />
@@ -185,28 +188,38 @@ const ProfileContainer = styled.div`
   align-items: center;
 
   padding: 1rem 0.5rem;
+
+  h2 {
+    margin: 0.5rem 0;
+    color: ${({ theme }) => theme.textLight};
+  }
 `;
 
 const Heading = styled.header`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: space-evenly;
+  justify-content: center;
 
   width: 100%;
   position: relative;
   font-size: 0.7rem;
-  color: ${({ theme }) => theme.text};
+  background: ${({ theme }) => theme.buttonMed};
 
   .line {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
+    justify-content: center;
+
     margin: 0.5rem 0;
+    font-weight: thin;
+    font-size: 1rem;
+    color: ${({ theme }) => theme.textLight};
 
     span {
-      margin-left: 0.5rem;
-      font-weight: bold;
-      font-size: 1.2rem;
+      font-size: 1.35rem;
+      margin-left: 1rem;
+      color: ${({ theme }) => theme.text};
     }
   }
 
@@ -229,27 +242,10 @@ const SelectContainer = styled.div`
   justify-content: space-between;
   padding: 0.5rem;
 
-  div {
+  select {
     width: 48%;
-    padding: 0.5rem 0;
-    border-radius: 5px;
-    border: none;
-
     &:first-child {
       margin-right: 0.25rem;
-    }
-
-    select {
-      width: 90%;
-      text-transform: capitalize;
-      padding: 0.5rem;
-      margin-top: 0.25rem;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-
-      &:hover {
-        background: #eaeeff;
-      }
     }
   }
 `;

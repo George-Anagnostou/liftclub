@@ -19,6 +19,8 @@ export default function WeightInput({ user }) {
   const handleSave = async (e) => {
     e.preventDefault();
 
+    if (!inputWeight) return;
+
     // send POST req
     const isSaved = await saveWeight(inputWeight, user._id);
 
@@ -54,13 +56,13 @@ export default function WeightInput({ user }) {
 
   return (
     <WeightContainer>
-      <p className="title">Weight</p>
-
       <form method="post" onSubmit={handleSave}>
-        <label htmlFor="weight">Current:</label>
+        <label htmlFor="weight" className="title">
+          Weight:
+        </label>
         <input type="number" name="weight" onChange={handleWeightChange} value={inputWeight} />
 
-        <button type="submit">save</button>
+        <button type="submit">SAVE</button>
         {saved && <Checkmark position={CheckmarkPosition} />}
       </form>
 
@@ -68,18 +70,18 @@ export default function WeightInput({ user }) {
         <div className="weightDiff">
           {weightDiff > 0 ? (
             <p>
-              You have gained <span>{weightDiff}</span> lbs
+              Total gained: <span>{weightDiff}</span> lbs
             </p>
           ) : (
             <p>
-              You have lost <span>{Math.abs(weightDiff)}</span> lbs
+              Total lost: <span>{Math.abs(weightDiff)}</span> lbs
             </p>
           )}
         </div>
 
         <div className="displayWeight">
           <p>
-            previous: <span>{displayWeight}</span> lbs
+            Previous: <span>{displayWeight}</span> lbs
           </p>
         </div>
       </div>
@@ -90,7 +92,7 @@ export default function WeightInput({ user }) {
 const WeightContainer = styled.div`
   width: 100%;
 
-  padding: 0 1rem;
+  padding: 1rem 0 2rem;
   margin-top: 1rem;
 
   display: flex;
@@ -98,60 +100,56 @@ const WeightContainer = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
 
-  .container {
-    display: flex;
-  }
-
-  .title {
-    font-weight: thin;
-    font-size: 1.35rem;
-    color: grey;
-  }
-
   form {
-    align-self: center;
     display: flex;
     align-items: center;
 
+    .title {
+      font-weight: thin;
+      font-size: 1.35rem;
+      color: ${({ theme }) => theme.textLight};
+    }
+
     input {
-      margin-left: 0.5rem;
-      max-width: 4rem;
-      border: 1px solid #ccc;
+      text-align: center;
+      width: 4rem;
+      margin: 0.5rem;
+      padding: 0.5rem;
+      border: none;
       border-radius: 5px;
-      outline: none;
-      padding: 0.5rem 0 0.5rem 0.5rem;
-      font-size: inherit;
-      background: inherit;
-      color: inherit;
+      color: ${({ theme }) => theme.text};
+      border: 1px solid ${({ theme }) => theme.border};
+      background: ${({ theme }) => theme.buttonMed};
     }
 
     button {
+      cursor: pointer;
+      margin: 0.5rem;
+      padding: 0.5rem 1rem;
       border-radius: 5px;
-      border: 1px solid #ccc;
-      padding: 0.5rem;
-      font-size: inherit;
-      color: inherit;
-      margin: 0 0.5rem;
+      color: ${({ theme }) => theme.text};
+      border: 1px solid ${({ theme }) => theme.border};
+      background: ${({ theme }) => theme.body};
     }
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
   }
 
   span {
     font-weight: thin;
     font-size: 2rem;
+    color: ${({ theme }) => theme.text};
   }
 
   .displayWeight {
-    margin: 0 0.5rem;
-    p {
-      margin: 0.5rem 0;
-    }
+    margin: 0.5rem 0;
   }
 
   .weightDiff {
-    margin: 0 0.5rem;
-
-    p {
-      margin: 0.5rem 0;
-    }
+    margin: 0.5rem 0;
   }
 `;
