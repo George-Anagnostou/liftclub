@@ -5,19 +5,18 @@ import useTouchSwipe from "../hooks/useTouchSwipe";
 import SavedWorkoutTile from "./SavedWorkoutTile";
 
 export default function SavedWorkouts({ workouts, removeFromSavedWorkouts }) {
-  const header = useRef(null);
-  const container = useRef(null);
+  const downSwipe = useRef(null);
+  const upSwipe = useRef(null);
 
-  useTouchSwipe(header, "down", () => toggleShow(true));
-  useTouchSwipe(container, "up", () => toggleShow(false));
+  useTouchSwipe(downSwipe, ["down", "up"], () => toggleShow(true));
 
-  const [showSavedWorkouts, setShowSavedWorkouts] = useState(false);
+  const [showDrawer, setShowDrawer] = useState(false);
 
-  const toggleShow = () => setShowSavedWorkouts((prev) => !prev);
+  const toggleShow = () => setShowDrawer((prev) => !prev);
 
   return (
-    <WorkoutList ref={container} style={showSavedWorkouts ? { top: "0%" } : null}>
-      <div className="tile-container">
+    <WorkoutList style={showDrawer ? { top: "0%" } : null}>
+      <div className="drawer">
         {!Boolean(workouts.length) && <h3 className="tip">You haven't saved any workouts yet.</h3>}
 
         {workouts.map((workout) => (
@@ -29,11 +28,13 @@ export default function SavedWorkouts({ workouts, removeFromSavedWorkouts }) {
         ))}
       </div>
 
-      <div ref={header} className="list-heading" onClick={toggleShow}>
-        <h3>Saved Workouts</h3>
-        <button className="toggle-btn">
-          <p style={showSavedWorkouts ? { transform: "rotate(0deg)" } : null}>^</p>
-        </button>
+      <div ref={upSwipe}>
+        <div ref={downSwipe} className="list-heading" onClick={toggleShow}>
+          <h3>Saved Workouts</h3>
+          <button className="toggle-btn">
+            <p style={showDrawer ? { transform: "rotate(0deg)" } : null}>^</p>
+          </button>
+        </div>
       </div>
     </WorkoutList>
   );
@@ -49,9 +50,9 @@ const WorkoutList = styled.ul`
 
   border-radius: 0px 0px 10px 10px;
   overflow: hidden;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.5s ease-in-out;
 
-  .tile-container {
+  .drawer {
     height: calc(100% - 50px);
     overflow-x: hidden;
     overflow-y: scroll;
