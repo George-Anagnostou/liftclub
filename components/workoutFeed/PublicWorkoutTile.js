@@ -133,10 +133,10 @@ const WorkoutTile = styled.li`
     }
 
     .remove {
-      background: ${({ theme }) => theme.border};
+      background: ${({ theme }) => theme.accentSoft};
     }
     .add {
-      background: ${({ theme }) => theme.border};
+      background: ${({ theme }) => theme.accentSoft};
     }
   }
 
