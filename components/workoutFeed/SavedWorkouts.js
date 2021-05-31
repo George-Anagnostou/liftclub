@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import styled from "styled-components";
-import useTouchSwipe from "../Hooks/useTouchSwipe";
+import useTouchSwipe from "../hooks/useTouchSwipe";
 // Components
 import SavedWorkoutTile from "./SavedWorkoutTile";
 
