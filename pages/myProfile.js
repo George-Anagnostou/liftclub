@@ -138,18 +138,18 @@ export default function myProfile() {
           <>
             <Heading>
               <div className="line">
+                <p>Username:</p>
+                <span>{user.username}</span>
+              </div>
+              <div className="line">
+                <p>Account Type:</p>
+                <span>{user.isAdmin ? "Admin" : "Member"}</span>
+              </div>
+              <div className="line">
                 <p>Night Mode</p>
                 <span>
                   <ThemeToggle />
                 </span>
-              </div>
-              <div className="line">
-                <p>Username</p>
-                <span>{user.username}</span>
-              </div>
-              <div className="line">
-                <p>Account Type</p>
-                <span>{user.isAdmin ? "Admin" : "Member"}</span>
               </div>
               <button onClick={handleLogoutClick}>sign out</button>
             </Heading>
@@ -202,9 +202,10 @@ const Heading = styled.header`
   justify-content: center;
 
   width: 100%;
+  padding: 0.5rem 1rem;
   position: relative;
-  font-size: 0.7rem;
-  background: ${({ theme }) => theme.buttonMed};
+  border-radius: 5px;
+  background: ${({ theme }) => theme.buttonLight};
 
   .line {
     display: flex;
@@ -212,12 +213,13 @@ const Heading = styled.header`
     justify-content: center;
 
     margin: 0.5rem 0;
-    font-weight: thin;
+    height: 1.5rem;
     font-size: 1rem;
     color: ${({ theme }) => theme.textLight};
 
     span {
       font-size: 1.35rem;
+      font-weight: thin;
       margin-left: 1rem;
       color: ${({ theme }) => theme.text};
     }
@@ -225,14 +227,14 @@ const Heading = styled.header`
 
   button {
     position: absolute;
-    top: 0%;
-    right: 0;
-    border-radius: 2px;
+    top: 5px;
+    right: 5px;
+    border-radius: 4px;
     padding: 0.5rem;
     font-size: inherit;
     border: ${({ theme }) => theme.border};
     color: ${({ theme }) => theme.textLight};
-    background: ${({ theme }) => theme.buttonLight};
+    background: ${({ theme }) => theme.buttonMed};
   }
 `;
 

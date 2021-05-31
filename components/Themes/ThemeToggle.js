@@ -18,9 +18,9 @@ export default function ThemeToggle() {
 }
 
 const Switch = styled.label`
-  --line: #505162;
+  --line: #252525;
   --dot: #c2c2c2;
-  --circle: #414141;
+  --circle: #3d3d3d;
   --duration: 0.25s;
   cursor: pointer;
 

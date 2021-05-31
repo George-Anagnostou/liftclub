@@ -91,9 +91,11 @@ export default function WeightInput({ user }) {
 
 const WeightContainer = styled.div`
   width: 100%;
-
-  padding: 1rem 0 2rem;
-  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  margin: 1rem;
+  border-radius: 5px;
+  background: ${({ theme }) => theme.buttonLight};
+  color: ${({ theme }) => theme.textLight};
 
   display: flex;
   flex-direction: column;
@@ -106,8 +108,6 @@ const WeightContainer = styled.div`
 
     .title {
       font-weight: thin;
-      font-size: 1.35rem;
-      color: ${({ theme }) => theme.textLight};
     }
 
     input {
@@ -141,7 +141,7 @@ const WeightContainer = styled.div`
 
   span {
     font-weight: thin;
-    font-size: 2rem;
+    font-size: 1.35rem;
     color: ${({ theme }) => theme.text};
   }
 

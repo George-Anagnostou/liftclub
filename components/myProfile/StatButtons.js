@@ -32,6 +32,7 @@ const Buttons = styled.div`
   width: 100%;
   button {
     flex: 1;
+    font-size: 1rem;
     cursor: pointer;
     margin: 0.35rem;
     padding: 0.2rem 0.5rem;
