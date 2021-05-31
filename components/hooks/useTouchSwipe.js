@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 /**
  *
  * @param {element} ref
- * @param {string} targetDirection
+ * @param {string or array} targetDirection
  * @param {function} callback
  */
 export default function useTouchSwipe(ref, targetDirection, callback) {
@@ -23,6 +23,11 @@ export default function useTouchSwipe(ref, targetDirection, callback) {
 
   const touchMove = (e) => {
     if (isOutsideBox(e)) return;
+
+    e.preventDefault();
+    document.body.style.height = "100%";
+    document.body.style.overflow = "hidden";
+
     const currPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
 
     if (startPos && startPos.x < currPos.x && startPos.y < currPos.y && direction === null)
@@ -37,6 +42,9 @@ export default function useTouchSwipe(ref, targetDirection, callback) {
 
   const touchEnd = () => {
     if (isSwipping) {
+      document.body.style.height = "auto";
+      document.body.style.overflow = "auto";
+
       setIsSwipping(false);
       setStartPos(null);
       setDirection(null);
@@ -44,18 +52,20 @@ export default function useTouchSwipe(ref, targetDirection, callback) {
   };
 
   useEffect(() => {
-    window.addEventListener("touchstart", touchStart);
-    window.addEventListener("touchmove", touchMove);
-    window.addEventListener("touchend", touchEnd);
+    window.addEventListener("touchstart", touchStart, { passive: false });
+    window.addEventListener("touchmove", touchMove, { passive: false });
+    window.addEventListener("touchend", touchEnd, { passive: false });
 
     return () => {
-      window.removeEventListener("touchstart", touchStart);
-      window.removeEventListener("touchmove", touchMove);
-      window.removeEventListener("touchend", touchEnd);
+      window.removeEventListener("touchstart", touchStart, { passive: false });
+      window.removeEventListener("touchmove", touchMove, { passive: false });
+      window.removeEventListener("touchend", touchEnd, { passive: false });
     };
   }, [touchStart, touchEnd]);
 
   useEffect(() => {
-    if (isSwipping && direction && direction.includes(targetDirection)) callback();
+    const targetArr = [].concat(targetDirection).map((dir) => dir);
+
+    if (isSwipping && direction && targetArr.some((dir) => direction.includes(dir))) callback();
   }, [direction, isSwipping]);
 }
