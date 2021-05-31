@@ -12,7 +12,7 @@ import { GlobalStyles } from "./GlobalStyles";
 import { lightTheme, darkTheme } from "./Themes/Themes";
 import { useThemeState, ThemeToggleContext } from "./Themes/useThemeState";
 
-export default function Layout({ title = "Workout App", children }) {
+export default function Layout({ title = "Ananostou Lift Club", children }) {
   const router = useRouter();
 
   const dispatch = useStoreDispatch();
