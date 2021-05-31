@@ -1,74 +1,19 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
+// Context
+import { useStoreState, useStoreDispatch, loginUser } from "../store";
+// Components
+import Login from "../components/HomePage/Login";
+import SeoHead from "../components/SeoHead";
 
-import { useStoreState, useStoreDispatch, loginUser, authLogin, createAccount } from "../store";
-
-const Home = () => {
+export default function Home() {
   const router = useRouter();
-
   const dispatch = useStoreDispatch();
   const { user } = useStoreState();
 
-  const [loginUsername, setLoginUsername] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
-  const [invalidLoginCreds, setInvalidLoginCreds] = useState(false);
-
-  const [createAccUsername, setCreateAccUsername] = useState("");
-  const [createAccPassword, setCreateAccPassword] = useState("");
-  const [usernameExists, setUsernameExists] = useState(false);
-
   // Route to workoutLog
-  const routeToWorkoutLog = () => {
-    setTimeout(() => {
-      router.push("/workoutLog");
-    }, 3000);
-  };
-
-  // Login handlers
-  const handleLoginUsernameChange = (e) => {
-    setLoginUsername(e.target.value);
-  };
-
-  const handleLoginPasswordChange = (e) => {
-    setLoginPassword(e.target.value);
-  };
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-
-    const userData = await authLogin(dispatch, loginUsername, loginPassword);
-
-    if (userData) {
-      localStorage.setItem("workoutID", userData._id);
-      setInvalidLoginCreds(false);
-      routeToWorkoutLog();
-    } else {
-      setInvalidLoginCreds(true);
-    }
-  };
-
-  // CREATE ACCOUNT handlers
-  const handleCreateAccUsernameChange = (e) => {
-    setCreateAccUsername(e.target.value);
-  };
-  const handleCreateAccPasswordChange = (e) => {
-    setCreateAccPassword(e.target.value);
-  };
-
-  const handleCreateAccount = async (e) => {
-    e.preventDefault();
-
-    const userData = await createAccount(dispatch, createAccUsername, createAccPassword);
-
-    if (userData) {
-      setUsernameExists(false);
-      localStorage.setItem("workoutID", userData._id);
-      routeToWorkoutLog();
-    } else {
-      setUsernameExists(true);
-    }
-  };
+  const routeToWorkoutLog = () => setTimeout(() => router.push("/workoutLog"), 3000);
 
   const persistLogin = async (user_id) => {
     const loginSuccess = await loginUser(dispatch, user_id);
@@ -79,13 +24,13 @@ const Home = () => {
   useEffect(() => {
     const user_id = localStorage.getItem("workoutID");
     // If local storage workoutID exists, login user
-    if (user_id) {
-      persistLogin(user_id);
-    }
+    if (user_id) persistLogin(user_id);
   }, []);
 
   return (
     <MainContainer>
+      <SeoHead title="Anagnostou Lift Club" />
+
       {user ? (
         <WelcomeMessage>
           <h1>Welcome {user.username}</h1>
@@ -93,93 +38,100 @@ const Home = () => {
         </WelcomeMessage>
       ) : (
         <>
-          <form action="post" onSubmit={handleLogin}>
-            <h3>Login</h3>
-            {invalidLoginCreds && <p>Email or Password was incorrect</p>}
-            <div>
-              <label htmlFor="loginUsername">Username: </label>
-              <input
-                type="text"
-                name="loginUsername"
-                id="loginUsername"
-                value={loginUsername}
-                onChange={handleLoginUsernameChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="loginPassword">Password: </label>
-              <input
-                type="text"
-                name="loginPassword"
-                id="loginPassword"
-                value={loginPassword}
-                onChange={handleLoginPasswordChange}
-              />
-            </div>
-            <button type="submit" onClick={handleLogin}>
-              Login
-            </button>
-          </form>
+          <Brand>
+            <span>
+              <img src="favicon.jpeg" alt="brand logo" />
+            </span>
 
-          <form action="post" onSubmit={handleLogin}>
-            <h3>Create Account</h3>
-            {usernameExists && <p>Username is already taken</p>}
+            <h1>ALC</h1>
+            <h4>Anagnostou Lift Club</h4>
+          </Brand>
 
-            <div>
-              <label htmlFor="createAccUsername">Username: </label>
-              <input
-                type="text"
-                name="createAccUsername"
-                id="createAccUsername"
-                value={createAccUsername}
-                onChange={handleCreateAccUsernameChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="createAccPassword">Password: </label>
-              <input
-                type="text"
-                name="createAccPassword"
-                id="createAccPassword"
-                value={createAccPassword}
-                onChange={handleCreateAccPasswordChange}
-              />
-            </div>
-            <button type="submit" onClick={handleCreateAccount}>
-              Submit
-            </button>
-          </form>
+          <Login routeToWorkoutLog={routeToWorkoutLog} />
         </>
       )}
     </MainContainer>
   );
-};
-
-export default Home;
+}
 
 const MainContainer = styled.div`
+  font-family: Tahoma, Helvetica;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 70vh;
 
-  form {
-    border: none;
-    border-radius: 5px;
-    box-shadow: 0 0 5px grey;
-    padding: 1rem;
-    margin: 1rem 0.5rem;
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  .loginContainer {
     text-align: center;
-    input {
-      margin: 0.5rem 0;
+
+    h3 {
+      font-weight: 100;
+      color: grey;
     }
-    button {
-      padding: 0.5rem;
+
+    form {
+      margin: 1rem 0.5rem;
+      input {
+        width: 100%;
+        margin: 0.5rem 0;
+        padding: 0.5rem 0 0.5rem 0.5rem;
+        font-size: 1.2rem;
+        border: none;
+        border-radius: 5px;
+        background: #e7e7e7;
+      }
+      button {
+        padding: 0.5rem;
+        width: 100%;
+        color: #5d78ee;
+        border: 1px solid #5d78ee;
+        background: inherit;
+        font-size: 1.2rem;
+        border-radius: 5px;
+      }
+    }
+
+    a {
+      font-style: italic;
+      color: grey;
     }
   }
 `;
 
 const WelcomeMessage = styled.div`
   text-align: center;
+`;
+
+const Brand = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 30%;
+  margin-bottom: 2rem;
+
+  span img {
+    max-height: 130px;
+    margin-bottom: -2rem;
+  }
+
+  h1 {
+    text-align: center;
+    font-weight: 100;
+    font-size: 3.5rem;
+    color: #5d78ee;
+  }
+  h4 {
+    font-size: 1rem;
+    text-align: center;
+    font-weight: 200;
+    color: grey;
+  }
 `;
