@@ -47,33 +47,37 @@ export default function UserWorkouts({
         />
       )}
 
-      <ul>
-        <h3>Your Workouts</h3>
-        {userMadeWorkouts.map((workout, i) => (
-          <li
-            key={i}
-            onClick={() => displaySavedWorkout(workout)}
-            className={customWorkout._id === workout._id ? "highlight" : ""}
-          >
-            {workout.name}
+      {Boolean(userMadeWorkouts.length) && (
+        <ul>
+          <h3>Your Workouts</h3>
+          {userMadeWorkouts.map((workout, i) => (
+            <li
+              key={i}
+              onClick={() => displaySavedWorkout(workout)}
+              className={customWorkout._id === workout._id ? "highlight" : ""}
+            >
+              {workout.name}
 
-            <button onClick={() => setWorkoutToDelete(workout)}>X</button>
-          </li>
-        ))}
-      </ul>
+              <button onClick={() => setWorkoutToDelete(workout)}>X</button>
+            </li>
+          ))}
+        </ul>
+      )}
 
-      <ul>
-        <h3>Saved Workouts</h3>
-        {userSavedWorkouts.map((workout, i) => (
-          <li
-            key={i}
-            onClick={() => displaySavedWorkout(workout)}
-            className={customWorkout._id === workout._id ? "highlight" : ""}
-          >
-            {workout.name}
-          </li>
-        ))}
-      </ul>
+      {Boolean(userSavedWorkouts.length) && (
+        <ul>
+          <h3>Saved Workouts</h3>
+          {userSavedWorkouts.map((workout, i) => (
+            <li
+              key={i}
+              onClick={() => displaySavedWorkout(workout)}
+              className={customWorkout._id === workout._id ? "highlight" : ""}
+            >
+              {workout.name}
+            </li>
+          ))}
+        </ul>
+      )}
     </UserWorkoutsContainer>
   );
 }
