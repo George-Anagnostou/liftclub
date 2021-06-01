@@ -1,24 +1,17 @@
 import { useState } from "react";
-import Link from "next/link";
 import styled from "styled-components";
 
 import { useStoreDispatch, authLogin } from "../../store";
 
-export default function Login({ routeToWorkoutLog }) {
+export default function Login({ routeToWorkoutLog, handleLinkClick }) {
   const dispatch = useStoreDispatch();
 
   const [loginUsername, setLoginUsername] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [invalidLoginCreds, setInvalidLoginCreds] = useState(false);
 
-  // Login handlers
-  const handleLoginUsernameChange = (e) => {
-    setLoginUsername(e.target.value);
-  };
-
-  const handleLoginPasswordChange = (e) => {
-    setLoginPassword(e.target.value);
-  };
+  const handleLoginUsernameChange = (e) => setLoginUsername(e.target.value);
+  const handleLoginPasswordChange = (e) => setLoginPassword(e.target.value);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -27,7 +20,6 @@ export default function Login({ routeToWorkoutLog }) {
 
     if (userData) {
       localStorage.setItem("workoutID", userData._id);
-      setInvalidLoginCreds(false);
       routeToWorkoutLog();
     } else {
       setInvalidLoginCreds(true);
@@ -35,10 +27,12 @@ export default function Login({ routeToWorkoutLog }) {
   };
 
   return (
-    <div className="loginContainer">
+    <LoginContainer>
       <form action="POST" onSubmit={handleLogin}>
         <h3>Welcome</h3>
+
         {invalidLoginCreds && <p>Email or Password was incorrect</p>}
+
         <input
           type="text"
           name="username"
@@ -62,10 +56,10 @@ export default function Login({ routeToWorkoutLog }) {
         <button type="submit">Login</button>
       </form>
 
-      <Link href={"/createAcc"}>
+      <a onClick={handleLinkClick}>
         <p>Create an account here</p>
-      </Link>
-    </div>
+      </a>
+    </LoginContainer>
   );
 }
 
@@ -96,11 +90,20 @@ const LoginContainer = styled.div`
       background: inherit;
       font-size: 1.2rem;
       border-radius: 5px;
+
+      &:active {
+        background: #94a4ee;
+      }
     }
   }
 
   a {
     font-style: italic;
     color: grey;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 `;

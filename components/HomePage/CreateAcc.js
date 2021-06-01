@@ -1,20 +1,14 @@
 import { useState } from "react";
 import styled from "styled-components";
-import Link from "next/link";
-import { useRouter } from "next/router";
 
-import { useStoreDispatch, createAccount } from "../store";
+import { useStoreDispatch, createAccount } from "../../store";
 
-export default function createAcc() {
-  const router = useRouter();
+export default function createAcc({ routeToWorkoutLog, handleLinkClick }) {
   const dispatch = useStoreDispatch();
 
   const [createAccUsername, setCreateAccUsername] = useState("");
   const [createAccPassword, setCreateAccPassword] = useState("");
   const [usernameExists, setUsernameExists] = useState(false);
-
-  // Route to workoutLog
-  const routeToWorkoutLog = () => setTimeout(() => router.push("/workoutLog"), 3000);
 
   // CREATE ACCOUNT handlers
   const handleCreateAccUsernameChange = (e) => {
@@ -68,18 +62,14 @@ export default function createAcc() {
         <button type="submit">Join</button>
       </form>
 
-      <Link href={"/"}>
+      <a onClick={handleLinkClick}>
         <p>Have an account? Login here</p>
-      </Link>
+      </a>
     </CreateContainer>
   );
 }
 
 const CreateContainer = styled.div`
-  font-family: Tahoma, Helvetica;
-
-  height: 70vh;
-
   text-align: center;
 
   h3 {
@@ -106,11 +96,20 @@ const CreateContainer = styled.div`
       background: inherit;
       font-size: 1.2rem;
       border-radius: 5px;
+
+      &:active {
+        background: #94a4ee;
+      }
     }
   }
 
   a {
     font-style: italic;
     color: grey;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 `;
