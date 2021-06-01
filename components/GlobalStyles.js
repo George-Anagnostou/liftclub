@@ -16,13 +16,17 @@ export const GlobalStyles = createGlobalStyle`
 
   a:link,
   a:visited,
-  a:hover,
   a:active {
     color: inherit;
   }
 
   a{
+    cursor: pointer;
     text-decoration: none;
+  }
+
+  button{
+    cursor: pointer;
   }
 
   ul {
