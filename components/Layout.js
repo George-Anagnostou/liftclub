@@ -1,13 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
-import styled from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 // Components
 import SeoHead from "./SeoHead";
 import NavBar from "./NavBar";
 // Context
 import { useStoreDispatch, loginUser } from "../store";
 // Theme
-import { ThemeProvider } from "styled-components";
 import { GlobalStyles } from "./GlobalStyles";
 import { lightTheme, darkTheme } from "./Themes/Themes";
 import { useThemeState, ThemeToggleContext } from "./Themes/useThemeState";
