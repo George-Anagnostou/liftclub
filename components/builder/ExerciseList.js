@@ -6,6 +6,8 @@ import CreateExerciseModal from "./CreateExerciseModal";
 // Context
 import { useStoreState } from "../../store";
 import ExerciseListItem from "./ExerciseListItem";
+// Components
+import LoadingSpinner from "../LoadingSpinner";
 
 // SWR fetcher
 const fetcher = (url) => fetch(url).then((r) => r.json());
@@ -67,7 +69,7 @@ export default function ExerciseList({ isExerciseInCustomWorkout, addExercise, r
 
       {showCreateExerciseModal && <CreateExerciseModal setShowModal={setShowCreateExerciseModal} />}
 
-      {data && (
+      {data ? (
         <ul>
           {displayedExercises.map((exercise) => (
             <ExerciseListItem
@@ -78,6 +80,8 @@ export default function ExerciseList({ isExerciseInCustomWorkout, addExercise, r
             />
           ))}
         </ul>
+      ) : (
+        <LoadingSpinner />
       )}
     </ExercisesContainer>
   );
@@ -94,6 +98,7 @@ const ExercisesContainer = styled.div`
 
     background: ${({ theme }) => theme.buttonLight};
     width: 100%;
+    margin-bottom: 0.5rem;
     border-radius: 5px;
 
     display: flex;

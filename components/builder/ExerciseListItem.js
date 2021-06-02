@@ -54,7 +54,7 @@ const Item = styled.li`
   box-shadow: 0 0 5px ${({ theme }) => theme.boxShadow};
   background: ${({ theme }) => theme.buttonLight};
   width: 100%;
-  margin: 0.5rem 1rem 0;
+  margin: 0 1rem 0.5rem;
   text-transform: capitalize;
   transition: all 0.2s ease;
 
