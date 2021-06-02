@@ -53,7 +53,7 @@ const Nav = styled.nav`
 const NavBurger = styled.div`
   background: ${({ theme }) => theme.buttonLight};
   border: 2px solid ${({ theme }) => theme.accentSoft};
-  box-shadow: 0 -2px 4px ${({ theme }) => theme.boxShadow};
+  box-shadow: 0 0 6px ${({ theme }) => theme.boxShadow};
 
   height: 100px;
   width: 80px;
