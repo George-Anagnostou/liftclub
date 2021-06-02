@@ -25,14 +25,14 @@ export const lightTheme = {
 };
 
 export const darkTheme = {
-  body: "#363537",
+  body: "#302f31",
   text: "#FAFAFA",
   textLight: "#c4c4c4",
   border: "#657d97",
   boxShadow: "#222222",
   background: "#999",
   buttonLight: "#4b4b4b",
-  buttonMed: "#363636",
+  buttonMed: "#3d3d3d",
   accent: "#4361ee",
   accentSoft: "#5d78ee",
 
