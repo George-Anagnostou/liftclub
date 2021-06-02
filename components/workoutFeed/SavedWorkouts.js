@@ -8,11 +8,11 @@ export default function SavedWorkouts({ workouts, removeFromSavedWorkouts }) {
   const downSwipe = useRef(null);
   const upSwipe = useRef(null);
 
-  useTouchSwipe(downSwipe, ["down", "up"], () => toggleShow(true));
-
   const [showDrawer, setShowDrawer] = useState(false);
 
   const toggleShow = () => setShowDrawer((prev) => !prev);
+
+  useTouchSwipe(downSwipe, ["down", "up"], () => toggleShow(true));
 
   return (
     <WorkoutList style={showDrawer ? { top: "0%" } : null}>
@@ -50,7 +50,7 @@ const WorkoutList = styled.ul`
 
   border-radius: 0px 0px 10px 10px;
   overflow: hidden;
-  transition: all 0.5s ease-in-out;
+  transition: all 0.35s ease-out;
 
   .drawer {
     height: calc(100% - 50px);
