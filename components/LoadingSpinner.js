@@ -5,6 +5,7 @@ export default function LoadingSpinner() {
 }
 
 const Loader = styled.div`
+  margin: auto;
   border: 3px solid #eee;
   border-radius: 50%;
   border-top: 3px solid #555;
