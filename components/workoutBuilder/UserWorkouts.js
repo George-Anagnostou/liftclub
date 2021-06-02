@@ -5,9 +5,10 @@ import { getUserMadeWorkouts, getWorkoutsFromIdArray } from "../../utils/api";
 // Context
 import { useStoreState } from "../../store";
 import DeleteWorkoutModal from "./DeleteWorkoutModal";
+import { addExerciseDataToWorkout } from "../../utils";
 
 export default function UserWorkouts({
-  displaySavedWorkout,
+  setCustomWorkout,
   customWorkout,
   workoutSavedSuccessfuly,
   clearCustomWorkout,
@@ -17,6 +18,11 @@ export default function UserWorkouts({
   const [userMadeWorkouts, setUserMadeWorkouts] = useState([]);
   const [userSavedWorkouts, setUserSavedWorkouts] = useState([]);
   const [workoutToDelete, setWorkoutToDelete] = useState(null);
+
+  const displaySavedWorkout = async (workout) => {
+    const mergedData = await addExerciseDataToWorkout(workout);
+    setCustomWorkout(mergedData);
+  };
 
   const loadUserMadeWorkouts = async () => {
     const madeWorkouts = await getUserMadeWorkouts(user._id);

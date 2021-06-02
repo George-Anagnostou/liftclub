@@ -6,19 +6,6 @@ import CreateExerciseModal from "./CreateExerciseModal";
 // Context
 import { useStoreState } from "../../store";
 
-const muscleGroups = [
-  "all",
-  "upper back",
-  "lower back",
-  "shoulder",
-  "upper arm",
-  "forearm",
-  "chest",
-  "hip",
-  "upper leg",
-  "lower leg",
-  "core",
-];
 // SWR fetcher
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
@@ -27,58 +14,55 @@ export default function ExerciseList({ isExerciseInCustomWorkout, addExercise, r
 
   const { user } = useStoreState();
 
+  const [searchTerm, setSearchTerm] = useState("");
   const [displayedExercises, setDisplayedExercises] = useState([]);
   const [showCreateExerciseModal, setShowCreateExerciseModal] = useState(false);
 
-  const filterExercisesBy = async ({ field, value }) => {
-    try {
-      let res;
-      // Don't use "field" and "value" for searching by "all"
-      value === "all"
-        ? (res = await fetch(`/api/exercises`))
-        : (res = await fetch(`/api/exercises?${field}=${value}`));
+  const handleSearchTermChange = (e) => setSearchTerm(e.target.value);
 
-      const queried = await res.json();
-      setDisplayedExercises(queried);
-    } catch (e) {
-      console.log(e);
+  const filterExercisesBy = (term) => {
+    if (term) {
+      const filtered = data.filter((exercise) => {
+        const { _id, ...no_id } = exercise;
+        return Object.values(no_id).some((val) => val.toLowerCase().includes(term.toLowerCase()));
+      });
+
+      console.log(term, filtered);
+
+      setDisplayedExercises(filtered);
+    } else {
+      const alphabetical = data.sort((a, b) => {
+        if (a.name.toLowerCase().charAt(0) < b.name.toLowerCase().charAt(0)) return -1;
+        if (a.name.toLowerCase().charAt(0) > b.name.toLowerCase().charAt(0)) return 1;
+        return 0;
+      });
+
+      setDisplayedExercises(alphabetical);
     }
   };
 
-  // Set exercises once SWR fetches the exercise data
   useEffect(() => {
-    if (data) setDisplayedExercises(data);
-  }, [data]);
-  // Used with SWR
+    if (data) filterExercisesBy(searchTerm);
+  }, [searchTerm, data]);
+
+  // Error catch for SWR
   if (error) return <h1>failed to load</h1>;
 
   return (
     <ExercisesContainer>
       <header>
-        <div>
-          <label htmlFor="muscleGroup">Muscle Group: </label>
-          <select
-            name="muscleGroup"
-            id="muscleGroup"
-            onChange={(e) => filterExercisesBy({ field: "muscleGroup", value: e.target.value })}
-          >
-            {muscleGroups.map((group) => (
-              <option key={group} value={group}>
-                {group}
-              </option>
-            ))}
-          </select>
-        </div>
+        <input
+          type="text"
+          name="searchTerm"
+          value={searchTerm}
+          onChange={handleSearchTermChange}
+          placeholder="Search"
+        />
 
-        {user?.isAdmin && <button onClick={() => setShowCreateExerciseModal(true)}>Add New</button>}
+        {user?.isAdmin && <button onClick={() => setShowCreateExerciseModal(true)}>Add</button>}
       </header>
 
-      {showCreateExerciseModal && (
-        <CreateExerciseModal
-          muscleGroups={muscleGroups}
-          setShowModal={setShowCreateExerciseModal}
-        />
-      )}
+      {showCreateExerciseModal && <CreateExerciseModal setShowModal={setShowCreateExerciseModal} />}
 
       {data && (
         <>
@@ -136,31 +120,26 @@ const ExercisesContainer = styled.ul`
     align-items: center;
     justify-content: center;
 
-    div {
-      flex: 1;
-      label {
-      }
-
-      select {
-        margin: 0.5rem 0;
-        padding: 0.5rem;
-        font-size: 1rem;
-        border: none;
-        border-radius: 5px;
-        color: ${({ theme }) => theme.text};
-        background: ${({ theme }) => theme.buttonMed};
-      }
+    input {
+      font-size: 1.2rem;
+      flex: 4;
+      margin: 0.5rem;
+      padding: 0.5rem;
+      border: none;
+      border-radius: 5px;
+      color: ${({ theme }) => theme.text};
+      background: ${({ theme }) => theme.buttonMed};
     }
 
     button {
+      font-size: 1.2rem;
+      flex: 1;
       background: ${({ theme }) => theme.buttonMed};
-      box-shadow: 0 2px 5px ${({ theme }) => theme.boxShadow};
       color: inherit;
       border: none;
-      border-radius: 3px;
-      margin: 0.5rem;
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
+      margin: 0.5rem 0.5rem 0.5rem 0;
+      border-radius: 5px;
+      padding: 0.5rem;
     }
   }
 

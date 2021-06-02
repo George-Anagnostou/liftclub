@@ -3,7 +3,21 @@ import { useState } from "react";
 
 import { createExercise } from "../../utils/api";
 
-export default function CreateExerciseModal({ muscleGroups, setShowModal }) {
+const muscleGroups = [
+  "all",
+  "upper back",
+  "lower back",
+  "shoulder",
+  "upper arm",
+  "forearm",
+  "chest",
+  "hip",
+  "upper leg",
+  "lower leg",
+  "core",
+];
+
+export default function CreateExerciseModal({ setShowModal }) {
   const [name, setName] = useState("");
   const [equipment, setEquipment] = useState("");
   const [muscleGroup, setMuscleGroup] = useState("");
