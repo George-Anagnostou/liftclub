@@ -216,7 +216,7 @@ const CustomWorkoutContainer = styled.ul`
       input[type="text"] {
         width: 100%;
         padding: 0.5rem;
-        font-size: 4.4vw;
+        font-size: 1.1rem;
         border: none;
         border-radius: 5px;
         color: ${({ theme }) => theme.text};
@@ -310,7 +310,6 @@ const Exercise = styled.li`
       margin-right: 0.5rem;
     }
     button {
-      cursor: pointer;
       border: 1px solid ${({ theme }) => theme.border};
       background: ${({ theme }) => theme.buttonMed};
       color: inherit;
@@ -325,7 +324,6 @@ const Exercise = styled.li`
     background: ${({ theme }) => theme.buttonMed};
     color: ${({ theme }) => theme.textLight};
     padding: 0.5rem 0;
-    cursor: pointer;
     border-radius: 0 0px 5px 5px;
   }
 `;

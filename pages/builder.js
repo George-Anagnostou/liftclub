@@ -2,13 +2,13 @@ import { useState } from "react";
 import styled from "styled-components";
 // Components
 import Layout from "../components/Layout";
-import ExerciseList from "../components/workoutBuilder/ExerciseList";
-import UserWorkouts from "../components/workoutBuilder/UserWorkouts";
-import CustomWorkout from "../components/workoutBuilder/CustomWorkout";
+import ExerciseList from "../components/builder/ExerciseList";
+import UserWorkouts from "../components/builder/UserWorkouts";
+import CustomWorkout from "../components/builder/CustomWorkout";
 // Context
 import { useStoreState } from "../store";
 
-export default function workoutBuilder() {
+export default function builder() {
   const { user } = useStoreState();
 
   const [showUserWorkouts, setShowUserWorkouts] = useState(false);
@@ -69,14 +69,13 @@ export default function workoutBuilder() {
           <p>Templates</p>
         </UserWorkoutToggle>
 
-        {showUserWorkouts && (
-          <UserWorkouts
-            workoutSavedSuccessfuly={workoutSavedSuccessfuly}
-            customWorkout={customWorkout}
-            clearCustomWorkout={clearCustomWorkout}
-            setCustomWorkout={setCustomWorkout}
-          />
-        )}
+        <UserWorkouts
+          workoutSavedSuccessfuly={workoutSavedSuccessfuly}
+          customWorkout={customWorkout}
+          clearCustomWorkout={clearCustomWorkout}
+          setCustomWorkout={setCustomWorkout}
+          showUserWorkouts={showUserWorkouts}
+        />
 
         <CustomWorkout
           user={user}
@@ -101,13 +100,12 @@ export default function workoutBuilder() {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  position: relative;
   padding: 0.5rem;
 `;
 
 const UserWorkoutToggle = styled.button`
   align-self: flex-end;
-  font-size: 4.4vw;
+  font-size: 1.1rem;
   color: inherit;
   margin: 0 0 0.5rem;
   border-radius: 5px;

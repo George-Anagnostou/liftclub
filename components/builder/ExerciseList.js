@@ -5,6 +5,7 @@ import useSWR from "swr";
 import CreateExerciseModal from "./CreateExerciseModal";
 // Context
 import { useStoreState } from "../../store";
+import ExerciseListItem from "./ExerciseListItem";
 
 // SWR fetcher
 const fetcher = (url) => fetch(url).then((r) => r.json());
@@ -68,28 +69,13 @@ export default function ExerciseList({ isExerciseInCustomWorkout, addExercise, r
 
       {data && (
         <ul>
-          {displayedExercises.map((each) => (
-            <li key={each._id} className={isExerciseInCustomWorkout(each._id) ? "highlight" : ""}>
-              <h3>{each.name}</h3>
-
-              <p>
-                <span>muscle group:</span> {each.muscleGroup}
-              </p>
-
-              <p>
-                <span>muscle worked:</span> {each.muscleWorked}
-              </p>
-
-              <p>
-                <span>equipment:</span> {each.equipment}
-              </p>
-
-              {isExerciseInCustomWorkout(each._id) ? (
-                <button onClick={() => removeExercise(each)}>Remove</button>
-              ) : (
-                <button onClick={() => addExercise(each)}>Add</button>
-              )}
-            </li>
+          {displayedExercises.map((exercise) => (
+            <ExerciseListItem
+              exercise={exercise}
+              isExerciseInCustomWorkout={isExerciseInCustomWorkout}
+              removeExercise={removeExercise}
+              addExercise={addExercise}
+            />
           ))}
         </ul>
       )}
@@ -100,9 +86,12 @@ export default function ExerciseList({ isExerciseInCustomWorkout, addExercise, r
 const ExercisesContainer = styled.div`
   border: none;
   width: 100%;
-  overflow-x: hidden;
 
   header {
+    position: sticky;
+    top: 0.5rem;
+    z-index: 99;
+
     background: ${({ theme }) => theme.buttonLight};
     width: 100%;
     border-radius: 5px;
@@ -112,7 +101,7 @@ const ExercisesContainer = styled.div`
     justify-content: center;
 
     input {
-      font-size: 4.4vw;
+      font-size: 1.1rem;
       flex: 1;
       margin: 0.5rem;
       padding: 0.5rem;
@@ -123,7 +112,7 @@ const ExercisesContainer = styled.div`
     }
 
     button {
-      font-size: 4.4vw;
+      font-size: 1.1rem;
       background: ${({ theme }) => theme.buttonMed};
       color: inherit;
       border: none;
@@ -141,58 +130,5 @@ const ExercisesContainer = styled.div`
     justify-content: center;
     align-items: flex-start;
     flex-wrap: wrap;
-
-    li {
-      border-radius: 5px;
-      box-shadow: 0 0 5px ${({ theme }) => theme.boxShadow};
-      background: ${({ theme }) => theme.buttonLight};
-      width: 100%;
-      flex: 1;
-      min-width: 140px;
-      max-width: 160px;
-      min-height: 200px;
-      margin: 1rem;
-      text-align: center;
-      text-transform: capitalize;
-
-      display: flex;
-      flex-direction: column;
-
-      h3 {
-        padding: 0.5rem;
-        word-wrap: break-word;
-      }
-
-      p {
-        flex: 1;
-        display: block;
-        width: 100%;
-        font-weight: 300;
-        margin-bottom: 0.75rem;
-        color: ${({ theme }) => theme.textLight};
-
-        span {
-          margin: 0.25rem 0;
-          font-weight: 100;
-          display: block;
-          font-size: 0.6rem;
-          width: 100%;
-        }
-      }
-
-      button {
-        border: 1px solid ${({ theme }) => theme.buttonLight};
-        background: ${({ theme }) => theme.buttonMed};
-        color: ${({ theme }) => theme.textLight};
-        padding: 0.5rem 0;
-        cursor: pointer;
-        border-radius: 0 0px 5px 5px;
-      }
-
-      &.highlight {
-        background: ${({ theme }) => theme.body};
-        color: ${({ theme }) => theme.textLight};
-      }
-    }
   }
 `;

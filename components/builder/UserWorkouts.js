@@ -12,6 +12,7 @@ export default function UserWorkouts({
   customWorkout,
   workoutSavedSuccessfuly,
   clearCustomWorkout,
+  showUserWorkouts,
 }) {
   const { user } = useStoreState();
 
@@ -46,63 +47,82 @@ export default function UserWorkouts({
   }, [user, workoutSavedSuccessfuly, workoutToDelete]);
 
   return (
-    <UserWorkoutsContainer>
-      {workoutToDelete && (
-        <DeleteWorkoutModal
-          workout={workoutToDelete}
-          setWorkoutToDelete={setWorkoutToDelete}
-          clearCustomWorkout={clearCustomWorkout}
-        />
+    <>
+      {showUserWorkouts && (
+        <UserWorkoutsContainer>
+          {workoutToDelete && (
+            <DeleteWorkoutModal
+              workout={workoutToDelete}
+              setWorkoutToDelete={setWorkoutToDelete}
+              clearCustomWorkout={clearCustomWorkout}
+            />
+          )}
+
+          <ul>
+            <h3>Created</h3>
+            {Boolean(userMadeWorkouts.length) ? (
+              userMadeWorkouts.map((workout, i) => (
+                <li
+                  key={i}
+                  onClick={() => displaySavedWorkout(workout)}
+                  className={customWorkout._id === workout._id ? "highlight" : ""}
+                >
+                  {workout.name}
+
+                  <button onClick={() => setWorkoutToDelete(workout)}>X</button>
+                </li>
+              ))
+            ) : (
+              <p>None</p>
+            )}
+          </ul>
+
+          <ul>
+            <h3>Saved</h3>
+            {Boolean(userSavedWorkouts.length) ? (
+              userSavedWorkouts.map((workout, i) => (
+                <li
+                  key={i}
+                  onClick={() => displaySavedWorkout(workout)}
+                  className={customWorkout._id === workout._id ? "highlight" : ""}
+                >
+                  {workout.name}
+                </li>
+              ))
+            ) : (
+              <p>None</p>
+            )}
+          </ul>
+        </UserWorkoutsContainer>
       )}
-
-      <ul>
-        <h3>Created</h3>
-        {Boolean(userMadeWorkouts.length) &&
-          userMadeWorkouts.map((workout, i) => (
-            <li
-              key={i}
-              onClick={() => displaySavedWorkout(workout)}
-              className={customWorkout._id === workout._id ? "highlight" : ""}
-            >
-              {workout.name}
-
-              <button onClick={() => setWorkoutToDelete(workout)}>X</button>
-            </li>
-          ))}
-      </ul>
-
-      <ul>
-        <h3>Saved</h3>
-        {Boolean(userSavedWorkouts.length) &&
-          userSavedWorkouts.map((workout, i) => (
-            <li
-              key={i}
-              onClick={() => displaySavedWorkout(workout)}
-              className={customWorkout._id === workout._id ? "highlight" : ""}
-            >
-              {workout.name}
-            </li>
-          ))}
-      </ul>
-    </UserWorkoutsContainer>
+    </>
   );
 }
 
 const UserWorkoutsContainer = styled.div`
-  text-align: center;
-  border: none;
   width: 100%;
   margin-bottom: 0.5rem;
 
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
 
-  /* position: absolute;
-  top: 100px; */
+  animation: 0.35s ease-out forwards slidein;
+
+  @keyframes slidein {
+    from {
+      margin-left: -100vw;
+    }
+
+    to {
+      margin-left: 0%;
+    }
+  }
 
   ul {
+    max-height: 300px;
+    overflow-x: hidden;
+    overflow-y: scroll;
     width: 100%;
     border-radius: 5px;
     padding-top: 0.5rem;
@@ -113,7 +133,7 @@ const UserWorkoutsContainer = styled.div`
     }
 
     h3 {
-      font-size: 4.4vw;
+      font-size: 1.1rem;
       color: ${({ theme }) => theme.textLight};
       font-weight: 100;
     }
@@ -146,6 +166,10 @@ const UserWorkoutsContainer = styled.div`
       &.highlight {
         background: ${({ theme }) => theme.accentSoft};
       }
+    }
+
+    p {
+      padding: 0.5rem;
     }
   }
 `;
