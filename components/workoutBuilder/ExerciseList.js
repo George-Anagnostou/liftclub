@@ -59,18 +59,17 @@ export default function ExerciseList({ isExerciseInCustomWorkout, addExercise, r
           placeholder="Search"
         />
 
+        <button onClick={() => setSearchTerm("")}>Clear</button>
+
         {user?.isAdmin && <button onClick={() => setShowCreateExerciseModal(true)}>Add</button>}
       </header>
 
       {showCreateExerciseModal && <CreateExerciseModal setShowModal={setShowCreateExerciseModal} />}
 
       {data && (
-        <>
+        <ul>
           {displayedExercises.map((each) => (
-            <li
-              key={each._id}
-              className={`exercise ${isExerciseInCustomWorkout(each._id) ? "highlight" : ""}`}
-            >
+            <li key={each._id} className={isExerciseInCustomWorkout(each._id) ? "highlight" : ""}>
               <h3>{each.name}</h3>
 
               <p>
@@ -92,24 +91,16 @@ export default function ExerciseList({ isExerciseInCustomWorkout, addExercise, r
               )}
             </li>
           ))}
-        </>
+        </ul>
       )}
     </ExercisesContainer>
   );
 }
 
-const ExercisesContainer = styled.ul`
+const ExercisesContainer = styled.div`
   border: none;
   width: 100%;
-  margin: 0.5rem 0;
   overflow-x: hidden;
-  position: relative;
-
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  flex-wrap: wrap;
 
   header {
     background: ${({ theme }) => theme.buttonLight};
@@ -121,8 +112,8 @@ const ExercisesContainer = styled.ul`
     justify-content: center;
 
     input {
-      font-size: 1.2rem;
-      flex: 4;
+      font-size: 4.4vw;
+      flex: 1;
       margin: 0.5rem;
       padding: 0.5rem;
       border: none;
@@ -132,8 +123,7 @@ const ExercisesContainer = styled.ul`
     }
 
     button {
-      font-size: 1.2rem;
-      flex: 1;
+      font-size: 4.4vw;
       background: ${({ theme }) => theme.buttonMed};
       color: inherit;
       border: none;
@@ -143,56 +133,66 @@ const ExercisesContainer = styled.ul`
     }
   }
 
-  .exercise {
-    border-radius: 5px;
-    box-shadow: 0 0 5px ${({ theme }) => theme.boxShadow};
-    background: ${({ theme }) => theme.buttonLight};
+  ul {
     width: 100%;
+
     flex: 1;
-    min-width: 140px;
-    max-width: 160px;
-    min-height: 200px;
-    margin: 1rem;
-    text-align: center;
-    text-transform: capitalize;
-
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
 
-    h3 {
-      padding: 0.5rem;
-      word-wrap: break-word;
-    }
-
-    p {
-      flex: 1;
-      display: block;
+    li {
+      border-radius: 5px;
+      box-shadow: 0 0 5px ${({ theme }) => theme.boxShadow};
+      background: ${({ theme }) => theme.buttonLight};
       width: 100%;
-      font-weight: 300;
-      margin-bottom: 0.75rem;
-      color: ${({ theme }) => theme.textLight};
+      flex: 1;
+      min-width: 140px;
+      max-width: 160px;
+      min-height: 200px;
+      margin: 1rem;
+      text-align: center;
+      text-transform: capitalize;
 
-      span {
-        margin: 0.25rem 0;
-        font-weight: 100;
-        display: block;
-        font-size: 0.6rem;
-        width: 100%;
+      display: flex;
+      flex-direction: column;
+
+      h3 {
+        padding: 0.5rem;
+        word-wrap: break-word;
       }
-    }
 
-    button {
-      border: 1px solid ${({ theme }) => theme.buttonLight};
-      background: ${({ theme }) => theme.buttonMed};
-      color: ${({ theme }) => theme.textLight};
-      padding: 0.5rem 0;
-      cursor: pointer;
-      border-radius: 0 0px 5px 5px;
-    }
+      p {
+        flex: 1;
+        display: block;
+        width: 100%;
+        font-weight: 300;
+        margin-bottom: 0.75rem;
+        color: ${({ theme }) => theme.textLight};
 
-    &.highlight {
-      background: ${({ theme }) => theme.body};
-      color: ${({ theme }) => theme.textLight};
+        span {
+          margin: 0.25rem 0;
+          font-weight: 100;
+          display: block;
+          font-size: 0.6rem;
+          width: 100%;
+        }
+      }
+
+      button {
+        border: 1px solid ${({ theme }) => theme.buttonLight};
+        background: ${({ theme }) => theme.buttonMed};
+        color: ${({ theme }) => theme.textLight};
+        padding: 0.5rem 0;
+        cursor: pointer;
+        border-radius: 0 0px 5px 5px;
+      }
+
+      &.highlight {
+        background: ${({ theme }) => theme.body};
+        color: ${({ theme }) => theme.textLight};
+      }
     }
   }
 `;

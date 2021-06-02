@@ -11,9 +11,10 @@ import { useStoreState } from "../store";
 export default function workoutBuilder() {
   const { user } = useStoreState();
 
+  const [showUserWorkouts, setShowUserWorkouts] = useState(false);
   const [workoutSavedSuccessfuly, setWorkoutSavedSuccessfuly] = useState(null);
   const [customWorkout, setCustomWorkout] = useState({
-    name: "New Workout",
+    name: "",
     creator_id: null,
     exercises: [],
     isPublic: false,
@@ -53,30 +54,39 @@ export default function workoutBuilder() {
 
   // Resets custom workout state
   const clearCustomWorkout = () => {
-    setCustomWorkout({ name: "New Workout", creator_id: null, exercises: [], isPublic: false });
+    setCustomWorkout({ name: "", creator_id: null, exercises: [], isPublic: false });
   };
+
+  const toggleUserWorkouts = () => setShowUserWorkouts(!showUserWorkouts);
 
   return (
     <Layout>
       <Container>
-        <section>
-          <CustomWorkout
-            user={user}
-            customWorkout={customWorkout}
-            setCustomWorkout={setCustomWorkout}
-            workoutSavedSuccessfuly={workoutSavedSuccessfuly}
-            clearCustomWorkout={clearCustomWorkout}
-            removeExercise={removeExercise}
-            setWorkoutSavedSuccessfuly={setWorkoutSavedSuccessfuly}
-          />
+        <UserWorkoutToggle
+          onClick={toggleUserWorkouts}
+          className={showUserWorkouts ? "pressed" : ""}
+        >
+          <p>Templates</p>
+        </UserWorkoutToggle>
 
+        {showUserWorkouts && (
           <UserWorkouts
             workoutSavedSuccessfuly={workoutSavedSuccessfuly}
             customWorkout={customWorkout}
             clearCustomWorkout={clearCustomWorkout}
             setCustomWorkout={setCustomWorkout}
           />
-        </section>
+        )}
+
+        <CustomWorkout
+          user={user}
+          customWorkout={customWorkout}
+          setCustomWorkout={setCustomWorkout}
+          workoutSavedSuccessfuly={workoutSavedSuccessfuly}
+          clearCustomWorkout={clearCustomWorkout}
+          removeExercise={removeExercise}
+          setWorkoutSavedSuccessfuly={setWorkoutSavedSuccessfuly}
+        />
 
         <ExerciseList
           isExerciseInCustomWorkout={isExerciseInCustomWorkout}
@@ -91,21 +101,23 @@ export default function workoutBuilder() {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-
   position: relative;
-  margin-top: 0.5rem;
   padding: 0.5rem;
+`;
 
-  section {
-    display: flex;
-  }
+const UserWorkoutToggle = styled.button`
+  align-self: flex-end;
+  font-size: 4.4vw;
+  color: inherit;
+  margin: 0 0 0.5rem;
+  border-radius: 5px;
+  padding: 0.5rem;
+  transition: all 0.2s ease;
 
-  @media (max-width: 768px) {
-    flex-direction: column;
-    height: fit-content;
+  border: 2px solid ${({ theme }) => theme.accent};
+  background: ${({ theme }) => theme.accent};
 
-    section {
-      flex-direction: column;
-    }
+  &.pressed {
+    background: ${({ theme }) => theme.accentSoft};
   }
 `;

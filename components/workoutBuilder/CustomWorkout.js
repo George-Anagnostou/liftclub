@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
 //Utils
 import { postNewWorkout, updateExistingWorkout } from "../../utils/api";
@@ -79,6 +79,7 @@ export default function CustomWorkout({
     } else {
       // User is saving their version of a saved workout or building a new workout
 
+      composedWorkout.name = "New Workout";
       // Current user set to creator
       composedWorkout.creator_id = user._id;
       // Only allow admins to save public workouts
@@ -107,7 +108,7 @@ export default function CustomWorkout({
   return (
     <CustomWorkoutContainer>
       <header>
-        <div className="input">
+        <div className="wrapper">
           <input
             type="text"
             name="workoutName"
@@ -143,7 +144,7 @@ export default function CustomWorkout({
       </header>
 
       {customWorkout.exercises.map(({ exercise, sets }, i) => (
-        <li key={exercise._id} className="exercise">
+        <Exercise key={exercise._id}>
           <p className="exTitle">
             <span>{i + 1}.</span> {exercise.name}
           </p>
@@ -170,8 +171,17 @@ export default function CustomWorkout({
           <button className="removeBtn" onClick={() => removeExercise(exercise)}>
             Remove
           </button>
-        </li>
+        </Exercise>
       ))}
+
+      {!Boolean(customWorkout.exercises.length) && (
+        <FallbackText>
+          <p>
+            Add an exercise below to <br />
+            begin creating a workout.
+          </p>
+        </FallbackText>
+      )}
     </CustomWorkoutContainer>
   );
 }
@@ -195,7 +205,7 @@ const CustomWorkoutContainer = styled.ul`
     width: 100%;
     padding: 0.5rem;
 
-    .input {
+    .wrapper {
       border-radius: 5px;
       width: 100%;
       background: ${({ theme }) => theme.buttonMed};
@@ -206,7 +216,7 @@ const CustomWorkoutContainer = styled.ul`
       input[type="text"] {
         width: 100%;
         padding: 0.5rem;
-        font-size: 1.2rem;
+        font-size: 4.4vw;
         border: none;
         border-radius: 5px;
         color: ${({ theme }) => theme.text};
@@ -217,7 +227,7 @@ const CustomWorkoutContainer = styled.ul`
     .controls {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: space-evenly;
       width: 100%;
 
       button {
@@ -252,70 +262,80 @@ const CustomWorkoutContainer = styled.ul`
       }
     }
   }
+`;
 
-  .exercise {
-    border-radius: 5px;
-    box-shadow: 0 0 5px ${({ theme }) => theme.boxShadow};
-    background: ${({ theme }) => theme.buttonLight};
-    width: 100%;
+const Exercise = styled.li`
+  border-radius: 5px;
+  box-shadow: 0 0 5px ${({ theme }) => theme.boxShadow};
+  background: ${({ theme }) => theme.buttonLight};
+  width: 100%;
+  flex: 1;
+  min-width: 150px;
+  max-width: 160px;
+  margin: 0.5rem;
+  text-align: center;
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  .exTitle {
+    padding: 0.5rem;
+    text-transform: capitalize;
+  }
+  div {
+    margin: 0.2rem 0;
     flex: 1;
-    min-width: 150px;
-    max-width: 160px;
-    margin: 0.5rem;
-    text-align: center;
-    position: relative;
 
-    display: flex;
-    flex-direction: column;
-    .exTitle {
-      padding: 0.5rem;
-      text-transform: capitalize;
-    }
-    div {
-      margin: 0.2rem 0;
-      flex: 1;
-
-      input {
-        width: 3rem;
-        font-size: 1.25rem;
-        padding: 0.25rem 0;
-        margin: 0 0.25rem;
-        background: ${({ theme }) => theme.buttonMed};
-        color: inherit;
-        text-align: center;
-        border-radius: 3px;
-        border: 1px solid ${({ theme }) => theme.border};
-      }
-      span {
-        font-weight: 300;
-        font-size: 0.7rem;
-      }
-    }
-    .setControl {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      p {
-        margin-right: 0.5rem;
-      }
-      button {
-        cursor: pointer;
-        border: 1px solid ${({ theme }) => theme.border};
-        background: ${({ theme }) => theme.buttonMed};
-        color: inherit;
-        border-radius: 3px;
-        margin: 0.15rem;
-        height: 2rem;
-        width: 2rem;
-      }
-    }
-    .removeBtn {
-      border: 1px solid ${({ theme }) => theme.buttonLight};
+    input {
+      width: 3rem;
+      font-size: 1.25rem;
+      padding: 0.25rem 0;
+      margin: 0 0.25rem;
       background: ${({ theme }) => theme.buttonMed};
-      color: ${({ theme }) => theme.textLight};
-      padding: 0.5rem 0;
-      cursor: pointer;
-      border-radius: 0 0px 5px 5px;
+      color: inherit;
+      text-align: center;
+      border-radius: 3px;
+      border: 1px solid ${({ theme }) => theme.border};
+    }
+    span {
+      font-weight: 300;
+      font-size: 0.7rem;
     }
   }
+  .setControl {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    p {
+      margin-right: 0.5rem;
+    }
+    button {
+      cursor: pointer;
+      border: 1px solid ${({ theme }) => theme.border};
+      background: ${({ theme }) => theme.buttonMed};
+      color: inherit;
+      border-radius: 3px;
+      margin: 0.15rem;
+      height: 2rem;
+      width: 2rem;
+    }
+  }
+  .removeBtn {
+    border: 1px solid ${({ theme }) => theme.buttonLight};
+    background: ${({ theme }) => theme.buttonMed};
+    color: ${({ theme }) => theme.textLight};
+    padding: 0.5rem 0;
+    cursor: pointer;
+    border-radius: 0 0px 5px 5px;
+  }
+`;
+
+const FallbackText = styled.div`
+  background: ${({ theme }) => theme.buttonMed};
+  color: ${({ theme }) => theme.textLight};
+
+  width: 100%;
+  border-radius: 5px;
+  margin: 1rem;
+  padding: 1rem;
 `;

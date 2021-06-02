@@ -30,8 +30,10 @@ export default function UserWorkouts({
   };
 
   const loadUserSavedWorkouts = async () => {
-    const savedWorkouts = await getWorkoutsFromIdArray(user.savedWorkouts);
-    setUserSavedWorkouts(savedWorkouts);
+    const workouts = await getWorkoutsFromIdArray(user.savedWorkouts);
+    // Sort the array based on the order of the user.savedWorkouts
+    workouts.sort((a, b) => user.savedWorkouts.indexOf(a._id) - user.savedWorkouts.indexOf(b._id));
+    setUserSavedWorkouts(workouts);
   };
 
   useEffect(() => {
@@ -53,10 +55,10 @@ export default function UserWorkouts({
         />
       )}
 
-      {Boolean(userMadeWorkouts.length) && (
-        <ul>
-          <h3>Your Workouts</h3>
-          {userMadeWorkouts.map((workout, i) => (
+      <ul>
+        <h3>Created</h3>
+        {Boolean(userMadeWorkouts.length) &&
+          userMadeWorkouts.map((workout, i) => (
             <li
               key={i}
               onClick={() => displaySavedWorkout(workout)}
@@ -67,13 +69,12 @@ export default function UserWorkouts({
               <button onClick={() => setWorkoutToDelete(workout)}>X</button>
             </li>
           ))}
-        </ul>
-      )}
+      </ul>
 
-      {Boolean(userSavedWorkouts.length) && (
-        <ul>
-          <h3>Saved Workouts</h3>
-          {userSavedWorkouts.map((workout, i) => (
+      <ul>
+        <h3>Saved</h3>
+        {Boolean(userSavedWorkouts.length) &&
+          userSavedWorkouts.map((workout, i) => (
             <li
               key={i}
               onClick={() => displaySavedWorkout(workout)}
@@ -82,8 +83,7 @@ export default function UserWorkouts({
               {workout.name}
             </li>
           ))}
-        </ul>
-      )}
+      </ul>
     </UserWorkoutsContainer>
   );
 }
@@ -92,14 +92,31 @@ const UserWorkoutsContainer = styled.div`
   text-align: center;
   border: none;
   width: 100%;
-  margin: 0.5rem 0;
+  margin-bottom: 0.5rem;
 
   display: flex;
   justify-content: flex-start;
   align-items: center;
   flex-direction: row;
+
+  /* position: absolute;
+  top: 100px; */
+
   ul {
     width: 100%;
+    border-radius: 5px;
+    padding-top: 0.5rem;
+    background: ${({ theme }) => theme.buttonMed};
+
+    &:first-child {
+      margin-right: 0.5rem;
+    }
+
+    h3 {
+      font-size: 4.4vw;
+      color: ${({ theme }) => theme.textLight};
+      font-weight: 100;
+    }
 
     li {
       background: ${({ theme }) => theme.buttonLight};
