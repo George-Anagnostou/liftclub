@@ -33,7 +33,19 @@ const ChartContainer = styled.div`
   height: 200px;
   width: 100vw;
 
+  line,
+  text {
+    fill: ${({ theme }) => theme.textLight} !important;
+    stroke: ${({ theme }) => theme.textLight} !important;
+  }
+
   .recharts-default-tooltip {
     background: ${({ theme }) => theme.body} !important;
+    border-radius: 5px;
+    border: 1px solid ${({ theme }) => theme.border} !important;
+
+    * {
+      color: ${({ theme }) => theme.text} !important;
+    }
   }
 `;

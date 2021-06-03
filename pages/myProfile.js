@@ -133,7 +133,7 @@ export default function myProfile() {
   return (
     <Layout>
       <ProfileContainer>
-        <h2>Your Profile</h2>
+        <h2>Profile</h2>
         {user ? (
           <>
             <Heading>
@@ -156,22 +156,24 @@ export default function myProfile() {
 
             <WeightInput user={user} />
 
-            <h3>Track your progress</h3>
-            <SelectContainer>
-              <WorkoutSelect
-                workoutOptions={workoutOptions}
-                handleWorkoutOptionChange={handleWorkoutOptionChange}
-              />
+            <section>
+              <h3>Track your progress</h3>
+              <SelectContainer>
+                <WorkoutSelect
+                  workoutOptions={workoutOptions}
+                  handleWorkoutOptionChange={handleWorkoutOptionChange}
+                />
 
-              <ExerciseSelect
-                exerciseOptions={exerciseOptions}
-                handleExerciseOptionChange={handleExerciseOptionChange}
-              />
-            </SelectContainer>
+                <ExerciseSelect
+                  exerciseOptions={exerciseOptions}
+                  handleExerciseOptionChange={handleExerciseOptionChange}
+                />
+              </SelectContainer>
 
-            <StatButtons setStatOption={setStatOption} statOption={statOption} />
+              <StatButtons setStatOption={setStatOption} statOption={statOption} />
 
-            <Chart data={chartData} />
+              <Chart data={chartData} />
+            </section>
           </>
         ) : (
           <LoadingSpinner />
@@ -192,6 +194,13 @@ const ProfileContainer = styled.div`
   h2 {
     margin: 0.5rem 0;
     color: ${({ theme }) => theme.textLight};
+  }
+
+  section {
+    width: 100%;
+    border-radius: 5px;
+    background: ${({ theme }) => theme.buttonLight};
+    margin: 0 1rem;
   }
 `;
 

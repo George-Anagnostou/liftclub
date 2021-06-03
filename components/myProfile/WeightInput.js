@@ -114,12 +114,13 @@ const WeightContainer = styled.div`
       text-align: center;
       width: 4rem;
       margin: 0.5rem;
-      padding: 0.5rem;
+      padding: 0.2rem 0.5rem;
+      font-size: 1.35rem;
       border: none;
       border-radius: 5px;
       color: ${({ theme }) => theme.text};
       border: 1px solid ${({ theme }) => theme.border};
-      background: ${({ theme }) => theme.buttonMed};
+      background: inherit;
     }
 
     button {
@@ -127,8 +128,8 @@ const WeightContainer = styled.div`
       padding: 0.5rem 1rem;
       border-radius: 5px;
       color: ${({ theme }) => theme.text};
-      border: 1px solid ${({ theme }) => theme.border};
-      background: ${({ theme }) => theme.body};
+      border: 1px solid ${({ theme }) => theme.accentSoft};
+      background: ${({ theme }) => theme.accent};
     }
   }
 

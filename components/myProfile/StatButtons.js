@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
 const options = [
-  { value: "avgWeight", text: "Average Weight" },
-  { value: "totalWeight", text: "Total Weight" },
-  { value: "maxWeight", text: "Max Weight" },
+  { value: "avgWeight", text: "Average" },
+  { value: "totalWeight", text: "Total" },
+  { value: "maxWeight", text: "Max" },
 ];
 
 export default function StatButtons({ setStatOption, statOption }) {
@@ -33,15 +33,16 @@ const Buttons = styled.div`
   button {
     flex: 1;
     font-size: 1rem;
-    margin: 0.35rem;
-    padding: 0.2rem 0.5rem;
+    margin: 0 0.5rem 0.5rem;
+    padding: 0.5rem;
     border-radius: 5px;
     color: ${({ theme }) => theme.text};
+    background: ${({ theme }) => theme.buttonMed};
     border: 1px solid ${({ theme }) => theme.border};
-    background: ${({ theme }) => theme.body};
 
     &.highlight {
       background: ${({ theme }) => theme.accentSoft};
+      border: 1px solid ${({ theme }) => theme.accent};
     }
   }
 `;

@@ -16,7 +16,7 @@ export default function ExerciseSelect({ handleExerciseOptionChange, exerciseOpt
 const Select = styled.select`
   width: 90%;
   text-transform: capitalize;
-  margin: 0.5rem 0;
+  margin: 0.25rem 0;
   padding: 0.5rem;
   font-size: 1rem;
   border: none;
