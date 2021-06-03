@@ -57,16 +57,16 @@ export default function PublicWorkoutTile({
         {loading && <LoadingSpinner />}
 
         <div>
-          <button onClick={toggleWorkoutInfo}>{showWorkoutInfo ? "close" : "view"} info</button>
           {workoutIsSaved(workout) ? (
             <button className="remove" onClick={() => removeFromSavedWorkouts(workout)}>
-              saved
+              remove
             </button>
           ) : (
             <button className="add" onClick={() => addToSavedWorkouts(workout)}>
               save
             </button>
           )}
+          <button onClick={toggleWorkoutInfo}>{showWorkoutInfo ? "close" : "view"} info</button>
         </div>
       </div>
 
@@ -136,7 +136,7 @@ const WorkoutTile = styled.li`
       background: ${({ theme }) => theme.accentSoft};
     }
     .add {
-      background: ${({ theme }) => theme.accentSoft};
+      background: ${({ theme }) => theme.accent};
     }
   }
 
