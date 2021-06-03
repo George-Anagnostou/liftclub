@@ -3,7 +3,7 @@ import styled from "styled-components";
 export default function WorkoutSelect({ handleWorkoutOptionChange, workoutOptions }) {
   return (
     <Select name="workoutOptions" onChange={handleWorkoutOptionChange} defaultValue="none">
-      <option value="none">Select One</option>
+      <option value="none">1. Select Workout</option>
       {workoutOptions.map((workout) => (
         <option value={workout._id} key={workout._id}>
           {workout.name}

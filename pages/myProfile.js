@@ -157,7 +157,7 @@ export default function myProfile() {
             <WeightInput user={user} />
 
             <section>
-              <h3>Track your progress</h3>
+              <h3>Progression</h3>
               <SelectContainer>
                 <WorkoutSelect
                   workoutOptions={workoutOptions}
@@ -201,6 +201,7 @@ const ProfileContainer = styled.div`
     border-radius: 5px;
     background: ${({ theme }) => theme.buttonLight};
     margin: 0 1rem;
+    padding: 0.5rem 0;
   }
 `;
 
