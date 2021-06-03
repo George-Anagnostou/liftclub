@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export default function LoadingSpinner() {
-  return <Loader />;
+  return <Loader className="loadingSpinner" />;
 }
 
 const Loader = styled.div`
