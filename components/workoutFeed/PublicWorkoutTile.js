@@ -46,7 +46,7 @@ export default function PublicWorkoutTile({
   return (
     <WorkoutTile>
       <div className="tile-heading">
-        <div>
+        <div className="name">
           <h3>{workout.name}</h3>
 
           <p>
@@ -54,9 +54,9 @@ export default function PublicWorkoutTile({
           </p>
         </div>
 
-        {loading && <LoadingSpinner />}
+        <div className="buttons">
+          {loading && <LoadingSpinner />}
 
-        <div>
           {workoutIsSaved(workout) ? (
             <button className="remove" onClick={() => removeFromSavedWorkouts(workout)}>
               remove
@@ -66,7 +66,7 @@ export default function PublicWorkoutTile({
               save
             </button>
           )}
-          <button onClick={toggleWorkoutInfo}>{showWorkoutInfo ? "close" : "view"} info</button>
+          <button onClick={toggleWorkoutInfo}>{showWorkoutInfo ? "close" : "view"}</button>
         </div>
       </div>
 
@@ -109,8 +109,9 @@ const WorkoutTile = styled.li`
     justify-content: space-between;
     align-items: center;
 
-    div {
+    .name {
       text-align: left;
+      flex: 3;
       h3 {
         text-transform: capitalize;
       }
@@ -120,23 +121,34 @@ const WorkoutTile = styled.li`
         color: grey;
       }
     }
-
-    button {
-      cursor: pointer;
-      border-radius: 5px;
-      border: none;
-      padding: 0.5rem;
-      margin-left: 0.25rem;
-      min-width: 40px;
-      background: ${({ theme }) => theme.buttonLight};
-      color: ${({ theme }) => theme.textLight};
+    .loadingSpinner {
+      margin-right: 0;
     }
+    .buttons {
+      width: 155px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
 
-    .remove {
-      background: ${({ theme }) => theme.accentSoft};
-    }
-    .add {
-      background: ${({ theme }) => theme.accent};
+      button {
+        cursor: pointer;
+        border-radius: 5px;
+        border: none;
+        padding: 0.5rem;
+        margin-left: 0.5rem;
+        min-width: 40px;
+        background: ${({ theme }) => theme.buttonLight};
+        color: ${({ theme }) => theme.text};
+      }
+
+      .remove {
+        color: ${({ theme }) => theme.textLight};
+        background: ${({ theme }) => theme.accentSoft};
+      }
+      .add {
+        color: ${({ theme }) => theme.text};
+        background: ${({ theme }) => theme.accent};
+      }
     }
   }
 
