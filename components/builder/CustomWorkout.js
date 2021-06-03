@@ -79,7 +79,7 @@ export default function CustomWorkout({
     } else {
       // User is saving their version of a saved workout or building a new workout
 
-      composedWorkout.name = "New Workout";
+      composedWorkout.name = composedWorkout.name || "New Workout";
       // Current user set to creator
       composedWorkout.creator_id = user._id;
       // Only allow admins to save public workouts
