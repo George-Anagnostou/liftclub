@@ -24,7 +24,7 @@ export default function DeleteWorkoutModal({ workout, setWorkoutToDelete, clearC
         </button>
 
         <h3>
-          Are you sure you want to delete <span>{workout.name}</span>?
+          Are you sure you want to delete "<span>{workout.name}</span>"?
         </h3>
 
         <div>
