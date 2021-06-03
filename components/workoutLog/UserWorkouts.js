@@ -33,69 +33,77 @@ export default function UserWorkouts({ displayWorkout }) {
   return (
     <UserWorkoutsContainer>
       {Boolean(userSavedWorkouts.length) && (
-        <div>
-          <h3>Saved Workouts</h3>
-          <ul>
-            {userSavedWorkouts.map((workout) => (
-              <li key={workout._id} onClick={() => displayWorkout(workout)}>
-                <h4>{workout.name}</h4>
-                <p>{workout.exercises.length} exercises</p>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <ul>
+          <h3>Saved</h3>
+
+          {userSavedWorkouts.map((workout) => (
+            <li key={workout._id} onClick={() => displayWorkout(workout)}>
+              <h4>{workout.name}</h4>
+              <p>{workout.exercises.length} exercises</p>
+            </li>
+          ))}
+        </ul>
       )}
 
       {Boolean(userMadeWorkouts.length) && (
-        <div>
-          <h3>Your Workouts</h3>
-          <ul>
-            {userMadeWorkouts.map((workout) => (
-              <li key={workout._id} onClick={() => displayWorkout(workout)}>
-                <h4>{workout.name}</h4>
-                <p>{workout.exercises.length} exercises</p>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <ul>
+          <h3>Created</h3>
+
+          {userMadeWorkouts.map((workout) => (
+            <li key={workout._id} onClick={() => displayWorkout(workout)}>
+              <h4>{workout.name}</h4>
+              <p>
+                {workout.exercises.length} {workout.exercises.length > 1 ? "exercises" : "exercise"}
+              </p>
+            </li>
+          ))}
+        </ul>
       )}
     </UserWorkoutsContainer>
   );
 }
 
 const UserWorkoutsContainer = styled.div`
-  width: 98%;
-  border: none;
-  border-radius: 5px;
-  text-align: center;
-  margin-bottom: 2rem;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding: 0 0.5rem;
+
   display: flex;
   justify-content: center;
-  div {
-    flex: 1;
-    ul {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
+  align-items: flex-start;
 
-      li {
-        word-wrap: break-word;
-        width: 100%;
-        cursor: pointer;
-        margin: 0.5rem;
-        padding: 0.5rem;
-        border-radius: 5px;
+  ul {
+    max-height: 400px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    width: 100%;
+    border-radius: 5px;
+    padding-top: 0.5rem;
+    background: ${({ theme }) => theme.buttonMed};
 
-        color: ${({ theme }) => theme.text};
-        background: ${({ theme }) => theme.buttonLight};
-        border: 1px solid ${({ theme }) => theme.border};
-        box-shadow: 0 2px 5px ${({ theme }) => theme.boxShadow};
+    &:first-child {
+      margin-right: 0.5rem;
+    }
 
-        h4 {
-          text-transform: capitalize;
-          padding-bottom: 0.5rem;
-        }
+    h3 {
+      font-size: 1.1rem;
+      color: ${({ theme }) => theme.textLight};
+      font-weight: 100;
+    }
+
+    li {
+      background: ${({ theme }) => theme.buttonLight};
+      box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
+      border-radius: 5px;
+
+      cursor: pointer;
+      padding: 0.5rem;
+      margin: 1rem;
+      text-align: center;
+
+      h4 {
+        text-transform: capitalize;
+        padding-bottom: 0.5rem;
       }
     }
   }

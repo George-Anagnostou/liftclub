@@ -330,6 +330,7 @@ const DateBar = styled.ul`
       }
       &.notSelected {
         transform: scale(0.85);
+        transform-origin: bottom;
         background: ${({ theme }) => theme.buttonMed};
       }
       &.hasDayData {
