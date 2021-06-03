@@ -52,7 +52,7 @@ const Nav = styled.nav`
 
 const NavBurger = styled.div`
   background: ${({ theme }) => theme.buttonLight};
-  border: 2px solid ${({ theme }) => theme.accentSoft};
+  border: 2px solid ${({ theme }) => theme.border};
   box-shadow: 0 0 6px ${({ theme }) => theme.boxShadow};
 
   height: 100px;
@@ -116,7 +116,7 @@ const NavIcons = styled.ul`
 
     fill: ${({ theme }) => theme.text};
     background: ${({ theme }) => theme.buttonLight};
-    border: 2px solid ${({ theme }) => theme.accentSoft};
+    border: 2px solid ${({ theme }) => theme.border};
     box-shadow: 0 2px 6px ${({ theme }) => theme.boxShadow};
 
     display: flex;
