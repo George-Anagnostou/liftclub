@@ -111,20 +111,22 @@ const WorkoutList = styled.ul`
   align-items: center;
   flex-direction: column;
   flex-wrap: wrap;
+  padding: 0 0.5rem;
 
   .exercise {
+    width: 100%;
     border-radius: 10px;
     padding: 0.5rem 0;
-    max-width: 100%;
-
     margin: 0.75rem 0;
     text-align: center;
+    background: ${({ theme }) => theme.buttonMed};
 
     h3 {
       text-transform: uppercase;
     }
 
     ul {
+      margin: auto;
       width: fit-content;
       display: flex;
       flex-wrap: wrap;

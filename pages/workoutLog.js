@@ -305,8 +305,6 @@ const DateBar = styled.ul`
     text-align: center;
 
     div {
-      box-shadow: none;
-      border: 1px solid #ccc;
       border-radius: 5px;
       padding: 0.5rem;
       transition: all 0.2s ease-in-out;

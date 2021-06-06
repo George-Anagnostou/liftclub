@@ -1,5 +1,4 @@
 import { useEffect, useState, createContext } from "react";
-import { lightTheme, darkTheme } from "./Themes";
 
 export const useThemeState = () => {
   const [themeMode, setThemeMode] = useState("light");
@@ -25,4 +24,4 @@ export const useThemeState = () => {
   return { themeMode, themeToggler };
 };
 
-export const ThemeToggleContext = createContext({});
+export const ThemeToggleContext = createContext();

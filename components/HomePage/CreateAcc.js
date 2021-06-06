@@ -11,13 +11,9 @@ export default function createAcc({ routeToWorkoutLog, handleLinkClick }) {
   const [usernameExists, setUsernameExists] = useState(false);
 
   // CREATE ACCOUNT handlers
-  const handleCreateAccUsernameChange = (e) => {
-    setCreateAccUsername(e.target.value);
-  };
-  const handleCreateAccPasswordChange = (e) => {
-    setCreateAccPassword(e.target.value);
-  };
-
+  const handleCreateAccUsernameChange = (e) => setCreateAccUsername(e.target.value);
+  const handleCreateAccPasswordChange = (e) => setCreateAccPassword(e.target.value);
+  
   const handleCreateAccount = async (e) => {
     e.preventDefault();
 
