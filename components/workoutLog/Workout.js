@@ -119,7 +119,7 @@ const WorkoutList = styled.ul`
     padding: 0.5rem 0;
     margin: 0.75rem 0;
     text-align: center;
-    background: ${({ theme }) => theme.buttonMed};
+    background: ${({ theme }) => theme.buttonLight};
 
     h3 {
       text-transform: uppercase;
@@ -168,7 +168,7 @@ const WorkoutList = styled.ul`
           input {
             text-align: center;
             box-shadow: none;
-            border: 1px solid ${({ theme }) => theme.border};
+            border: 1px solid ${({ theme }) => theme.shades[4]};
             border-radius: 5px;
             width: 5rem;
             font-size: 2rem;

@@ -73,6 +73,7 @@ export default function ExerciseList({ isExerciseInCustomWorkout, addExercise, r
         <ul>
           {displayedExercises.map((exercise) => (
             <ExerciseListItem
+              key={exercise._id}
               exercise={exercise}
               isExerciseInCustomWorkout={isExerciseInCustomWorkout}
               removeExercise={removeExercise}
@@ -106,7 +107,7 @@ const ExercisesContainer = styled.div`
     justify-content: center;
 
     input {
-      font-size: 1.1rem;
+      font-size: 1rem;
       flex: 1;
       margin: 0.5rem;
       padding: 0.5rem;
@@ -117,7 +118,7 @@ const ExercisesContainer = styled.div`
     }
 
     button {
-      font-size: 1.1rem;
+      font-size: 1rem;
       background: ${({ theme }) => theme.buttonMed};
       color: inherit;
       border: none;
