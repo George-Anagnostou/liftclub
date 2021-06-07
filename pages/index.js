@@ -4,13 +4,13 @@ import styled, { ThemeProvider } from "styled-components";
 // Context
 import { useStoreState, useStoreDispatch, loginUser } from "../store";
 // Components
-import Login from "../components/HomePage/Login";
-import SeoHead from "../components/SeoHead";
 import Branding from "../components/HomePage/Branding";
+import Login from "../components/HomePage/Login";
+import CreateAcc from "../components/HomePage/CreateAcc";
+import SeoHead from "../components/SeoHead";
 import { GlobalStyles } from "../components/GlobalStyles";
 import { useThemeState } from "../components/Themes/useThemeState";
 import { darkTheme, lightTheme } from "../components/Themes/Themes";
-import CreateAcc from "../components/HomePage/CreateAcc";
 
 export default function Home() {
   const router = useRouter();
