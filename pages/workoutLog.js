@@ -8,11 +8,11 @@ import LoadingSpinner from "../components/LoadingSpinner";
 // Utils
 import {
   getCurrYearMonthDay,
-  addExerciseDataToLoggedWorkout,
   addExerciseDataToWorkout,
 } from "../utils";
 // Context
 import { useStoreState, useStoreDispatch, saveWorkoutLog } from "../store";
+import { fetchDateFromUserWorkoutLog } from "../store/actions/userActions";
 
 export default function workoutLog() {
   const dispatch = useStoreDispatch();
@@ -41,7 +41,7 @@ export default function workoutLog() {
     setCurrentDayData((prev) => ({ ...prev, exerciseData: exerciseData }));
   };
 
-  const setDataToToday = () => {
+  const setDataToToday = async () => {
     const { year, month, day } = getCurrYearMonthDay();
 
     setYearMonthDay({ year, month, day });
@@ -49,7 +49,7 @@ export default function workoutLog() {
     const currIsoDate = new Date(year, month, day).toISOString();
 
     // Find the workout for today
-    const dayData = getDayDataFromWorkoutLog(currIsoDate);
+    const dayData = await fetchDateFromUserWorkoutLog(user._id, currIsoDate);
     setPageState(dayData);
   };
 
@@ -74,7 +74,7 @@ export default function workoutLog() {
   };
 
   // Accepts a workout from user's workoutLog and sets workout and currentDay data
-  const setPageState = async (dayData) => {
+  const setPageState = (dayData) => {
     setLoading(true);
 
     // Check if workout exists
@@ -82,10 +82,8 @@ export default function workoutLog() {
       // Search for previous best for dayData.workout_id;
       findPrevBestData(dayData);
 
-      const mergedData = await addExerciseDataToLoggedWorkout(dayData);
-
-      setCurrentDayData(mergedData);
-      setWorkoutNote(mergedData.workoutNote || "");
+      setCurrentDayData(dayData);
+      setWorkoutNote(dayData.workoutNote || "");
     } else {
       setCurrentDayData({});
     }
@@ -126,7 +124,7 @@ export default function workoutLog() {
   };
 
   // Set page state when a new date is selected
-  const changeCurrentDayData = (numOfDaysToShift) => {
+  const changeCurrentDayData = async (numOfDaysToShift) => {
     const { year, month, day } = getCurrYearMonthDay();
     const date = new Date(year, month, day);
 
@@ -140,7 +138,7 @@ export default function workoutLog() {
       setYearMonthDay({ year: newYear, month: newMonth, day: newDay });
 
       // Find the workout for the new date
-      const dayData = getDayDataFromWorkoutLog(date.toISOString());
+      const dayData = await fetchDateFromUserWorkoutLog(user._id, date.toISOString());
       setPageState(dayData);
     }
   };
