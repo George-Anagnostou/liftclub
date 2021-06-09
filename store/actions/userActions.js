@@ -98,3 +98,25 @@ export const saveWeight = async (weight, user_id) => {
     return false;
   }
 };
+
+export const fetchUserSavedWorkouts = async (user_id) => {
+  try {
+    const res = await fetch(`/api/users/${user_id}?field=savedWorkouts`);
+    const workouts = await res.json();
+
+    return workouts;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const fetchDateFromUserWorkoutLog = async (user_id, isoDate) => {
+  try {
+    const res = await fetch(`/api/users/${user_id}?field=workoutLog&date=${isoDate}`);
+    const logData = await res.json();
+
+    return logData;
+  } catch (e) {
+    console.log(e);
+  }
+};
