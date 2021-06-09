@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 // Utils
-import { getUserMadeWorkouts, getWorkoutsFromIdArray } from "../../utils/api";
+import { getUserMadeWorkouts } from "../../utils/api";
 // Context
 import { useStoreState } from "../../store";
+import { fetchUserSavedWorkouts } from "../../store/actions/userActions";
 
 export default function UserWorkouts({ displayWorkout }) {
   const { user } = useStoreState();
@@ -17,7 +18,7 @@ export default function UserWorkouts({ displayWorkout }) {
   };
 
   const loadUserSavedWorkouts = async () => {
-    const savedWorkouts = await getWorkoutsFromIdArray(user.savedWorkouts);
+    const savedWorkouts = await fetchUserSavedWorkouts(user._id);
     setUserSavedWorkouts(savedWorkouts);
   };
 
