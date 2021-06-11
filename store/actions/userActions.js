@@ -75,7 +75,7 @@ export const saveWorkoutLog = async (dispatch, workoutLog, user_id) => {
 
     const userData = await res.json();
     // dispatch({ type: "SET_USER", payload: { userData } });
-    return true;
+    return userData;
   } catch (e) {
     console.log(e);
     return false;
@@ -116,6 +116,18 @@ export const fetchDateFromUserWorkoutLog = async (user_id, isoDate) => {
     const logData = await res.json();
 
     return logData;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const deleteWorkoutFromWorkoutLog = async (user_id, isoDate) => {
+  try {
+    const res = await fetch(`/api/users/${user_id}?field=workoutLog&date=${isoDate}`, {
+      method: "DELETE",
+    });
+    const updatedLog = await res.json();
+    return updatedLog;
   } catch (e) {
     console.log(e);
   }

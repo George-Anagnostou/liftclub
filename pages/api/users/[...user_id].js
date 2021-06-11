@@ -11,6 +11,9 @@ export default async (req, res) => {
   switch (httpMethod) {
     case "GET":
       if (req.query.field === "savedWorkouts") {
+        /**
+         * GET aggregated savedWorkouts with interpolated workout data
+         */
         const data = await db
           .collection("users")
           .aggregate([
@@ -28,17 +31,14 @@ export default async (req, res) => {
 
         res.json(data[0].data);
       } else if (req.query.field === "workoutLog") {
+        /**
+         * GET aggregated workoutLog with interpolated workout and exercise data
+         */
         const data = await db
           .collection("users")
           .aggregate([
-            {
-              $match: {
-                _id: new ObjectId("606e45bacbc4df4171012563"),
-              },
-            },
-            {
-              $unwind: "$workoutLog",
-            },
+            { $match: { _id: new ObjectId("606e45bacbc4df4171012563") } },
+            { $unwind: "$workoutLog" },
             {
               $lookup: {
                 from: "workouts",
@@ -47,12 +47,8 @@ export default async (req, res) => {
                 as: "workoutLog.workout",
               },
             },
-            {
-              $unwind: "$workoutLog.workout",
-            },
-            {
-              $unwind: "$workoutLog.exerciseData",
-            },
+            { $unwind: "$workoutLog.workout" },
+            { $unwind: "$workoutLog.exerciseData" },
             {
               $lookup: {
                 from: "exercises",
@@ -61,63 +57,30 @@ export default async (req, res) => {
                 as: "workoutLog.exerciseData.exercise",
               },
             },
-            {
-              $unwind: "$workoutLog.exerciseData.exercise",
-            },
+            { $unwind: "$workoutLog.exerciseData.exercise" },
             {
               $group: {
                 _id: "$workoutLog.isoDate",
-                root: {
-                  $mergeObjects: "$$ROOT",
-                },
-                exerciseData: {
-                  $push: "$workoutLog.exerciseData",
-                },
+                root: { $mergeObjects: "$$ROOT" },
+                exerciseData: { $push: "$workoutLog.exerciseData" },
               },
             },
-            {
-              $sort: {
-                _id: 1,
-              },
-            },
-            {
-              $replaceRoot: {
-                newRoot: {
-                  $mergeObjects: ["$root", "$$ROOT"],
-                },
-              },
-            },
-            {
-              $set: {
-                "workoutLog.exerciseData": "$exerciseData",
-              },
-            },
+            { $sort: { _id: 1 } },
+            { $replaceRoot: { newRoot: { $mergeObjects: ["$root", "$$ROOT"] } } },
+            { $set: { "workoutLog.exerciseData": "$exerciseData" } },
             {
               $group: {
                 _id: "$root._id",
-                root: {
-                  $mergeObjects: "$$ROOT",
-                },
-                workoutLog: {
-                  $push: "$workoutLog",
-                },
+                root: { $mergeObjects: "$$ROOT" },
+                workoutLog: { $push: "$workoutLog" },
               },
             },
-            {
-              $replaceRoot: {
-                newRoot: {
-                  $mergeObjects: ["$root", "$$ROOT"],
-                },
-              },
-            },
-            {
-              $project: {
-                root: 0,
-              },
-            },
+            { $replaceRoot: { newRoot: { $mergeObjects: ["$root", "$$ROOT"] } } },
+            { $project: { root: 0 } },
           ])
           .toArray();
 
+        // Find queried workout and return
         const foundWorkout = data[0].workoutLog.filter(
           (item) => item.isoDate.toISOString() === req.query.date
         );
@@ -133,12 +96,15 @@ export default async (req, res) => {
     case "POST":
       break;
     case "PUT":
+      // Declare a field to update
       let fieldToUpdate;
 
       const { workoutLog } = JSON.parse(req.body);
       if (workoutLog) fieldToUpdate = "workoutLog";
+
       const { savedWorkouts } = JSON.parse(req.body);
       if (savedWorkouts) fieldToUpdate = "savedWorkouts";
+
       const { weight } = JSON.parse(req.body);
       if (weight) fieldToUpdate = "weight";
 
@@ -187,6 +153,21 @@ export default async (req, res) => {
           break;
       }
 
+      break;
+    case "DELETE":
+      if (req.query.field === "workoutLog") {
+        const updated = await db
+          .collection("users")
+          .findOneAndUpdate(
+            { _id: ObjectId(user_id) },
+            { $pull: { workoutLog: { isoDate: new Date(req.query.date) } } },
+            { returnOriginal: false }
+          );
+
+        res.json(updated.value.workoutLog);
+      }
+
+      res.status(404).send();
       break;
   }
 };

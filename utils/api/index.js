@@ -22,7 +22,7 @@ export const getUserData = async (user_id) => {
  *
  * @param {array} savedWorkouts
  * @param {ObjectId} user_id
- * @returns updated user document
+ * @returns boolean for save success
  */
 export const saveSavedWorkouts = async (savedWorkouts, user_id) => {
   try {
