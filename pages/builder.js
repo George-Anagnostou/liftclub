@@ -1,7 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
 // Components
-import Layout from "../components/Layout";
 import ExerciseList from "../components/builder/ExerciseList";
 import UserWorkouts from "../components/builder/UserWorkouts";
 import CustomWorkout from "../components/builder/CustomWorkout";
@@ -60,40 +59,35 @@ export default function builder() {
   const toggleUserWorkouts = () => setShowUserWorkouts(!showUserWorkouts);
 
   return (
-    <Layout>
-      <Container>
-        <UserWorkoutToggle
-          onClick={toggleUserWorkouts}
-          className={showUserWorkouts ? "pressed" : ""}
-        >
-          <p>Templates</p>
-        </UserWorkoutToggle>
+    <Container>
+      <UserWorkoutToggle onClick={toggleUserWorkouts} className={showUserWorkouts ? "pressed" : ""}>
+        <p>Templates</p>
+      </UserWorkoutToggle>
 
-        <UserWorkouts
-          workoutSavedSuccessfuly={workoutSavedSuccessfuly}
-          customWorkout={customWorkout}
-          clearCustomWorkout={clearCustomWorkout}
-          setCustomWorkout={setCustomWorkout}
-          showUserWorkouts={showUserWorkouts}
-        />
+      <UserWorkouts
+        workoutSavedSuccessfuly={workoutSavedSuccessfuly}
+        customWorkout={customWorkout}
+        clearCustomWorkout={clearCustomWorkout}
+        setCustomWorkout={setCustomWorkout}
+        showUserWorkouts={showUserWorkouts}
+      />
 
-        <CustomWorkout
-          user={user}
-          customWorkout={customWorkout}
-          setCustomWorkout={setCustomWorkout}
-          workoutSavedSuccessfuly={workoutSavedSuccessfuly}
-          clearCustomWorkout={clearCustomWorkout}
-          removeExercise={removeExercise}
-          setWorkoutSavedSuccessfuly={setWorkoutSavedSuccessfuly}
-        />
+      <CustomWorkout
+        user={user}
+        customWorkout={customWorkout}
+        setCustomWorkout={setCustomWorkout}
+        workoutSavedSuccessfuly={workoutSavedSuccessfuly}
+        clearCustomWorkout={clearCustomWorkout}
+        removeExercise={removeExercise}
+        setWorkoutSavedSuccessfuly={setWorkoutSavedSuccessfuly}
+      />
 
-        <ExerciseList
-          isExerciseInCustomWorkout={isExerciseInCustomWorkout}
-          addExercise={addExercise}
-          removeExercise={removeExercise}
-        />
-      </Container>
-    </Layout>
+      <ExerciseList
+        isExerciseInCustomWorkout={isExerciseInCustomWorkout}
+        addExercise={addExercise}
+        removeExercise={removeExercise}
+      />
+    </Container>
   );
 }
 
@@ -114,6 +108,7 @@ const UserWorkoutToggle = styled.button`
 
   border: 2px solid ${({ theme }) => theme.accent};
   background: ${({ theme }) => theme.accent};
+  color: ${({ theme }) => theme.accentText};
 
   &.pressed {
     background: ${({ theme }) => theme.accentSoft};

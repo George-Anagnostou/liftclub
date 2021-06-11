@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 // Components
-import Layout from "../components/Layout";
 import LoadingSpinner from "../components/LoadingSpinner";
 import WorkoutSelect from "../components/myProfile/WorkoutSelect";
 import ExerciseSelect from "../components/myProfile/ExerciseSelect";
@@ -131,55 +130,53 @@ export default function myProfile() {
   };
 
   return (
-    <Layout>
-      <ProfileContainer>
-        <h2>Profile</h2>
-        {user ? (
-          <>
-            <Heading>
-              <div className="line">
-                <p>Username:</p>
-                <span>{user.username}</span>
-              </div>
-              <div className="line">
-                <p>Account Type:</p>
-                <span>{user.isAdmin ? "Admin" : "Member"}</span>
-              </div>
-              <div className="line">
-                <p>Night Mode</p>
-                <span>
-                  <ThemeToggle />
-                </span>
-              </div>
-              <button onClick={handleLogoutClick}>sign out</button>
-            </Heading>
+    <ProfileContainer>
+      {user ? (
+        <>
+          <Heading>
+            <div className="line">
+              <p>Username:</p>
+              <span>{user.username}</span>
+            </div>
+            <div className="line">
+              <p>Account Type:</p>
+              <span>{user.isAdmin ? "Admin" : "Member"}</span>
+            </div>
+            <div className="line">
+              <p>Night Mode</p>
+              <span>
+                <ThemeToggle />
+              </span>
+            </div>
+            <button onClick={handleLogoutClick}>sign out</button>
+          </Heading>
 
-            <WeightInput user={user} />
+          <WeightInput user={user} />
 
-            <section>
-              <h3>Progression</h3>
-              <SelectContainer>
-                <WorkoutSelect
-                  workoutOptions={workoutOptions}
-                  handleWorkoutOptionChange={handleWorkoutOptionChange}
-                />
+          <section>
+            <h3>Progression</h3>
 
-                <ExerciseSelect
-                  exerciseOptions={exerciseOptions}
-                  handleExerciseOptionChange={handleExerciseOptionChange}
-                />
-              </SelectContainer>
+            <SelectContainer>
+              <WorkoutSelect
+                workoutOptions={workoutOptions}
+                handleWorkoutOptionChange={handleWorkoutOptionChange}
+              />
 
-              <StatButtons setStatOption={setStatOption} statOption={statOption} />
+              <ExerciseSelect
+                exerciseOptions={exerciseOptions}
+                handleExerciseOptionChange={handleExerciseOptionChange}
+              />
+            </SelectContainer>
 
-              <Chart data={chartData} />
-            </section>
-          </>
-        ) : (
-          <LoadingSpinner />
-        )}
-      </ProfileContainer>
-    </Layout>
+            <StatButtons setStatOption={setStatOption} statOption={statOption} />
+
+            <Chart data={chartData} />
+          </section>
+        </>
+      ) : (
+        <LoadingSpinner />
+      )}
+    </ProfileContainer>
   );
 }
 
@@ -191,15 +188,10 @@ const ProfileContainer = styled.div`
 
   padding: 1rem 0.5rem;
 
-  h2 {
-    margin: 0.5rem 0;
-    color: ${({ theme }) => theme.textLight};
-  }
-
   section {
     width: 100%;
     border-radius: 5px;
-    background: ${({ theme }) => theme.buttonLight};
+    background: ${({ theme }) => theme.background};
     margin: 0 1rem;
     padding: 0.5rem 0;
   }
@@ -215,7 +207,7 @@ const Heading = styled.header`
   padding: 0.5rem 1rem;
   position: relative;
   border-radius: 5px;
-  background: ${({ theme }) => theme.buttonLight};
+  background: ${({ theme }) => theme.background};
 
   .line {
     display: flex;

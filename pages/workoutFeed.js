@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 // Components
-import Layout from "../components/Layout";
 import SavedWorkouts from "../components/workoutFeed/SavedWorkouts";
 import PublicWorkouts from "../components/workoutFeed/PublicWorkouts";
 // Utils
@@ -58,25 +57,21 @@ export default function workoutFeed() {
     // Get all public workouts
     getAllPublicWorkouts();
 
-    if (user) {
-      // Get all workotus saved by the user
-      getSavedWorkouts();
-    }
+    // Get all workotus saved by the user
+    if (user) getSavedWorkouts();
   }, [user]);
 
   return (
-    <Layout>
-      <WorkoutFeedContainer>
-        <PublicWorkouts
-          workouts={publicWorkouts}
-          workoutIsSaved={workoutIsSaved}
-          removeFromSavedWorkouts={removeFromSavedWorkouts}
-          addToSavedWorkouts={addToSavedWorkouts}
-        />
+    <WorkoutFeedContainer>
+      <PublicWorkouts
+        workouts={publicWorkouts}
+        workoutIsSaved={workoutIsSaved}
+        removeFromSavedWorkouts={removeFromSavedWorkouts}
+        addToSavedWorkouts={addToSavedWorkouts}
+      />
 
-        <SavedWorkouts workouts={savedWorkouts} removeFromSavedWorkouts={removeFromSavedWorkouts} />
-      </WorkoutFeedContainer>
-    </Layout>
+      <SavedWorkouts workouts={savedWorkouts} removeFromSavedWorkouts={removeFromSavedWorkouts} />
+    </WorkoutFeedContainer>
   );
 }
 

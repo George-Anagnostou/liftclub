@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 // Utils
 import { getUserData } from "../../utils/api";
 // Components
-import Layout from "../../components/Layout";
 import LoadingSpinner from "../../components/LoadingSpinner";
 
 export default function User_id() {
@@ -22,17 +21,15 @@ export default function User_id() {
   }, [user_id]);
 
   return (
-    <Layout>
-      <div>
-        {userData ? (
-          <div>
-            <p>{userData.username}</p>
-            <p>Workouts completed: {userData.workoutLog.length}</p>
-          </div>
-        ) : (
-          <LoadingSpinner />
-        )}
-      </div>
-    </Layout>
+    <div>
+      {userData ? (
+        <div>
+          <p>{userData.username}</p>
+          <p>Workouts completed: {userData.workoutLog.length}</p>
+        </div>
+      ) : (
+        <LoadingSpinner />
+      )}
+    </div>
   );
 }
