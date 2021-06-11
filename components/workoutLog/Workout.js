@@ -103,10 +103,9 @@ const WorkoutList = styled.ul`
     }
 
     ul {
-      margin: auto;
-      width: fit-content;
+      width: 100%;
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
       justify-content: center;
 
       .set-title {
