@@ -83,6 +83,8 @@ const NavBurger = styled.div`
 
   &.open {
     span {
+      background: ${({ theme }) => theme.textLight};
+
       &:nth-child(1) {
         transform: rotate(45deg) translateX(6px) translateY(5px);
         width: 40%;
@@ -142,7 +144,11 @@ const NavIcons = styled.ul`
 
   &.open {
     top: -8rem;
-    background: linear-gradient(to top, ${({ theme }) => theme.body} 0%, rgba(0, 0, 0, 0) 100%);
+    background: linear-gradient(
+      to top,
+      ${({ theme }) => theme.opacityBackground} 0%,
+      rgba(0, 0, 0, 0) 100%
+    );
     opacity: 1;
   }
   &.closed {

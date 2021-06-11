@@ -10,6 +10,7 @@ export const lightTheme = {
   accent: "#4361ee",
   accentSoft: "#5d78ee",
   accentText: "#fafafa",
+  opacityBackground: "rgba(255, 255, 255, 0.5)",
 
   shades: {
     1: "#FFFFFF",
@@ -37,6 +38,7 @@ export const darkTheme = {
   accent: "#4361ee",
   accentSoft: "#5d78ee",
   accentText: "#fafafa",
+  opacityBackground: "rgba(0, 0, 0, 0.5)",
 
   shades: {
     1: "#FFFFFF",
