@@ -56,8 +56,8 @@ const Nav = styled.nav`
 
 const NavBurger = styled.div`
   background: ${({ theme }) => theme.background};
-  border: 2px solid ${({ theme }) => theme.border};
-  box-shadow: 0 0 6px ${({ theme }) => theme.boxShadow};
+  border: 2px solid ${({ theme }) => theme.buttonLight};
+  box-shadow: 0 -2px 6px ${({ theme }) => theme.boxShadow};
 
   height: 100px;
   width: 80px;
@@ -119,8 +119,8 @@ const NavIcons = styled.ul`
 
     fill: ${({ theme }) => theme.text};
     background: ${({ theme }) => theme.background};
-    border: 2px solid ${({ theme }) => theme.border};
-    box-shadow: 0 2px 6px ${({ theme }) => theme.boxShadow};
+    border: 2px solid ${({ theme }) => theme.buttonLight};
+    box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
 
     display: flex;
     align-items: center;
@@ -142,7 +142,7 @@ const NavIcons = styled.ul`
 
   &.open {
     top: -8rem;
-    background: linear-gradient(0deg, ${({ theme }) => theme.body} 10%, rgba(0, 0, 0, 0) 100%);
+    background: linear-gradient(to top, ${({ theme }) => theme.body} 0%, rgba(0, 0, 0, 0) 100%);
     opacity: 1;
   }
   &.closed {
