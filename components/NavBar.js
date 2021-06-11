@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 // Components
@@ -20,6 +20,10 @@ export default function NavBar() {
   const router = useRouter();
 
   const [showNav, setShowNav] = useState(false);
+
+  useEffect(() => {
+    setShowNav(false);
+  }, [router.pathname]);
 
   return (
     <Nav>
@@ -51,7 +55,7 @@ const Nav = styled.nav`
 `;
 
 const NavBurger = styled.div`
-  background: ${({ theme }) => theme.buttonMed};
+  background: ${({ theme }) => theme.background};
   border: 2px solid ${({ theme }) => theme.border};
   box-shadow: 0 0 6px ${({ theme }) => theme.boxShadow};
 
@@ -74,7 +78,7 @@ const NavBurger = styled.div`
     width: 40%;
     height: 3px;
     border-radius: 5px;
-    background: ${({ theme }) => theme.textLight};
+    background: ${({ theme }) => theme.shades[5]};
   }
 
   &.open {
@@ -96,13 +100,13 @@ const NavBurger = styled.div`
 
 const NavIcons = styled.ul`
   position: absolute;
-  height: 5rem;
   width: 100%;
-  pointer-events: none;
-  transition: all 0.2s ease-out;
+  height: fit-content;
+  padding-top: 5rem;
+  transition: all 0.25s ease-out;
   z-index: -1;
-  opacity: 1;
   pointer-events: all;
+  transform-origin: bottom;
 
   display: flex;
   justify-content: space-evenly;
@@ -115,7 +119,7 @@ const NavIcons = styled.ul`
     pointer-events: visible;
 
     fill: ${({ theme }) => theme.text};
-    background: ${({ theme }) => theme.buttonMed};
+    background: ${({ theme }) => theme.background};
     border: 2px solid ${({ theme }) => theme.border};
     box-shadow: 0 2px 6px ${({ theme }) => theme.boxShadow};
 
@@ -124,25 +128,26 @@ const NavIcons = styled.ul`
     justify-content: center;
 
     &:nth-of-type(1) {
-      margin-top: 3rem;
+      margin: 1.5rem 0;
     }
     &:nth-of-type(2) {
-      margin-top: -3rem;
+      margin-top: -3.5rem;
     }
     &:nth-of-type(3) {
-      margin-top: -3rem;
+      margin-top: -3.5rem;
     }
     &:nth-of-type(4) {
-      margin-top: 3rem;
+      margin: 1.5rem 0;
     }
   }
 
   &.open {
-    top: 0;
+    top: -5.8rem;
+    background: linear-gradient(0deg, ${({ theme }) => theme.body} 20%, rgba(0, 0, 0, 0) 100%);
+    opacity: 1;
   }
   &.closed {
-    top: 8vh;
-    transform: scale(0);
+    top: 6rem;
     opacity: 0;
   }
 `;

@@ -1,45 +1,49 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import styled, { ThemeProvider } from "styled-components";
+import styled from "styled-components";
 // Components
 import SeoHead from "./SeoHead";
 import NavBar from "./NavBar";
 // Context
-import { useStoreDispatch, loginUser } from "../store";
-// Theme
+import { useStoreDispatch, loginUser, useStoreState } from "../store";
+// Styles
 import { GlobalStyles } from "./GlobalStyles";
-import { lightTheme, darkTheme } from "./Themes/Themes";
-import { useThemeState, ThemeToggleContext } from "./Themes/useThemeState";
 
 export default function Layout({ title = "Ananostou Lift Club", children }) {
   const router = useRouter();
 
   const dispatch = useStoreDispatch();
+  const { user } = useStoreState();
 
-  const { themeMode, themeToggler } = useThemeState();
-  const themes = themeMode === "light" ? lightTheme : darkTheme;
+  const routeToWorkoutLog = () => router.push("/workoutLog");
+
+  const persistLogin = async (user_id) => {
+    const loginSuccess = await loginUser(dispatch, user_id);
+    if (loginSuccess && router.pathname === "/") routeToWorkoutLog();
+  };
 
   // Check local storage for user_id for persistant login
-  useEffect(() => {
+  const checkLocalStorage = async () => {
     const user_id = localStorage.getItem("workoutID");
 
     // If local storage workoutID exists, login user
-    user_id ? loginUser(dispatch, user_id) : router.push("/");
-  }, []);
+    user_id ? persistLogin(user_id) : router.push("/");
+  };
+  useEffect(() => {
+    checkLocalStorage();
+  }, [router.pathname]);
 
   return (
-    <ThemeProvider theme={themes}>
-      <ThemeToggleContext.Provider value={themeToggler}>
-        <GlobalStyles />
+    <>
+      <GlobalStyles />
 
-        <SeoHead title={title} />
+      <SeoHead title={title} />
 
-        <MainContainer>
-          <NavBar />
-          {children}
-        </MainContainer>
-      </ThemeToggleContext.Provider>
-    </ThemeProvider>
+      <MainContainer>
+        {children}
+        {user && <NavBar />}
+      </MainContainer>
+    </>
   );
 }
 
