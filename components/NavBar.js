@@ -101,8 +101,7 @@ const NavBurger = styled.div`
 const NavIcons = styled.ul`
   position: absolute;
   width: 100%;
-  height: fit-content;
-  padding-top: 5rem;
+  height: 15rem;
   transition: all 0.25s ease-out;
   z-index: -1;
   pointer-events: all;
@@ -128,26 +127,26 @@ const NavIcons = styled.ul`
     justify-content: center;
 
     &:nth-of-type(1) {
-      margin: 1.5rem 0;
+      margin-top: 2.5rem;
     }
     &:nth-of-type(2) {
-      margin-top: -3.5rem;
+      margin-bottom: 0rem;
     }
     &:nth-of-type(3) {
-      margin-top: -3.5rem;
+      margin-bottom: 0rem;
     }
     &:nth-of-type(4) {
-      margin: 1.5rem 0;
+      margin-top: 2.5rem;
     }
   }
 
   &.open {
-    top: -5.8rem;
-    background: linear-gradient(0deg, ${({ theme }) => theme.body} 20%, rgba(0, 0, 0, 0) 100%);
+    top: -8rem;
+    background: linear-gradient(0deg, ${({ theme }) => theme.body} 10%, rgba(0, 0, 0, 0) 100%);
     opacity: 1;
   }
   &.closed {
-    top: 6rem;
+    top: 6.5rem;
     opacity: 0;
   }
 `;
