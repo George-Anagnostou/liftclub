@@ -126,7 +126,7 @@ const UserWorkoutsContainer = styled.div`
     width: 100%;
     border-radius: 5px;
     padding-top: 0.5rem;
-    background: ${({ theme }) => theme.buttonMed};
+    background: ${({ theme }) => theme.background};
 
     &:first-child {
       margin-right: 0.5rem;
@@ -139,8 +139,8 @@ const UserWorkoutsContainer = styled.div`
     }
 
     li {
-      background: ${({ theme }) => theme.buttonLight};
-      box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
+      background: ${({ theme }) => theme.buttonMed};
+      box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
       border-radius: 5px;
 
       cursor: pointer;
@@ -151,7 +151,7 @@ const UserWorkoutsContainer = styled.div`
       position: relative;
 
       button {
-        background: ${({ theme }) => theme.buttonMed};
+        background: ${({ theme }) => theme.buttonLight};
         color: ${({ theme }) => theme.textLight};
         border: none;
         border-radius: 3px;

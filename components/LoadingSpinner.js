@@ -6,9 +6,9 @@ export default function LoadingSpinner() {
 
 const Loader = styled.div`
   margin: auto;
-  border: 3px solid #eee;
+  border: 3px solid ${({ theme }) => theme.buttonLight};
   border-radius: 50%;
-  border-top: 3px solid #555;
+  border-top: 3px solid ${({ theme }) => theme.accentSoft};
   width: 25px;
   height: 25px;
   -webkit-animation: spin 0.5s linear infinite; /* Safari */

@@ -52,7 +52,7 @@ export default function ExerciseListItem({
 const Item = styled.li`
   border-radius: 5px;
   box-shadow: 0 0 5px ${({ theme }) => theme.boxShadow};
-  background: ${({ theme }) => theme.buttonLight};
+  background: ${({ theme }) => theme.background};
   width: 100%;
   margin: 0 1rem 0.5rem;
   text-transform: capitalize;
@@ -65,6 +65,7 @@ const Item = styled.li`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0.25rem 0;
 
     h3 {
       text-align: left;
@@ -81,8 +82,8 @@ const Item = styled.li`
       .infoBtn {
         padding: 0.5rem;
         border-radius: 5px;
-        background: ${({ theme }) => theme.buttonMed};
-        border: 1px solid ${({ theme }) => theme.buttonLight};
+        background: ${({ theme }) => theme.buttonLight};
+        border: none;
         margin: 0 0.5rem;
         p {
           border: 1px solid ${({ theme }) => theme.textLight};
@@ -93,9 +94,9 @@ const Item = styled.li`
         }
       }
       .ctrlBtn {
-        border: 1px solid ${({ theme }) => theme.buttonLight};
-        background: ${({ theme }) => theme.buttonMed};
-        color: ${({ theme }) => theme.textLight};
+        background: ${({ theme }) => theme.accentSoft};
+        border: none;
+        color: ${({ theme }) => theme.accentText};
         padding: 0.5rem;
         border-radius: 5px;
       }
@@ -128,13 +129,22 @@ const Item = styled.li`
 
   &.highlight {
     background: ${({ theme }) => theme.accentSoft};
+    color: ${({ theme }) => theme.accentText} !important;
     button {
       border: 1px solid ${({ theme }) => theme.accentSoft} !important;
       background: ${({ theme }) => theme.accent} !important;
-      color: ${({ theme }) => theme.text} !important;
+      color: ${({ theme }) => theme.accentText} !important;
+
+      p {
+        color: ${({ theme }) => theme.accentText} !important;
+        border-color: ${({ theme }) => theme.accentText} !important;
+      }
     }
     .info p {
       background: ${({ theme }) => theme.accent} !important;
+      span {
+        color: ${({ theme }) => theme.accentText} !important;
+      }
     }
   }
 `;

@@ -11,15 +11,22 @@ export default function UserWorkouts({ displayWorkout }) {
 
   const [userMadeWorkouts, setUserMadeWorkouts] = useState([]);
   const [userSavedWorkouts, setUserSavedWorkouts] = useState([]);
+  const [showUserMade, setShowUserMade] = useState(true);
+  const [showUserSaved, setShowUserSaved] = useState(true);
 
   const loadUserMadeWorkouts = async () => {
     const madeWorkouts = await getUserMadeWorkouts(user._id);
-    setUserMadeWorkouts(madeWorkouts);
+    setUserMadeWorkouts(madeWorkouts || []);
   };
 
   const loadUserSavedWorkouts = async () => {
     const savedWorkouts = await fetchUserSavedWorkouts(user._id);
-    setUserSavedWorkouts(savedWorkouts);
+    
+    savedWorkouts.sort(
+      (a, b) => user.savedWorkouts.indexOf(a._id) - user.savedWorkouts.indexOf(b._id)
+    );
+
+    setUserSavedWorkouts(savedWorkouts || []);
   };
 
   useEffect(() => {
@@ -32,80 +39,128 @@ export default function UserWorkouts({ displayWorkout }) {
   }, [user]);
 
   return (
-    <UserWorkoutsContainer>
-      {Boolean(userSavedWorkouts.length) && (
-        <ul>
+    <Container>
+      <WorkoutsList>
+        <TitleBar>
           <h3>Saved</h3>
+          <button onClick={() => setShowUserSaved(!showUserSaved)}>
+            {showUserSaved ? "close" : "show"}
+          </button>
+        </TitleBar>
 
-          {userSavedWorkouts.map((workout) => (
-            <li key={workout._id} onClick={() => displayWorkout(workout)}>
-              <h4>{workout.name}</h4>
-              <p>{workout.exercises.length} exercises</p>
-            </li>
-          ))}
-        </ul>
-      )}
+        {showUserSaved && (
+          <>
+            {userSavedWorkouts.length ? (
+              <ul>
+                {userSavedWorkouts.map((workout) => (
+                  <li key={workout._id} onClick={() => displayWorkout(workout)}>
+                    <p>{workout.name}</p>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <h3 className="fallbackText">None</h3>
+            )}
+          </>
+        )}
+      </WorkoutsList>
 
-      {Boolean(userMadeWorkouts.length) && (
-        <ul>
+      <WorkoutsList>
+        <TitleBar>
           <h3>Created</h3>
+          <button onClick={() => setShowUserMade(!showUserMade)}>
+            {showUserMade ? "close" : "show"}
+          </button>
+        </TitleBar>
 
-          {userMadeWorkouts.map((workout) => (
-            <li key={workout._id} onClick={() => displayWorkout(workout)}>
-              <h4>{workout.name}</h4>
-              <p>
-                {workout.exercises.length} {workout.exercises.length > 1 ? "exercises" : "exercise"}
-              </p>
-            </li>
-          ))}
-        </ul>
-      )}
-    </UserWorkoutsContainer>
+        {showUserMade && (
+          <>
+            {userMadeWorkouts.length ? (
+              <ul>
+                {userMadeWorkouts.map((workout) => (
+                  <li key={workout._id} onClick={() => displayWorkout(workout)}>
+                    <p>{workout.name}</p>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <h3 className="fallbackText">None</h3>
+            )}
+          </>
+        )}
+      </WorkoutsList>
+    </Container>
   );
 }
 
-const UserWorkoutsContainer = styled.div`
+const Container = styled.section`
   width: 100%;
-  margin-bottom: 0.5rem;
-  padding: 0 0.5rem;
-
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
+`;
+
+const TitleBar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h3 {
+    padding-left: 0.75rem;
+    font-size: 1.1rem;
+    color: ${({ theme }) => theme.textLight};
+    font-weight: 100;
+  }
+
+  button {
+    background: ${({ theme }) => theme.accentSoft};
+    color: ${({ theme }) => theme.accentText};
+    border-radius: 5px;
+    padding: 8px 12px;
+    margin: 8px;
+    border: none;
+  }
+`;
+
+const WorkoutsList = styled.div`
+  width: 100%;
+  border-radius: 5px;
+  background: ${({ theme }) => theme.background};
+  margin-bottom: 1rem;
 
   ul {
-    max-height: 400px;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    width: 100%;
-    border-radius: 5px;
-    padding-top: 0.5rem;
-    background: ${({ theme }) => theme.buttonMed};
-
-    &:first-child {
-      margin-right: 0.5rem;
-    }
-
-    h3 {
-      font-size: 1.1rem;
-      color: ${({ theme }) => theme.textLight};
-      font-weight: 100;
-    }
+    display: flex;
+    overflow: scroll;
 
     li {
-      background: ${({ theme }) => theme.buttonLight};
-      box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
+      background: ${({ theme }) => theme.buttonMed};
+      box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
       border-radius: 5px;
-
       cursor: pointer;
       padding: 0.5rem;
-      margin: 1rem;
-      text-align: center;
+      margin: 0 0.5rem 0.5rem;
 
-      h4 {
+      p {
         text-transform: capitalize;
-        padding-bottom: 0.5rem;
+        width: max-content;
       }
     }
+
+    @media (max-width: 425px) {
+      /* Remove scroll bar on mobile */
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+  }
+
+  .fallbackText {
+    width: fit-content;
+    padding: 0 0.75rem 0.5rem;
+    color: ${({ theme }) => theme.textLight};
   }
 `;

@@ -30,8 +30,6 @@ export default function ExerciseList({ isExerciseInCustomWorkout, addExercise, r
         return Object.values(no_id).some((val) => val.toLowerCase().includes(term.toLowerCase()));
       });
 
-      console.log(term, filtered);
-
       setDisplayedExercises(filtered);
     } else {
       const alphabetical = data.sort((a, b) => {
@@ -97,7 +95,7 @@ const ExercisesContainer = styled.div`
     top: 0.5rem;
     z-index: 99;
 
-    background: ${({ theme }) => theme.buttonLight};
+    background: ${({ theme }) => theme.buttonMed};
     width: 100%;
     margin-bottom: 0.5rem;
     border-radius: 5px;
@@ -114,12 +112,12 @@ const ExercisesContainer = styled.div`
       border: none;
       border-radius: 5px;
       color: ${({ theme }) => theme.text};
-      background: ${({ theme }) => theme.buttonMed};
+      background: ${({ theme }) => theme.background};
     }
 
     button {
       font-size: 1rem;
-      background: ${({ theme }) => theme.buttonMed};
+      background: ${({ theme }) => theme.background};
       color: inherit;
       border: none;
       margin: 0.5rem 0.5rem 0.5rem 0;

@@ -41,8 +41,9 @@ const Buttons = styled.div`
     border: 1px solid ${({ theme }) => theme.border};
 
     &.highlight {
-      background: ${({ theme }) => theme.accentSoft};
-      border: 1px solid ${({ theme }) => theme.accent};
+      color: ${({ theme }) => theme.accentText};
+      background: ${({ theme }) => theme.accent};
+      border: 1px solid ${({ theme }) => theme.accentSoft};
     }
   }
 `;

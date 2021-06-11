@@ -1,14 +1,15 @@
 export const lightTheme = {
-  body: "#FFF",
+  body: "#c7c7ca",
   text: "#363537",
   textLight: "#6e6e6e",
-  border: "#eaeaea",
-  boxShadow: "#AAA",
-  background: "#DDD",
-  buttonLight: "#e6e6e6",
-  buttonMed: "#c5c5c5",
+  border: "#bbbbbb",
+  boxShadow: "#bbbbbb",
+  background: "#eeeeee",
+  buttonLight: "#ffffff",
+  buttonMed: "#ffffff",
   accent: "#4361ee",
   accentSoft: "#5d78ee",
+  accentText: "#fafafa",
 
   shades: {
     1: "#FFFFFF",
@@ -25,16 +26,17 @@ export const lightTheme = {
 };
 
 export const darkTheme = {
-  body: "#302f31",
+  body: "#1e1d20",
   text: "#FAFAFA",
   textLight: "#c4c4c4",
-  border: "#818181",
-  boxShadow: "#222222",
-  background: "#353535",
+  border: "#666666",
+  boxShadow: "#111111",
+  background: "#303030",
   buttonLight: "#4b4b4b",
-  buttonMed: "#3d3d3d",
+  buttonMed: "#3f3f3f",
   accent: "#4361ee",
   accentSoft: "#5d78ee",
+  accentText: "#fafafa",
 
   shades: {
     1: "#FFFFFF",

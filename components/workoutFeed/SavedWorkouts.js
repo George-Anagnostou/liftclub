@@ -17,7 +17,7 @@ export default function SavedWorkouts({ workouts, removeFromSavedWorkouts }) {
   return (
     <WorkoutList style={showDrawer ? { top: "0%" } : null}>
       <div className="drawer">
-        {!Boolean(workouts.length) && <h3 className="tip">You haven't saved any workouts yet.</h3>}
+        {!Boolean(workouts.length) && <h3 className="tip">You don't have any saved workouts.</h3>}
 
         {workouts.map((workout) => (
           <SavedWorkoutTile
@@ -31,9 +31,7 @@ export default function SavedWorkouts({ workouts, removeFromSavedWorkouts }) {
       <div ref={upSwipe}>
         <div ref={downSwipe} className="list-heading" onClick={toggleShow}>
           <h3>Saved Workouts</h3>
-          <button className="toggle-btn">
-            <p style={showDrawer ? { transform: "rotate(0deg)" } : null}>^</p>
-          </button>
+          <span className="drawer-indicator"></span>
         </div>
       </div>
     </WorkoutList>
@@ -66,6 +64,7 @@ const WorkoutList = styled.ul`
 
   .list-heading {
     height: 50px;
+    background: ${({ theme }) => theme.background};
     box-shadow: 0 -2px 5px ${({ theme }) => theme.boxShadow};
     color: ${({ theme }) => theme.textLight};
     position: relative;
@@ -76,29 +75,18 @@ const WorkoutList = styled.ul`
     justify-content: center;
 
     h3 {
-      font-size: 1.5rem;
+      line-height: 1rem;
+      font-size: 1.2rem;
       font-weight: 300;
     }
 
-    .toggle-btn {
+    .drawer-indicator {
       position: absolute;
-      top: 8px;
-      right: 2rem;
-      background: ${({ theme }) => theme.buttonLight};
-      color: ${({ theme }) => theme.textLight};
-      border: none;
-      border-radius: 50%;
-      width: 35px;
-      height: 35px;
-
-      font-weight: bold;
-      font-size: 1.5rem;
-
-      p {
-        transform: rotate(180deg);
-        width: 35px;
-        height: 19px;
-      }
+      bottom: 5px;
+      background: ${({ theme }) => theme.border};
+      border-radius: 5px;
+      width: 100px;
+      height: 5px;
     }
   }
 `;

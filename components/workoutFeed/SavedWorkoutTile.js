@@ -86,9 +86,10 @@ export default function SavedWorkoutTile({ workout, removeFromSavedWorkouts }) {
 }
 
 const WorkoutTile = styled.li`
-  border: 1px solid ${({ theme }) => theme.border};
   border-radius: 5px;
-  box-shadow: 0 0 5px ${({ theme }) => theme.boxShadow};
+  border: 1px solid ${({ theme }) => theme.border};
+  box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
+  background: ${({ theme }) => theme.background};
 
   padding: 0.5rem;
   margin: 1rem;
@@ -107,7 +108,7 @@ const WorkoutTile = styled.li`
 
       p {
         font-size: 0.7rem;
-        color: grey;
+        color: ${({ theme }) => theme.textLight};
       }
     }
     .loadingSpinner {
@@ -131,7 +132,7 @@ const WorkoutTile = styled.li`
       }
 
       .remove {
-        color: ${({ theme }) => theme.textLight};
+        color: ${({ theme }) => theme.accentText};
         background: ${({ theme }) => theme.accentSoft};
       }
     }
@@ -145,7 +146,7 @@ const WorkoutTile = styled.li`
 
     .creator {
       font-size: 0.7rem;
-      color: grey;
+      color: ${({ theme }) => theme.textLight};
 
       &:hover {
         text-decoration: underline;

@@ -200,7 +200,7 @@ const CustomWorkoutContainer = styled.ul`
     align-items: center;
     flex-direction: column;
 
-    background: ${({ theme }) => theme.buttonLight};
+    background: ${({ theme }) => theme.buttonMed};
     border-radius: 5px;
     width: 100%;
     padding: 0.5rem;
@@ -208,7 +208,7 @@ const CustomWorkoutContainer = styled.ul`
     .wrapper {
       border-radius: 5px;
       width: 100%;
-      background: ${({ theme }) => theme.buttonMed};
+      background: ${({ theme }) => theme.background};
 
       display: flex;
       align-items: center;
@@ -233,9 +233,9 @@ const CustomWorkoutContainer = styled.ul`
       button {
         border: none;
         border-radius: 5px;
-        background: ${({ theme }) => theme.buttonMed};
+        background: ${({ theme }) => theme.background};
         color: ${({ theme }) => theme.text};
-        box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
+        box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
         display: inline-block;
         margin: 0.5rem;
         padding: 0.5rem 1rem;
@@ -245,7 +245,7 @@ const CustomWorkoutContainer = styled.ul`
       .checkbox {
         border: none;
         border-radius: 5px;
-        background: ${({ theme }) => theme.buttonMed};
+        background: ${({ theme }) => theme.background};
         color: ${({ theme }) => theme.text};
         box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
         display: inline-block;
@@ -267,7 +267,7 @@ const CustomWorkoutContainer = styled.ul`
 const Exercise = styled.li`
   border-radius: 5px;
   box-shadow: 0 0 5px ${({ theme }) => theme.boxShadow};
-  background: ${({ theme }) => theme.buttonLight};
+  background: ${({ theme }) => theme.background};
   width: 100%;
   flex: 1;
   min-width: 150px;
@@ -291,7 +291,7 @@ const Exercise = styled.li`
       font-size: 1.25rem;
       padding: 0.25rem 0;
       margin: 0 0.25rem;
-      background: ${({ theme }) => theme.buttonMed};
+      background: ${({ theme }) => theme.body};
       color: inherit;
       text-align: center;
       border-radius: 3px;
@@ -320,7 +320,7 @@ const Exercise = styled.li`
     }
   }
   .removeBtn {
-    border: 1px solid ${({ theme }) => theme.buttonLight};
+    border: none;
     background: ${({ theme }) => theme.buttonMed};
     color: ${({ theme }) => theme.textLight};
     padding: 0.5rem 0;
@@ -329,7 +329,7 @@ const Exercise = styled.li`
 `;
 
 const FallbackText = styled.div`
-  background: ${({ theme }) => theme.buttonMed};
+  background: ${({ theme }) => theme.background};
   color: ${({ theme }) => theme.textLight};
 
   width: 100%;

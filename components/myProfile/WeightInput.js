@@ -94,7 +94,7 @@ const WeightContainer = styled.div`
   padding: 0.5rem 1rem;
   margin: 1rem;
   border-radius: 5px;
-  background: ${({ theme }) => theme.buttonLight};
+  background: ${({ theme }) => theme.background};
   color: ${({ theme }) => theme.textLight};
 
   display: flex;
@@ -127,7 +127,7 @@ const WeightContainer = styled.div`
       margin: 0.5rem;
       padding: 0.5rem 1rem;
       border-radius: 5px;
-      color: ${({ theme }) => theme.text};
+      color: ${({ theme }) => theme.accentText};
       border: 1px solid ${({ theme }) => theme.accentSoft};
       background: ${({ theme }) => theme.accent};
     }
