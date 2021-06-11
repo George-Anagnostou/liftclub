@@ -1,24 +1,14 @@
 import styled from "styled-components";
-import Checkmark from "../Checkmark";
 
 export default function Workout({
-  saveWorkout,
   currentDayData,
   handleWeightChange,
   handleWorkoutNoteChange,
   workoutNote,
   prevBestData,
-  savedSuccessfully,
 }) {
   return (
     <>
-      <SaveWorkoutButton onClick={saveWorkout}>
-        Save Workout
-        {savedSuccessfully && (
-          <Checkmark position={{ position: "absolute", top: "15px", right: "15px" }} />
-        )}
-      </SaveWorkoutButton>
-
       <WorkoutName>
         <h1>{currentDayData.workoutName}</h1>
         <h3>{currentDayData.exerciseData.length} exercises</h3>
@@ -86,21 +76,6 @@ const WorkoutName = styled.div`
   h1 {
     text-transform: uppercase;
   }
-`;
-
-const SaveWorkoutButton = styled.button`
-  width: 98%;
-  position: sticky;
-  top: 0.5rem;
-  margin: 1rem auto;
-  font-size: 1.5rem;
-  padding: 1rem 0.5rem;
-  border-radius: 5px;
-
-  color: ${({ theme }) => theme.text};
-  background: ${({ theme }) => theme.buttonLight};
-  border: 1px solid ${({ theme }) => theme.border};
-  box-shadow: 0 2px 5px ${({ theme }) => theme.boxShadow};
 `;
 
 const WorkoutList = styled.ul`
