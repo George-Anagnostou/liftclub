@@ -209,7 +209,8 @@ const DeleteBtn = styled.button`
   border-radius: 10px;
 
   border: none;
-  color: ${({ theme }) => theme.text};
+  color: ${({ theme }) => theme.textLight};
   background: ${({ theme }) => theme.background};
+  border: 1px solid ${({ theme }) => theme.border};
   box-shadow: 0 2px 5px ${({ theme }) => theme.boxShadow};
 `;
