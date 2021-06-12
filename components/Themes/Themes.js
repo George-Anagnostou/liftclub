@@ -10,7 +10,7 @@ export const lightTheme = {
   accent: "#4361ee",
   accentSoft: "#5d78ee",
   accentText: "#fafafa",
-  opacityBackground: "rgba(255, 255, 255, 0.5)",
+  opacityBackground: "rgba(150, 150, 150, 0.5)",
 
   shades: {
     1: "#FFFFFF",
