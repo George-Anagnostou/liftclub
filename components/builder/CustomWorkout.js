@@ -145,6 +145,14 @@ export default function CustomWorkout({
             <span>{i + 1}.</span> {exercise.name}
           </p>
 
+          <div className="setControl">
+            <button onClick={() => handleSetChange("remove", i)} disabled={!Boolean(sets.length)}>
+              -
+            </button>
+            <p>Set</p>
+            <button onClick={() => handleSetChange("add", i)}>+</button>
+          </div>
+
           {sets.map(({ reps }, j) => (
             <div key={j}>
               <span>{j + 1}.</span>
@@ -157,12 +165,6 @@ export default function CustomWorkout({
               <span>reps</span>
             </div>
           ))}
-
-          <div className="setControl">
-            <p>Set</p>
-            <button onClick={() => handleSetChange("add", i)}>+</button>
-            <button onClick={() => handleSetChange("remove", i)}>-</button>
-          </div>
 
           <button className="removeBtn" onClick={() => removeExercise(exercise)}>
             Remove
@@ -280,7 +282,8 @@ const Exercise = styled.li`
   }
   div {
     margin: 0.2rem 0;
-    flex: 1;
+    display: flex;
+    align-items: center;
 
     input {
       width: 3rem;
@@ -296,6 +299,7 @@ const Exercise = styled.li`
     span {
       font-weight: 300;
       font-size: 0.7rem;
+      flex: 1;
     }
   }
   .setControl {
@@ -303,9 +307,10 @@ const Exercise = styled.li`
     justify-content: center;
     align-items: center;
     p {
-      margin-right: 0.5rem;
+      margin: 0 0.5rem;
     }
     button {
+      flex: 1;
       border: 1px solid ${({ theme }) => theme.border};
       background: ${({ theme }) => theme.buttonMed};
       color: inherit;
@@ -313,6 +318,14 @@ const Exercise = styled.li`
       margin: 0.15rem;
       height: 2rem;
       width: 2rem;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+
+      &:disabled {
+        color: ${({ theme }) => theme.border};
+        background: ${({ theme }) => theme.background};
+        border: 1px solid ${({ theme }) => theme.buttonLight};
+      }
     }
   }
   .removeBtn {
