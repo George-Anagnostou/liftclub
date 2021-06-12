@@ -37,7 +37,7 @@ export default async (req, res) => {
         const data = await db
           .collection("users")
           .aggregate([
-            { $match: { _id: new ObjectId("606e45bacbc4df4171012563") } },
+            { $match: { _id: new ObjectId(user_id) } },
             { $unwind: "$workoutLog" },
             {
               $lookup: {
