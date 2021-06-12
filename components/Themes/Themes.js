@@ -5,7 +5,7 @@ export const lightTheme = {
   border: "#bbbbbb",
   boxShadow: "#bbbbbb",
   // background: "#eeeeee",
-  background: "linear-gradient(to bottom, #eeeeee 20%, #e6e4f0 100%)",
+  background: "linear-gradient(to bottom, #eeeeee 20%, #e9e8f1 100%)",
 
   buttonLight: "#ffffff",
   buttonMed: "#ffffff",
@@ -35,7 +35,7 @@ export const darkTheme = {
   border: "#666666",
   boxShadow: "#111111",
   // background: "#303030",
-  background: "linear-gradient(to bottom, #303030 20%, #29272c 100%)",
+  background: "linear-gradient(to bottom, #303030 20%, #2e2d31 100%)",
   buttonLight: "#4b4b4b",
   buttonMed: "#3f3f3f",
   accent: "#4361ee",
