@@ -56,11 +56,12 @@ export default function builder() {
     setCustomWorkout({ name: "", creator_id: null, exercises: [], isPublic: false });
   };
 
-  const toggleUserWorkouts = () => setShowUserWorkouts(!showUserWorkouts);
-
   return (
     <Container>
-      <UserWorkoutToggle onClick={toggleUserWorkouts} className={showUserWorkouts ? "pressed" : ""}>
+      <UserWorkoutToggle
+        onClick={() => setShowUserWorkouts(!showUserWorkouts)}
+        className={showUserWorkouts ? "pressed" : ""}
+      >
         <p>Templates</p>
       </UserWorkoutToggle>
 

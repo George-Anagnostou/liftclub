@@ -98,11 +98,7 @@ export default function CustomWorkout({
 
   // Remove saved successfully notification after 5 seconds
   useEffect(() => {
-    if (workoutSavedSuccessfuly) {
-      setTimeout(() => {
-        setWorkoutSavedSuccessfuly(null);
-      }, 5000);
-    }
+    if (workoutSavedSuccessfuly) setTimeout(() => setWorkoutSavedSuccessfuly(null), 5000);
   }, [workoutSavedSuccessfuly]);
 
   return (
