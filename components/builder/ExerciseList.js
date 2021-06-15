@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import useSWR from "swr";
-// Components
-import CreateExerciseModal from "./CreateExerciseModal";
 // Context
 import { useStoreState } from "../../store";
-import ExerciseListItem from "./ExerciseListItem";
 // Components
 import LoadingSpinner from "../LoadingSpinner";
+import CreateExerciseModal from "./CreateExerciseModal";
+import ExerciseListItem from "./ExerciseListItem";
 
 // SWR fetcher
 const fetcher = (url) => fetch(url).then((r) => r.json());
