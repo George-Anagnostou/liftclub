@@ -57,8 +57,13 @@ export default function workoutLog() {
   };
 
   const findPrevBestData = (dayData) => {
-    let indexOfWorkout =
-      user.workoutLog.findIndex((workout) => workout.isoDate === dayData.isoDate) - 1;
+    let indexOfWorkout = user.workoutLog.length - 1; // Default with last index
+
+    // If the workout has a been saved set index to the previous of it
+    if (dayData.completed) {
+      indexOfWorkout =
+        user.workoutLog.findIndex((workout) => workout.isoDate === dayData.isoDate) - 1;
+    }
 
     for (let i = indexOfWorkout; i >= 0; i--) {
       if (user.workoutLog[i].workout_id == dayData.workout_id) {
