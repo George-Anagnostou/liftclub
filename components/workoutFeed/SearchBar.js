@@ -2,22 +2,22 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import SearchIcon from "./SearchIcon";
 
-export default function SearchBar({ workouts, setFilteredWorkouts }) {
+export default function SearchBar({ workouts, setFilteredWorkouts, setLoading }) {
   const [filter, setFilter] = useState("");
 
-  const handleFilterChange = (e) => {
-    setFilter(e.target.value);
-  };
+  const handleFilterChange = (e) => setFilter(e.target.value);
 
   useEffect(() => {
     if (workouts.length) {
       const lowercasedFilter = filter.toLowerCase();
 
-      const filteredData = workouts.filter((workout) => {
-        return workout.name.toLowerCase().includes(lowercasedFilter);
-      });
+      const filteredData = workouts.filter((workout) =>
+        workout.name.toLowerCase().includes(lowercasedFilter)
+      );
 
       setFilteredWorkouts(filteredData);
+
+      setLoading(false);
     }
   }, [filter, workouts]);
 

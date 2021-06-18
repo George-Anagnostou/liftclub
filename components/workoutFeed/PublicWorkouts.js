@@ -1,8 +1,9 @@
 import { useState } from "react";
 import styled from "styled-components";
-
+// Components
 import PublicWorkoutTile from "./PublicWorkoutTile";
 import SearchBar from "./SearchBar";
+import LoadingSpinner from "../LoadingSpinner";
 
 export default function PublicWorkouts({
   workouts,
@@ -11,22 +12,31 @@ export default function PublicWorkouts({
   addToSavedWorkouts,
 }) {
   const [filteredWorkouts, setFilteredWorkouts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   return (
     <WorkoutList>
-      <SearchBar workouts={workouts} setFilteredWorkouts={setFilteredWorkouts} />
+      <SearchBar
+        workouts={workouts}
+        setFilteredWorkouts={setFilteredWorkouts}
+        setLoading={setLoading}
+      />
 
       <h3 className="listTitle">Public Workouts</h3>
 
-      {filteredWorkouts.map((workout) => (
-        <PublicWorkoutTile
-          key={`public${workout._id}`}
-          workout={workout}
-          workoutIsSaved={workoutIsSaved}
-          removeFromSavedWorkouts={removeFromSavedWorkouts}
-          addToSavedWorkouts={addToSavedWorkouts}
-        />
-      ))}
+      {loading ? (
+        <LoadingSpinner />
+      ) : (
+        filteredWorkouts.map((workout) => (
+          <PublicWorkoutTile
+            key={`public${workout._id}`}
+            workout={workout}
+            workoutIsSaved={workoutIsSaved}
+            removeFromSavedWorkouts={removeFromSavedWorkouts}
+            addToSavedWorkouts={addToSavedWorkouts}
+          />
+        ))
+      )}
     </WorkoutList>
   );
 }
