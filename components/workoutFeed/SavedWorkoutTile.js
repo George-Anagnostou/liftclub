@@ -13,10 +13,9 @@ export default function SavedWorkoutTile({ workout, removeFromSavedWorkouts }) {
   const [creator, setCreator] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const toggleWorkoutView = () => {
-    setShowWorkoutInfo((prev) => !prev);
-  };
-
+  const toggleWorkoutView = () => setShowWorkoutInfo((prev) => !prev);
+  
+  // Get all exercises for a workout
   const getWorkoutExercises = async () => {
     const mergedData = await addExerciseDataToWorkout(workout);
     setWorkoutExercises(mergedData.exercises);
@@ -31,12 +30,14 @@ export default function SavedWorkoutTile({ workout, removeFromSavedWorkouts }) {
   };
 
   useEffect(() => {
+    // Only fetch data if it has not already been fetched
     if (showWorkoutInfo && !workoutExercises.length) {
       setLoading(true);
       getWorkoutExercises();
       getCreator();
     }
   }, [showWorkoutInfo]);
+
   return (
     <WorkoutTile>
       <div className="tile-heading">
@@ -86,13 +87,13 @@ export default function SavedWorkoutTile({ workout, removeFromSavedWorkouts }) {
 }
 
 const WorkoutTile = styled.li`
-  border-radius: 5px;
+  border-radius: 10px;
   border: 1px solid ${({ theme }) => theme.border};
   box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
   background: ${({ theme }) => theme.background};
 
   padding: 0.5rem;
-  margin: 1rem;
+  margin: 0.5em;
 
   .tile-heading {
     display: flex;
@@ -156,7 +157,7 @@ const WorkoutTile = styled.li`
       }
     }
     .exercise {
-      margin: 0.25rem 0;
+      margin: 0.25rem 0.5rem;
       text-transform: capitalize;
       display: flex;
       justify-content: space-between;

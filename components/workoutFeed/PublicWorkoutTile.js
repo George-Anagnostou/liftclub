@@ -18,10 +18,9 @@ export default function PublicWorkoutTile({
   const [creator, setCreator] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const toggleWorkoutInfo = () => {
-    setShowWorkoutInfo((prev) => !prev);
-  };
-
+  const toggleWorkoutInfo = () => setShowWorkoutInfo((prev) => !prev);
+  
+  // Get all exercises for a workout
   const getWorkoutExercises = async () => {
     const mergedData = await addExerciseDataToWorkout(workout);
     setWorkoutExercises(mergedData.exercises);
@@ -36,6 +35,7 @@ export default function PublicWorkoutTile({
   };
 
   useEffect(() => {
+    // Only fetch data if it has not already been fetched
     if (showWorkoutInfo && !workoutExercises.length) {
       setLoading(true);
       getWorkoutExercises();
@@ -97,13 +97,13 @@ export default function PublicWorkoutTile({
 }
 
 const WorkoutTile = styled.li`
-  border-radius: 5px;
+  border-radius: 10px;
   border: 1px solid ${({ theme }) => theme.border};
   box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
   background: ${({ theme }) => theme.background};
 
   padding: 0.5rem;
-  margin: 1rem;
+  margin: 0.5em;
 
   .tile-heading {
     display: flex;
@@ -171,7 +171,7 @@ const WorkoutTile = styled.li`
       }
     }
     .exercise {
-      margin: 0.25rem 0;
+      margin: 0.25rem 0.5rem;
       text-transform: capitalize;
       display: flex;
       justify-content: space-between;
