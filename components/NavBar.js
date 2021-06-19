@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 // Components
@@ -19,14 +19,25 @@ const routes = [
 export default function NavBar() {
   const router = useRouter();
 
+  const ref = useRef(null);
+
   const [showNav, setShowNav] = useState(false);
+
+  const clickOutListener = (e) => {
+    if (ref.current && !ref.current.contains(e.target)) setShowNav(false);
+  };
 
   useEffect(() => {
     setShowNav(false);
   }, [router.pathname]);
 
+  useEffect(() => {
+    document.addEventListener("click", clickOutListener);
+    return () => document.removeEventListener("click", clickOutListener);
+  }, []);
+
   return (
-    <Nav>
+    <Nav ref={ref}>
       <NavBurger className={`burger ${showNav ? "open" : ""}`} onClick={() => setShowNav(!showNav)}>
         <span />
         <span />
@@ -103,7 +114,7 @@ const NavBurger = styled.div`
 const NavIcons = styled.ul`
   position: absolute;
   width: 100%;
-  height: 15rem;
+  height: 9rem;
   transition: all 0.25s ease-out;
   z-index: -1;
   pointer-events: all;
@@ -111,7 +122,7 @@ const NavIcons = styled.ul`
 
   display: flex;
   justify-content: space-evenly;
-  align-items: center;
+  align-items: flex-start;
 
   li {
     border-radius: 10px;
@@ -129,7 +140,7 @@ const NavIcons = styled.ul`
     justify-content: center;
 
     &:nth-of-type(1) {
-      margin-top: 2.5rem;
+      margin-top: 1.5rem;
     }
     &:nth-of-type(2) {
       margin-bottom: 0rem;
@@ -138,15 +149,15 @@ const NavIcons = styled.ul`
       margin-bottom: 0rem;
     }
     &:nth-of-type(4) {
-      margin-top: 2.5rem;
+      margin-top: 1.5rem;
     }
   }
 
   &.open {
-    top: -8rem;
+    top: -2.5rem;
     background: linear-gradient(
       to top,
-      ${({ theme }) => theme.opacityBackground} 0%,
+      ${({ theme }) => theme.opacityBackground} 20%,
       rgba(0, 0, 0, 0) 100%
     );
     opacity: 1;
