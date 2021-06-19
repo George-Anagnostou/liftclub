@@ -157,8 +157,8 @@ const NavIcons = styled.ul`
     top: -2.5rem;
     background: linear-gradient(
       to top,
-      ${({ theme }) => theme.opacityBackground} 20%,
-      rgba(0, 0, 0, 0) 100%
+      ${({ theme }) => theme.opacityBackground} 10%,
+      rgba(0, 0, 0, 0) 90%
     );
     opacity: 1;
   }
