@@ -6,17 +6,22 @@ import styled from "styled-components";
 import { getUserData } from "../../utils/api";
 // Components
 import LoadingSpinner from "../../components/LoadingSpinner";
+// Context
+import { useStoreState } from "../../store";
 
 export default function User_id() {
   const router = useRouter();
   const { user_id } = router.query;
+  const { user } = useStoreState();
 
   const [userData, setUserData] = useState(null);
+  const [canEditPage, setCanEditPage] = useState(false);
 
   useEffect(() => {
     const getData = async () => {
       const data = await getUserData(user_id);
       setUserData(data);
+      setCanEditPage(user._id === data._id);
     };
 
     if (user_id) getData();
@@ -42,17 +47,19 @@ export default function User_id() {
             </div>
             <div className="right">
               <h1>{userData.username}</h1>
-              <p>{userData.workoutLog.length} total workouts</p>
+              <p>{userData.workoutLog.length} logged lifts</p>
               <p>0 followers</p>
             </div>
+
+            {canEditPage && <EditBtn>Edit</EditBtn>}
           </Header>
 
-          {userData.bio && (
-            <Bio>
-              <p>Bio:</p>
-              <p>{userData.bio}</p>
-            </Bio>
-          )}
+          <Bio>
+            <h3>Bio</h3>
+            <p>{userData.bio || "User bio here."}</p>
+
+            {canEditPage && <EditBtn>Edit</EditBtn>}
+          </Bio>
         </>
       ) : (
         <LoadingSpinner />
@@ -68,9 +75,14 @@ const Container = styled.div`
   justify-content: flex-start;
   align-items: center;
   padding: 0.5rem;
+
+  & > * {
+    margin-bottom: 0.5rem;
+  }
 `;
 
 const Header = styled.header`
+  position: relative;
   width: 100%;
   background: ${({ theme }) => theme.background};
   display: flex;
@@ -86,6 +98,8 @@ const Header = styled.header`
 
     h1 {
       margin-bottom: 0.5rem;
+      letter-spacing: 1px;
+      font-weight: 200;
     }
     p {
       margin: 0.25rem;
@@ -135,10 +149,30 @@ const ProfileImage = styled.div`
 `;
 
 const Bio = styled.section`
+  position: relative;
   width: 100%;
   background: ${({ theme }) => theme.background};
-  margin: 0.5rem;
-  padding: 1rem 0.5rem;
+  padding: 1rem 1rem;
   border-radius: 10px;
   text-align: left;
+
+  h3 {
+    font-weight: 100;
+    letter-spacing: 1px;
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+    color: ${({ theme }) => theme.textLight};
+  }
+`;
+
+const EditBtn = styled.button`
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+  border: ${({ theme }) => theme.border};
+  color: ${({ theme }) => theme.textLight};
+  background: ${({ theme }) => theme.buttonMed};
 `;
