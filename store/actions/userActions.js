@@ -91,7 +91,50 @@ export const saveWeight = async (weight, user_id) => {
     });
 
     const userData = await res.json();
-    // dispatch({ type: "SET_USER", payload: { userData } });
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
+export const addFollow = async (user_id, followee_id) => {
+  try {
+    const res = await fetch(`/api/users/${user_id}`, {
+      method: "PUT",
+      contentType: "application/json",
+      body: JSON.stringify({ follow: followee_id }),
+    });
+
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+export const removeFollow = async (user_id, followee_id) => {
+  try {
+    const res = await fetch(`/api/users/${user_id}`, {
+      method: "PUT",
+      contentType: "application/json",
+      body: JSON.stringify({ unfollow: followee_id }),
+    });
+
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
+export const saveBio = async (user_id, bio) => {
+  try {
+    const res = await fetch(`/api/users/${user_id}`, {
+      method: "PUT",
+      contentType: "application/json",
+      body: JSON.stringify({ bio }),
+    });
+
     return true;
   } catch (e) {
     console.log(e);
