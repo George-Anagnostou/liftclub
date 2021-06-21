@@ -100,16 +100,25 @@ export default async (req, res) => {
       let fieldToUpdate;
 
       const { workoutLog } = JSON.parse(req.body);
-      if (workoutLog) fieldToUpdate = "workoutLog";
+      if (workoutLog) fieldToUpdate = "WORKOUT_LOG";
 
       const { savedWorkouts } = JSON.parse(req.body);
-      if (savedWorkouts) fieldToUpdate = "savedWorkouts";
+      if (savedWorkouts) fieldToUpdate = "SAVED_WORKOUTS";
 
       const { weight } = JSON.parse(req.body);
-      if (weight) fieldToUpdate = "weight";
+      if (weight) fieldToUpdate = "WEIGHT";
+
+      const { follow } = JSON.parse(req.body);
+      if (follow) fieldToUpdate = "FOLLOW";
+
+      const { unfollow } = JSON.parse(req.body);
+      if (unfollow) fieldToUpdate = "UNFOLLOW";
+
+      const { bio } = JSON.parse(req.body);
+      if (typeof bio === "string") fieldToUpdate = "BIO";
 
       switch (fieldToUpdate) {
-        case "workoutLog":
+        case "WORKOUT_LOG":
           // Cast id strings to ObjIds
           workoutLog.map((entry) => {
             entry.workout_id = ObjectId(entry.workout_id);
@@ -123,12 +132,12 @@ export default async (req, res) => {
             .findOneAndUpdate(
               { _id: ObjectId(user_id) },
               { $set: { workoutLog: workoutLog } },
-              { returnOriginal: false }
+              { returnNewDocument: true }
             );
           res.json(userData.value);
           break;
 
-        case "savedWorkouts":
+        case "SAVED_WORKOUTS":
           const ObjIdArr = savedWorkouts.map((id) => ObjectId(id));
 
           userData = await db
@@ -136,21 +145,74 @@ export default async (req, res) => {
             .findOneAndUpdate(
               { _id: ObjectId(user_id) },
               { $set: { savedWorkouts: ObjIdArr } },
-              { returnOriginal: false }
+              { returnNewDocument: true }
             );
           res.json(userData.value);
           break;
 
-        case "weight":
+        case "WEIGHT":
           userData = await db
             .collection("users")
             .findOneAndUpdate(
               { _id: ObjectId(user_id) },
               { $push: { weight: Number(weight) } },
-              { returnOriginal: false }
+              { returnNewDocument: true }
             );
           res.json(userData.value);
           break;
+
+        case "FOLLOW":
+          // Push followee's id into user_id's following array
+          userData = await db
+            .collection("users")
+            .findOneAndUpdate(
+              { _id: ObjectId(user_id) },
+              { $push: { following: ObjectId(follow) } },
+              { returnNewDocument: true }
+            );
+
+          // Push user_id into followee's followers array
+          await db
+            .collection("users")
+            .findOneAndUpdate(
+              { _id: ObjectId(follow) },
+              { $push: { followers: ObjectId(user_id) } }
+            );
+
+          res.json({});
+          break;
+
+        case "UNFOLLOW":
+          // Pull followee's id from user_id's following array
+          userData = await db
+            .collection("users")
+            .findOneAndUpdate(
+              { _id: ObjectId(user_id) },
+              { $pull: { following: ObjectId(unfollow) } },
+              { returnNewDocument: true }
+            );
+
+          // Pull user_id from followee's followers array
+          await db
+            .collection("users")
+            .findOneAndUpdate(
+              { _id: ObjectId(unfollow) },
+              { $pull: { followers: ObjectId(user_id) } }
+            );
+
+          res.json({});
+          break;
+
+        case "BIO":
+          userData = await db
+            .collection("users")
+            .findOneAndUpdate({ _id: ObjectId(user_id) }, { $set: { bio: bio } });
+
+          res.json({});
+          break;
+
+        default:
+          res.status(404).send();
       }
 
       break;
@@ -161,7 +223,7 @@ export default async (req, res) => {
           .findOneAndUpdate(
             { _id: ObjectId(user_id) },
             { $pull: { workoutLog: { isoDate: new Date(req.query.date) } } },
-            { returnOriginal: false }
+            { returnNewDocument: true }
           );
 
         res.json(updated.value.workoutLog);
