@@ -19,7 +19,7 @@ export default function PublicWorkoutTile({
   const [loading, setLoading] = useState(false);
 
   const toggleWorkoutInfo = () => setShowWorkoutInfo((prev) => !prev);
-  
+
   // Get all exercises for a workout
   const getWorkoutExercises = async () => {
     const mergedData = await addExerciseDataToWorkout(workout);
@@ -45,8 +45,8 @@ export default function PublicWorkoutTile({
 
   return (
     <WorkoutTile>
-      <div className="tile-heading">
-        <div className="name">
+      <div className="tile-bar">
+        <div className="name" onClick={toggleWorkoutInfo}>
           <h3>{workout.name}</h3>
 
           <p>
@@ -105,7 +105,7 @@ const WorkoutTile = styled.li`
   padding: 0.5rem;
   margin: 0.5em;
 
-  .tile-heading {
+  .tile-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -154,6 +154,7 @@ const WorkoutTile = styled.li`
   }
 
   .workoutInfo {
+    margin-top: 0.5rem;
     text-align: left;
     transform-origin: top;
     -webkit-animation: open 0.5s ease forwards; /* Safari */

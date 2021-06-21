@@ -1,65 +1,96 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import Image from "next/image";
 import styled from "styled-components";
 // Utils
-import { getUserData } from "../../utils/api";
-// Components
-import LoadingSpinner from "../../components/LoadingSpinner";
+import { getUserData, getUserMadeWorkouts } from "../../utils/api";
 // Context
 import { useStoreState } from "../../store";
+import { addFollow, removeFollow } from "../../store/actions/userActions";
+// Components
+import LoadingSpinner from "../../components/LoadingSpinner";
+import ProfileImg from "../../components/userProfile/ProfileImg";
+import Bio from "../../components/userProfile/Bio";
 
 export default function User_id() {
   const router = useRouter();
   const { user_id } = router.query;
   const { user } = useStoreState();
 
-  const [userData, setUserData] = useState(null);
-  const [canEditPage, setCanEditPage] = useState(false);
+  const [profileData, setProfileData] = useState(null);
+  const [userIsFollowing, setUserIsFollowing] = useState(false);
+  const [createdWorkouts, setCreatedWorkouts] = useState([]);
+  const [isProfileOwner, setIsProfileOwner] = useState(false);
+
+  const handleFollowClick = async () => {
+    const success = await addFollow(user._id, user_id);
+
+    if (success) {
+      setUserIsFollowing(true);
+      setProfileData((prev) => ({ ...prev, followers: [...prev.followers, user._id] }));
+    }
+  };
+
+  const handleUnfollowClick = async () => {
+    const success = await removeFollow(user._id, user_id);
+
+    if (success) {
+      setUserIsFollowing(false);
+      setProfileData((prev) => ({
+        ...prev,
+        followers: prev.followers.filter((entry) => entry !== user._id),
+      }));
+    }
+  };
 
   useEffect(() => {
-    const getData = async () => {
-      const data = await getUserData(user_id);
-      setUserData(data);
-      setCanEditPage(user._id === data._id);
+    const getProfileData = async () => {
+      const created = await getUserMadeWorkouts(user_id);
+      setCreatedWorkouts(created || []);
+
+      const profile = await getUserData(user_id);
+      setProfileData(profile);
+      setIsProfileOwner(user._id === profile._id);
+      setUserIsFollowing(user.following.includes(profile._id));
     };
 
-    if (user_id) getData();
-  }, [user_id]);
+    if (user_id && user) getProfileData();
+  }, [user_id, user]);
 
   return (
     <Container>
-      {userData ? (
+      {profileData && user ? (
         <>
-          <Header>
+          <HeaderTile>
             <div className="left">
-              <ProfileImage>
-                {userData.profileImg ? (
-                  <Image src="/favicon.jpeg" height="100" width="100"></Image>
-                ) : (
-                  <div className="addImgIcon">
-                    <span></span>
-                    <span></span>
-                    <p>ADD IMAGE</p>
-                  </div>
-                )}
-              </ProfileImage>
+              <ProfileImg profileData={profileData} isProfileOwner={isProfileOwner} />
+
+              {!isProfileOwner && (
+                <button
+                  className={userIsFollowing ? "unfollowBtn" : "followBtn"}
+                  onClick={userIsFollowing ? handleUnfollowClick : handleFollowClick}
+                >
+                  {userIsFollowing ? "Following" : "Follow"}
+                </button>
+              )}
             </div>
+
             <div className="right">
-              <h1>{userData.username}</h1>
-              <p>{userData.workoutLog.length} logged lifts</p>
-              <p>0 followers</p>
+              <h1>{profileData.username}</h1>
+              <p>{profileData.workoutLog.length} workouts logged</p>
+              <p>{createdWorkouts.length} workouts built</p>
+              <p>
+                {profileData.followers?.length || 0}{" "}
+                {profileData.followers?.length === 1 ? "follower" : "followers"}
+              </p>
             </div>
+          </HeaderTile>
 
-            {canEditPage && <EditBtn>Edit</EditBtn>}
-          </Header>
-
-          <Bio>
-            <h3>Bio</h3>
-            <p>{userData.bio || "User bio here."}</p>
-
-            {canEditPage && <EditBtn>Edit</EditBtn>}
-          </Bio>
+          <Bio
+            profileData={profileData}
+            isProfileOwner={isProfileOwner}
+            setProfileData={setProfileData}
+            user_id={user._id}
+          />
         </>
       ) : (
         <LoadingSpinner />
@@ -71,8 +102,6 @@ export default function User_id() {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  justify-content: flex-start;
   align-items: center;
   padding: 0.5rem;
 
@@ -81,13 +110,32 @@ const Container = styled.div`
   }
 `;
 
-const Header = styled.header`
-  position: relative;
+const HeaderTile = styled.header`
   width: 100%;
   background: ${({ theme }) => theme.background};
   display: flex;
   padding: 1rem 0.5rem;
   border-radius: 10px;
+  .left {
+    .followBtn {
+      margin-top: 0.5rem;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      color: ${({ theme }) => theme.accentText};
+      background: ${({ theme }) => theme.accent};
+      border: 1px solid ${({ theme }) => theme.accentSoft};
+    }
+    .unfollowBtn {
+      margin-top: 0.5rem;
+      padding: 0.5rem 0.5rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      color: ${({ theme }) => theme.textLight};
+      background: ${({ theme }) => theme.buttonMed};
+      border: 1px solid ${({ theme }) => theme.buttonLight};
+    }
+  }
 
   .right {
     margin-left: 0.5rem;
@@ -106,73 +154,4 @@ const Header = styled.header`
       color: ${({ theme }) => theme.textLight};
     }
   }
-`;
-
-const ProfileImage = styled.div`
-  border-radius: 50%;
-  height: 100px;
-  width: 100px;
-  background: ${({ theme }) => theme.buttonMed};
-  overflow: hidden;
-
-  .addImgIcon {
-    height: 100%;
-    position: relative;
-
-    span {
-      position: absolute;
-      bottom: 60px;
-      right: 0;
-      left: 0;
-      margin: auto;
-      display: block;
-      height: 5px;
-      width: 35px;
-      background: ${({ theme }) => theme.background};
-      border-radius: 7px;
-
-      &:first-of-type {
-        transform: rotate(90deg);
-      }
-    }
-
-    p {
-      position: absolute;
-      bottom: 20px;
-      left: 0;
-      right: 0;
-      margin: auto;
-      color: ${({ theme }) => theme.textLight};
-      font-size: 0.7rem;
-    }
-  }
-`;
-
-const Bio = styled.section`
-  position: relative;
-  width: 100%;
-  background: ${({ theme }) => theme.background};
-  padding: 1rem 1rem;
-  border-radius: 10px;
-  text-align: left;
-
-  h3 {
-    font-weight: 100;
-    letter-spacing: 1px;
-    font-size: 0.8rem;
-    margin-bottom: 0.5rem;
-    color: ${({ theme }) => theme.textLight};
-  }
-`;
-
-const EditBtn = styled.button`
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  border-radius: 4px;
-  padding: 0.25rem 0.5rem;
-  font-size: 0.8rem;
-  border: ${({ theme }) => theme.border};
-  color: ${({ theme }) => theme.textLight};
-  background: ${({ theme }) => theme.buttonMed};
 `;
