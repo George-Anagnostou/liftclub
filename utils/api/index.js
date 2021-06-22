@@ -7,9 +7,9 @@
  *
  *
  */
-export const getUserData = async (user_id) => {
+export const getUserFromUsername = async (username) => {
   try {
-    const res = await fetch(`/api/users/${user_id}`);
+    const res = await fetch(`/api/users/null?username=${username}`);
     const userData = await res.json();
     return userData;
   } catch (e) {
