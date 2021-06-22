@@ -1,11 +1,21 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Image from "next/image";
 import styled from "styled-components";
 
 export default function ProfileImg({ profileData, isProfileOwner }) {
+  const shadow = useRef(null);
+
   const [showIconSelect, setShowIconSelect] = useState(false);
+  const [selectedIcon, setSelectedIcon] = useState("");
+  const [icons, setIcons] = useState(["ICON 1", "ICON 2", "ICON 3", "ICON 4", "ICON 5", "ICON 6"]);
 
   const toggleShowIconSelect = () => setShowIconSelect(!showIconSelect);
+
+  const handleIconClick = (icon) => setSelectedIcon(icon);
+
+  const handleShadowClick = ({ target }) => {
+    if (target.classList.contains("shadow")) setShowIconSelect(false);
+  };
 
   return (
     <>
@@ -24,16 +34,18 @@ export default function ProfileImg({ profileData, isProfileOwner }) {
       </ProfileImage>
 
       {showIconSelect && (
-        <IconSelect>
+        <IconSelect ref={shadow} className="shadow" onClick={handleShadowClick}>
           <div className="container">
             <button onClick={toggleShowIconSelect}>X</button>
-            <div>ICON 1</div>
-            <div>ICON 2</div>
-            <div>ICON 3</div>
-            <div>ICON 4</div>
-            <div>ICON 5</div>
-            <div>ICON 6</div>
-            <div>CUSTOM</div>
+
+            {icons.map((icon) => (
+              <Icon
+                onClick={() => handleIconClick(icon)}
+                className={selectedIcon === icon ? "selected" : ""}
+              >
+                {icon}
+              </Icon>
+            ))}
           </div>
         </IconSelect>
       )}
@@ -90,6 +102,7 @@ const IconSelect = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
+  min-height: 100vh;
   background: ${({ theme }) => theme.opacityBackground};
   z-index: 99;
 
@@ -100,7 +113,6 @@ const IconSelect = styled.div`
     background: ${({ theme }) => theme.background};
     max-width: 400px;
     width: 95%;
-    /* height: 50vh; */
     position: relative;
 
     display: flex;
@@ -120,15 +132,24 @@ const IconSelect = styled.div`
       width: 15px;
       font-size: 10px;
     }
-    div {
-      background: ${({ theme }) => theme.buttonMed};
-      height: 100px;
-      width: 100px;
-      margin: 1rem 0.5rem;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+  }
+`;
+
+const Icon = styled.div`
+  background: ${({ theme }) => theme.buttonMed};
+  border: 3px solid ${({ theme }) => theme.buttonMed};
+  height: 100px;
+  width: 100px;
+  margin: 1rem 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s ease;
+
+  &.selected {
+    border: 3px solid ${({ theme }) => theme.border};
+    box-shadow: 0 2px 5px ${({ theme }) => theme.boxShadow};
+    transform: scale(1.1);
   }
 `;
