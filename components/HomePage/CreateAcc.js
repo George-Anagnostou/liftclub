@@ -11,9 +11,12 @@ export default function createAcc({ routeToWorkoutLog, handleLinkClick }) {
   const [usernameExists, setUsernameExists] = useState(false);
 
   // CREATE ACCOUNT handlers
-  const handleCreateAccUsernameChange = (e) => setCreateAccUsername(e.target.value);
+  // Username cannot contain special characters
+  const handleCreateAccUsernameChange = (e) =>
+    setCreateAccUsername(e.target.value.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, ""));
+
   const handleCreateAccPasswordChange = (e) => setCreateAccPassword(e.target.value);
-  
+
   const handleCreateAccount = async (e) => {
     e.preventDefault();
 
