@@ -140,7 +140,7 @@ export default function myProfile() {
             </div>
             <div className="line">
               <p>Account Type:</p>
-              <span>{user.isAdmin ? "Admin" : "Member"}</span>
+              <span>{user.isTrainer ? "Admin" : "Member"}</span>
             </div>
             <div className="line">
               <p>Night Mode</p>

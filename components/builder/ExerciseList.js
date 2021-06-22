@@ -61,7 +61,7 @@ export default function ExerciseList({ isExerciseInCustomWorkout, addExercise, r
 
         <button onClick={() => setSearchTerm("")}>Clear</button>
 
-        {user?.isAdmin && <button onClick={() => setShowCreateExerciseModal(true)}>Add</button>}
+        {user?.isTrainer && <button onClick={() => setShowCreateExerciseModal(true)}>Add</button>}
       </header>
 
       {showCreateExerciseModal && <CreateExerciseModal setShowModal={setShowCreateExerciseModal} />}

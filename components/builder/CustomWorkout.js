@@ -83,7 +83,7 @@ export default function CustomWorkout({
       // Current user set to creator
       composedWorkout.creator_id = user._id;
       // Only allow admins to save public workouts
-      if (!user.isAdmin) composedWorkout.isPublic = false;
+      if (!user.isTrainer) composedWorkout.isPublic = false;
       // Remove any existing _id
       delete composedWorkout._id;
       // Add date created
@@ -124,7 +124,7 @@ export default function CustomWorkout({
 
             <button onClick={clearCustomWorkout}>Clear</button>
 
-            {user?.isAdmin && (
+            {user?.isTrainer && (
               <div className="checkbox" onClick={handlePrivacyChange}>
                 <label htmlFor="public">Public</label>
                 <input
