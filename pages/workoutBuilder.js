@@ -1,13 +1,13 @@
 import { useState } from "react";
 import styled from "styled-components";
 // Components
-import ExerciseList from "../components/builder/ExerciseList";
-import UserWorkouts from "../components/builder/UserWorkouts";
-import CustomWorkout from "../components/builder/CustomWorkout";
+import ExerciseList from "../components/workoutBuilder/ExerciseList";
+import UserWorkouts from "../components/workoutBuilder/UserWorkouts";
+import CustomWorkout from "../components/workoutBuilder/CustomWorkout";
 // Context
 import { useStoreState } from "../store";
 
-export default function builder() {
+export default function workoutBuilder() {
   const { user } = useStoreState();
 
   const [showUserWorkouts, setShowUserWorkouts] = useState(false);

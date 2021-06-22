@@ -11,7 +11,7 @@ import Stats from "../public/navIcons/Stats";
 
 const routes = [
   { pathname: "/workoutLog", icon: <Notebook /> },
-  { pathname: "/builder", icon: <Builder /> },
+  { pathname: "/workoutBuilder", icon: <Builder /> },
   { pathname: "/workoutFeed", icon: <Feed /> },
   { pathname: "/myProfile", icon: <Stats /> },
 ];
