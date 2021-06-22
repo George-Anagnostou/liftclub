@@ -10,10 +10,16 @@ export default async (req, res) => {
 
   switch (httpMethod) {
     case "GET":
+      /**
+       *
+       * QUERIES
+       *
+       */
+
       if (req.query.field === "savedWorkouts") {
-        /**
-         * GET aggregated savedWorkouts with interpolated workout data
-         */
+        // GET aggregated savedWorkouts with interpolated workout data
+        // /users/user_id?field=savedWorkouts
+
         const data = await db
           .collection("users")
           .aggregate([
@@ -31,9 +37,9 @@ export default async (req, res) => {
 
         res.json(data[0].data);
       } else if (req.query.field === "workoutLog") {
-        /**
-         * GET aggregated workoutLog with interpolated workout and exercise data
-         */
+        // GET aggregated workoutLog with interpolated workout and exercise data
+        // /users/user_id?field=workoutLog&date=isoDate
+
         const data = await db
           .collection("users")
           .aggregate([
@@ -86,8 +92,14 @@ export default async (req, res) => {
         );
 
         res.json(foundWorkout[0]);
+      } else if (req.query.username) {
+        // Get a specific user from username
+
+        userData = await db.collection("users").findOne({ username: req.query.username });
+        res.json(userData);
       } else {
         // Get a specific user from _id
+
         userData = await db.collection("users").findOne({ _id: ObjectId(user_id) });
         res.json(userData);
       }
