@@ -149,7 +149,6 @@ const Icon = styled.div`
 
   &.selected {
     border: 3px solid ${({ theme }) => theme.border};
-    box-shadow: 0 2px 5px ${({ theme }) => theme.boxShadow};
     transform: scale(1.1);
   }
 `;
