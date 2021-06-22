@@ -71,7 +71,8 @@ const BioContainer = styled.section`
   }
 
   textarea {
-    letter-spacing: 1px;
+    line-height: 1.3rem;
+    letter-spacing: 0.5px;
     font-family: inherit;
     font-size: 1rem;
     width: 100%;
@@ -86,7 +87,8 @@ const BioContainer = styled.section`
   }
 
   p {
-    letter-spacing: 1px;
+    line-height: 1.3rem;
+    letter-spacing: 0.5px;
     padding: 0.5rem;
   }
 `;
