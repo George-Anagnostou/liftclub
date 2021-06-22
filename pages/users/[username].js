@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 // Utils
-import { getUserData, getUserMadeWorkouts } from "../../utils/api";
+import { getUserFromUsername, getUserMadeWorkouts } from "../../utils/api";
 // Context
 import { useStoreState } from "../../store";
 import { addFollow, removeFollow } from "../../store/actions/userActions";
@@ -13,7 +13,7 @@ import Bio from "../../components/userProfile/Bio";
 
 export default function User_id() {
   const router = useRouter();
-  const { user_id } = router.query;
+  const { username } = router.query;
   const { user } = useStoreState();
 
   const [profileData, setProfileData] = useState(null);
@@ -22,7 +22,7 @@ export default function User_id() {
   const [isProfileOwner, setIsProfileOwner] = useState(false);
 
   const handleFollowClick = async () => {
-    const success = await addFollow(user._id, user_id);
+    const success = await addFollow(user._id, profileData._id);
 
     if (success) {
       setUserIsFollowing(true);
@@ -31,7 +31,7 @@ export default function User_id() {
   };
 
   const handleUnfollowClick = async () => {
-    const success = await removeFollow(user._id, user_id);
+    const success = await removeFollow(user._id, profileData._id);
 
     if (success) {
       setUserIsFollowing(false);
@@ -44,17 +44,18 @@ export default function User_id() {
 
   useEffect(() => {
     const getProfileData = async () => {
-      const created = await getUserMadeWorkouts(user_id);
-      setCreatedWorkouts(created || []);
+      const profile = await getUserFromUsername(username);
 
-      const profile = await getUserData(user_id);
       setProfileData(profile);
       setIsProfileOwner(user._id === profile._id);
       setUserIsFollowing(user.following.includes(profile._id));
+
+      const created = await getUserMadeWorkouts(profile._id);
+      setCreatedWorkouts(created || []);
     };
 
-    if (user_id && user) getProfileData();
-  }, [user_id, user]);
+    if (!profileData && username && user) getProfileData();
+  }, [username, user]);
 
   return (
     <Container>
