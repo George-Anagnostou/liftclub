@@ -4,13 +4,11 @@ import Link from "next/link";
 // Components
 import LoadingSpinner from "../LoadingSpinner";
 // Utils
-import { getUserData } from "../../utils/api";
 import { addExerciseDataToWorkout, timeSince } from "../../utils";
 
 export default function SavedWorkoutTile({ workout, removeFromSavedWorkouts }) {
   const [showWorkoutInfo, setShowWorkoutInfo] = useState(false);
   const [workoutExercises, setWorkoutExercises] = useState([]);
-  const [creator, setCreator] = useState("");
   const [loading, setLoading] = useState(false);
 
   const toggleWorkoutView = () => setShowWorkoutInfo((prev) => !prev);
@@ -19,13 +17,6 @@ export default function SavedWorkoutTile({ workout, removeFromSavedWorkouts }) {
   const getWorkoutExercises = async () => {
     const mergedData = await addExerciseDataToWorkout(workout);
     setWorkoutExercises(mergedData.exercises);
-  };
-
-  // Get creator username
-  const getCreator = async () => {
-    const creatorData = await getUserData(workout.creator_id);
-    setCreator(creatorData.username);
-
     setLoading(false);
   };
 
@@ -34,18 +25,20 @@ export default function SavedWorkoutTile({ workout, removeFromSavedWorkouts }) {
     if (showWorkoutInfo && !workoutExercises.length) {
       setLoading(true);
       getWorkoutExercises();
-      getCreator();
     }
   }, [showWorkoutInfo]);
 
   return (
     <WorkoutTile>
       <div className="tile-bar">
-        <div className="name" onClick={toggleWorkoutView}>
-          <h3>{workout.name}</h3>
+        <div className="name">
+          <h3 onClick={toggleWorkoutView}>{workout.name}</h3>
 
           <p>
-            Posted <span>{timeSince(new Date(workout.date_created))}</span>
+            Posted <span>{timeSince(new Date(workout.date_created))}</span> by
+            <Link href={`users/${workout.creatorName}`}>
+              <a className="creator"> {workout.creatorName}</a>
+            </Link>
           </p>
         </div>
 
@@ -60,16 +53,8 @@ export default function SavedWorkoutTile({ workout, removeFromSavedWorkouts }) {
         </div>
       </div>
 
-      {showWorkoutInfo && creator && (
+      {showWorkoutInfo && (
         <div className="workoutInfo">
-          <p className="creator">
-            <Link href={`users/${workout.creator_id}`}>
-              <a>
-                By: <span>{creator}</span>
-              </a>
-            </Link>
-          </p>
-
           {workoutExercises.map(({ sets, exercise_id, exercise }) => (
             <div key={`saved${exercise_id}`} className="exercise">
               {exercise && (
@@ -110,6 +95,18 @@ const WorkoutTile = styled.li`
       p {
         font-size: 0.7rem;
         color: ${({ theme }) => theme.textLight};
+
+        .creator {
+          font-size: 0.7rem;
+          color: ${({ theme }) => theme.textLight};
+
+          &:hover {
+            text-decoration: underline;
+            cursor: pointer;
+
+            color: ${({ theme }) => theme.textLight};
+          }
+        }
       }
     }
     .loadingSpinner {
@@ -146,17 +143,6 @@ const WorkoutTile = styled.li`
     -webkit-animation: open 0.5s ease forwards; /* Safari */
     animation: open 0.5s ease forwards;
 
-    .creator {
-      font-size: 0.7rem;
-      color: ${({ theme }) => theme.textLight};
-
-      &:hover {
-        text-decoration: underline;
-        cursor: pointer;
-
-        color: ${({ theme }) => theme.textLight};
-      }
-    }
     .exercise {
       margin: 0.25rem 0.5rem;
       text-transform: capitalize;
