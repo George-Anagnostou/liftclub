@@ -38,3 +38,28 @@ export const timeSince = (previous, current = Date.now()) => {
     return years > 1 ? years + " years ago" : years + " year ago";
   }
 };
+
+export const timeBetween = (first, second = Date.now()) => {
+  if (isNaN(first)) return;
+
+  var msPerDay = 1000 * 60 * 60 * 24;
+  var msPerWeek = msPerDay * 7;
+  var msPerMonth = msPerDay * 30;
+  var msPerYear = msPerDay * 365;
+
+  var elapsed = second - first;
+
+  const days = Math.round(elapsed / msPerDay);
+  return days > 1 ? days + " days" : days + " day";
+
+  if (elapsed < msPerMonth) {
+    const days = Math.round(elapsed / msPerDay);
+    return days > 1 ? days + " days" : days + " day";
+  } else if (elapsed < msPerMonth) {
+    const weeks = Math.round(elapsed / msPerWeek);
+    const remainingDays = Math.round((elapsed - msPerWeek * 4) / msPerDay);
+    return `${weeks} ${weeks > 1 ? "weeks" : "week"} ${
+      remainingDays && remainingDays > 1 ? remainingDays + " days" : remainingDays + " day"
+    } `;
+  }
+};
