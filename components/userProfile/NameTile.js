@@ -3,11 +3,11 @@ import styled from "styled-components";
 // Context
 import { useStoreState } from "../../store";
 // API
-import { addFollow, removeFollow } from "../../store/actions/userActions";
+import { addFollow, removeFollow } from "../../utils/api";
 // Components
 import ProfileImg from "./ProfileImg";
 
-export default function NameTile({ profileData, setProfileData, isProfileOwner, createdWorkouts }) {
+export default function NameTile({ profileData, setProfileData, isProfileOwner }) {
   const { user } = useStoreState();
 
   const [userIsFollowing, setUserIsFollowing] = useState(false);
@@ -17,7 +17,7 @@ export default function NameTile({ profileData, setProfileData, isProfileOwner, 
 
     if (success) {
       setUserIsFollowing(true);
-      setProfileData((prev) => ({ ...prev, followers: [...prev.followers, user._id] }));
+      setProfileData((prev) => ({ ...prev, followers: [...(prev.followers || []), user._id] }));
     }
   };
 
@@ -54,12 +54,12 @@ export default function NameTile({ profileData, setProfileData, isProfileOwner, 
 
       <div className="right">
         <h1>{profileData.username}</h1>
-        <p>{profileData.workoutLog.length} workouts logged</p>
-        <p>{createdWorkouts.length} workouts built</p>
+        <p>{profileData.workoutLog.length} days logged</p>
         <p>
           {profileData.followers?.length || 0}{" "}
           {profileData.followers?.length === 1 ? "follower" : "followers"}
         </p>
+        <p>{profileData.following?.length || 0} following </p>
       </div>
     </TileContainer>
   );
@@ -98,6 +98,7 @@ const TileContainer = styled.header`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    text-align: left;
 
     h1 {
       margin-bottom: 0.5rem;

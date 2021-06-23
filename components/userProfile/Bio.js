@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 // API
-import { saveBio } from "../../store/actions/userActions";
+import { saveBio } from "../../utils/api";
 
 export default function Bio({ profileData, isProfileOwner, setProfileData, user_id }) {
   const [editing, setEditing] = useState(false);
@@ -26,7 +26,14 @@ export default function Bio({ profileData, isProfileOwner, setProfileData, user_
 
   return (
     <BioContainer>
-      <h3>Bio</h3>
+      <div className="topbar">
+        <h3>Bio</h3>
+
+        {isProfileOwner && !editing && <button onClick={handleEditClick}>Edit</button>}
+
+        {editing && <button onClick={handleCancleClick}>Cancel</button>}
+      </div>
+
       {editing ? (
         <textarea
           type="text"
@@ -45,10 +52,6 @@ export default function Bio({ profileData, isProfileOwner, setProfileData, user_
         <p>{profileData.bio || "None"}</p>
       )}
 
-      {isProfileOwner && !editing && <EditBtn onClick={handleEditClick}>Edit</EditBtn>}
-
-      {editing && <CancelBtn onClick={handleCancleClick}>Cancel</CancelBtn>}
-
       {editing && <SaveBtn onClick={handleSaveClick}>Save</SaveBtn>}
     </BioContainer>
   );
@@ -58,16 +61,30 @@ const BioContainer = styled.section`
   position: relative;
   width: 100%;
   background: ${({ theme }) => theme.background};
-  padding: 1rem 1rem;
+  padding: 0.5rem;
   border-radius: 10px;
   text-align: left;
 
-  h3 {
-    font-weight: 100;
-    letter-spacing: 1px;
-    font-size: 0.8rem;
-    margin-bottom: 0.5rem;
-    color: ${({ theme }) => theme.textLight};
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    h3 {
+      font-size: 0.8rem;
+      font-weight: 100;
+      letter-spacing: 1px;
+      color: ${({ theme }) => theme.textLight};
+    }
+
+    button {
+      border-radius: 5px;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.8rem;
+      border: ${({ theme }) => theme.border};
+      color: ${({ theme }) => theme.textLight};
+      background: ${({ theme }) => theme.buttonMed};
+    }
   }
 
   textarea {
@@ -83,48 +100,23 @@ const BioContainer = styled.section`
     border-radius: 5px;
     color: ${({ theme }) => theme.text};
     background: ${({ theme }) => theme.buttonMed};
-    margin-bottom: 1.5rem;
+    margin: 0.5rem 0 0.25rem;
   }
 
   p {
     line-height: 1.3rem;
     letter-spacing: 0.5px;
     padding: 0.5rem;
+    margin: 0.5rem 0;
   }
 `;
 
-const EditBtn = styled.button`
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  border-radius: 4px;
-  padding: 0.25rem 0.5rem;
-  font-size: 0.8rem;
-  border: ${({ theme }) => theme.border};
-  color: ${({ theme }) => theme.textLight};
-  background: ${({ theme }) => theme.buttonMed};
-`;
-
-const CancelBtn = styled.button`
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  border-radius: 4px;
-  padding: 0.25rem 0.5rem;
-  font-size: 0.8rem;
-  border: ${({ theme }) => theme.border};
-  color: ${({ theme }) => theme.textLight};
-  background: ${({ theme }) => theme.buttonMed};
-`;
-
 const SaveBtn = styled.button`
-  position: absolute;
-  bottom: 0.5rem;
-  right: 0.5rem;
-  border-radius: 4px;
+  float: right;
+  border-radius: 5px;
   padding: 0.25rem 0.5rem;
   font-size: 0.8rem;
   border: ${({ theme }) => theme.border};
-  color: ${({ theme }) => theme.textLight};
-  background: ${({ theme }) => theme.buttonMed};
+  color: ${({ theme }) => theme.accentText};
+  background: ${({ theme }) => theme.accentSoft};
 `;

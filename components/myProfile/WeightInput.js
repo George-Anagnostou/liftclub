@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 
-import { saveWeight } from "../../store";
+// API
+import { saveWeight } from "../../utils/api";
 import Checkmark from "../Checkmark";
 
 const CheckmarkPosition = {

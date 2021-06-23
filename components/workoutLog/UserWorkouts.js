@@ -4,7 +4,8 @@ import styled from "styled-components";
 import { getUserMadeWorkouts } from "../../utils/api";
 // Context
 import { useStoreState } from "../../store";
-import { fetchUserSavedWorkouts } from "../../store/actions/userActions";
+// API
+import { fetchUserSavedWorkouts } from "../../utils/api";
 
 export default function UserWorkouts({ displayWorkout }) {
   const { user } = useStoreState();
@@ -21,7 +22,7 @@ export default function UserWorkouts({ displayWorkout }) {
 
   const loadUserSavedWorkouts = async () => {
     const savedWorkouts = await fetchUserSavedWorkouts(user._id);
-    
+
     savedWorkouts.sort(
       (a, b) => user.savedWorkouts.indexOf(a._id) - user.savedWorkouts.indexOf(b._id)
     );

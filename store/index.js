@@ -3,8 +3,6 @@ import {
   logoutUser,
   authLogin,
   createAccount,
-  saveWorkoutLog,
-  saveWeight,
 } from "./actions/userActions";
 import { StoreProvider, useStoreDispatch, useStoreState } from "./context/state";
 
@@ -16,6 +14,4 @@ export {
   logoutUser,
   authLogin,
   createAccount,
-  saveWorkoutLog,
-  saveWeight,
 };

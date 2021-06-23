@@ -9,14 +9,15 @@ import DateScroll from "../components/workoutLog/DateScroll";
 // Utils
 import { getCurrYearMonthDay, addExerciseDataToWorkout } from "../utils";
 // Context
-import { useStoreState, useStoreDispatch, saveWorkoutLog } from "../store";
+import { useStoreState } from "../store";
+// API
 import {
+  saveWorkoutLog,
   deleteWorkoutFromWorkoutLog,
   fetchDateFromUserWorkoutLog,
-} from "../store/actions/userActions";
+} from "../utils/api";
 
 export default function workoutLog() {
-  const dispatch = useStoreDispatch();
   const { user } = useStoreState();
 
   const [workoutLog, setWorkoutLog] = useState([]);
@@ -170,7 +171,7 @@ export default function workoutLog() {
       day.exerciseData.map((each) => delete each.exercise);
     });
 
-    const userData = await saveWorkoutLog(dispatch, updatedWorkoutLog, user._id);
+    const userData = await saveWorkoutLog(updatedWorkoutLog, user._id);
     setWorkoutLog(userData.workoutLog);
     setSavedSuccessfully(userData);
   };
