@@ -29,7 +29,7 @@ export default function ProfileImg({ profileData, isProfileOwner }) {
             <p>ADD IMAGE</p>
           </div>
         ) : (
-          <div>Default</div>
+          <Image src="/favicon.jpeg" height="100" width="100"></Image>
         )}
       </ProfileImage>
 
@@ -40,6 +40,7 @@ export default function ProfileImg({ profileData, isProfileOwner }) {
 
             {icons.map((icon) => (
               <Icon
+                key={icon}
                 onClick={() => handleIconClick(icon)}
                 className={selectedIcon === icon ? "selected" : ""}
               >
