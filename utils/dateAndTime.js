@@ -1,3 +1,5 @@
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
 export const getCurrYearMonthDay = () => {
   const date = new Date();
   const currYear = date.getFullYear();
@@ -52,14 +54,23 @@ export const timeBetween = (first, second = Date.now()) => {
   const days = Math.round(elapsed / msPerDay);
   return days > 1 ? days + " days" : days + " day";
 
-  if (elapsed < msPerMonth) {
-    const days = Math.round(elapsed / msPerDay);
-    return days > 1 ? days + " days" : days + " day";
-  } else if (elapsed < msPerMonth) {
-    const weeks = Math.round(elapsed / msPerWeek);
-    const remainingDays = Math.round((elapsed - msPerWeek * 4) / msPerDay);
-    return `${weeks} ${weeks > 1 ? "weeks" : "week"} ${
-      remainingDays && remainingDays > 1 ? remainingDays + " days" : remainingDays + " day"
-    } `;
-  }
+  // if (elapsed < msPerMonth) {
+  //   const days = Math.round(elapsed / msPerDay);
+  //   return days > 1 ? days + " days" : days + " day";
+  // } else if (elapsed < msPerMonth) {
+  //   const weeks = Math.round(elapsed / msPerWeek);
+  //   const remainingDays = Math.round((elapsed - msPerWeek * 4) / msPerDay);
+  //   return `${weeks} ${weeks > 1 ? "weeks" : "week"} ${
+  //     remainingDays && remainingDays > 1 ? remainingDays + " days" : remainingDays + " day"
+  //   } `;
+  // }
+};
+
+export const formatIsoDate = (isoDate) => {
+  const date = new Date(isoDate);
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const day = date.getDate();
+
+  return `${MONTHS[month]} ${day}, ${year}`;
 };
