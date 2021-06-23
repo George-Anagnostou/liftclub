@@ -8,7 +8,7 @@ export const lightTheme = {
   background: "linear-gradient(to bottom, #eeeeee 20%, #e9e8f1 100%)",
 
   buttonLight: "#ffffff",
-  buttonMed: "#ffffff",
+  buttonMed: "#dddddd",
   accent: "#4361ee",
   accentSoft: "#5d78ee",
   accentText: "#fafafa",
