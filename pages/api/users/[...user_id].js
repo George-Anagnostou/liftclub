@@ -107,6 +107,7 @@ export default async (req, res) => {
       break;
     case "POST":
       break;
+
     case "PUT":
       // Declare a field to update
       let fieldToUpdate;
@@ -128,6 +129,12 @@ export default async (req, res) => {
 
       const { bio } = JSON.parse(req.body);
       if (typeof bio === "string") fieldToUpdate = "BIO";
+
+      const { joinTeam } = JSON.parse(req.body);
+      if (joinTeam) fieldToUpdate = "JOIN_TEAM";
+
+      const { leaveTeam } = JSON.parse(req.body);
+      if (leaveTeam) fieldToUpdate = "LEAVE_TEAM";
 
       switch (fieldToUpdate) {
         case "WORKOUT_LOG":
@@ -219,6 +226,42 @@ export default async (req, res) => {
           userData = await db
             .collection("users")
             .findOneAndUpdate({ _id: ObjectId(user_id) }, { $set: { bio: bio } });
+
+          res.json({});
+          break;
+
+        case "JOIN_TEAM":
+          userData = await db
+            .collection("users")
+            .findOneAndUpdate(
+              { _id: ObjectId(user_id) },
+              { $push: { teamsJoined: ObjectId(joinTeam) } }
+            );
+
+          await db
+            .collection("teams")
+            .findOneAndUpdate(
+              { _id: ObjectId(joinTeam) },
+              { $push: { members: ObjectId(user_id) } }
+            );
+
+          res.json({});
+          break;
+
+        case "LEAVE_TEAM":
+          userData = await db
+            .collection("users")
+            .findOneAndUpdate(
+              { _id: ObjectId(user_id) },
+              { $pull: { teamsJoined: ObjectId(leaveTeam) } }
+            );
+
+          await db
+            .collection("teams")
+            .findOneAndUpdate(
+              { _id: ObjectId(leaveTeam) },
+              { $pull: { members: ObjectId(user_id) } }
+            );
 
           res.json({});
           break;
