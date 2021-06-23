@@ -44,9 +44,16 @@ const DateScrollContainer = styled.ul`
 
   .date {
     flex: 1;
-    margin: 0 0.25rem;
     height: fit-content;
     text-align: center;
+    margin: 0 0.25rem;
+
+    &:last-child {
+      margin: 0 0.25rem 0 0;
+    }
+    &:first-child {
+      margin: 0 0 0 0.25rem;
+    }
 
     div {
       border-radius: 10px;
@@ -54,7 +61,7 @@ const DateScrollContainer = styled.ul`
       transition: all 0.2s ease-in-out;
 
       color: ${({ theme }) => theme.text};
-      border: 1px solid ${({ theme }) => theme.border};
+      /* border: 1px solid ${({ theme }) => theme.boxShadow}; */
 
       p {
         margin: 0.2rem 0;
@@ -65,6 +72,7 @@ const DateScrollContainer = styled.ul`
         color: ${({ theme }) => theme.accentText};
       }
       &.noDayData {
+        background: ${({ theme }) => theme.background};
       }
     }
   }
