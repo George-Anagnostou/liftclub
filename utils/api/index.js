@@ -48,12 +48,27 @@ export const leaveTeam = async (user_id, team_id) => {
   }
 };
 
-export const saveSavedWorkouts = async (savedWorkouts, user_id) => {
+export const addUserSavedWorkout = async (user_id, workout_id) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
       contentType: "application/json",
-      body: JSON.stringify({ savedWorkouts }),
+      body: JSON.stringify({ addSavedWorkout: workout_id }),
+    });
+
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
+export const removeUserSavedWorkout = async (user_id, workout_id) => {
+  try {
+    const res = await fetch(`/api/users/${user_id}`, {
+      method: "PUT",
+      contentType: "application/json",
+      body: JSON.stringify({ removeSavedWorkout: workout_id }),
     });
 
     return true;
@@ -341,6 +356,49 @@ export const getWorkoutsFromIdArray = async (idArr) => {
  *
  */
 
+export const getRoutineFromId = async (routine_id) => {
+  try {
+    const res = await fetch(`/api/routines/${routine_id}`);
+
+    const routineData = await res.json();
+
+    console.log(routineData);
+    return routineData;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+export const addNewRoutine = async (routine) => {
+  try {
+    const res = await fetch(`/api/routines}`, {
+      method: "POST",
+      contentType: "application/json",
+      body: JSON.stringify({ routine }),
+    });
+
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
+export const updateRoutine = async (updatedRoutine) => {
+  try {
+    const res = await fetch(`/api/routines/${updatedRoutine._id}}`, {
+      method: "PUT",
+      contentType: "application/json",
+      body: JSON.stringify({ updatedRoutine }),
+    });
+
+    return res.status === 204;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
 /*
  *
  *
@@ -353,7 +411,7 @@ export const getWorkoutsFromIdArray = async (idArr) => {
 export const getTeamById = async (team_id) => {
   try {
     const res = await fetch(`/api/teams/${team_id}`);
-    
+
     const team = await res.json();
     return team;
   } catch (e) {

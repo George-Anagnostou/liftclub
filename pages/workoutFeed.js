@@ -4,7 +4,12 @@ import styled from "styled-components";
 import SavedWorkouts from "../components/workoutFeed/SavedWorkouts";
 import PublicWorkouts from "../components/workoutFeed/PublicWorkouts";
 // Utils
-import { getPublicWorkouts, getWorkoutsFromIdArray, saveSavedWorkouts } from "../utils/api";
+import {
+  addUserSavedWorkout,
+  getPublicWorkouts,
+  getWorkoutsFromIdArray,
+  removeUserSavedWorkout,
+} from "../utils/api";
 // Context
 import { useStoreState } from "../store";
 
@@ -19,30 +24,22 @@ export default function workoutFeed() {
     return savedWorkouts.map((each) => each._id).includes(workout._id);
   };
 
-  const updateStateAndSaveToDB = (workoutArr) => {
-    // Update local state
-    setSavedWorkouts(workoutArr);
-    // Grab workout ids and save to DB
-    const idArr = workoutArr.map((each) => each._id);
-    saveSavedWorkouts(idArr, user._id);
+  const addToSavedWorkouts = async (workout) => {
+    const added = await addUserSavedWorkout(user._id, workout._id);
+
+    if (added) setSavedWorkouts((prev) => [...prev, workout]);
   };
 
-  const addToSavedWorkouts = (workout) => {
-    if (!workoutIsSaved(workout)) {
-      const updatedWorkouts = [...savedWorkouts, workout];
-      updateStateAndSaveToDB(updatedWorkouts);
-    }
-  };
+  const removeFromSavedWorkouts = async (workout) => {
+    const removed = await removeUserSavedWorkout(user._id, workout._id);
 
-  const removeFromSavedWorkouts = (workout) => {
-    const updatedWorkouts = savedWorkouts.filter((each) => each._id !== workout._id);
-    updateStateAndSaveToDB(updatedWorkouts);
+    if (removed) setSavedWorkouts((prev) => prev.filter((item) => item._id !== workout._id));
   };
 
   const getSavedWorkouts = async () => {
     const workouts = await getWorkoutsFromIdArray(user.savedWorkouts);
 
-    // Sort the array based on the order of the user.savedWorkouts
+    // Sort the array based on the order of user.savedWorkouts
     workouts.sort((a, b) => user.savedWorkouts.indexOf(a._id) - user.savedWorkouts.indexOf(b._id));
 
     setSavedWorkouts(workouts);
