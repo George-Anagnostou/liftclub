@@ -38,10 +38,6 @@ export default function workoutFeed() {
 
   const getSavedWorkouts = async () => {
     const workouts = await getWorkoutsFromIdArray(user.savedWorkouts);
-
-    // Sort the array based on the order of user.savedWorkouts
-    workouts.sort((a, b) => user.savedWorkouts.indexOf(a._id) - user.savedWorkouts.indexOf(b._id));
-
     setSavedWorkouts(workouts);
   };
 
