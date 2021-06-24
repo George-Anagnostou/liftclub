@@ -66,6 +66,7 @@ const TrainerList = styled.ul`
   display: flex;
   overflow-x: scroll;
   overflow-y: hidden;
+  padding: 4px 0;
 
   li {
     margin: 0 0.5rem;
@@ -74,6 +75,7 @@ const TrainerList = styled.ul`
     place-items: center;
     padding: 0.5rem;
     border-radius: 10px;
+    box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
 
     .icon {
       background: ${({ theme }) => theme.buttonLight};
@@ -120,6 +122,16 @@ const TrainerList = styled.ul`
         font-weight: 600;
         letter-spacing: 0px;
       }
+    }
+  }
+
+  @media (max-width: 425px) {
+    /* Remove scroll bar on mobile */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+
+    &::-webkit-scrollbar {
+      display: none;
     }
   }
 `;
