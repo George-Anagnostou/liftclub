@@ -42,11 +42,16 @@ export default async (req, res) => {
     case "PUT":
       const { updatedRoutine } = JSON.parse(req.body);
 
-      console.log(updatedRoutine);
+      updatedRoutine.workoutPlan.map((entry) => {
+        entry.workout_id = ObjectId(entry.workout_id);
+        entry.isoDate = new Date(entry.isoDate);
+      });
+      updatedRoutine.creator_id = ObjectId(updatedRoutine.creator_id);
+      updatedRoutine._id = ObjectId(updatedRoutine._id);
 
       const updated = await db
         .collection("routines")
-        .replaceOne({ _id: ObjectId(routine_id) }, { updatedRoutine });
+        .replaceOne({ _id: ObjectId(routine_id) }, updatedRoutine);
 
       updated ? res.status(204).end() : res.status(404).end();
 
