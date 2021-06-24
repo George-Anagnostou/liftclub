@@ -41,6 +41,7 @@ export default async (req, res) => {
         ])
         .toArray();
 
+
       res.json(teamData[0]);
       break;
     case "POST":

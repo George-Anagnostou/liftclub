@@ -115,8 +115,11 @@ export default async (req, res) => {
       const { workoutLog } = JSON.parse(req.body);
       if (workoutLog) fieldToUpdate = "WORKOUT_LOG";
 
-      const { savedWorkouts } = JSON.parse(req.body);
-      if (savedWorkouts) fieldToUpdate = "SAVED_WORKOUTS";
+      const { addSavedWorkout } = JSON.parse(req.body);
+      if (addSavedWorkout) fieldToUpdate = "ADD_SAVED_WORKOUT";
+
+      const { removeSavedWorkout } = JSON.parse(req.body);
+      if (removeSavedWorkout) fieldToUpdate = "REMOVE_SAVED_WORKOUT";
 
       const { weight } = JSON.parse(req.body);
       if (weight) fieldToUpdate = "WEIGHT";
@@ -156,17 +159,29 @@ export default async (req, res) => {
           res.json(userData.value);
           break;
 
-        case "SAVED_WORKOUTS":
-          const ObjIdArr = savedWorkouts.map((id) => ObjectId(id));
-
+        case "ADD_SAVED_WORKOUT":
           userData = await db
             .collection("users")
             .findOneAndUpdate(
               { _id: ObjectId(user_id) },
-              { $set: { savedWorkouts: ObjIdArr } },
+              { $push: { savedWorkouts: ObjectId(addSavedWorkout) } },
               { returnNewDocument: true }
             );
-          res.json(userData.value);
+
+          res.json({});
+
+          break;
+
+        case "REMOVE_SAVED_WORKOUT":
+          userData = await db
+            .collection("users")
+            .findOneAndUpdate(
+              { _id: ObjectId(user_id) },
+              { $pull: { savedWorkouts: ObjectId(removeSavedWorkout) } },
+              { returnNewDocument: true }
+            );
+
+          res.json({});
           break;
 
         case "WEIGHT":
