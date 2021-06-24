@@ -50,7 +50,7 @@ export default function RoutineTile({ team, setTeam }) {
     const days = timeBetween(new Date(plan[0].isoDate), new Date(plan[plan.length - 1].isoDate));
 
     return (
-      <RoutineInfo>
+      <RoutineInfo onClick={() => setShowRoutineEditor(true)}>
         <p className="routineName">{routine.name}</p>
 
         <div>
@@ -65,16 +65,14 @@ export default function RoutineTile({ team, setTeam }) {
     <Container>
       <div className="heading">
         <h3 className="title">Routine</h3>
-        {/* {user._id === team.creator_id && ( */}
-        <button onClick={() => setShowRoutineEditor(true)}>View Routine</button>
-        {/* )} */}
       </div>
 
       {showRoutineEditor && (
         <RoutineEditor
+          setShowRoutineEditor={setShowRoutineEditor}
           routine_id={team.routine._id}
           setTeam={setTeam}
-          setShowRoutineEditor={setShowRoutineEditor}
+          user={user}
         />
       )}
 
@@ -140,6 +138,10 @@ const RoutineInfo = styled.div`
   margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
+  background: ${({ theme }) => theme.buttonMed};
+  padding: 0.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
 
   .routineName {
     text-align: left;
@@ -157,21 +159,26 @@ const RoutineInfo = styled.div`
 
 const UniqueWorkoutList = styled.ul`
   display: flex;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  border-radius: 5px;
 
   li {
     background: ${({ theme }) => theme.buttonMed};
     padding: 0.5rem 0.5rem;
-    border-radius: 10px;
-
-    p {
-      margin-bottom: 0.5rem;
-    }
+    margin-right: 0.25rem;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    min-width: max-content;
 
     button {
+      margin-left: 0.5rem;
       cursor: pointer;
       border-radius: 5px;
       border: none;
-      padding: 0.5rem;
+      padding: 0.25rem;
+      box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
 
       &.save {
         background: ${({ theme }) => theme.accentSoft};
@@ -182,6 +189,16 @@ const UniqueWorkoutList = styled.ul`
         background: ${({ theme }) => theme.buttonLight};
         color: ${({ theme }) => theme.textLight};
       }
+    }
+  }
+
+  @media (max-width: 425px) {
+    /* Remove scroll bar on mobile */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+
+    &::-webkit-scrollbar {
+      display: none;
     }
   }
 `;

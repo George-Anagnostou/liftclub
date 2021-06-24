@@ -11,7 +11,7 @@ import LoadingSpinner from "../LoadingSpinner";
 // Components
 import Calendar from "./Calendar";
 
-export default function RoutineEditor({ routine_id, setShowRoutineEditor, setTeam, team, user }) {
+export default function RoutineEditor({ routine_id, setShowRoutineEditor, setTeam, user }) {
   const shadow = useRef(null);
 
   const [routine, setRoutine] = useState(null);
