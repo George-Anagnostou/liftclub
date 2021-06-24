@@ -3,12 +3,11 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 // API
 import { getTeamById } from "../../utils/api";
-// Utils
-import { timeBetween } from "../../utils";
 // Components
 import LoadingSpinner from "../../components/LoadingSpinner";
 import TopTile from "../../components/teamPage/TopTile";
 import TrainersTile from "../../components/teamPage/TrainersTile";
+import RoutineTile from "../../components/teamPage/RoutineTile";
 // Context
 import { useStoreState } from "../../store";
 
@@ -20,22 +19,9 @@ export default function Team_id() {
 
   const [team, setTeam] = useState(null);
 
-  const formatWorkoutPlan = (plan) => {
-    const days = timeBetween(new Date(plan[0].isoDate), new Date(plan[plan.length - 1].isoDate));
-
-    return (
-      <div>
-        <p>{days}</p>
-        <p>{plan.length} workouts</p>
-      </div>
-    );
-  };
-
   useEffect(() => {
     const getTeamData = async () => {
       const teamData = await getTeamById(team_id);
-
-      console.log(teamData);
       setTeam(teamData);
     };
 
@@ -50,11 +36,7 @@ export default function Team_id() {
 
           <TrainersTile team={team} user_id={user._id} />
 
-          <h3>Workout Plan</h3>
-
-          <p>{team.routineName}</p>
-
-          {formatWorkoutPlan(team.routine.workoutPlan)}
+          <RoutineTile team={team} setTeam={setTeam} />
         </>
       ) : (
         <div className="loadingContainer">
