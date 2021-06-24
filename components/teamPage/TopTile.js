@@ -79,9 +79,9 @@ const Tile = styled.div`
     align-items: flex-end;
 
     button {
-      border-radius: 5px;
+     border-radius: 5px;
       padding: 0.75rem;
-      border: none;
+      border: none; 
 
       &.join {
         background: ${({ theme }) => theme.accent};
