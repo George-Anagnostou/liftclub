@@ -58,33 +58,37 @@ export default function Teams({ profileData, isProfileOwner }) {
       </div>
 
       <TeamsList>
-        {profileOwnedTeams.map((team) => (
-          <Team key={team._id}>
-            <div className="teamInfo">
-              <p className="name">{team.teamName}</p>
-              <p className="members">
-                {team.members.length} {team.members.length === 1 ? "member" : "members"}
-              </p>
-            </div>
+        {Boolean(profileOwnedTeams.length) ? (
+          profileOwnedTeams.map((team) => (
+            <Team key={team._id}>
+              <div className="teamInfo">
+                <p className="name">{team.teamName}</p>
+                <p className="members">
+                  {team.members.length} {team.members.length === 1 ? "member" : "members"}
+                </p>
+              </div>
 
-            <div className="buttons">
-              <Link href={`/teams/${team._id}`}>
-                <button className="view">view</button>
-              </Link>
+              <div className="buttons">
+                <Link href={`/teams/${team._id}`}>
+                  <button className="view">view</button>
+                </Link>
 
-              <button
-                onClick={
-                  team.members.includes(user._id)
-                    ? () => handleLeaveTeam(team._id)
-                    : () => handleJoinTeam(team._id)
-                }
-                className={team.members.includes(user._id) ? "joined" : "join"}
-              >
-                {team.members.includes(user._id) ? "joined" : "join"}
-              </button>
-            </div>
-          </Team>
-        ))}
+                <button
+                  onClick={
+                    team.members.includes(user._id)
+                      ? () => handleLeaveTeam(team._id)
+                      : () => handleJoinTeam(team._id)
+                  }
+                  className={team.members.includes(user._id) ? "joined" : "join"}
+                >
+                  {team.members.includes(user._id) ? "joined" : "join"}
+                </button>
+              </div>
+            </Team>
+          ))
+        ) : (
+          <p className="noTeams">None</p>
+        )}
       </TeamsList>
     </Container>
   );
@@ -124,6 +128,10 @@ const Container = styled.div`
 const TeamsList = styled.ul`
   display: flex;
   margin: 0.5rem 0;
+
+  .noTeams {
+    margin-left: 0.5rem;
+  }
 `;
 
 const Team = styled.li`
