@@ -5,15 +5,14 @@ import { getCurrYearMonthDay } from "../../utils";
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu ", "Fri", "Sat"];
 
-export default function Calendar({ data }) {
+export default function Calendar({ data, setSelectedDate, selectedDate }) {
   const [{ year, month, day }, setYearMonthDay] = useState(getCurrYearMonthDay());
   const [daysInMonth, setDaysInMonth] = useState(0);
 
   const isDayInData = (isoString) => data?.findIndex((item) => item.isoDate === isoString) > -1;
 
-  const handleDayClick = (o) => {
-    console.log(o);
-  };
+  const handleDayClick = (date) =>
+    date === selectedDate ? setSelectedDate(null) : setSelectedDate(date);
 
   const incrementMonth = () => {
     const newMonth = (month + 1) % 12;
@@ -58,9 +57,15 @@ export default function Calendar({ data }) {
           <div
             key={i}
             onClick={() => handleDayClick(new Date(year, month, i + 1).toISOString())}
-            className={
-              isDayInData(new Date(year, month, i + 1).toISOString()) ? "day highlight" : "day"
+            className={`day ${
+              selectedDate === new Date(year, month, i + 1).toISOString() && "selected"
             }
+            ${isDayInData(new Date(year, month, i + 1).toISOString()) && "hasWorkout"}
+            ${
+              selectedDate === new Date(year, month, i + 1).toISOString() &&
+              isDayInData(new Date(year, month, i + 1).toISOString()) &&
+              "selectedAndHasWorkout"
+            }`}
           >
             <span>
               {DAYS[new Date(year, month, i + 1).getDay()]}
@@ -104,6 +109,7 @@ const MonthCtrl = styled.div`
 `;
 
 const DaysCtrl = styled.div`
+  padding: 0.25rem;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
 
@@ -119,8 +125,17 @@ const DaysCtrl = styled.div`
       font-weight: 100;
     }
   }
-  .highlight {
+
+  .hasWorkout {
     background: ${({ theme }) => theme.accentSoft};
+    color: ${({ theme }) => theme.accentText};
+  }
+  .selected {
+    background: ${({ theme }) => theme.background};
+    color: ${({ theme }) => theme.text};
+  }
+  .selectedAndHasWorkout {
+    background: ${({ theme }) => theme.accent};
     color: ${({ theme }) => theme.accentText};
   }
 `;
