@@ -340,6 +340,9 @@ export const getWorkoutsFromIdArray = async (idArr) => {
     });
 
     const workouts = await res.json();
+
+    workouts.sort((a, b) => idArr.indexOf(a._id) - idArr.indexOf(b._id));
+
     return workouts;
   } catch (e) {
     console.log(e);
@@ -362,7 +365,6 @@ export const getRoutineFromId = async (routine_id) => {
 
     const routineData = await res.json();
 
-    console.log(routineData);
     return routineData;
   } catch (e) {
     console.log(e);
@@ -386,7 +388,7 @@ export const addNewRoutine = async (routine) => {
 
 export const updateRoutine = async (updatedRoutine) => {
   try {
-    const res = await fetch(`/api/routines/${updatedRoutine._id}}`, {
+    const res = await fetch(`/api/routines/${updatedRoutine._id}`, {
       method: "PUT",
       contentType: "application/json",
       body: JSON.stringify({ updatedRoutine }),
