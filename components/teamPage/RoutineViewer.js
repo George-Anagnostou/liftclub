@@ -171,7 +171,7 @@ export default function RoutineEditor({ routine_id, setTeam }) {
           />
 
           {isRoutineOwner && !isEditing && (
-            <button className="bottomBtn" onClick={() => setIsEditing(true)}>
+            <button className="editBtn" onClick={() => setIsEditing(true)}>
               Edit
             </button>
           )}
@@ -215,6 +215,17 @@ const Editor = styled.div`
     div {
       display: flex;
     }
+  }
+
+  .editBtn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 5px;
+    padding: 0.25rem 0.5rem;
+    border: none;
+    background: ${({ theme }) => theme.buttonMed};
+    color: ${({ theme }) => theme.text};
   }
 
   .bottomBtn {
