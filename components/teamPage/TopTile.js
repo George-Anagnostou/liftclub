@@ -72,23 +72,25 @@ export default function TopTile({ team, setTeam, teamMembers, setTeamMembers }) 
       <h1>{team.teamName}</h1>
 
       <div className="info">
-        <div>
-          <p>
-            Leader: <Link href={`/users/${team.creatorName}`}>{team.creatorName}</Link>
-          </p>
+        <p>
+          Leader -{" "}
+          <Link href={`/users/${team.creatorName}`}>
+            <a className="leader">{team.creatorName}</a>
+          </Link>
+        </p>
 
-          <p className="membersCount" onClick={() => setShowMembers(true)}>
-            {team.members.length} {team.members.length === 1 ? "member" : "members"}
-          </p>
-        </div>
+        <p>•</p>
 
+        <p className="membersCount" onClick={() => setShowMembers(true)}>
+          {team.members.length} {team.members.length === 1 ? "member" : "members"}
+        </p>
         <button
           onClick={
             userIsInTeam() ? () => handleLeaveTeam(team._id) : () => handleJoinTeam(team._id)
           }
           className={userIsInTeam() ? "joined" : "join"}
         >
-          {userIsInTeam() ? "joined" : "join"}
+          {userIsInTeam() ? "Joined" : "Join"}
         </button>
       </div>
 
@@ -136,7 +138,7 @@ const Tile = styled.div`
   border-radius: 10px;
 
   h1 {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     font-weight: 300;
     font-size: 2rem;
   }
@@ -144,18 +146,25 @@ const Tile = styled.div`
     color: ${({ theme }) => theme.textLight};
     text-align: left;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
 
+    p {
+      margin-right: 0.25rem;
+    }
+
+    .leader:active,
     .membersCount:active {
       text-decoration: underline;
     }
 
     button {
       border-radius: 5px;
-      padding: 0.75rem;
+      padding: 0.5rem 0.75rem;
       border: none;
       box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
+      margin-left: auto;
 
       &.join {
         background: ${({ theme }) => theme.accent};

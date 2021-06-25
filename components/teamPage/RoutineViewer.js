@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useStoreState } from "../../store";
 // API
 import {
   getRoutineFromId,
@@ -11,9 +12,10 @@ import LoadingSpinner from "../LoadingSpinner";
 // Components
 import Calendar from "./Calendar";
 
-export default function RoutineEditor({ routine_id, setShowRoutineEditor, setTeam, user }) {
-  const shadow = useRef(null);
+export default function RoutineEditor({ routine_id, setTeam }) {
+  const { user } = useStoreState();
 
+  const [initialRoutineData, setInitialRoutineData] = useState(null);
   const [routine, setRoutine] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -55,23 +57,24 @@ export default function RoutineEditor({ routine_id, setShowRoutineEditor, setTea
     }
   };
 
-  const handleRoutineNameChange = ({ target }) =>
-    setRoutine((prev) => ({ ...prev, name: target.value }));
-
-  const handleShadowClick = ({ target }) => {
-    if (target.classList.contains("shadow")) setShowRoutineEditor(false);
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    setRoutine(initialRoutineData);
   };
 
+  // Get the routine data from DB
   useEffect(() => {
     const getRoutineData = async () => {
       const routineData = await getRoutineFromId(routine_id);
       setRoutine(routineData);
+      setInitialRoutineData(routineData);
       setIsRoutineOwner(user._id === routineData.creator_id);
     };
 
     if (!routine) getRoutineData();
   }, [routine]);
 
+  // If the user is the owner of the routine, get their saved and created workouts to use in the editor
   useEffect(() => {
     const getUserWorkouts = async () => {
       const workoutsMade = await getUserMadeWorkouts(user._id);
@@ -84,13 +87,15 @@ export default function RoutineEditor({ routine_id, setShowRoutineEditor, setTea
     if (isRoutineOwner) getUserWorkouts();
   }, [isRoutineOwner]);
 
-  const displaySelectedDate = () => {
+  // Displays the data for the selected date & editor if in editing mode
+  // If there is a workout, displays the
+  const displaySelectedDateData = () => {
     const foundWorkout = routine.workoutPlan.filter(
       (item) => item.isoDate.substring(0, 10) === selectedDate?.substring(0, 10)
     )[0]?.workout;
 
     return (
-      <div className="ctrl">
+      <div className="dateData">
         {selectedDate ? (
           foundWorkout ? (
             <div>
@@ -107,7 +112,7 @@ export default function RoutineEditor({ routine_id, setShowRoutineEditor, setTea
         )}
 
         {isEditing && (
-          <WorkoutSelector>
+          <EditingWorkoutOptions>
             <ul>
               {userMadeWorkouts.map((workout) => (
                 <li
@@ -145,121 +150,55 @@ export default function RoutineEditor({ routine_id, setShowRoutineEditor, setTea
                 </li>
               ))}
             </ul>
-          </WorkoutSelector>
+          </EditingWorkoutOptions>
         )}
       </div>
     );
   };
 
   return (
-    <Shadow ref={shadow} className="shadow" onClick={handleShadowClick}>
-      {routine ? (
+    <>
+      {routine && (
         <Editor>
-          <button className="closeBtn" onClick={() => setShowRoutineEditor(false)}>
-            X
-          </button>
-
-          <div className="name">
-            {isEditing ? (
-              <input
-                type="text"
-                name="routineName"
-                value={routine.name}
-                onChange={handleRoutineNameChange}
-              />
-            ) : (
-              <p>{routine.name}</p>
-            )}
-          </div>
-
-          {displaySelectedDate()}
-
           <h3 className="title">Schedule</h3>
+
+          {displaySelectedDateData()}
+
           <Calendar
             data={routine.workoutPlan}
             setSelectedDate={setSelectedDate}
             selectedDate={selectedDate}
           />
 
-          {isEditing && (
-            <button className="bottomBtn" onClick={handleSaveRoutine}>
-              Save
-            </button>
-          )}
-
           {isRoutineOwner && !isEditing && (
             <button className="bottomBtn" onClick={() => setIsEditing(true)}>
               Edit
             </button>
           )}
+
+          {isEditing && (
+            <div>
+              <button className="bottomBtn" onClick={handleSaveRoutine}>
+                Save
+              </button>
+              <button className="bottomBtn" onClick={handleCancelEdit}>
+                Cancel
+              </button>
+            </div>
+          )}
         </Editor>
-      ) : (
-        <div className="loadingContainer">
-          <LoadingSpinner />
-        </div>
       )}
-    </Shadow>
+    </>
   );
 }
 
-const Shadow = styled.section`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  min-height: 100vh;
-  background: ${({ theme }) => theme.opacityBackground};
-  z-index: 99999;
-`;
-
 const Editor = styled.div`
-  margin: 1rem auto 0;
-  padding: 0rem 0.5rem 0.5rem;
-  border-radius: 10px;
   background: ${({ theme }) => theme.background};
-  max-width: 400px;
-  width: 95%;
   position: relative;
   overflow: hidden;
+  margin-bottom: 0.5rem;
 
-  .name {
-    padding: 1.5rem 0 0.5rem;
-    margin: 0 -0.5rem 0.5em;
-    font-size: 1.5rem;
-    display: flex;
-
-    p {
-      flex: 1;
-      margin: 0 1rem;
-    }
-
-    input {
-      flex: 1;
-      border-radius: 5px;
-      border: none;
-      background: ${({ theme }) => theme.buttonLight};
-      color: ${({ theme }) => theme.text};
-      text-align: center;
-      font-size: 1.5rem;
-      font-family: inherit;
-      margin: 0 0.5rem;
-    }
-  }
-
-  .closeBtn {
-    position: absolute;
-    top: 0.25rem;
-    right: 0.25rem;
-    background: ${({ theme }) => theme.buttonMed};
-    color: ${({ theme }) => theme.textLight};
-    border: none;
-    border-radius: 3px;
-    padding: 0.2rem 0.4rem;
-    font-size: 10px;
-  }
-
-  .ctrl {
+  .dateData {
     background: ${({ theme }) => theme.buttonMed};
     padding: 0.5rem;
     border-radius: 5px;
@@ -278,20 +217,17 @@ const Editor = styled.div`
     }
   }
 
-  .title {
-    margin-top: 1rem;
-  }
-
   .bottomBtn {
     border-radius: 5px;
     padding: 0.75rem;
+    margin: 0 0.5rem;
     border: none;
     background: ${({ theme }) => theme.buttonMed};
     color: ${({ theme }) => theme.text};
   }
 `;
 
-const WorkoutSelector = styled.div`
+const EditingWorkoutOptions = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0.5rem 0;

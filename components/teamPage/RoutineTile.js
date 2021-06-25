@@ -11,14 +11,13 @@ import {
 } from "../../utils/api";
 // Components
 import LoadingSpinner from "../LoadingSpinner";
-import RoutineEditor from "./RoutineEditor";
+import RoutineViewer from "./RoutineViewer";
 
 export default function RoutineTile({ team, setTeam }) {
   const { user } = useStoreState();
 
   const [uniqueWorkoutsInRoutine, setUniqueWorkoutsInRoutine] = useState(null);
   const [userSavedWorkouts, setUserSavedWorkouts] = useState(null);
-  const [showRoutineEditor, setShowRoutineEditor] = useState(false);
 
   const handleAddSavedWorkout = async (workout_id) => {
     const added = await addUserSavedWorkout(user._id, workout_id);
@@ -50,13 +49,12 @@ export default function RoutineTile({ team, setTeam }) {
     const days = timeBetween(new Date(plan[0].isoDate), new Date(plan[plan.length - 1].isoDate));
 
     return (
-      <RoutineInfo onClick={() => setShowRoutineEditor(true)}>
+      <RoutineInfo>
         <p className="routineName">{routine.name}</p>
 
-        <div>
-          <p>{plan.length} total workouts</p>
-          <p>over {days}</p>
-        </div>
+        <p className="routineStats">
+          {plan.length} workouts • {days}
+        </p>
       </RoutineInfo>
     );
   };
@@ -67,20 +65,13 @@ export default function RoutineTile({ team, setTeam }) {
         <h3 className="title">Routine</h3>
       </div>
 
-      {showRoutineEditor && (
-        <RoutineEditor
-          setShowRoutineEditor={setShowRoutineEditor}
-          routine_id={team.routine._id}
-          setTeam={setTeam}
-          user={user}
-        />
-      )}
-
       {formatRoutineInfo(team.routine)}
+
+      <RoutineViewer routine_id={team.routine._id} setTeam={setTeam} />
 
       {uniqueWorkoutsInRoutine && userSavedWorkouts ? (
         <>
-          <h3 className="title">Workouts in this routine</h3>
+          <h3 className="title">All workouts</h3>
           <UniqueWorkoutList>
             {uniqueWorkoutsInRoutine.map((workout) => (
               <li key={workout._id}>
@@ -129,24 +120,19 @@ const Container = styled.div`
 
 const RoutineInfo = styled.div`
   margin-bottom: 0.5rem;
-  display: flex;
-  align-items: center;
-  background: ${({ theme }) => theme.buttonMed};
-  padding: 0.5rem;
+  padding: 0.25rem 0.5rem;
   border-radius: 10px;
-  box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
+  text-align: left;
 
   .routineName {
-    text-align: left;
     flex: 1;
-    font-weight: 300;
+    font-weight: 100;
     font-size: 1.75rem;
   }
 
-  div {
-    text-align: right;
-    font-size: 1rem;
+  .routineStats {
     color: ${({ theme }) => theme.textLight};
+    font-size: 1rem;
   }
 `;
 
