@@ -111,13 +111,6 @@ const Container = styled.div`
   padding: 1rem 0.5rem;
   border-radius: 10px;
 
-  .title {
-    color: ${({ theme }) => theme.textLight};
-    text-align: left;
-    margin-bottom: 0.5rem;
-    font-weight: 300;
-  }
-
   .heading {
     display: flex;
     justify-content: space-between;
