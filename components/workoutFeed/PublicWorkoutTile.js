@@ -40,9 +40,9 @@ export default function PublicWorkoutTile({
           <h3 onClick={toggleWorkoutInfo}>{workout.name}</h3>
 
           <p>
-            Posted <span>{timeSince(new Date(workout.date_created))}</span> by
+            Posted <span>{timeSince(new Date(workout.date_created))}</span> by{" "}
             <Link href={`users/${workout.creatorName}`}>
-              <a className="creator"> {workout.creatorName}</a>
+              <a className="creator">{workout.creatorName}</a>
             </Link>
           </p>
         </div>
