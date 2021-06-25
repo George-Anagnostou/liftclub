@@ -192,10 +192,10 @@ export const deleteWorkoutFromWorkoutLog = async (user_id, isoDate) => {
 // Multiple
 export const getUsersFromIdArr = async (idArr) => {
   try {
-    const res = await fetch(`api/users/queryMultiple`, {
+    const res = await fetch(`/api/users/queryMultiple`, {
       method: "POST",
       contentType: "application/json",
-      body: JSON.stringify(idArr),
+      body: JSON.stringify({ idArr }),
     });
 
     const users = await res.json();
@@ -371,15 +371,15 @@ export const getRoutineFromId = async (routine_id) => {
     return false;
   }
 };
-export const addNewRoutine = async (routine) => {
+export const postNewRoutine = async (newRoutine) => {
   try {
     const res = await fetch(`/api/routines}`, {
       method: "POST",
       contentType: "application/json",
-      body: JSON.stringify({ routine }),
+      body: JSON.stringify({ newRoutine }),
     });
 
-    return true;
+    return res.status === 201;
   } catch (e) {
     console.log(e);
     return false;
@@ -428,6 +428,28 @@ export const getUserMadeTeams = async (user_id) => {
     const teams = await res.json();
 
     return teams;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
+export const addTrainerToTeam = async (team_id, trainer_id) => {
+  try {
+    const res = await fetch(`/api/teams/${team_id}?addTrainer=${trainer_id}`, { method: "PUT" });
+
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
+export const removeTrainerFromTeam = async (team_id, trainer_id) => {
+  try {
+    const res = await fetch(`/api/teams/${team_id}?removeTrainer=${trainer_id}`, { method: "PUT" });
+
+    return true;
   } catch (e) {
     console.log(e);
     return false;
