@@ -6,6 +6,7 @@ export const GlobalStyles = createGlobalStyle`
     margin: 0;
     box-sizing: border-box;
     letter-spacing: .5px;
+    font-family: inherit;
   }
 
   body {
