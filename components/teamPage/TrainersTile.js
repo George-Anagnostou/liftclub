@@ -1,14 +1,48 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
 // Components
 import Checkmark from "../Checkmark";
+import LoadingSpinner from "../LoadingSpinner";
+// Utils
+import { addTrainerToTeam, getUsersFromIdArr, removeTrainerFromTeam } from "../../utils/api";
+// Context
+import { useStoreState } from "../../store";
 
-export default function TrainersTile({ team, user_id }) {
-  const handleAddTrainer = async () => {
-    console.log("add trainer");
+export default function TrainersTile({ team, setTeam, teamMembers, setTeamMembers }) {
+  const { user } = useStoreState();
+
+  const shadow = useRef(null);
+
+  const [showTrainerManager, setShowTrainerManager] = useState(false);
+
+  const handleRemoveTrainer = async (trainer) => {
+    const removed = await removeTrainerFromTeam(team._id, trainer._id);
+    if (removed)
+      setTeam((prev) => ({
+        ...prev,
+        trainers: prev.trainers.filter((item) => item._id !== trainer._id),
+      }));
   };
+
+  const handleAddTrainer = async (trainer) => {
+    const added = await addTrainerToTeam(team._id, trainer._id);
+    if (added) setTeam((prev) => ({ ...prev, trainers: [...prev.trainers, trainer] }));
+  };
+
+  const handleShadowClick = ({ target }) => {
+    if (target.classList.contains("shadow")) setShowTrainerManager(false);
+  };
+
+  useEffect(() => {
+    const getTeamMembers = async () => {
+      const members = await getUsersFromIdArr(team.members);
+      setTeamMembers(members);
+    };
+
+    if (showTrainerManager && !teamMembers) getTeamMembers();
+  }, [showTrainerManager]);
 
   return (
     <Tile>
@@ -33,8 +67,8 @@ export default function TrainersTile({ team, user_id }) {
           </Link>
         ))}
 
-        {user_id === team.creator_id && (
-          <li onClick={handleAddTrainer} key={"addTrainer"}>
+        {user._id === team.creator_id && (
+          <li onClick={() => setShowTrainerManager(true)} key={"addTrainer"}>
             <div className="icon">
               <span></span>
               <span></span>
@@ -43,6 +77,36 @@ export default function TrainersTile({ team, user_id }) {
           </li>
         )}
       </TrainerList>
+
+      {showTrainerManager && (
+        <Shadow ref={shadow} className="shadow" onClick={handleShadowClick}>
+          <TrainerManager>
+            <h3 className="title">Members</h3>
+
+            {teamMembers ? (
+              <ul>
+                {teamMembers.map((member) => (
+                  <li key={member._id}>
+                    <p>{member.username}</p>
+
+                    {team.trainers.findIndex((trainer) => trainer._id === member._id) >= 0 ? (
+                      <button className="remove" onClick={() => handleRemoveTrainer(member)}>
+                        remove
+                      </button>
+                    ) : (
+                      <button className="add" onClick={() => handleAddTrainer(member)}>
+                        add
+                      </button>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <LoadingSpinner />
+            )}
+          </TrainerManager>
+        </Shadow>
+      )}
     </Tile>
   );
 }
@@ -132,6 +196,59 @@ const TrainerList = styled.ul`
 
     &::-webkit-scrollbar {
       display: none;
+    }
+  }
+`;
+
+const Shadow = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  background: ${({ theme }) => theme.opacityBackground};
+  z-index: 99999;
+`;
+
+const TrainerManager = styled.div`
+  margin: 1rem auto 0;
+  padding: 0.5rem;
+  border-radius: 10px;
+  background: ${({ theme }) => theme.background};
+  max-width: 400px;
+  width: 95%;
+  position: relative;
+
+  ul {
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      border-radius: 5px;
+      background: ${({ theme }) => theme.buttonMed};
+
+      button {
+        min-width: max-content;
+        cursor: pointer;
+        border-radius: 5px;
+        border: none;
+        padding: 0.25rem;
+        box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
+
+        &.add {
+          background: ${({ theme }) => theme.accentSoft};
+          color: ${({ theme }) => theme.accentText};
+        }
+
+        &.remove {
+          background: ${({ theme }) => theme.buttonLight};
+          color: ${({ theme }) => theme.textLight};
+        }
+      }
     }
   }
 `;
