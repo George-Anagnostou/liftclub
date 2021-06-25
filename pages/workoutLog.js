@@ -272,6 +272,7 @@ const FallbackText = styled.h3`
   max-width: 100%;
   padding: 1rem;
   background: ${({ theme }) => theme.background};
+  color: ${({ theme }) => theme.textLight};
   border-radius: 10px;
   margin: 0 0 0.5rem;
 `;

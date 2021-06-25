@@ -80,6 +80,10 @@ const WorkoutName = styled.div`
   background: ${({ theme }) => theme.background};
   padding: 0.75rem 0;
   margin: 0 auto 0.5rem;
+
+  h3 {
+    font-weight: 100;
+  }
 `;
 
 const WorkoutList = styled.ul`
@@ -100,6 +104,8 @@ const WorkoutList = styled.ul`
 
     h3 {
       text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      font-weight: 300;
     }
 
     ul {
@@ -137,7 +143,7 @@ const WorkoutList = styled.ul`
 
         p {
           font-weight: 300;
-          font-size: 2rem;
+          font-size: 1.5rem;
         }
 
         .weight {
@@ -147,8 +153,8 @@ const WorkoutList = styled.ul`
             border: 1px solid ${({ theme }) => theme.border};
             border-radius: 5px;
             width: 5rem;
-            font-size: 2rem;
-            font-weight: 200;
+            font-size: 1.5rem;
+            font-weight: 100;
             transition: all 0.1s ease-in-out;
             background: inherit;
             color: inherit;
@@ -160,6 +166,7 @@ const WorkoutList = styled.ul`
           &::after {
             content: " lbs";
             width: 0;
+            color: ${({ theme }) => theme.textLight};
           }
         }
 

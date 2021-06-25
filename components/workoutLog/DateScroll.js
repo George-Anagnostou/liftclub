@@ -25,9 +25,9 @@ export default function DateScroll({
           dayData ? "hasDayData" : "noDayData"
         }`}
       >
-        {date.getDate() === 1 && <h2>{String(date).substring(3, 7)}</h2>}
-        <h5>{String(date).substring(0, 3)}</h5>
-        <h3>{String(date).substring(8, 11)}</h3>
+        {date.getDate() === 1 && <p className="month">{String(date).substring(3, 7)}</p>}
+        <p className="dow">{String(date).substring(0, 3)}</p>
+        <p className="day">{String(date).substring(8, 11)}</p>
       </div>
     );
   };
@@ -48,12 +48,12 @@ const DateScrollContainer = styled.ul`
   align-items: flex-end;
   flex-direction: row-reverse;
 
-  width: 100%;
-  padding: 10px;
+  width: calc(100% + 1rem);
+  padding: 0.25rem 0 0.5rem;
   overflow-x: scroll;
 
   .date {
-    min-width: 60px;
+    min-width: 55px;
     margin: 0 0.1rem;
     cursor: pointer;
     height: fit-content;
@@ -61,20 +61,24 @@ const DateScrollContainer = styled.ul`
 
     div {
       border-radius: 10px;
-      padding: 0.5rem;
+      padding: 0.25rem;
       transition: all 0.2s ease-in-out;
 
       color: ${({ theme }) => theme.text};
-      border: 1px solid ${({ theme }) => theme.border};
       box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
 
-      h4,
-      h5 {
-        font-weight: 500;
-        margin: 0.25rem;
+      p {
+        font-weight: 200;
+        margin: 0.25rem 0;
       }
-      h2 {
-        font-weight: 400;
+
+      .month {
+        text-transform: uppercase;
+      }
+      .dow {
+        font-weight: 600;
+      }
+      .day {
       }
 
       &.selected {
