@@ -79,7 +79,7 @@ const WorkoutName = styled.div`
   border-radius: 10px;
   background: ${({ theme }) => theme.background};
   padding: 0.75rem 0;
-  margin: 0.5rem 0;
+  margin: 0 auto 0.5rem;
 `;
 
 const WorkoutList = styled.ul`
@@ -94,7 +94,7 @@ const WorkoutList = styled.ul`
     width: 100%;
     border-radius: 10px;
     padding: 0.5rem 0;
-    margin: 0.75rem 0;
+    margin: 0 auto 0.5rem;
     text-align: center;
     background: ${({ theme }) => theme.background};
 

@@ -54,7 +54,7 @@ const DateScrollContainer = styled.ul`
 
   .date {
     min-width: 60px;
-    margin: 0 0.5rem;
+    margin: 0 0.1rem;
     cursor: pointer;
     height: fit-content;
     text-align: center;

@@ -17,7 +17,7 @@ const SaveBtn = styled.button`
   width: 100%;
   position: sticky;
   top: 0.5rem;
-  margin: 1rem auto;
+  margin: 0rem auto 0.5rem;
   font-size: 1.5rem;
   padding: 0.75rem 0.5rem;
   border-radius: 10px;

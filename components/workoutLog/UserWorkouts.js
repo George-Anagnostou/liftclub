@@ -128,7 +128,7 @@ const WorkoutsList = styled.div`
   width: 100%;
   border-radius: 5px;
   background: ${({ theme }) => theme.background};
-  margin-bottom: 1rem;
+  margin-bottom: .5rem;
 
   ul {
     display: flex;

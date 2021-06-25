@@ -264,14 +264,14 @@ const MainContainer = styled.section`
   justify-content: center;
   align-items: center;
   min-height: 30vh;
-  padding: 0 4px;
+  padding: 0 0.5rem;
 `;
 
 const FallbackText = styled.h3`
   font-weight: 300;
   max-width: 100%;
-  padding: 16px;
+  padding: 1rem;
   background: ${({ theme }) => theme.background};
   border-radius: 10px;
-  margin: 0 0 16px;
+  margin: 0 0 0.5rem;
 `;
