@@ -1,21 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import styled from "styled-components";
+// Components
+import LoadingSpinner from "../LoadingSpinner";
 // API
-import { joinTeam, leaveTeam } from "../../utils/api";
+import { addFollow, getUsersFromIdArr, joinTeam, leaveTeam, removeFollow } from "../../utils/api";
+// Context
 import { useStoreState } from "../../store";
 
-export default function TopTile({ team, setTeam }) {
+export default function TopTile({ team, setTeam, teamMembers, setTeamMembers }) {
   const { user } = useStoreState();
 
-  const userIsInTeam = () => team.members.findIndex((mem) => mem._id === user._id) >= 0;
+  const shadow = useRef(null);
+
+  const [showMembers, setShowMembers] = useState(false);
+  const [userFollowing, setUserFollowing] = useState([]);
+
+  const userIsInTeam = () => team.members.includes(user._id);
 
   const handleJoinTeam = async (team_id) => {
     const joined = await joinTeam(user._id, team_id);
 
     if (joined) {
       setTeam((prev) => {
-        prev.members = [...prev.members, user];
+        prev.members = [...prev.members, user._id];
         return { ...prev };
       });
     }
@@ -26,11 +34,38 @@ export default function TopTile({ team, setTeam }) {
 
     if (left) {
       setTeam((prev) => {
-        prev.members = [...prev.members.filter((mem) => mem._id !== user._id)];
+        prev.members = [...prev.members.filter((_id) => _id !== user._id)];
         return { ...prev };
       });
     }
   };
+
+  const handleFollowClick = async (member_id) => {
+    const followed = await addFollow(user._id, member_id);
+    if (followed) setUserFollowing((prev) => [...prev, member_id]);
+  };
+
+  const handleUnfollowClick = async (member_id) => {
+    const unfollowed = await removeFollow(user._id, member_id);
+    if (unfollowed) setUserFollowing((prev) => [...prev.filter((_id) => _id !== member_id)]);
+  };
+
+  const handleShadowClick = ({ target }) => {
+    if (target.classList.contains("shadow")) setShowMembers(false);
+  };
+
+  useEffect(() => {
+    const getTeamMembers = async () => {
+      const members = await getUsersFromIdArr(team.members);
+      setTeamMembers(members);
+    };
+
+    if (showMembers && !teamMembers) getTeamMembers();
+  }, [showMembers]);
+
+  useEffect(() => {
+    if (user) setUserFollowing(user.following);
+  }, [user]);
 
   return (
     <Tile>
@@ -39,10 +74,10 @@ export default function TopTile({ team, setTeam }) {
       <div className="info">
         <div>
           <p>
-            Team leader: <Link href={`/users/${team.creatorName}`}>{team.creatorName}</Link>
+            Leader: <Link href={`/users/${team.creatorName}`}>{team.creatorName}</Link>
           </p>
 
-          <p>
+          <p className="membersCount" onClick={() => setShowMembers(true)}>
             {team.members.length} {team.members.length === 1 ? "member" : "members"}
           </p>
         </div>
@@ -56,6 +91,40 @@ export default function TopTile({ team, setTeam }) {
           {userIsInTeam() ? "joined" : "join"}
         </button>
       </div>
+
+      {showMembers && (
+        <Shadow ref={shadow} className="shadow" onClick={handleShadowClick}>
+          <MembersList>
+            <h3 className="title">Members</h3>
+
+            {teamMembers ? (
+              <ul>
+                {teamMembers.map((member) => (
+                  <li key={member._id}>
+                    <Link href={`/users/${member.username}`}>
+                      <p>{member.username}</p>
+                    </Link>
+
+                    {userFollowing.includes(member._id) ? (
+                      <button className="following" onClick={() => handleUnfollowClick(member._id)}>
+                        following
+                      </button>
+                    ) : (
+                      user._id !== member._id && (
+                        <button className="follow" onClick={() => handleFollowClick(member._id)}>
+                          follow
+                        </button>
+                      )
+                    )}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <LoadingSpinner />
+            )}
+          </MembersList>
+        </Shadow>
+      )}
     </Tile>
   );
 }
@@ -78,6 +147,10 @@ const Tile = styled.div`
     justify-content: space-between;
     align-items: flex-end;
 
+    .membersCount:active {
+      text-decoration: underline;
+    }
+
     button {
       border-radius: 5px;
       padding: 0.75rem;
@@ -92,6 +165,64 @@ const Tile = styled.div`
         background: ${({ theme }) => theme.buttonMed};
         color: ${({ theme }) => theme.textLight};
         box-shadow: 0 1px 0px ${({ theme }) => theme.boxShadow};
+      }
+    }
+  }
+`;
+
+const Shadow = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  background: ${({ theme }) => theme.opacityBackground};
+  z-index: 99999;
+`;
+
+const MembersList = styled.div`
+  margin: 1rem auto 0;
+  padding: 0.5rem;
+  border-radius: 10px;
+  background: ${({ theme }) => theme.background};
+  max-width: 400px;
+  width: 95%;
+  position: relative;
+
+  ul {
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      border-radius: 5px;
+      background: ${({ theme }) => theme.buttonMed};
+
+      p {
+        flex: 1;
+        text-align: left;
+      }
+
+      button {
+        min-width: max-content;
+        cursor: pointer;
+        border-radius: 5px;
+        border: none;
+        padding: 0.25rem;
+        box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
+
+        &.follow {
+          background: ${({ theme }) => theme.accentSoft};
+          color: ${({ theme }) => theme.accentText};
+        }
+
+        &.following {
+          background: ${({ theme }) => theme.buttonLight};
+          color: ${({ theme }) => theme.textLight};
+        }
       }
     }
   }
