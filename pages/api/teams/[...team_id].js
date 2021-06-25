@@ -6,10 +6,11 @@ export default async (req, res) => {
   const { db } = await connectToDatabase();
 
   const team_id = req.query.team_id[0];
+  let teamData;
 
   switch (httpMethod) {
     case "GET":
-      const teamData = await db
+      teamData = await db
         .collection("teams")
         .aggregate([
           { $match: { _id: ObjectId(team_id) } },
@@ -25,14 +26,6 @@ export default async (req, res) => {
           {
             $lookup: {
               from: "users",
-              localField: "members",
-              foreignField: "_id",
-              as: "members",
-            },
-          },
-          {
-            $lookup: {
-              from: "users",
               localField: "trainers",
               foreignField: "_id",
               as: "trainers",
@@ -41,12 +34,43 @@ export default async (req, res) => {
         ])
         .toArray();
 
-
       res.json(teamData[0]);
       break;
     case "POST":
       break;
     case "PUT":
+      let fieldToUpdate;
+
+      const { addTrainer } = req.query;
+      if (addTrainer) fieldToUpdate = "ADD_TRAINER";
+
+      const { removeTrainer } = req.query;
+      if (removeTrainer) fieldToUpdate = "REMOVE_TRAINER";
+
+      switch (fieldToUpdate) {
+        case "ADD_TRAINER":
+          teamData = await db
+            .collection("teams")
+            .findOneAndUpdate(
+              { _id: ObjectId(team_id) },
+              { $push: { trainers: ObjectId(addTrainer) } },
+              { returnNewDocument: true }
+            );
+
+          res.json({});
+          break;
+        case "REMOVE_TRAINER":
+          teamData = await db
+            .collection("teams")
+            .findOneAndUpdate(
+              { _id: ObjectId(team_id) },
+              { $pull: { trainers: ObjectId(removeTrainer) } },
+              { returnNewDocument: true }
+            );
+
+          res.json({});
+          break;
+      }
       break;
     case "DELETE":
       break;
