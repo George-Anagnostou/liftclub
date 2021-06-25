@@ -18,6 +18,7 @@ export default function Team_id() {
   const { user } = useStoreState();
 
   const [team, setTeam] = useState(null);
+  const [teamMembers, setTeamMembers] = useState(null);
 
   useEffect(() => {
     const getTeamData = async () => {
@@ -32,9 +33,20 @@ export default function Team_id() {
     <Container>
       {team ? (
         <>
-          <TopTile team={team} setTeam={setTeam} />
+          <TopTile
+            team={team}
+            setTeam={setTeam}
+            teamMembers={teamMembers}
+            setTeamMembers={setTeamMembers}
+          />
 
-          <TrainersTile team={team} user_id={user._id} />
+          <TrainersTile
+            team={team}
+            setTeam={setTeam}
+            user_id={user._id}
+            teamMembers={teamMembers}
+            setTeamMembers={setTeamMembers}
+          />
 
           <RoutineTile team={team} setTeam={setTeam} />
         </>
@@ -55,6 +67,13 @@ const Container = styled.section`
 
   & > * {
     margin-bottom: 0.5rem;
+  }
+
+  .title {
+    color: ${({ theme }) => theme.textLight};
+    text-align: left;
+    margin-bottom: 0.5rem;
+    font-weight: 300;
   }
 
   .loadingContainer {
