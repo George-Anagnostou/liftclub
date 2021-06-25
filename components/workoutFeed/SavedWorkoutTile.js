@@ -60,7 +60,7 @@ export default function SavedWorkoutTile({ workout, removeFromSavedWorkouts }) {
               {exercise && (
                 <>
                   <p>{exercise.name}</p>
-                  <p>{sets.length} sets</p>
+                  <p className="sets">{sets.length} sets</p>
                 </>
               )}
             </div>
@@ -73,12 +73,11 @@ export default function SavedWorkoutTile({ workout, removeFromSavedWorkouts }) {
 
 const WorkoutTile = styled.li`
   border-radius: 10px;
-  border: 1px solid ${({ theme }) => theme.border};
   box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
   background: ${({ theme }) => theme.background};
 
   padding: 0.5rem;
-  margin: 0.5em;
+  margin: 0.75em 0.5rem;
 
   .tile-bar {
     display: flex;
@@ -88,7 +87,9 @@ const WorkoutTile = styled.li`
     .name {
       text-align: left;
       flex: 3;
+
       h3 {
+        font-weight: 100;
         text-transform: capitalize;
       }
 
@@ -148,6 +149,10 @@ const WorkoutTile = styled.li`
       text-transform: capitalize;
       display: flex;
       justify-content: space-between;
+
+      .sets {
+        min-width: max-content;
+      }
     }
 
     /* Safari */
