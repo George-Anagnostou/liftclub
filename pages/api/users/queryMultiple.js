@@ -9,7 +9,7 @@ export default async (req, res) => {
     case "GET":
       break;
     case "POST":
-      const idArr = JSON.parse(req.body);
+      const { idArr } = JSON.parse(req.body);
 
       const foundUsers = await db
         .collection("users")
