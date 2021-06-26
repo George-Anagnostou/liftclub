@@ -27,12 +27,12 @@ export default function UserWorkouts({
 
   const loadUserMadeWorkouts = async () => {
     const madeWorkouts = await getUserMadeWorkouts(user._id);
-    setUserMadeWorkouts(madeWorkouts);
+    setUserMadeWorkouts(madeWorkouts || []);
   };
 
   const loadUserSavedWorkouts = async () => {
     const workouts = await getWorkoutsFromIdArray(user.savedWorkouts);
-    setUserSavedWorkouts(workouts);
+    setUserSavedWorkouts(workouts.reverse() || []);
   };
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export default function UserWorkouts({
   return (
     <>
       {showUserWorkouts && (
-        <UserWorkoutsContainer>
+        <Container>
           {workoutToDelete && (
             <DeleteWorkoutModal
               workout={workoutToDelete}
@@ -56,54 +56,60 @@ export default function UserWorkouts({
             />
           )}
 
-          <ul>
+          <WorkoutsList>
             <h3>Created</h3>
-            {Boolean(userMadeWorkouts.length) ? (
-              userMadeWorkouts.map((workout, i) => (
-                <li
-                  key={i}
-                  onClick={() => displaySavedWorkout(workout)}
-                  className={customWorkout._id === workout._id ? "highlight" : ""}
-                >
-                  {workout.name}
+            <ul>
+              {Boolean(userMadeWorkouts.length) ? (
+                userMadeWorkouts.map((workout, i) => (
+                  <li
+                    key={i}
+                    onClick={() => displaySavedWorkout(workout)}
+                    className={customWorkout._id === workout._id ? "highlight" : ""}
+                  >
+                    {workout.name}
 
-                  <button onClick={() => setWorkoutToDelete(workout)}>X</button>
-                </li>
-              ))
-            ) : (
-              <p>None</p>
-            )}
-          </ul>
+                    <button onClick={() => setWorkoutToDelete(workout)}>X</button>
+                  </li>
+                ))
+              ) : (
+                <p className="fallbackText">None</p>
+              )}
+            </ul>
+          </WorkoutsList>
 
-          <ul>
+          <WorkoutsList>
             <h3>Saved</h3>
-            {Boolean(userSavedWorkouts.length) ? (
-              userSavedWorkouts.map((workout, i) => (
-                <li
-                  key={i}
-                  onClick={() => displaySavedWorkout(workout)}
-                  className={customWorkout._id === workout._id ? "highlight" : ""}
-                >
-                  {workout.name}
-                </li>
-              ))
-            ) : (
-              <p>None</p>
-            )}
-          </ul>
-        </UserWorkoutsContainer>
+            <ul>
+              {Boolean(userSavedWorkouts.length) ? (
+                userSavedWorkouts.map((workout, i) => (
+                  <li
+                    key={i}
+                    onClick={() => displaySavedWorkout(workout)}
+                    className={customWorkout._id === workout._id ? "highlight" : ""}
+                  >
+                    {workout.name}
+                  </li>
+                ))
+              ) : (
+                <p className="fallbackText">None</p>
+              )}
+            </ul>
+          </WorkoutsList>
+        </Container>
       )}
     </>
   );
 }
 
-const UserWorkoutsContainer = styled.div`
+const Container = styled.div`
   width: 100%;
   margin-bottom: 0.5rem;
 
+  width: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
 
   animation: 0.35s ease-out forwards slidein;
 
@@ -116,58 +122,71 @@ const UserWorkoutsContainer = styled.div`
       margin-left: 0%;
     }
   }
+`;
+
+const WorkoutsList = styled.div`
+  width: 100%;
+  border-radius: 5px;
+  background: ${({ theme }) => theme.background};
+  margin-bottom: 0.5rem;
+  h3 {
+    color: ${({ theme }) => theme.textLight};
+    text-align: left;
+    font-weight: 300;
+    margin: 0.5rem;
+  }
 
   ul {
-    max-height: 300px;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    width: 100%;
-    border-radius: 5px;
-    padding-top: 0.5rem;
-    background: ${({ theme }) => theme.background};
-
-    &:first-child {
-      margin-right: 0.5rem;
-    }
-
-    h3 {
-      font-size: 1.1rem;
-      color: ${({ theme }) => theme.textLight};
-      font-weight: 100;
-    }
+    display: flex;
+    overflow: scroll;
 
     li {
+      position: relative;
       background: ${({ theme }) => theme.buttonMed};
       box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
       border-radius: 5px;
-
       cursor: pointer;
-      padding: 0.5rem;
-      margin: 1rem;
-      text-align: center;
-      text-transform: capitalize;
-      position: relative;
+      padding: 0.5rem 1.2rem 0.5rem 1rem;
+      margin: 0 0.5rem 0.5rem;
+      min-width: max-content;
 
-      button {
-        background: ${({ theme }) => theme.buttonLight};
-        color: ${({ theme }) => theme.textLight};
-        border: none;
-        border-radius: 3px;
-        position: absolute;
-        top: 2px;
-        right: 2px;
-        height: 15px;
-        width: 15px;
-        font-size: 10px;
-      }
-
-      &.highlight {
-        background: ${({ theme }) => theme.accentSoft};
+      p {
+        text-transform: capitalize;
+        width: max-content;
       }
     }
 
-    p {
-      padding: 0.5rem;
+    @media (max-width: 425px) {
+      /* Remove scroll bar on mobile */
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
     }
+  }
+
+  button {
+    background: ${({ theme }) => theme.buttonLight};
+    color: ${({ theme }) => theme.textLight};
+    border: none;
+    border-radius: 3px;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+
+    font-size: 8px;
+    padding: 2px 4px;
+  }
+
+  &.highlight {
+    background: ${({ theme }) => theme.accentSoft};
+  }
+
+  .fallbackText {
+    width: fit-content;
+    padding: 0 0.75rem 0.5rem;
+    color: ${({ theme }) => theme.textLight};
   }
 `;

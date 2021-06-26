@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-// Utils
-import { getUserMadeWorkouts } from "../../utils/api";
+// API
+import { getUserMadeWorkouts, getWorkoutsFromIdArray } from "../../utils/api";
 // Context
 import { useStoreState } from "../../store";
-// API
-import { fetchUserSavedWorkouts } from "../../utils/api";
 
 export default function UserWorkouts({ displayWorkout }) {
   const { user } = useStoreState();
@@ -21,13 +19,8 @@ export default function UserWorkouts({ displayWorkout }) {
   };
 
   const loadUserSavedWorkouts = async () => {
-    const savedWorkouts = await fetchUserSavedWorkouts(user._id);
-
-    savedWorkouts.sort(
-      (a, b) => user.savedWorkouts.indexOf(a._id) - user.savedWorkouts.indexOf(b._id)
-    );
-
-    setUserSavedWorkouts(savedWorkouts || []);
+    const savedWorkouts = await getWorkoutsFromIdArray(user.savedWorkouts);
+    setUserSavedWorkouts(savedWorkouts.reverse() || []);
   };
 
   useEffect(() => {
@@ -43,52 +36,46 @@ export default function UserWorkouts({ displayWorkout }) {
     <Container>
       <WorkoutsList>
         <TitleBar>
-          <h3>Saved</h3>
-          <button onClick={() => setShowUserSaved(!showUserSaved)}>
-            {showUserSaved ? "close" : "show"}
-          </button>
-        </TitleBar>
-
-        {showUserSaved && (
-          <>
-            {userSavedWorkouts.length ? (
-              <ul>
-                {userSavedWorkouts.map((workout) => (
-                  <li key={workout._id} onClick={() => displayWorkout(workout)}>
-                    <p>{workout.name}</p>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <h3 className="fallbackText">None</h3>
-            )}
-          </>
-        )}
-      </WorkoutsList>
-
-      <WorkoutsList>
-        <TitleBar>
           <h3>Created</h3>
           <button onClick={() => setShowUserMade(!showUserMade)}>
             {showUserMade ? "close" : "show"}
           </button>
         </TitleBar>
 
-        {showUserMade && (
-          <>
-            {userMadeWorkouts.length ? (
-              <ul>
-                {userMadeWorkouts.map((workout) => (
-                  <li key={workout._id} onClick={() => displayWorkout(workout)}>
-                    <p>{workout.name}</p>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <h3 className="fallbackText">None</h3>
-            )}
-          </>
-        )}
+        {showUserMade &&
+          (userMadeWorkouts.length ? (
+            <ul>
+              {userMadeWorkouts.map((workout) => (
+                <li key={workout._id} onClick={() => displayWorkout(workout)}>
+                  <p>{workout.name}</p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="fallbackText">None</p>
+          ))}
+      </WorkoutsList>
+
+      <WorkoutsList>
+        <TitleBar>
+          <h3>Saved</h3>
+          <button onClick={() => setShowUserSaved(!showUserSaved)}>
+            {showUserSaved ? "close" : "show"}
+          </button>
+        </TitleBar>
+
+        {showUserSaved &&
+          (userSavedWorkouts.length ? (
+            <ul>
+              {userSavedWorkouts.map((workout) => (
+                <li key={workout._id} onClick={() => displayWorkout(workout)}>
+                  <p>{workout.name}</p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="fallbackText">None</p>
+          ))}
       </WorkoutsList>
     </Container>
   );
@@ -128,7 +115,7 @@ const WorkoutsList = styled.div`
   width: 100%;
   border-radius: 5px;
   background: ${({ theme }) => theme.background};
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 
   ul {
     display: flex;
@@ -141,6 +128,7 @@ const WorkoutsList = styled.div`
       cursor: pointer;
       padding: 0.5rem;
       margin: 0 0.5rem 0.5rem;
+      min-width: max-content;
 
       p {
         text-transform: capitalize;
