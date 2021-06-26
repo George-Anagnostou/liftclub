@@ -66,8 +66,11 @@ export default function RoutineEditor({ routine_id, setTeam }) {
   useEffect(() => {
     const getRoutineData = async () => {
       const routineData = await getRoutineFromId(routine_id);
+
       setRoutine(routineData);
+
       setInitialRoutineData(routineData);
+      
       setIsRoutineOwner(user._id === routineData.creator_id);
     };
 

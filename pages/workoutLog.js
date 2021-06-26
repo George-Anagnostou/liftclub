@@ -12,9 +12,9 @@ import { getCurrYearMonthDay, addExerciseDataToWorkout } from "../utils";
 import { useStoreState } from "../store";
 // API
 import {
-  saveWorkoutLog,
+  saveUserWorkoutLog,
   deleteWorkoutFromWorkoutLog,
-  fetchDateFromUserWorkoutLog,
+  getDateFromUserWorkoutLog,
 } from "../utils/api";
 
 export default function workoutLog() {
@@ -53,7 +53,7 @@ export default function workoutLog() {
     const currIsoDate = new Date(year, month, day).toISOString();
 
     // Find the workout for today
-    const dayData = await fetchDateFromUserWorkoutLog(user._id, currIsoDate);
+    const dayData = await getDateFromUserWorkoutLog(user._id, currIsoDate);
     setPageState(dayData);
   };
 
@@ -119,7 +119,7 @@ export default function workoutLog() {
       // Find the workout for the new date
       const hasWorkout = getDayDataFromWorkoutLog(date.toISOString());
       if (hasWorkout) {
-        const dayData = await fetchDateFromUserWorkoutLog(user._id, date.toISOString());
+        const dayData = await getDateFromUserWorkoutLog(user._id, date.toISOString());
         setPageState(dayData);
       } else {
         setPageState(null);
@@ -171,7 +171,7 @@ export default function workoutLog() {
       day.exerciseData.map((each) => delete each.exercise);
     });
 
-    const userData = await saveWorkoutLog(updatedWorkoutLog, user._id);
+    const userData = await saveUserWorkoutLog(updatedWorkoutLog, user._id);
     setWorkoutLog(userData.workoutLog);
     setSavedSuccessfully(userData);
   };

@@ -18,7 +18,7 @@ export const getUserFromUsername = async (username) => {
   }
 };
 
-export const joinTeam = async (user_id, team_id) => {
+export const userJoiningTeam = async (user_id, team_id) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
@@ -33,7 +33,7 @@ export const joinTeam = async (user_id, team_id) => {
   }
 };
 
-export const leaveTeam = async (user_id, team_id) => {
+export const userLeavingTeam = async (user_id, team_id) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
@@ -78,7 +78,7 @@ export const removeUserSavedWorkout = async (user_id, workout_id) => {
   }
 };
 
-export const saveWorkoutLog = async (workoutLog, user_id) => {
+export const saveUserWorkoutLog = async (workoutLog, user_id) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
@@ -94,7 +94,7 @@ export const saveWorkoutLog = async (workoutLog, user_id) => {
   }
 };
 
-export const saveWeight = async (weight, user_id) => {
+export const saveUserWeight = async (weight, user_id) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
@@ -140,7 +140,7 @@ export const removeFollow = async (user_id, followee_id) => {
   }
 };
 
-export const saveBio = async (user_id, bio) => {
+export const saveUserBio = async (user_id, bio) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
@@ -155,7 +155,7 @@ export const saveBio = async (user_id, bio) => {
   }
 };
 
-export const fetchUserSavedWorkouts = async (user_id) => {
+export const getUserSavedWorkouts = async (user_id) => {
   try {
     const res = await fetch(`/api/users/${user_id}?field=savedWorkouts`);
     const workouts = await res.json();
@@ -166,7 +166,7 @@ export const fetchUserSavedWorkouts = async (user_id) => {
   }
 };
 
-export const fetchDateFromUserWorkoutLog = async (user_id, isoDate) => {
+export const getDateFromUserWorkoutLog = async (user_id, isoDate) => {
   try {
     const res = await fetch(`/api/users/${user_id}?field=workoutLog&date=${isoDate}`);
     const logData = await res.json();
@@ -313,7 +313,9 @@ export const getUserMadeWorkouts = async (user_id) => {
     const res = await fetch(`/api/workouts?creator_id=${user_id}`);
 
     const userMadeWorkouts = await res.json();
-    return userMadeWorkouts;
+
+    // Reverse to get newest to front
+    return userMadeWorkouts.reverse();
   } catch (e) {
     console.log(e);
   }
@@ -324,7 +326,9 @@ export const getPublicWorkouts = async () => {
     const res = await fetch("/api/workouts?isPublic=true");
 
     const publicWorkouts = await res.json();
-    return publicWorkouts;
+
+    // Reverse to get newest to front
+    return publicWorkouts.reverse();
   } catch (e) {
     console.log(e);
   }
@@ -341,6 +345,7 @@ export const getWorkoutsFromIdArray = async (idArr) => {
 
     const workouts = await res.json();
 
+    // Sort workouts to be in the same order that the irArr requests them
     workouts.sort((a, b) => idArr.indexOf(a._id) - idArr.indexOf(b._id));
 
     return workouts;

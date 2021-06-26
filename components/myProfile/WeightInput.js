@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 
 // API
-import { saveWeight } from "../../utils/api";
+import { saveUserWeight } from "../../utils/api";
 import Checkmark from "../Checkmark";
 
 const CheckmarkPosition = {
@@ -23,7 +23,7 @@ export default function WeightInput({ user }) {
     if (!inputWeight) return;
 
     // send POST req
-    const isSaved = await saveWeight(inputWeight, user._id);
+    const isSaved = await saveUserWeight(inputWeight, user._id);
 
     // if saved successfully, notify user
     setSaved(isSaved);

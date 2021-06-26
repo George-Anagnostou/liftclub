@@ -4,7 +4,7 @@ import styled from "styled-components";
 // Context
 import { useStoreState } from "../../store";
 // API
-import { getUserMadeTeams, joinTeam, leaveTeam } from "../../utils/api";
+import { getUserMadeTeams, userJoiningTeam, userLeavingTeam } from "../../utils/api";
 
 export default function Teams({ profileData, isProfileOwner }) {
   const { user } = useStoreState();
@@ -12,7 +12,7 @@ export default function Teams({ profileData, isProfileOwner }) {
   const [profileOwnedTeams, setProfileOwnedTeams] = useState([]);
 
   const handleJoinTeam = async (team_id) => {
-    const joined = await joinTeam(user._id, team_id);
+    const joined = await userJoiningTeam(user._id, team_id);
 
     if (joined) {
       setProfileOwnedTeams((prev) => {
@@ -25,7 +25,7 @@ export default function Teams({ profileData, isProfileOwner }) {
   };
 
   const handleLeaveTeam = async (team_id) => {
-    const left = await leaveTeam(user._id, team_id);
+    const left = await userLeavingTeam(user._id, team_id);
 
     if (left) {
       setProfileOwnedTeams((prev) => {

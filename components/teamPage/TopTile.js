@@ -4,7 +4,13 @@ import styled from "styled-components";
 // Components
 import LoadingSpinner from "../LoadingSpinner";
 // API
-import { addFollow, getUsersFromIdArr, joinTeam, leaveTeam, removeFollow } from "../../utils/api";
+import {
+  addFollow,
+  getUsersFromIdArr,
+  userJoiningTeam,
+  userLeavingTeam,
+  removeFollow,
+} from "../../utils/api";
 // Context
 import { useStoreState } from "../../store";
 
@@ -19,7 +25,7 @@ export default function TopTile({ team, setTeam, teamMembers, setTeamMembers }) 
   const userIsInTeam = () => team.members.includes(user._id);
 
   const handleJoinTeam = async (team_id) => {
-    const joined = await joinTeam(user._id, team_id);
+    const joined = await userJoiningTeam(user._id, team_id);
 
     if (joined) {
       setTeam((prev) => {
@@ -30,7 +36,7 @@ export default function TopTile({ team, setTeam, teamMembers, setTeamMembers }) 
   };
 
   const handleLeaveTeam = async (team_id) => {
-    const left = await leaveTeam(user._id, team_id);
+    const left = await userLeavingTeam(user._id, team_id);
 
     if (left) {
       setTeam((prev) => {

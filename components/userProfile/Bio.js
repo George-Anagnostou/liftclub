@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 // API
-import { saveBio } from "../../utils/api";
+import { saveUserBio } from "../../utils/api";
 
 export default function Bio({ profileData, isProfileOwner, setProfileData, user_id }) {
   const [editing, setEditing] = useState(false);
@@ -15,7 +15,7 @@ export default function Bio({ profileData, isProfileOwner, setProfileData, user_
   };
 
   const handleSaveClick = async () => {
-    const saved = await saveBio(user_id, bioEdits);
+    const saved = await saveUserBio(user_id, bioEdits);
     if (saved) {
       setProfileData((prev) => ({ ...prev, bio: bioEdits }));
       setEditing(false);
