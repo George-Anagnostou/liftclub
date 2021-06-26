@@ -38,7 +38,7 @@ export default function workoutFeed() {
 
   const getSavedWorkouts = async () => {
     const workouts = await getWorkoutsFromIdArray(user.savedWorkouts);
-    setSavedWorkouts(workouts);
+    setSavedWorkouts(workouts.reverse());
   };
 
   const getAllPublicWorkouts = async () => {
