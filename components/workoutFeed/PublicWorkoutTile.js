@@ -104,11 +104,12 @@ const WorkoutTile = styled.li`
       }
 
       p {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         color: ${({ theme }) => theme.textLight};
 
         .creator {
-          color: ${({ theme }) => theme.textLight};
+          color: ${({ theme }) => theme.text};
+          font-size: 1.05em;
 
           &:hover {
             text-decoration: underline;
