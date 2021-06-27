@@ -40,7 +40,10 @@ export default function NavBar() {
   }, []);
 
   return (
-    <Nav ref={ref} className={platform === "ios" || true ? "ios-safe-area" : ""}>
+    <Nav
+      ref={ref}
+      className={`${showNav ? "show" : ""} ${platform === "ios" ? "ios-safe-area" : ""}`}
+    >
       <NavBurger className={`burger ${showNav ? "open" : ""}`} onClick={() => setShowNav(!showNav)}>
         <span />
         <span />
@@ -68,8 +71,7 @@ const Nav = styled.nav`
   pointer-events: none;
 
   &.ios-safe-area {
-    border: 1px solid red;
-    padding-bottom: 10px;
+    padding-bottom: 15px;
   }
 `;
 
@@ -162,12 +164,13 @@ const NavIcons = styled.ul`
   }
 
   &.open {
-    top: -2.5rem;
+    top: -1.8rem;
     background: linear-gradient(
       to top,
       ${({ theme }) => theme.opacityBackground} 10%,
       rgba(0, 0, 0, 0) 90%
     );
+
     opacity: 1;
   }
   &.closed {
