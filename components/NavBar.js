@@ -12,7 +12,7 @@ import { useStoreState } from "../store";
 
 const routes = [
   { pathname: "/workoutLog", icon: <Notebook /> },
-  { pathname: "/workoutBuilder", icon: <Builder /> },
+  { pathname: "/builder", icon: <Builder /> },
   { pathname: "/workoutFeed", icon: <Feed /> },
   { pathname: "/myProfile", icon: <Stats /> },
 ];
@@ -80,7 +80,7 @@ const NavBurger = styled.div`
   box-shadow: 0 -2px 6px ${({ theme }) => theme.boxShadow};
 
   height: 100px;
-  width: 150px;
+  width: 155px;
   border-radius: 10px 10px 0 0;
   padding-top: 10px;
   padding-bottom: 65px;
@@ -94,7 +94,7 @@ const NavBurger = styled.div`
 
   span {
     transition: all 0.2s ease;
-    width: 40%;
+    width: 25%;
     height: 4px;
     background: ${({ theme }) => theme.border};
 
