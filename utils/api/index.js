@@ -155,25 +155,25 @@ export const saveUserBio = async (user_id, bio) => {
   }
 };
 
-export const getUserSavedWorkouts = async (user_id) => {
-  try {
-    const res = await fetch(`/api/users/${user_id}?field=savedWorkouts`);
-    const workouts = await res.json();
+// export const getUserSavedWorkouts = async (user_id) => {
+//   try {
+//     const res = await fetch(`/api/users/${user_id}?field=savedWorkouts`);
+//     const workouts = await res.json();
 
-    return workouts;
-  } catch (e) {
-    console.log(e);
-  }
-};
+//     return workouts;
+//   } catch (e) {
+//     console.log(e);
+//   }
+// };
 
 export const getDateFromUserWorkoutLog = async (user_id, isoDate) => {
   try {
     const res = await fetch(`/api/users/${user_id}?field=workoutLog&date=${isoDate}`);
-    const logData = await res.json();
 
-    return logData;
+    return res.status === 200 ? await res.json() : false;
   } catch (e) {
     console.log(e);
+    return false;
   }
 };
 
@@ -186,6 +186,7 @@ export const deleteWorkoutFromWorkoutLog = async (user_id, isoDate) => {
     return updatedLog;
   } catch (e) {
     console.log(e);
+    return false;
   }
 };
 
@@ -202,6 +203,7 @@ export const getUsersFromIdArr = async (idArr) => {
     return users;
   } catch (e) {
     console.log(e);
+    return false;
   }
 };
 
@@ -226,6 +228,7 @@ export const getExercisesFromIdArray = async (idArr) => {
     return exercises;
   } catch (e) {
     console.log(e);
+    return false;
   }
 };
 
@@ -240,6 +243,7 @@ export const createExercise = async (exercise) => {
     return { status: res.status };
   } catch (e) {
     console.log(e);
+    return false;
   }
 };
 

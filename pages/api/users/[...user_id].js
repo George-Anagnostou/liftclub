@@ -91,7 +91,7 @@ export default async (req, res) => {
           (item) => item.isoDate.toISOString() === req.query.date
         );
 
-        res.json(foundWorkout[0]);
+        foundWorkout[0] ? res.status(200).json(foundWorkout[0]) : res.status(204).json({});
       } else if (req.query.username) {
         // Get a specific user from username
 
