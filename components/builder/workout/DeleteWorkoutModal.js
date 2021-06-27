@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { deleteWorkout } from "../../utils/api";
+// API
+import { deleteWorkout } from "../../../utils/api";
 
 export default function DeleteWorkoutModal({ workout, setWorkoutToDelete, clearCustomWorkout }) {
   const handleDeleteWorkout = async () => {
@@ -44,7 +45,7 @@ const ModalContainer = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 99;
+  z-index: 999;
 
   display: grid;
   place-items: center;
@@ -55,7 +56,6 @@ const ModalContainer = styled.div`
     width: 95%;
     max-width: 350px;
     background: ${({ theme }) => theme.buttonLight};
-    border: 3px solid ${({ theme }) => theme.accentSoft};
     box-shadow: 0 0 10px ${({ theme }) => theme.boxShadow};
     border-radius: 5px;
     padding: 0 1.5rem;

@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import useSWR from "swr";
 // Context
-import { useStoreState } from "../../store";
+import { useStoreState } from "../../../store";
 // Components
-import LoadingSpinner from "../LoadingSpinner";
+import LoadingSpinner from "../../LoadingSpinner";
 import CreateExerciseModal from "./CreateExerciseModal";
 import ExerciseListItem from "./ExerciseListItem";
 

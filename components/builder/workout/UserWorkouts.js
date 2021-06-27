@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 // Utils
-import { getUserMadeWorkouts, getWorkoutsFromIdArray } from "../../utils/api";
+import { getUserMadeWorkouts, getWorkoutsFromIdArray } from "../../../utils/api";
 // Context
-import { useStoreState } from "../../store";
+import { useStoreState } from "../../../store";
 import DeleteWorkoutModal from "./DeleteWorkoutModal";
-import { addExerciseDataToWorkout } from "../../utils";
+import { addExerciseDataToWorkout } from "../../../utils";
 
 export default function UserWorkouts({
   setCustomWorkout,
@@ -138,7 +138,8 @@ const WorkoutsList = styled.div`
 
   ul {
     display: flex;
-    overflow: scroll;
+    overflow-x: scroll;
+    overflow-y: hidden;
 
     li {
       position: relative;

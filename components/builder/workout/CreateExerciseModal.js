@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
 
-import { createExercise } from "../../utils/api";
+import { createExercise } from "../../../utils/api"; 
 
 const muscleGroups = [
   "all",

@@ -1,13 +1,13 @@
 import { useState } from "react";
 import styled from "styled-components";
 // Components
-import ExerciseList from "../components/workoutBuilder/ExerciseList";
-import UserWorkouts from "../components/workoutBuilder/UserWorkouts";
-import CustomWorkout from "../components/workoutBuilder/CustomWorkout";
+import ExerciseList from "./ExerciseList";
+import UserWorkouts from "./UserWorkouts";
+import CustomWorkout from "./CustomWorkout";
 // Context
-import { useStoreState } from "../store";
+import { useStoreState } from "../../../store";
 
-export default function workoutBuilder() {
+export default function WorkoutBuilder() {
   const { user } = useStoreState();
 
   const [showUserWorkouts, setShowUserWorkouts] = useState(false);
@@ -92,10 +92,9 @@ export default function workoutBuilder() {
   );
 }
 
-const Container = styled.div`
+const Container = styled.section`
   display: flex;
   flex-direction: column;
-  padding: 0.5rem;
 `;
 
 const UserWorkoutToggle = styled.button`

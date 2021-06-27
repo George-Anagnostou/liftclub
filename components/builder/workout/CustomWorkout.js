@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import styled from "styled-components";
 //Utils
-import { postNewWorkout, updateExistingWorkout } from "../../utils/api";
+import { postNewWorkout, updateExistingWorkout } from "../../../utils/api";
 // Components
-import Checkmark from "../Checkmark";
+import Checkmark from "../../Checkmark";
 
 export default function CustomWorkout({
   customWorkout,
