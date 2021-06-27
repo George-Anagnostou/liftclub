@@ -7,7 +7,8 @@ import Notebook from "../public/navIcons/Notebook";
 import Builder from "../public/navIcons/Builder";
 import Feed from "../public/navIcons/Feed";
 import Stats from "../public/navIcons/Stats";
-// Style Patch
+// Context
+import { useStoreState } from "../store";
 
 const routes = [
   { pathname: "/workoutLog", icon: <Notebook /> },
@@ -17,6 +18,8 @@ const routes = [
 ];
 
 export default function NavBar() {
+  const { platform } = useStoreState();
+
   const router = useRouter();
 
   const ref = useRef(null);
@@ -37,7 +40,7 @@ export default function NavBar() {
   }, []);
 
   return (
-    <Nav ref={ref}>
+    <Nav ref={ref} className={platform === "ios" || true ? "ios-safe-area" : ""}>
       <NavBurger className={`burger ${showNav ? "open" : ""}`} onClick={() => setShowNav(!showNav)}>
         <span />
         <span />
@@ -63,6 +66,11 @@ const Nav = styled.nav`
   width: 100%;
   z-index: 99;
   pointer-events: none;
+
+  &.ios-safe-area {
+    border: 1px solid red;
+    padding-bottom: 10px;
+  }
 `;
 
 const NavBurger = styled.div`
