@@ -29,9 +29,18 @@ export default function Layout({ title = "Ananostou Lift Club", children }) {
     // If local storage workoutID exists, login user
     user_id ? persistLogin(user_id) : router.push("/");
   };
+
   useEffect(() => {
     checkLocalStorage();
   }, [router.pathname]);
+
+  useEffect(() => {
+    if (window.matchMedia("(display-mode: standalone)").matches) {
+      // do things here
+      // set a variable to be used when calling something
+      router.push("/workoutFeed");
+    }
+  }, []);
 
   return (
     <>
