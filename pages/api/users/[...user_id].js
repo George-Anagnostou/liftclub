@@ -154,7 +154,7 @@ export default async (req, res) => {
             .findOneAndUpdate(
               { _id: ObjectId(user_id) },
               { $set: { workoutLog: workoutLog } },
-              { returnNewDocument: true }
+              { returnOriginal: false }
             );
           res.json(userData.value);
           break;
@@ -165,7 +165,7 @@ export default async (req, res) => {
             .findOneAndUpdate(
               { _id: ObjectId(user_id) },
               { $push: { savedWorkouts: ObjectId(addSavedWorkout) } },
-              { returnNewDocument: true }
+              { returnOriginal: false }
             );
 
           res.json({});
@@ -178,7 +178,7 @@ export default async (req, res) => {
             .findOneAndUpdate(
               { _id: ObjectId(user_id) },
               { $pull: { savedWorkouts: ObjectId(removeSavedWorkout) } },
-              { returnNewDocument: true }
+              { returnOriginal: false }
             );
 
           res.json({});
@@ -190,7 +190,7 @@ export default async (req, res) => {
             .findOneAndUpdate(
               { _id: ObjectId(user_id) },
               { $push: { weight: Number(weight) } },
-              { returnNewDocument: true }
+              { returnOriginal: false }
             );
           res.json(userData.value);
           break;
@@ -202,7 +202,7 @@ export default async (req, res) => {
             .findOneAndUpdate(
               { _id: ObjectId(user_id) },
               { $push: { following: ObjectId(follow) } },
-              { returnNewDocument: true }
+              { returnOriginal: false }
             );
 
           // Push user_id into followee's followers array
@@ -223,7 +223,7 @@ export default async (req, res) => {
             .findOneAndUpdate(
               { _id: ObjectId(user_id) },
               { $pull: { following: ObjectId(unfollow) } },
-              { returnNewDocument: true }
+              { returnOriginal: false }
             );
 
           // Pull user_id from followee's followers array
@@ -293,7 +293,7 @@ export default async (req, res) => {
           .findOneAndUpdate(
             { _id: ObjectId(user_id) },
             { $pull: { workoutLog: { isoDate: new Date(req.query.date) } } },
-            { returnNewDocument: true }
+            { returnOriginal: false }
           );
 
         res.json(updated.value.workoutLog);
