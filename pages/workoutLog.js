@@ -18,7 +18,7 @@ import {
 } from "../utils/api";
 
 export default function workoutLog() {
-  const { user, isUsingPWA } = useStoreState();
+  const { user, isUsingPWA, platform } = useStoreState();
 
   const [workoutLog, setWorkoutLog] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -231,6 +231,7 @@ export default function workoutLog() {
       ) : (
         <>
           <h1>{isUsingPWA ? "true" : "false"}</h1>
+          <h1>{platform}</h1>
 
           {currentDayData.exerciseData && (
             <SaveButton saveWorkout={saveWorkout} savedSuccessfully={savedSuccessfully} />

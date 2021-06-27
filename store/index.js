@@ -4,6 +4,7 @@ import {
   authLogin,
   createAccount,
   setIsUsingPWA,
+  setPlatformToiOS,
 } from "./actions/userActions";
 import { StoreProvider, useStoreDispatch, useStoreState } from "./context/state";
 
@@ -16,4 +17,5 @@ export {
   authLogin,
   createAccount,
   setIsUsingPWA,
+  setPlatformToiOS,
 };

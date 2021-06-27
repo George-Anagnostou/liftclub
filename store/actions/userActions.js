@@ -62,3 +62,7 @@ export const createAccount = async (dispatch, username, password) => {
 export const setIsUsingPWA = (dispatch) => {
   dispatch({ type: "USING_PWA", payload: { value: true } });
 };
+
+export const setPlatformToiOS = (dispatch) => {
+  dispatch({ type: "USING_iOS_PWA" });
+};

@@ -5,7 +5,13 @@ import styled from "styled-components";
 import SeoHead from "./SeoHead";
 import NavBar from "./NavBar";
 // Context
-import { useStoreDispatch, loginUser, useStoreState, setIsUsingPWA } from "../store";
+import {
+  useStoreDispatch,
+  loginUser,
+  useStoreState,
+  setIsUsingPWA,
+  setPlatformToiOS,
+} from "../store";
 // Styles
 import { GlobalStyles } from "./GlobalStyles";
 
@@ -36,6 +42,21 @@ export default function Layout({ title = "Ananostou Lift Club", children }) {
 
   useEffect(() => {
     if (window.matchMedia("(display-mode: standalone)").matches) setIsUsingPWA(dispatch);
+
+    // Detects if device is on iOS
+    const isIos = () => {
+      const userAgent = window.navigator.userAgent.toLowerCase();
+      console.log(userAgent);
+      return /iphone|ipad|ipod/.test(userAgent);
+    };
+    // Detects if device is in standalone mode
+    const isInStandaloneMode = () =>
+      "standalone" in window.navigator && window.navigator.standalone;
+
+    if (isIos() && isInStandaloneMode()) {
+      // offer app installation here
+      setPlatformToiOS(dispatch);
+    }
   }, []);
 
   return (

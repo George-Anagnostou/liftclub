@@ -9,6 +9,9 @@ export default function userReducer(state, action) {
     case "USING_PWA":
       return { ...state, isUsingPWA: action.payload.value };
 
+    case "USING_iOS_PWA":
+      return { ...state, platform: "ios" };
+
     default:
       throw new Error();
   }

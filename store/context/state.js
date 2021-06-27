@@ -19,7 +19,11 @@ export function useStoreDispatch() {
 }
 
 export const StoreProvider = ({ children }) => {
-  const [user, dispatch] = useReducer(userReducer, { user: undefined, isUsingPWA: false });
+  const [user, dispatch] = useReducer(userReducer, {
+    user: undefined,
+    isUsingPWA: false,
+    platform: "web",
+  });
 
   return (
     <StoreStateContext.Provider value={user}>
