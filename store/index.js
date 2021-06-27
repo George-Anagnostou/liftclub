@@ -3,6 +3,7 @@ import {
   logoutUser,
   authLogin,
   createAccount,
+  setIsUsingPWA,
 } from "./actions/userActions";
 import { StoreProvider, useStoreDispatch, useStoreState } from "./context/state";
 
@@ -14,4 +15,5 @@ export {
   logoutUser,
   authLogin,
   createAccount,
+  setIsUsingPWA,
 };

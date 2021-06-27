@@ -58,3 +58,7 @@ export const createAccount = async (dispatch, username, password) => {
     return false;
   }
 };
+
+export const setIsUsingPWA = (dispatch) => {
+  dispatch({ type: "USING_PWA", payload: { value: true } });
+};

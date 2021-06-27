@@ -6,6 +6,9 @@ export default function userReducer(state, action) {
     case "LOGOUT":
       return { ...state, user: undefined };
 
+    case "USING_PWA":
+      return { ...state, isUsingPWA: action.payload.value };
+
     default:
       throw new Error();
   }

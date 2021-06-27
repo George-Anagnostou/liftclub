@@ -5,7 +5,7 @@ import styled from "styled-components";
 import SeoHead from "./SeoHead";
 import NavBar from "./NavBar";
 // Context
-import { useStoreDispatch, loginUser, useStoreState } from "../store";
+import { useStoreDispatch, loginUser, useStoreState, setIsUsingPWA } from "../store";
 // Styles
 import { GlobalStyles } from "./GlobalStyles";
 
@@ -35,11 +35,7 @@ export default function Layout({ title = "Ananostou Lift Club", children }) {
   }, [router.pathname]);
 
   useEffect(() => {
-    if (window.matchMedia("(display-mode: standalone)").matches) {
-      // do things here
-      // set a variable to be used when calling something
-      router.push("/workoutFeed");
-    }
+    if (window.matchMedia("(display-mode: standalone)").matches) setIsUsingPWA(dispatch);
   }, []);
 
   return (
