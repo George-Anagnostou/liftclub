@@ -18,7 +18,7 @@ import {
 } from "../utils/api";
 
 export default function workoutLog() {
-  const { user, isUsingPWA, platform } = useStoreState();
+  const { user } = useStoreState();
 
   const [workoutLog, setWorkoutLog] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -44,16 +44,12 @@ export default function workoutLog() {
     setCurrentDayData((prev) => ({ ...prev, exerciseData: exerciseData }));
   };
 
-  const setDataToToday = async () => {
+  const setDataToToday = async (currIsoDate) => {
     setLoading(true);
-    const { year, month, day } = getCurrYearMonthDay();
-
-    setYearMonthDay({ year, month, day });
-
-    const currIsoDate = new Date(year, month, day).toISOString();
 
     // Find the workout for today
     const dayData = await getDateFromUserWorkoutLog(user._id, currIsoDate);
+
     setPageState(dayData);
   };
 
@@ -79,6 +75,8 @@ export default function workoutLog() {
 
   // Accepts a workout from user's workoutLog and sets page state
   const setPageState = (dayData) => {
+    setLoading(true);
+
     // Check if workout exists
     if (dayData) {
       // Search for previous best for dayData.workout_id;
@@ -199,6 +197,7 @@ export default function workoutLog() {
     setPageState(composedData);
   };
 
+  // Remove Saved notification after 3 seconds
   useEffect(() => {
     const reset = setTimeout(() => setSavedSuccessfully(null), 3000);
     return () => clearTimeout(reset);
@@ -214,7 +213,13 @@ export default function workoutLog() {
       // workoutLog is used to update UI for DateScroll on workout save
       setWorkoutLog(user.workoutLog);
 
-      setDataToToday();
+      const currIsoDate = new Date(year, month, day).toISOString();
+
+      const lastWorkoutDate = user.workoutLog[user.workoutLog.length - 1].isoDate;
+
+      lastWorkoutDate.substring(0, 10) === currIsoDate.substring(0, 10)
+        ? setDataToToday(currIsoDate)
+        : setPageState(null);
     }
   }, [user]);
 
@@ -230,9 +235,6 @@ export default function workoutLog() {
         <LoadingSpinner />
       ) : (
         <>
-          <h1>{isUsingPWA ? "true" : "false"}</h1>
-          <h1>{platform}</h1>
-
           {currentDayData.exerciseData && (
             <SaveButton saveWorkout={saveWorkout} savedSuccessfully={savedSuccessfully} />
           )}
