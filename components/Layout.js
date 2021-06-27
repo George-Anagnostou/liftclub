@@ -72,4 +72,5 @@ const MainContainer = styled.main`
   text-align: center;
   padding-bottom: 7vh;
   position: relative;
+  overflow-x: hidden;
 `;

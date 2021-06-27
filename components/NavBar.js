@@ -47,7 +47,6 @@ export default function NavBar() {
       <NavBurger className={`burger ${showNav ? "open" : ""}`} onClick={() => setShowNav(!showNav)}>
         <span />
         <span />
-        <span />
       </NavBurger>
 
       <NavIcons className={showNav ? "open" : "closed"}>
@@ -81,7 +80,7 @@ const NavBurger = styled.div`
   box-shadow: 0 -2px 6px ${({ theme }) => theme.boxShadow};
 
   height: 100px;
-  width: 80px;
+  width: 150px;
   border-radius: 10px 10px 0 0;
   padding-top: 10px;
   padding-bottom: 65px;
@@ -90,32 +89,34 @@ const NavBurger = styled.div`
   pointer-events: all;
 
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 
   span {
     transition: all 0.2s ease;
     width: 40%;
-    height: 3px;
-    border-radius: 5px;
-    background: ${({ theme }) => theme.shades[5]};
+    height: 4px;
+    background: ${({ theme }) => theme.border};
+
+    &:nth-child(1) {
+      border-radius: 5px 0 0 5px;
+    }
+    &:nth-child(2) {
+      border-radius: 0 5px 5px 0;
+    }
   }
 
   &.open {
     span {
-      background: ${({ theme }) => theme.textLight};
-
       &:nth-child(1) {
-        transform: rotate(45deg) translateX(6px) translateY(5px);
-        width: 40%;
+        transform: rotate(-45deg) translateX(16px) translateY(10px);
+        border-radius: 5px;
+        width: 24%;
       }
       &:nth-child(2) {
-        transform: scale(0);
-      }
-      &:nth-child(3) {
-        transform: rotate(-45deg) translateX(8px) translateY(-6px);
-        width: 40%;
+        transform: rotate(45deg) translateX(-16px) translateY(10px);
+        border-radius: 5px;
+        width: 25%;
       }
     }
   }
