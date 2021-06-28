@@ -70,7 +70,6 @@ export default function Layout({ title = "Ananostou Lift Club", children }) {
 
 const MainContainer = styled.main`
   text-align: center;
-  padding-bottom: 7vh;
+  padding-bottom: 3.5rem;
   position: relative;
-  overflow-x: hidden;
 `;

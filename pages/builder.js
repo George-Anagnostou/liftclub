@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 // Components
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -12,34 +12,40 @@ import { useStoreState } from "../store";
 const Builders = [<WorkoutBuilder />, <RoutineBuilder />, <TeamBuilder />];
 
 export default function builder() {
+  const slider = useRef(null);
   const { user } = useStoreState();
 
   const [builderType, setBuilderType] = useState("workout");
 
-  const sliderStyle = () => {
-    switch (builderType) {
-      case "workout":
-        return { marginLeft: "0vw" };
-      case "routine":
-        return { marginLeft: "-100vw" };
-      case "team":
-        return { marginLeft: "-200vw" };
+  const [margin, setMargin] = useState(0);
+
+  useEffect(() => {
+    if (builderType === "workout") {
+      setMargin(0);
+    } else if (builderType === "routine") {
+      setMargin(-100);
+    } else if (builderType === "team") {
+      setMargin(-200);
     }
-  };
+  }, [builderType]);
 
   return (
     <Container>
       {user ? (
         <>
           <BuilderSelectBar builderType={builderType} setBuilderType={setBuilderType} />
-          <BuilderSlideContainer style={sliderStyle()}>
-            {Builders.map((Builder) => (
-              <div className="builder">{Builder}</div>
+          <BuilderSlideContainer style={{ marginLeft: `${margin}vw` }} ref={slider}>
+            {Builders.map((Builder, i) => (
+              <div className="builder" key={i}>
+                {Builder}
+              </div>
             ))}
           </BuilderSlideContainer>
         </>
       ) : (
-        <LoadingSpinner />
+        <div className="loadingContainer">
+          <LoadingSpinner />
+        </div>
       )}
     </Container>
   );
@@ -48,13 +54,20 @@ export default function builder() {
 const Container = styled.section`
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+
+  .loadingContainer {
+    height: 100vh;
+    display: grid;
+    place-items: center;
+  }
 `;
 
 const BuilderSlideContainer = styled.div`
   width: 300vw;
   min-height: 100vh;
   display: flex;
-  transition: margin 0.2s ease;
+  transition: margin 0.2s ease-out;
 
   .builder {
     width: 100vw;

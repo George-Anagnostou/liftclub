@@ -1,63 +1,39 @@
 import styled from "styled-components";
-import { useEffect, useState, useRef } from "react";
-import { useRouter } from "next/router";
+import { useState, useRef } from "react";
 import Link from "next/link";
 // Components
 import Notebook from "../public/navIcons/Notebook";
 import Builder from "../public/navIcons/Builder";
-import Feed from "../public/navIcons/Feed";
-import Stats from "../public/navIcons/Stats";
+import Search from "../public/navIcons/Magnifying";
+import Profile from "../public/navIcons/Profile";
+import Create from "../public/navIcons/Create";
 // Context
 import { useStoreState } from "../store";
 
-const routes = [
-  { pathname: "/workoutLog", icon: <Notebook /> },
-  { pathname: "/builder", icon: <Builder /> },
-  { pathname: "/workoutFeed", icon: <Feed /> },
-  { pathname: "/myProfile", icon: <Stats /> },
-];
-
 export default function NavBar() {
-  const { platform } = useStoreState();
-
-  const router = useRouter();
+  const { platform, user } = useStoreState();
 
   const ref = useRef(null);
 
-  const [showNav, setShowNav] = useState(false);
-
-  const clickOutListener = (e) => {
-    if (ref.current && !ref.current.contains(e.target)) setShowNav(false);
-  };
-
-  useEffect(() => {
-    setShowNav(false);
-  }, [router.pathname]);
-
-  useEffect(() => {
-    document.addEventListener("click", clickOutListener);
-    return () => document.removeEventListener("click", clickOutListener);
-  }, []);
+  const [routes, setRoutes] = useState([
+    { pathname: "/workoutLog", icon: <Notebook />, slug: "log" },
+    { pathname: "/workoutFeed", icon: <Search />, slug: "feed" },
+    { pathname: "/builder", icon: <Create />, slug: "builder" },
+    { pathname: `/users/${user.username}`, icon: <Profile />, slug: "profile" },
+  ]);
+  const [currSlug, setCurrSlug] = useState("log");
 
   return (
-    <Nav
-      ref={ref}
-      className={`${showNav ? "show" : ""} ${platform === "ios" ? "ios-safe-area" : ""}`}
-    >
-      <NavBurger className={`burger ${showNav ? "open" : ""}`} onClick={() => setShowNav(!showNav)}>
-        <span />
-        <span />
-      </NavBurger>
-
-      <NavIcons className={showNav ? "open" : "closed"}>
-        {routes.map((route) => (
-          <Link href={route.pathname} key={route.pathname}>
-            <li className={router.pathname === route.pathname ? "selected" : ""}>
-              <a>{route.icon}</a>
+    <Nav ref={ref} className={platform === "ios" ? "ios-safe-area" : ""}>
+      <NavBarContainer>
+        {routes.map(({ pathname, slug, icon }) => (
+          <Link href={pathname} key={slug}>
+            <li className={currSlug === slug ? "selected" : ""} onClick={() => setCurrSlug(slug)}>
+              <a>{icon}</a>
             </li>
           </Link>
         ))}
-      </NavIcons>
+      </NavBarContainer>
     </Nav>
   );
 }
@@ -70,112 +46,34 @@ const Nav = styled.nav`
   pointer-events: none;
 
   &.ios-safe-area {
-    padding-bottom: 15px;
-  }
-`;
-
-const NavBurger = styled.div`
-  background: ${({ theme }) => theme.background};
-  border: 2px solid ${({ theme }) => theme.buttonLight};
-  box-shadow: 0 -2px 6px ${({ theme }) => theme.boxShadow};
-
-  height: 100px;
-  width: 155px;
-  border-radius: 10px 10px 0 0;
-  padding-top: 10px;
-  padding-bottom: 65px;
-  transform: translateY(60px);
-  margin: auto;
-  pointer-events: all;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  span {
-    transition: all 0.2s ease;
-    width: 25%;
-    height: 4px;
-    background: ${({ theme }) => theme.border};
-
-    &:nth-child(1) {
-      border-radius: 5px 0 0 5px;
-    }
-    &:nth-child(2) {
-      border-radius: 0 5px 5px 0;
-    }
-  }
-
-  &.open {
-    span {
-      &:nth-child(1) {
-        transform: rotate(-45deg) translateX(16px) translateY(10px);
-        border-radius: 5px;
-        width: 24%;
-      }
-      &:nth-child(2) {
-        transform: rotate(45deg) translateX(-16px) translateY(10px);
-        border-radius: 5px;
-        width: 25%;
-      }
+    ul {
+      padding-bottom: 15px;
     }
   }
 `;
 
-const NavIcons = styled.ul`
-  position: absolute;
-  width: 100%;
-  height: 9rem;
-  transition: all 0.25s ease-out;
-  z-index: -1;
-  pointer-events: all;
-  transform-origin: bottom;
-
+const NavBarContainer = styled.ul`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: flex-start;
+  box-shadow: 0 -1px 4px ${({ theme }) => theme.boxShadow};
+  background: ${({ theme }) => theme.background};
+  padding: 0.5rem 0;
 
   li {
-    border-radius: 10px;
-    height: 65px;
-    width: 65px;
+    flex: 1;
     pointer-events: visible;
 
-    fill: ${({ theme }) => theme.text};
-    background: ${({ theme }) => theme.background};
-    border: 2px solid ${({ theme }) => theme.buttonLight};
-    box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
+    fill: ${({ theme }) => theme.textLight};
+    stroke: ${({ theme }) => theme.textLight};
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    &:nth-of-type(1) {
-      margin-top: 1.5rem;
+    &.selected {
+      fill: ${({ theme }) => theme.text};
+      stroke: ${({ theme }) => theme.text};
     }
-    &:nth-of-type(2) {
-      margin-bottom: 0rem;
-    }
-    &:nth-of-type(3) {
-      margin-bottom: 0rem;
-    }
-    &:nth-of-type(4) {
-      margin-top: 1.5rem;
-    }
-  }
-
-  &.open {
-    top: -1.8rem;
-    background: linear-gradient(
-      to top,
-      ${({ theme }) => theme.opacityBackground} 10%,
-      rgba(0, 0, 0, 0) 90%
-    );
-
-    opacity: 1;
-  }
-  &.closed {
-    top: 6.5rem;
-    opacity: 0;
   }
 `;

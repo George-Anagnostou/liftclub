@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
  *
  * @param {element} ref
  * @param {string or array} targetDirection
- * @param {function} callback
+ * @param {function} callback that gets called
  */
 export default function useTouchSwipe(ref, targetDirection, callback) {
   const [isSwipping, setIsSwipping] = useState(false);

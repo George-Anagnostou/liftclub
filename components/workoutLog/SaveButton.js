@@ -18,8 +18,8 @@ const SaveBtn = styled.button`
   position: sticky;
   top: 0.5rem;
   margin: 0rem auto 0.5rem;
-  font-size: 1.5rem;
-  padding: 0.75rem 0.5rem;
+  font-size: 1.25rem;
+  padding: 0.5rem;
   border-radius: 10px;
 
   color: ${({ theme }) => theme.text};

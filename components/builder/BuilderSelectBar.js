@@ -9,6 +9,7 @@ export default function BuilderSelectBar({ builderType, setBuilderType }) {
           <li
             className={builderType === type ? "selected" : ""}
             onClick={() => setBuilderType(type)}
+            key={type}
           >
             {type}
           </li>
