@@ -209,15 +209,14 @@ const WorkoutNote = styled.div`
 `;
 
 const DeleteBtn = styled.button`
-  width: 100%;
-  margin: 0.5rem auto;
+  min-width: 50%;
+  margin: 0 0 0.5rem auto;
   font-size: 1.2rem;
-  padding: 0.75rem;
+  padding: 0.5rem;
   border-radius: 10px;
 
   border: none;
-  color: ${({ theme }) => theme.textLight};
+  color: ${({ theme }) => theme.border};
   background: ${({ theme }) => theme.background};
-  border: 1px solid ${({ theme }) => theme.border};
   box-shadow: 0 2px 5px ${({ theme }) => theme.boxShadow};
 `;
