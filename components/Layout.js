@@ -19,7 +19,7 @@ export default function Layout({ title = "Ananostou Lift Club", children }) {
   const router = useRouter();
 
   const dispatch = useStoreDispatch();
-  const { user } = useStoreState();
+  const { user, platform } = useStoreState();
 
   const routeToWorkoutLog = () => router.push("/workoutLog");
 
@@ -60,7 +60,7 @@ export default function Layout({ title = "Ananostou Lift Club", children }) {
 
       <SeoHead title={title} />
 
-      <MainContainer>
+      <MainContainer className={platform === "ios" ? "ios-safe-area" : ""}>
         {children}
         {user && <NavBar />}
       </MainContainer>
@@ -70,6 +70,10 @@ export default function Layout({ title = "Ananostou Lift Club", children }) {
 
 const MainContainer = styled.main`
   text-align: center;
-  padding-bottom: 3.5rem;
+  padding-bottom: 3rem;
   position: relative;
+
+  &.ios-safe-area {
+    padding-bottom: 4rem;
+  }
 `;

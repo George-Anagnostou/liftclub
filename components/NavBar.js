@@ -47,7 +47,7 @@ const Nav = styled.nav`
 
   &.ios-safe-area {
     ul {
-      padding-bottom: 20px;
+      padding-bottom: 25px;
     }
   }
 `;
