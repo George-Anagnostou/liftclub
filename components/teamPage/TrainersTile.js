@@ -44,6 +44,16 @@ export default function TrainersTile({ team, setTeam, teamMembers, setTeamMember
     if (showTrainerManager && !teamMembers) getTeamMembers();
   }, [showTrainerManager]);
 
+  useEffect(() => {
+    if (showTrainerManager) {
+      document.body.style.height = "100%";
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.height = "auto";
+      document.body.style.overflow = "auto";
+    }
+  }, [showTrainerManager]);
+
   return (
     <Tile>
       <h3>Trainers</h3>

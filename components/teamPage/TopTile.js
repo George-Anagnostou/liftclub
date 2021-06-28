@@ -70,6 +70,16 @@ export default function TopTile({ team, setTeam, teamMembers, setTeamMembers }) 
   }, [showMembers]);
 
   useEffect(() => {
+    if (showMembers) {
+      document.body.style.height = "100%";
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.height = "auto";
+      document.body.style.overflow = "auto";
+    }
+  }, [showMembers]);
+
+  useEffect(() => {
     if (user) setUserFollowing(user.following);
   }, [user]);
 
