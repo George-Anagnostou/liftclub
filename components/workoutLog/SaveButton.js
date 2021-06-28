@@ -7,7 +7,7 @@ export default function SaveButton({ saveWorkout, savedSuccessfully }) {
     <SaveBtn onClick={saveWorkout}>
       Save Workout
       {savedSuccessfully && (
-        <Checkmark position={{ position: "absolute", top: "10px", right: "15px" }} />
+        <Checkmark position={{ position: "absolute", top: "5px", right: "15px" }} />
       )}
     </SaveBtn>
   );
