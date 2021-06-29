@@ -1,28 +1,22 @@
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import styled from "styled-components";
 // Components
-import LoadingSpinner from "../components/LoadingSpinner";
-import WorkoutSelect from "../components/myProfile/WorkoutSelect";
-import ExerciseSelect from "../components/myProfile/ExerciseSelect";
-import Chart from "../components/myProfile/Chart";
-import StatButtons from "../components/myProfile/StatButtons";
-import WeightInput from "../components/myProfile/WeightInput";
-import ThemeToggle from "../components/Themes/ThemeToggle";
+import WorkoutSelect from "./WorkoutSelect";
+import ExerciseSelect from "./ExerciseSelect";
+import Chart from "./Chart";
+import StatButtons from "./StatButtons";
 // Utils
-import { getWorkoutsFromIdArray } from "../utils/api";
-import { addExerciseDataToLoggedWorkout, round } from "../utils";
+import { getWorkoutsFromIdArray } from "../../utils/api";
+import { addExerciseDataToLoggedWorkout, round } from "../../utils";
 // Context
-import { useStoreState, useStoreDispatch, logoutUser } from "../store";
+import { useStoreState } from "../../store";
 
-export default function myProfile() {
-  const dispatch = useStoreDispatch();
+export default function ProgressTile() {
   const { user } = useStoreState();
-  const router = useRouter();
 
   const [workoutOptions, setWorkoutOptions] = useState([]); // Used in WorkoutSelect
-  const [filteredWorkouts, setFilteredWorkouts] = useState([]); // Workouts that match workout selected
   const [exerciseOptions, setExerciseOptions] = useState([]); // Exercise id and name options in Exercise Select
+  const [filteredWorkouts, setFilteredWorkouts] = useState([]); // Workouts that match workout selected
   const [statOption, setStatOption] = useState("avgWeight"); // Stat to chart
   const [selectedExerciseId, setSelectedExerciseId] = useState(null);
   const [chartData, setChartData] = useState([{ date: "", value: 0 }]);
@@ -124,120 +118,41 @@ export default function myProfile() {
 
   const handleExerciseOptionChange = (e) => setSelectedExerciseId(e.target.value);
 
-  const handleLogoutClick = () => {
-    logoutUser(dispatch);
-    router.push("/");
-  };
-
   return (
-    <ProfileContainer>
-      {user ? (
-        <>
-          <Heading>
-            <div className="line">
-              <p>Username:</p>
-              <span>{user.username}</span>
-            </div>
-            <div className="line">
-              <p>Account Type:</p>
-              <span>{user.isTrainer ? "Admin" : "Member"}</span>
-            </div>
-            <div className="line">
-              <p>Night Mode</p>
-              <span>
-                <ThemeToggle />
-              </span>
-            </div>
-            <button onClick={handleLogoutClick}>sign out</button>
-          </Heading>
+    <Container>
+      <h3 className="title">Progression</h3>
 
-          <WeightInput user={user} />
+      <SelectContainer>
+        <WorkoutSelect
+          workoutOptions={workoutOptions}
+          handleWorkoutOptionChange={handleWorkoutOptionChange}
+        />
 
-          <section>
-            <h3>Progression</h3>
+        <ExerciseSelect
+          exerciseOptions={exerciseOptions}
+          handleExerciseOptionChange={handleExerciseOptionChange}
+        />
+      </SelectContainer>
 
-            <SelectContainer>
-              <WorkoutSelect
-                workoutOptions={workoutOptions}
-                handleWorkoutOptionChange={handleWorkoutOptionChange}
-              />
+      <StatButtons setStatOption={setStatOption} statOption={statOption} />
 
-              <ExerciseSelect
-                exerciseOptions={exerciseOptions}
-                handleExerciseOptionChange={handleExerciseOptionChange}
-              />
-            </SelectContainer>
-
-            <StatButtons setStatOption={setStatOption} statOption={statOption} />
-
-            <Chart data={chartData} />
-          </section>
-        </>
-      ) : (
-        <LoadingSpinner />
-      )}
-    </ProfileContainer>
+      <Chart data={chartData} />
+    </Container>
   );
 }
 
-const ProfileContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  padding: 1rem 0.5rem;
-
-  section {
-    width: 100%;
-    border-radius: 5px;
-    background: ${({ theme }) => theme.background};
-    margin: 0 1rem;
-    padding: 0.5rem 0;
-  }
-`;
-
-const Heading = styled.header`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-
-  width: 100%;
-  padding: 0.5rem 1rem;
+const Container = styled.section`
   position: relative;
-  border-radius: 5px;
+  width: 100%;
   background: ${({ theme }) => theme.background};
+  padding: 0.5rem;
+  border-radius: 10px;
+  text-align: left;
 
-  .line {
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-
-    margin: 0.5rem 0;
-    height: 1.5rem;
-    font-size: 1rem;
-    color: ${({ theme }) => theme.textLight};
-
-    span {
-      font-size: 1.35rem;
-      font-weight: thin;
-      margin-left: 1rem;
-      color: ${({ theme }) => theme.text};
-    }
-  }
-
-  button {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    border-radius: 4px;
-    padding: 0.5rem;
-    font-size: inherit;
-    border: ${({ theme }) => theme.border};
-    color: ${({ theme }) => theme.textLight};
-    background: ${({ theme }) => theme.buttonMed};
-  }
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
 `;
 
 const SelectContainer = styled.div`

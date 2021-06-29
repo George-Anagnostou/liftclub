@@ -5,10 +5,10 @@ export default function Chart({ data }) {
   return (
     <ChartContainer>
       <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={data} margin={{ top: 20, right: 45, left: 0, bottom: 0 }} baseValue={0}>
+        <AreaChart data={data} margin={{ top: 20, right: 25, left: -25, bottom: 0 }} baseValue={0}>
           <defs>
             <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="10%" stopColor="#4361ee" stopOpacity={0.8} />
+              <stop offset="5%" stopColor="#4361ee" stopOpacity={0.7} />
               <stop offset="90%" stopColor="#4361ee" stopOpacity={0} />
             </linearGradient>
           </defs>
@@ -31,7 +31,8 @@ export default function Chart({ data }) {
 
 const ChartContainer = styled.div`
   height: 200px;
-  width: 100vw;
+  width: 100%;
+  padding-left: -30px;
 
   line,
   text {
