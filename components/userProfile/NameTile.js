@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import styled from "styled-components";
 // Context
 import { useStoreState } from "../../store";
@@ -6,6 +7,7 @@ import { useStoreState } from "../../store";
 import { addFollow, removeFollow } from "../../utils/api";
 // Components
 import ProfileImg from "./ProfileImg";
+import Settings from "../../public/navIcons/Settings";
 
 export default function NameTile({ profileData, setProfileData, isProfileOwner }) {
   const { user } = useStoreState();
@@ -39,6 +41,14 @@ export default function NameTile({ profileData, setProfileData, isProfileOwner }
 
   return (
     <TileContainer>
+      {isProfileOwner && (
+        <Link href="/settings">
+          <SettingsIcon>
+            <Settings />
+          </SettingsIcon>
+        </Link>
+      )}
+
       <div className="left">
         <ProfileImg profileData={profileData} isProfileOwner={isProfileOwner} />
 
@@ -66,11 +76,13 @@ export default function NameTile({ profileData, setProfileData, isProfileOwner }
 }
 
 const TileContainer = styled.header`
+  position: relative;
   width: 100%;
   background: ${({ theme }) => theme.background};
   display: flex;
   padding: 1rem 0.5rem;
   border-radius: 10px;
+
   .left {
     .followBtn {
       margin-top: 0.5rem;
@@ -104,10 +116,19 @@ const TileContainer = styled.header`
       margin-bottom: 0.5rem;
       letter-spacing: 1px;
       font-weight: 200;
+      min-width: max-content;
     }
     p {
       margin: 0.25rem;
       color: ${({ theme }) => theme.textLight};
     }
   }
+`;
+
+const SettingsIcon = styled.div`
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+
+  fill: ${({ theme }) => theme.text};
 `;

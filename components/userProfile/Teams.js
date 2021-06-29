@@ -48,13 +48,17 @@ export default function Teams({ profileData, isProfileOwner }) {
     };
 
     getTeams();
-  }, []);
+  }, [profileData]);
 
   return (
     <Container>
       <div className="topbar">
-        <h3>Owned Teams</h3>
-        {isProfileOwner && <button onClick={handleMakeTeam}>Make Team</button>}
+        <h3 className="title">Owned Teams</h3>
+        {isProfileOwner && (
+          <Link href="/builder">
+            <button onClick={handleMakeTeam}>Make Team</button>
+          </Link>
+        )}
       </div>
 
       <TeamsList>
@@ -105,18 +109,12 @@ const Container = styled.div`
   .topbar {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
-
-    h3 {
-      font-size: 0.8rem;
-      font-weight: 100;
-      letter-spacing: 1px;
-      color: ${({ theme }) => theme.textLight};
-    }
+    align-items: center;
 
     button {
       border-radius: 5px;
       padding: 0.25rem 0.5rem;
+      margin-bottom: 0.5rem;
       font-size: 0.8rem;
       border: ${({ theme }) => theme.border};
       color: ${({ theme }) => theme.textLight};
@@ -175,8 +173,8 @@ const Team = styled.li`
       border: none;
 
       &.view {
-        background: ${({ theme }) => theme.buttonLight};
-        color: ${({ theme }) => theme.textLight};
+        background: ${({ theme }) => theme.accentSoft};
+        color: ${({ theme }) => theme.accentText};
       }
       &.join {
         background: ${({ theme }) => theme.accent};

@@ -56,7 +56,7 @@ export default function TrainersTile({ team, setTeam, teamMembers, setTeamMember
 
   return (
     <Tile>
-      <h3>Trainers</h3>
+      <h3 className="title">Trainers</h3>
 
       <TrainerList>
         {team.trainers.map((trainer) => (
@@ -126,13 +126,6 @@ const Tile = styled.div`
   background: ${({ theme }) => theme.background};
   padding: 1rem 0.5rem;
   border-radius: 10px;
-
-  h3 {
-    color: ${({ theme }) => theme.textLight};
-    text-align: left;
-    margin-bottom: 0.5rem;
-    font-weight: 300;
-  }
 `;
 
 const TrainerList = styled.ul`

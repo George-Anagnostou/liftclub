@@ -74,6 +74,7 @@ const Container = styled.section`
     text-align: left;
     margin-bottom: 0.5rem;
     font-weight: 300;
+    font-size: 1rem;
   }
 
   .loadingContainer {

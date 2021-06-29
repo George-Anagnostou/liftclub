@@ -27,7 +27,7 @@ export default function Bio({ profileData, isProfileOwner, setProfileData, user_
   return (
     <BioContainer>
       <div className="topbar">
-        <h3>Bio</h3>
+        <h3 className="title">Bio</h3>
 
         {isProfileOwner && !editing && <button onClick={handleEditClick}>Edit</button>}
 
@@ -69,13 +69,6 @@ const BioContainer = styled.section`
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-
-    h3 {
-      font-size: 0.8rem;
-      font-weight: 100;
-      letter-spacing: 1px;
-      color: ${({ theme }) => theme.textLight};
-    }
 
     button {
       border-radius: 5px;

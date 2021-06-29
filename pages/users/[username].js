@@ -32,8 +32,8 @@ export default function User_id() {
       setCreatedWorkouts(created || []);
     };
 
-    if (!profileData && username && user) getProfileData();
-  }, [username, user]);
+    if (username && user) getProfileData();
+  }, [username, user, router]);
 
   return (
     <Container>
@@ -73,6 +73,14 @@ const Container = styled.div`
 
   & > * {
     margin-bottom: 0.5rem;
+  }
+
+  .title {
+    color: ${({ theme }) => theme.textLight};
+    text-align: left;
+    margin-bottom: 0.5rem;
+    font-weight: 300;
+    font-size: 1rem;
   }
 
   .loadingContainer {
