@@ -16,8 +16,9 @@ export default function builder() {
   const { user } = useStoreState();
 
   const [builderType, setBuilderType] = useState("workout");
-
+  const [isSwipping, setIsSwipping] = useState(false);
   const [margin, setMargin] = useState(0);
+  const [startingX, setStartingX] = useState(null);
 
   useEffect(() => {
     if (builderType === "workout") {
@@ -28,6 +29,57 @@ export default function builder() {
       setMargin(-200);
     }
   }, [builderType]);
+
+  const touchStart = (e) => {
+    setIsSwipping(true);
+    setStartingX(e.touches[0].clientX.toFixed());
+  };
+
+  const touchMove = (e) => {
+    const currX = e.touches[0].clientX.toFixed();
+    const diff = (((startingX - currX) / window.innerWidth) * 100).toFixed();
+
+    // Diff must be greater than 10vw
+    if (Math.abs(diff) > 10) {
+      e.preventDefault();
+
+      if (builderType === "workout") setMargin(-diff);
+      if (builderType === "routine") setMargin(-diff - 100);
+      if (builderType === "team") setMargin(-diff - 200);
+    }
+  };
+
+  const touchEnd = () => {
+    setMargin((prev) => {
+      if (prev > -50) {
+        setBuilderType("workout");
+        return 0;
+      }
+
+      if (prev > -150) {
+        setBuilderType("routine");
+        return -100;
+      }
+
+      setBuilderType("team");
+      return -200;
+    });
+
+    setIsSwipping(false);
+    setStartingX(null);
+  };
+
+  useEffect(() => {
+    window.addEventListener("touchstart", touchStart, { passive: false });
+    window.addEventListener("touchmove", touchMove, { passive: false });
+    window.addEventListener("touchend", touchEnd, { passive: false });
+
+    return () => {
+      window.removeEventListener("touchstart", touchStart, { passive: false });
+      window.removeEventListener("touchmove", touchMove, { passive: false });
+      window.removeEventListener("touchend", touchEnd, { passive: false });
+    };
+  }, [startingX]);
 
   return (
     <Container>
