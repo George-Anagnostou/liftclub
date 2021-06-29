@@ -71,5 +71,7 @@ const BuilderSlideContainer = styled.div`
 
   .builder {
     width: 100vw;
+    padding: 0 0.5rem;
+    box-sizing: content-box;
   }
 `;
