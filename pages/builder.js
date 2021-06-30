@@ -42,7 +42,7 @@ export default function builder() {
 
     // In vw / vh units
     const horizThreshold = 5;
-    const vertThreshold = 10;
+    const vertThreshold = 5;
 
     // yDiff must be less than 10vh AND xDiff must be greater than 5vw
     // If true, horizontal sliding will commence
@@ -141,9 +141,13 @@ const Container = styled.section`
 `;
 
 const BuilderSlideContainer = styled.div`
+  position: relative;
   width: 300vw;
   min-height: 100vh;
+  height: min-content;
+
   display: flex;
+  align-items: flex-start;
   transition: margin 0.2s ease-out;
 
   .builder {

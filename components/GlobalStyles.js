@@ -14,6 +14,7 @@ export const GlobalStyles = createGlobalStyle`
     color: ${({ theme }) => theme.text};
     font-family: Tahoma, Helvetica, Arial, Roboto, sans-serif;
     transition: all 0.25s linear;
+    scroll-behavior: smooth
   }
 
   a:link,

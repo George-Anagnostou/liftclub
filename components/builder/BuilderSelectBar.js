@@ -20,9 +20,12 @@ export default function BuilderSelectBar({ builderType, setBuilderType }) {
 }
 
 const Bar = styled.div`
+  position: sticky;
+  top: 0;
   width: calc(100% + 1rem);
   margin-left: -0.5rem;
   margin-bottom: 0.5rem;
+  
   ul {
     display: flex;
 
@@ -32,18 +35,6 @@ const Bar = styled.div`
       padding: 0.5rem 0;
       color: ${({ theme }) => theme.text};
       background: ${({ theme }) => theme.background};
-
-      &:nth-child(1) {
-        border-radius: 0 0 5px 0;
-        margin-right: 3px;
-      }
-      &:nth-child(2) {
-        border-radius: 0 0 5px 5px;
-      }
-      &:nth-child(3) {
-        border-radius: 0 0 0 5px;
-        margin-left: 3px;
-      }
 
       &.selected {
         color: ${({ theme }) => theme.accentText};
