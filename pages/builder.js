@@ -15,10 +15,11 @@ export default function builder() {
   const { user } = useStoreState();
 
   const [builderType, setBuilderType] = useState("workout");
-  // const [isSwiping, setIsSwiping] = useState(false);
+  // Margin for SlideContainer
   const [margin, setMargin] = useState(0);
   const [startPos, setStartPos] = useState(null);
 
+  // Handles margin when builder tabs clicked
   useEffect(() => {
     if (builderType === "workout") {
       setMargin(0);
@@ -29,20 +30,28 @@ export default function builder() {
     }
   }, [builderType]);
 
-  const touchStart = (e) => {
-    setStartPos({ x: e.touches[0].clientX, y: e.touches[0].clientY });
-  };
+  // Set the starting touch position {x,y}
+  const touchStart = (e) => setStartPos({ x: e.touches[0].clientX, y: e.touches[0].clientY });
 
   const touchMove = (e) => {
     const currPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+
+    // Number (0 - 100) in view width / height units (vw / vh)
     const xDiff = (((startPos.x - currPos.x) / window.innerWidth) * 100).toFixed();
     const yDiff = (((startPos.y - currPos.y) / window.innerHeight) * 100).toFixed();
 
+    // In vw / vh units
+    const horizThreshold = 5;
+    const vertThreshold = 10;
+
     // yDiff must be less than 10vh AND xDiff must be greater than 5vw
-    if (Math.abs(yDiff) < 10 && Math.abs(xDiff) > 5) {
+    // If true, horizontal sliding will commence
+    if (Math.abs(yDiff) < vertThreshold && Math.abs(xDiff) > horizThreshold) {
+      // Prevent scrolling vertically
       document.body.style.height = "100%";
       document.body.style.overflow = "hidden";
 
+      // Add extra margin depending on which builder is shown
       if (builderType === "workout") setMargin(-xDiff);
       if (builderType === "routine") setMargin(-xDiff - 100);
       if (builderType === "team") setMargin(-xDiff - 200);
@@ -51,21 +60,38 @@ export default function builder() {
 
   const touchEnd = () => {
     setMargin((prev) => {
+      // Slide back to workout
       if (prev > -50) {
-        setBuilderType("workout");
+        if (builderType !== "workout") {
+          // Scroll to top if the builder is changed
+          setBuilderType("workout");
+          window.scrollTo(0, 0);
+        }
         return 0;
       }
 
+      // Slide back to routine
       if (prev > -150) {
-        setBuilderType("routine");
+        if (builderType !== "routine") {
+          setBuilderType("routine");
+          window.scrollTo(0, 0);
+        }
         return -100;
       }
 
-      setBuilderType("team");
+      // Slide back to team
+      if (builderType !== "team") {
+        setBuilderType("team");
+        window.scrollTo(0, 0);
+      }
       return -200;
     });
 
     setStartPos(null);
+
+    // Reset body styles
+    document.body.style.height = "auto";
+    document.body.style.overflow = "auto";
   };
 
   useEffect(() => {
