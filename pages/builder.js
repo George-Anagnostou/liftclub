@@ -12,13 +12,12 @@ import { useStoreState } from "../store";
 const Builders = [<WorkoutBuilder />, <RoutineBuilder />, <TeamBuilder />];
 
 export default function builder() {
-  const slider = useRef(null);
   const { user } = useStoreState();
 
   const [builderType, setBuilderType] = useState("workout");
-  const [isSwipping, setIsSwipping] = useState(false);
+  // const [isSwipping, setIsSwipping] = useState(false);
   const [margin, setMargin] = useState(0);
-  const [startingX, setStartingX] = useState(null);
+  const [startPos, setStartPos] = useState(null);
 
   useEffect(() => {
     if (builderType === "workout") {
@@ -31,21 +30,19 @@ export default function builder() {
   }, [builderType]);
 
   const touchStart = (e) => {
-    setIsSwipping(true);
-    setStartingX(e.touches[0].clientX.toFixed());
+    setStartPos({ x: e.touches[0].clientX, y: e.touches[0].clientY });
   };
 
   const touchMove = (e) => {
-    const currX = e.touches[0].clientX.toFixed();
-    const diff = (((startingX - currX) / window.innerWidth) * 100).toFixed();
+    const currPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    const xDiff = (((startPos.x - currPos.x) / window.innerWidth) * 100).toFixed();
+    const yDiff = (((startPos.y - currPos.y) / window.innerHeight) * 100).toFixed();
 
-    // Diff must be greater than 10vw
-    if (Math.abs(diff) > 10) {
-      e.preventDefault();
-
-      if (builderType === "workout") setMargin(-diff);
-      if (builderType === "routine") setMargin(-diff - 100);
-      if (builderType === "team") setMargin(-diff - 200);
+    // yDiff must be less than 10vh AND xDiff must be greater than 5vw
+    if (Math.abs(yDiff) < 10 && Math.abs(xDiff) > 5) {
+      if (builderType === "workout") setMargin(-xDiff);
+      if (builderType === "routine") setMargin(-xDiff - 100);
+      if (builderType === "team") setMargin(-xDiff - 200);
     }
   };
 
@@ -65,8 +62,7 @@ export default function builder() {
       return -200;
     });
 
-    setIsSwipping(false);
-    setStartingX(null);
+    setStartPos(null);
   };
 
   useEffect(() => {
@@ -79,14 +75,14 @@ export default function builder() {
       window.removeEventListener("touchmove", touchMove, { passive: false });
       window.removeEventListener("touchend", touchEnd, { passive: false });
     };
-  }, [startingX]);
+  }, [startPos]);
 
   return (
     <Container>
       {user ? (
         <>
           <BuilderSelectBar builderType={builderType} setBuilderType={setBuilderType} />
-          <BuilderSlideContainer style={{ marginLeft: `${margin}vw` }} ref={slider}>
+          <BuilderSlideContainer style={{ marginLeft: `${margin}vw` }}>
             {Builders.map((Builder, i) => (
               <div className="builder" key={i}>
                 {Builder}
