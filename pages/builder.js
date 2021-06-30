@@ -51,7 +51,7 @@ export default function builder() {
     // If true, horizontal sliding will commence
     if (Math.abs(yDiff) < vertThreshold && Math.abs(xDiff) > horizThreshold) {
       // Prevent scrolling vertically
-      document.body.style.height = "100%";
+      document.body.style.height = "100vh";
       document.body.style.overflow = "hidden";
 
       // Add extra margin depending on which builder is shown
