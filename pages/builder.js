@@ -15,7 +15,7 @@ export default function builder() {
   const { user } = useStoreState();
 
   const [builderType, setBuilderType] = useState("workout");
-  // const [isSwipping, setIsSwipping] = useState(false);
+  // const [isSwiping, setIsSwiping] = useState(false);
   const [margin, setMargin] = useState(0);
   const [startPos, setStartPos] = useState(null);
 
@@ -40,6 +40,9 @@ export default function builder() {
 
     // yDiff must be less than 10vh AND xDiff must be greater than 5vw
     if (Math.abs(yDiff) < 10 && Math.abs(xDiff) > 5) {
+      document.body.style.height = "100%";
+      document.body.style.overflow = "hidden";
+
       if (builderType === "workout") setMargin(-xDiff);
       if (builderType === "routine") setMargin(-xDiff - 100);
       if (builderType === "team") setMargin(-xDiff - 200);
