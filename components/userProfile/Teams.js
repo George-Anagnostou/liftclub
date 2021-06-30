@@ -37,10 +37,6 @@ export default function Teams({ profileData, isProfileOwner }) {
     }
   };
 
-  const handleMakeTeam = () => {
-    console.log("make team");
-  };
-
   useEffect(() => {
     const getTeams = async () => {
       const teamsRes = await getUserMadeTeams(profileData._id);
@@ -55,8 +51,8 @@ export default function Teams({ profileData, isProfileOwner }) {
       <div className="topbar">
         <h3 className="title">Owned Teams</h3>
         {isProfileOwner && (
-          <Link href="/builder">
-            <button onClick={handleMakeTeam}>Make Team</button>
+          <Link href="/builder?builder=team">
+            <button>Make Team</button>
           </Link>
         )}
       </div>

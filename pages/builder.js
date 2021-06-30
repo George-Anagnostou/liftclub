@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useRouter } from "next/router";
 // Components
 import LoadingSpinner from "../components/LoadingSpinner";
 import WorkoutBuilder from "../components/builder/workout";
@@ -12,12 +13,14 @@ import { useStoreState } from "../store";
 const Builders = [<WorkoutBuilder />, <RoutineBuilder />, <TeamBuilder />];
 
 export default function builder() {
+  const router = useRouter();
+
   const { user } = useStoreState();
 
-  const [builderType, setBuilderType] = useState("workout");
   // Margin for SlideContainer
   const [margin, setMargin] = useState(0);
   const [startPos, setStartPos] = useState(null);
+  const [builderType, setBuilderType] = useState(router.query.builder || "workout");
 
   // Handles margin when builder tabs clicked
   useEffect(() => {
@@ -105,6 +108,10 @@ export default function builder() {
       window.removeEventListener("touchend", touchEnd, { passive: false });
     };
   }, [startPos]);
+
+  useEffect(() => {
+    if (router.query.builder) setBuilderType(router.query.builder);
+  }, [router.query]);
 
   return (
     <Container>
