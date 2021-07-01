@@ -36,7 +36,7 @@ export default function NameTile({ profileData, setProfileData, isProfileOwner }
   };
 
   useEffect(() => {
-    setUserIsFollowing(user.following.includes(profileData._id));
+    setUserIsFollowing(user.following?.includes(profileData._id));
   }, [user]);
 
   return (
