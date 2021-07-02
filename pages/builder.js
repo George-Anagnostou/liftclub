@@ -19,9 +19,9 @@ export default function builder() {
 
   // Margin for SlideContainer
   const [margin, setMargin] = useState(0);
-  const [startPos, setStartPos] = useState(null);
-  const [slideDistance, setSlideDistance] = useState(0);
-  const [builderType, setBuilderType] = useState(router.query.builder || "workout");
+  const [startPos, setStartPos] = useState(null); // position of touchstart
+  const [slideDistance, setSlideDistance] = useState(0); // distance touch has slid (x-axis view width)
+  const [builderType, setBuilderType] = useState(router.query.builder || "workout"); // 'workout' 'routine' 'team'
 
   const slideBuilderRight = () => {
     if (builderType === "workout") {
@@ -52,24 +52,13 @@ export default function builder() {
     setBuilderType(type);
   };
 
-  // Handles margin when builder tabs clicked
-  useEffect(() => {
-    if (builderType === "workout") {
-      setMargin(0);
-    } else if (builderType === "routine") {
-      setMargin(-100);
-    } else if (builderType === "team") {
-      setMargin(-200);
-    }
-  }, [builderType]);
-
   // Set the starting touch position {x,y}
   const touchStart = (e) => setStartPos({ x: e.touches[0].clientX, y: e.touches[0].clientY });
 
   const touchMove = (e) => {
     const currPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
 
-    // Number (0 - 100) in view width / height units (vw / vh)
+    // Number (0 - 100) in view width / view height units (vw / vh)
     const xDiff = (((startPos.x - currPos.x) / window.innerWidth) * 100).toFixed();
     const yDiff = (((startPos.y - currPos.y) / window.innerHeight) * 100).toFixed();
 
@@ -79,17 +68,17 @@ export default function builder() {
     const horizThreshold = 5;
     const vertThreshold = 5;
 
-    // MOVE SLIDER TO FOLLOW TOUCH POS
+    // MOVE SLIDER TO FOLLOW TOUCH POSITION
     // yDiff must be less than 10vh AND xDiff must be greater than 5vw
-    // If true, horizontal sliding will commence
+    // If true, horizontal sliding will follow touch
     if (Math.abs(yDiff) < vertThreshold && Math.abs(xDiff) > horizThreshold) {
       // Prevent scrolling vertically
       document.body.style.height = "100vh";
       document.body.style.overflow = "hidden";
 
       if (builderType === "workout") setMargin(-xDiff);
-      if (builderType === "routine") setMargin(-xDiff - 100);
-      if (builderType === "team") setMargin(-xDiff - 200);
+      else if (builderType === "routine") setMargin(-xDiff - 100);
+      else if (builderType === "team") setMargin(-xDiff - 200);
     }
   };
 
@@ -126,6 +115,17 @@ export default function builder() {
     if (router.query.builder) setBuilderType(router.query.builder);
   }, [router.query]);
 
+  // Sets margin when builder type changes
+  useEffect(() => {
+    if (builderType === "workout") {
+      setMargin(0);
+    } else if (builderType === "routine") {
+      setMargin(-100);
+    } else if (builderType === "team") {
+      setMargin(-200);
+    }
+  }, [builderType]);
+
   return (
     <Container>
       {user ? (
@@ -152,6 +152,8 @@ const Container = styled.section`
   display: flex;
   flex-direction: column;
   overflow: hidden;
+
+  overscroll-behavior: contain;
 
   .loadingContainer {
     height: 100vh;
