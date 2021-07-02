@@ -20,7 +20,33 @@ export default function builder() {
   // Margin for SlideContainer
   const [margin, setMargin] = useState(0);
   const [startPos, setStartPos] = useState(null);
+  const [slideDistance, setSlideDistance] = useState(0);
   const [builderType, setBuilderType] = useState(router.query.builder || "workout");
+
+  const slideBuilderRight = () => {
+    if (builderType === "workout") {
+      setBuilderType("routine");
+    } else if (builderType === "routine") {
+      setBuilderType("team");
+    } else {
+      recenterBuilder(builderType);
+    }
+  };
+
+  const slideBuilderLeft = () => {
+    if (builderType === "routine") {
+      setBuilderType("workout");
+    } else if (builderType === "team") {
+      setBuilderType("routine");
+    } else {
+      recenterBuilder(builderType);
+    }
+  };
+
+  const recenterBuilder = (type) => {
+    setBuilderType("");
+    setBuilderType(type);
+  };
 
   // Handles margin when builder tabs clicked
   useEffect(() => {
@@ -43,10 +69,13 @@ export default function builder() {
     const xDiff = (((startPos.x - currPos.x) / window.innerWidth) * 100).toFixed();
     const yDiff = (((startPos.y - currPos.y) / window.innerHeight) * 100).toFixed();
 
+    setSlideDistance(xDiff);
+
     // In vw / vh units
     const horizThreshold = 5;
     const vertThreshold = 5;
 
+    // MOVE SLIDER TO FOLLOW TOUCH POS
     // yDiff must be less than 10vh AND xDiff must be greater than 5vw
     // If true, horizontal sliding will commence
     if (Math.abs(yDiff) < vertThreshold && Math.abs(xDiff) > horizThreshold) {
@@ -54,7 +83,6 @@ export default function builder() {
       document.body.style.height = "100vh";
       document.body.style.overflow = "hidden";
 
-      // Add extra margin depending on which builder is shown
       if (builderType === "workout") setMargin(-xDiff);
       if (builderType === "routine") setMargin(-xDiff - 100);
       if (builderType === "team") setMargin(-xDiff - 200);
@@ -62,35 +90,16 @@ export default function builder() {
   };
 
   const touchEnd = () => {
-    setMargin((prev) => {
-      // Slide back to workout
-      if (prev > -50) {
-        if (builderType !== "workout") {
-          // Scroll to top if the builder is changed
-          setBuilderType("workout");
-          window.scrollTo(0, 0);
-        }
-        return 0;
-      }
-
-      // Slide back to routine
-      if (prev > -150) {
-        if (builderType !== "routine") {
-          setBuilderType("routine");
-          window.scrollTo(0, 0);
-        }
-        return -100;
-      }
-
-      // Slide back to team
-      if (builderType !== "team") {
-        setBuilderType("team");
-        window.scrollTo(0, 0);
-      }
-      return -200;
-    });
+    if (slideDistance > 20) {
+      slideBuilderRight();
+    } else if (slideDistance < -20) {
+      slideBuilderLeft();
+    } else {
+      recenterBuilder(builderType);
+    }
 
     setStartPos(null);
+    setSlideDistance(0);
 
     // Reset body styles
     document.body.style.height = "auto";
@@ -107,7 +116,7 @@ export default function builder() {
       window.removeEventListener("touchmove", touchMove, { passive: false });
       window.removeEventListener("touchend", touchEnd, { passive: false });
     };
-  }, [startPos]);
+  }, [margin, startPos, slideDistance]);
 
   useEffect(() => {
     if (router.query.builder) setBuilderType(router.query.builder);
