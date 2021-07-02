@@ -26,8 +26,10 @@ export default function builder() {
   const slideBuilderRight = () => {
     if (builderType === "workout") {
       setBuilderType("routine");
+      window.scrollTo(0, 0);
     } else if (builderType === "routine") {
       setBuilderType("team");
+      window.scrollTo(0, 0);
     } else {
       recenterBuilder(builderType);
     }
@@ -36,8 +38,10 @@ export default function builder() {
   const slideBuilderLeft = () => {
     if (builderType === "routine") {
       setBuilderType("workout");
+      window.scrollTo(0, 0);
     } else if (builderType === "team") {
       setBuilderType("routine");
+      window.scrollTo(0, 0);
     } else {
       recenterBuilder(builderType);
     }
