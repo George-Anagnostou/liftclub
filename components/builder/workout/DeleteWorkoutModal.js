@@ -1,4 +1,6 @@
 import styled from "styled-components";
+// Components
+import Modal from "../../Wrappers/Modal";
 // API
 import { deleteWorkout } from "../../../utils/api";
 
@@ -12,86 +14,72 @@ export default function DeleteWorkoutModal({ workout, setWorkoutToDelete, clearC
     }
   };
 
-  const handleModalShadowClick = (e) => {
-    // Only close the modal when the shadow is clicked
-    if (e.target.classList.contains("modal-shadow")) setWorkoutToDelete(null);
-  };
-
   return (
-    <ModalContainer className="modal-shadow" onClick={handleModalShadowClick}>
-      <div className="modal">
+    <Modal isOpen={workout} removeModal={() => setWorkoutToDelete(null)}>
+      <Container>
         <button className="close-btn" onClick={() => setWorkoutToDelete(null)}>
           X
         </button>
 
         <h3>
-          Are you sure you want to delete "<span>{workout.name}</span>"?
+          Are you sure you want to delete <span>{workout.name}</span>?
         </h3>
 
         <div>
           <button onClick={handleDeleteWorkout}>Yes</button>
           <button onClick={() => setWorkoutToDelete(null)}>Cancel</button>
         </div>
-      </div>
-    </ModalContainer>
+      </Container>
+    </Modal>
   );
 }
 
-const ModalContainer = styled.div`
-  height: 100vh;
-  width: 100vw;
-  background: rgba(0, 0, 0, 0.5);
+const Container = styled.div`
+  position: relative;
+  width: 95%;
+  margin: 10vh auto;
+  max-width: 350px;
+  background: ${({ theme }) => theme.buttonLight};
+  box-shadow: 0 0 10px ${({ theme }) => theme.boxShadow};
+  border-radius: 5px;
+  padding: 1.5rem;
 
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
-  display: grid;
-  place-items: center;
+  .close-btn {
+    background: ${({ theme }) => theme.buttonMed};
+    color: ${({ theme }) => theme.textLight};
+    border: none;
+    border-radius: 3px;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    height: 15px;
+    width: 15px;
+    font-size: 10px;
+  }
 
-  .modal {
-    position: relative;
-    height: 20%;
-    width: 95%;
-    max-width: 350px;
-    background: ${({ theme }) => theme.buttonLight};
-    box-shadow: 0 0 10px ${({ theme }) => theme.boxShadow};
-    border-radius: 5px;
-    padding: 0 1.5rem;
+  h3 {
+    font-weight: 200;
+  }
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  h3 span {
+    text-transform: capitalize;
+    font-weight: 600;
+  }
 
-    .close-btn {
+  div {
+    button {
       background: ${({ theme }) => theme.buttonMed};
-      color: ${({ theme }) => theme.textLight};
+      box-shadow: 0 1px 2px ${({ theme }) => theme.boxShadow};
+      color: inherit;
       border: none;
-      border-radius: 3px;
-      position: absolute;
-      top: 2px;
-      right: 2px;
-      height: 15px;
-      width: 15px;
-      font-size: 10px;
-    }
-
-    h3 span {
-      text-transform: capitalize;
-    }
-
-    div {
-      button {
-        background: ${({ theme }) => theme.buttonLight};
-        box-shadow: 0 2px 5px ${({ theme }) => theme.boxShadow};
-        color: inherit;
-        border: none;
-        border-radius: 3px;
-        margin: 1rem 2rem;
-        padding: 0.5rem 1rem;
-        font-size: 1.1rem;
-      }
+      border-radius: 5px;
+      margin: 1rem 2rem 0;
+      padding: 0.5rem 1rem;
+      font-size: 1.1rem;
     }
   }
 `;

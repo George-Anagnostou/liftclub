@@ -64,7 +64,12 @@ export default function ExerciseList({ isExerciseInCustomWorkout, addExercise, r
         {user?.isTrainer && <button onClick={() => setShowCreateExerciseModal(true)}>Add</button>}
       </header>
 
-      {showCreateExerciseModal && <CreateExerciseModal setShowModal={setShowCreateExerciseModal} />}
+      {showCreateExerciseModal && (
+        <CreateExerciseModal
+          setShowModal={setShowCreateExerciseModal}
+          showModal={showCreateExerciseModal}
+        />
+      )}
 
       {data ? (
         <ul>
@@ -92,7 +97,7 @@ const ExercisesContainer = styled.div`
   header {
     position: sticky;
     top: 0.5rem;
-    z-index: 99;
+    /* z-index: 99; */
 
     background: ${({ theme }) => theme.buttonMed};
     width: 100%;

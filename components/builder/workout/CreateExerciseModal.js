@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import { useState } from "react";
-
-import { createExercise } from "../../../utils/api"; 
+// Utils
+import { createExercise } from "../../../utils/api";
+// Components
+import Modal from "../../Wrappers/Modal";
 
 const muscleGroups = [
-  "all",
   "upper back",
   "lower back",
   "shoulder",
@@ -17,7 +18,7 @@ const muscleGroups = [
   "core",
 ];
 
-export default function CreateExerciseModal({ setShowModal }) {
+export default function CreateExerciseModal({ setShowModal, showModal }) {
   const [name, setName] = useState("");
   const [equipment, setEquipment] = useState("");
   const [muscleGroup, setMuscleGroup] = useState("");
@@ -47,20 +48,15 @@ export default function CreateExerciseModal({ setShowModal }) {
     setMuscleWorked(e.target.value);
   };
 
-  const handleModalShadowClick = (e) => {
-    // Only close the modal when the shadow is clicked
-    if (e.target.classList.contains("modal-shadow")) setShowModal(false);
-  };
-
   return (
-    <ModalContainer className="modal-shadow" onClick={handleModalShadowClick}>
-      <div className="modal">
+    <Modal isOpen={showModal} removeModal={() => setShowModal(false)}>
+      <Container>
         <button className="close-btn" onClick={() => setShowModal(false)}>
           X
         </button>
 
         <form action="POST" onSubmit={handleFormSubmit}>
-          <h3>Create a New Exercise</h3>
+          <h3>New Exercise</h3>
 
           <div>
             <label htmlFor="name">Name:</label>
@@ -80,7 +76,16 @@ export default function CreateExerciseModal({ setShowModal }) {
 
           <div>
             <label htmlFor="muscleGroup">Muscle Group:</label>
-            <select name="muscleGroup" onChange={handleMuscleGroupChange}>
+            <select
+              name="muscleGroup"
+              onChange={handleMuscleGroupChange}
+              defaultValue={"none"}
+              required
+            >
+              <option value="none" disabled>
+                Select One
+              </option>
+
               {muscleGroups.map((group) => (
                 <option key={group} value={group}>
                   {group}
@@ -102,106 +107,95 @@ export default function CreateExerciseModal({ setShowModal }) {
 
           <button type="submit">Add Exercise</button>
         </form>
-      </div>
-    </ModalContainer>
+      </Container>
+    </Modal>
   );
 }
 
-const ModalContainer = styled.div`
-  height: 100vh;
-  width: 100vw;
-  background: rgba(0, 0, 0, 0.5);
-
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 99;
+const Container = styled.div`
+  width: 95%;
+  margin: 10vh auto 0;
+  max-width: 350px;
+  border-radius: 10px;
+  background: ${({ theme }) => theme.buttonLight};
+  box-shadow: 0 0 10px ${({ theme }) => theme.boxShadow};
+  position: relative;
 
   display: grid;
   place-items: center;
 
-  .modal {
-    position: relative;
-    height: 50%;
-    width: 95%;
-    max-width: 350px;
-    border-radius: 5px;
-    background: ${({ theme }) => theme.buttonLight};
-    border: 3px solid ${({ theme }) => theme.accentSoft};
-    box-shadow: 0 0 10px ${({ theme }) => theme.boxShadow};
+  .close-btn {
+    background: ${({ theme }) => theme.buttonMed};
+    color: ${({ theme }) => theme.textLight};
+    border: none;
+    border-radius: 3px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 5px 8px;
+    font-size: 10px;
+  }
 
-    display: grid;
-    place-items: center;
+  form {
+    height: 100%;
+    width: 100%;
+    padding: 1rem;
 
-    .close-btn {
-      background: ${({ theme }) => theme.buttonMed};
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    h3 {
       color: ${({ theme }) => theme.textLight};
-      border: none;
-      border-radius: 3px;
-      position: absolute;
-      top: 2px;
-      right: 2px;
-      height: 15px;
-      width: 15px;
-      font-size: 10px;
+      font-weight: 300;
     }
 
-    form {
-      height: 100%;
+    div {
       width: 100%;
-      padding: 1rem;
-
       display: flex;
+      text-align: left;
+      justify-content: center;
+      align-items: flex-start;
       flex-direction: column;
-      justify-content: space-around;
 
-      div {
+      label {
+        font-size: 0.8rem;
+        color: ${({ theme }) => theme.textLight};
+        text-transform: uppercase;
+      }
+
+      input {
         width: 100%;
-        display: flex;
-        text-align: left;
-        justify-content: center;
-        align-items: flex-start;
-        flex-direction: column;
-
-        label {
-          font-size: 0.8rem;
-          color: ${({ theme }) => theme.textLight};
-          text-transform: uppercase;
-        }
-
-        input {
-          width: 100%;
-          margin: 0.5rem 0;
-          padding: 0.5rem;
-          font-size: 1rem;
-          border: none;
-          border-radius: 5px;
-          color: ${({ theme }) => theme.text};
-          background: ${({ theme }) => theme.buttonMed};
-        }
-
-        select {
-          width: 50%;
-          margin: 0.5rem 0;
-          padding: 0.5rem;
-          font-size: 1rem;
-          border: none;
-          border-radius: 5px;
-          color: ${({ theme }) => theme.text};
-          background: ${({ theme }) => theme.buttonMed};
-        }
-      }
-
-      button {
-        background: ${({ theme }) => theme.buttonLight};
-        box-shadow: 0 2px 5px ${({ theme }) => theme.boxShadow};
-        color: inherit;
+        margin: 0.5rem 0;
+        padding: 0.5rem;
+        font-size: 1rem;
         border: none;
-        border-radius: 3px;
-        margin: 1rem 2rem;
-        padding: 0.5rem 1rem;
-        font-size: 1.1rem;
+        border-radius: 5px;
+        color: ${({ theme }) => theme.text};
+        background: ${({ theme }) => theme.buttonMed};
       }
+
+      select {
+        width: 50%;
+        margin: 0.5rem 0;
+        padding: 0.5rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 5px;
+        color: ${({ theme }) => theme.text};
+        background: ${({ theme }) => theme.buttonMed};
+      }
+    }
+
+    button {
+      background: ${({ theme }) => theme.buttonMed};
+      box-shadow: 0 1px 2px ${({ theme }) => theme.boxShadow};
+      color: inherit;
+      border: none;
+      border-radius: 5px;
+      margin: auto;
+      padding: 0.5rem 1rem;
+      font-size: 1.1rem;
     }
   }
 `;

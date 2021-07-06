@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
 // Components
 import Checkmark from "../Checkmark";
 import LoadingSpinner from "../LoadingSpinner";
+import Modal from "../Wrappers/Modal";
 // Utils
 import { addTrainerToTeam, getUsersFromIdArr, removeTrainerFromTeam } from "../../utils/api";
 // Context
@@ -12,8 +13,6 @@ import { useStoreState } from "../../store";
 
 export default function TrainersTile({ team, setTeam, teamMembers, setTeamMembers }) {
   const { user } = useStoreState();
-
-  const shadow = useRef(null);
 
   const [showTrainerManager, setShowTrainerManager] = useState(false);
 
@@ -31,10 +30,6 @@ export default function TrainersTile({ team, setTeam, teamMembers, setTeamMember
     if (added) setTeam((prev) => ({ ...prev, trainers: [...prev.trainers, trainer] }));
   };
 
-  const handleShadowClick = ({ target }) => {
-    if (target.classList.contains("shadow")) setShowTrainerManager(false);
-  };
-
   useEffect(() => {
     const getTeamMembers = async () => {
       const members = await getUsersFromIdArr(team.members);
@@ -42,16 +37,6 @@ export default function TrainersTile({ team, setTeam, teamMembers, setTeamMember
     };
 
     if (showTrainerManager && !teamMembers) getTeamMembers();
-  }, [showTrainerManager]);
-
-  useEffect(() => {
-    if (showTrainerManager) {
-      document.body.style.height = "100%";
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.height = "auto";
-      document.body.style.overflow = "auto";
-    }
   }, [showTrainerManager]);
 
   return (
@@ -89,7 +74,7 @@ export default function TrainersTile({ team, setTeam, teamMembers, setTeamMember
       </TrainerList>
 
       {showTrainerManager && (
-        <Shadow ref={shadow} className="shadow" onClick={handleShadowClick}>
+        <Modal removeModal={() => setShowTrainerManager(false)} isOpen={showTrainerManager}>
           <TrainerManager>
             <h3 className="title">Members</h3>
 
@@ -115,7 +100,7 @@ export default function TrainersTile({ team, setTeam, teamMembers, setTeamMember
               <LoadingSpinner />
             )}
           </TrainerManager>
-        </Shadow>
+        </Modal>
       )}
     </Tile>
   );
@@ -201,17 +186,6 @@ const TrainerList = styled.ul`
       display: none;
     }
   }
-`;
-
-const Shadow = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  min-height: 100vh;
-  background: ${({ theme }) => theme.opacityBackground};
-  z-index: 99999;
 `;
 
 const TrainerManager = styled.div`

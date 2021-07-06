@@ -1,8 +1,9 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import styled from "styled-components";
 // Components
 import LoadingSpinner from "../LoadingSpinner";
+import Modal from "../Wrappers/Modal";
 // API
 import {
   addFollow,
@@ -16,8 +17,6 @@ import { useStoreState } from "../../store";
 
 export default function TopTile({ team, setTeam, teamMembers, setTeamMembers }) {
   const { user } = useStoreState();
-
-  const shadow = useRef(null);
 
   const [showMembers, setShowMembers] = useState(false);
   const [userFollowing, setUserFollowing] = useState([]);
@@ -56,10 +55,6 @@ export default function TopTile({ team, setTeam, teamMembers, setTeamMembers }) 
     if (unfollowed) setUserFollowing((prev) => [...prev.filter((_id) => _id !== member_id)]);
   };
 
-  const handleShadowClick = ({ target }) => {
-    if (target.classList.contains("shadow")) setShowMembers(false);
-  };
-
   useEffect(() => {
     const getTeamMembers = async () => {
       const members = await getUsersFromIdArr(team.members);
@@ -67,16 +62,6 @@ export default function TopTile({ team, setTeam, teamMembers, setTeamMembers }) 
     };
 
     if (showMembers && !teamMembers) getTeamMembers();
-  }, [showMembers]);
-
-  useEffect(() => {
-    if (showMembers) {
-      document.body.style.height = "100%";
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.height = "auto";
-      document.body.style.overflow = "auto";
-    }
   }, [showMembers]);
 
   useEffect(() => {
@@ -111,7 +96,7 @@ export default function TopTile({ team, setTeam, teamMembers, setTeamMembers }) 
       </div>
 
       {showMembers && (
-        <Shadow ref={shadow} className="shadow" onClick={handleShadowClick}>
+        <Modal removeModal={() => setShowMembers(false)} isOpen={showMembers}>
           <MembersList>
             <h3 className="title">Members</h3>
 
@@ -141,7 +126,7 @@ export default function TopTile({ team, setTeam, teamMembers, setTeamMembers }) 
               <LoadingSpinner />
             )}
           </MembersList>
-        </Shadow>
+        </Modal>
       )}
     </Tile>
   );
@@ -193,17 +178,6 @@ const Tile = styled.div`
       }
     }
   }
-`;
-
-const Shadow = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  min-height: 100vh;
-  background: ${({ theme }) => theme.opacityBackground};
-  z-index: 99999;
 `;
 
 const MembersList = styled.div`
