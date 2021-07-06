@@ -163,7 +163,7 @@ const Container = styled.section`
 `;
 
 const BuilderSlideContainer = styled.div`
-  position: relative;
+  /* position: relative; */
   width: 300vw;
   min-height: 100vh;
   height: min-content;

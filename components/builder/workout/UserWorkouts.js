@@ -102,26 +102,13 @@ export default function UserWorkouts({
 }
 
 const Container = styled.div`
-  width: 100%;
+  width: calc(100vw - 1rem);
   margin-bottom: 0.5rem;
 
-  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  animation: 0.35s ease-out forwards slidein;
-
-  @keyframes slidein {
-    from {
-      margin-left: -100vw;
-    }
-
-    to {
-      margin-left: 0%;
-    }
-  }
 `;
 
 const WorkoutsList = styled.div`
@@ -129,6 +116,7 @@ const WorkoutsList = styled.div`
   border-radius: 5px;
   background: ${({ theme }) => theme.background};
   margin-bottom: 0.5rem;
+
   h3 {
     color: ${({ theme }) => theme.textLight};
     text-align: left;
