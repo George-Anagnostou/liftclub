@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { getCurrYearMonthDay } from "../../utils";
+import { getCurrYearMonthDay, stripTimeAndCompareDates } from "../../utils";
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu ", "Fri", "Sat"];
@@ -12,7 +12,7 @@ export default function Calendar({ data, setSelectedDate, selectedDate }) {
   const isDayInData = (isoString) => data?.findIndex((item) => item.isoDate === isoString) > -1;
 
   const handleDayClick = (date) =>
-    date === selectedDate ? setSelectedDate(null) : setSelectedDate(date);
+    stripTimeAndCompareDates(date, selectedDate) ? setSelectedDate(null) : setSelectedDate(date);
 
   const incrementMonth = () => {
     const newMonth = (month + 1) % 12;
@@ -58,11 +58,12 @@ export default function Calendar({ data, setSelectedDate, selectedDate }) {
             key={i}
             onClick={() => handleDayClick(new Date(year, month, i + 1).toISOString())}
             className={`day ${
-              selectedDate === new Date(year, month, i + 1).toISOString() && "selected"
+              stripTimeAndCompareDates(selectedDate, new Date(year, month, i + 1).toISOString()) &&
+              "selected"
             }
             ${isDayInData(new Date(year, month, i + 1).toISOString()) && "hasWorkout"}
             ${
-              selectedDate === new Date(year, month, i + 1).toISOString() &&
+              stripTimeAndCompareDates(selectedDate, new Date(year, month, i + 1).toISOString()) &&
               isDayInData(new Date(year, month, i + 1).toISOString()) &&
               "selectedAndHasWorkout"
             }`}

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useStoreState } from "../../store";
+// Utils
+import { stripTimeAndCompareDates } from "../../utils";
 // API
 import {
   getRoutineFromId,
@@ -8,7 +10,6 @@ import {
   getWorkoutsFromIdArray,
   updateRoutine,
 } from "../../utils/api";
-import LoadingSpinner from "../LoadingSpinner";
 // Components
 import Calendar from "./Calendar";
 
@@ -18,7 +19,7 @@ export default function RoutineEditor({ routine_id, setTeam }) {
   const [initialRoutineData, setInitialRoutineData] = useState(null);
   const [routine, setRoutine] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString());
   const [isRoutineOwner, setIsRoutineOwner] = useState(false);
   const [userMadeWorkouts, setUserMadeWorkouts] = useState([]);
   const [userSavedWorkouts, setUserSavedWorkouts] = useState([]);
@@ -70,7 +71,7 @@ export default function RoutineEditor({ routine_id, setTeam }) {
       setRoutine(routineData);
 
       setInitialRoutineData(routineData);
-      
+
       setIsRoutineOwner(user._id === routineData.creator_id);
     };
 
@@ -93,8 +94,8 @@ export default function RoutineEditor({ routine_id, setTeam }) {
   // Displays the data for the selected date & editor if in editing mode
   // If there is a workout, displays the
   const displaySelectedDateData = () => {
-    const foundWorkout = routine.workoutPlan.filter(
-      (item) => item.isoDate.substring(0, 10) === selectedDate?.substring(0, 10)
+    const foundWorkout = routine.workoutPlan.filter((item) =>
+      stripTimeAndCompareDates(item.isoDate, selectedDate)
     )[0]?.workout;
 
     return (
@@ -108,7 +109,7 @@ export default function RoutineEditor({ routine_id, setTeam }) {
           ) : isEditing ? (
             <p className="textLight">Select a workout from below</p>
           ) : (
-            <p className="textLight">No workout</p>
+            <p className="textLight">No workout today</p>
           )
         ) : (
           <p className="textLight">Tap a date to view its workout</p>

@@ -7,7 +7,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import SaveButton from "../components/workoutLog/SaveButton";
 import DateScroll from "../components/workoutLog/DateScroll";
 // Utils
-import { getCurrYearMonthDay, addExerciseDataToWorkout } from "../utils";
+import { getCurrYearMonthDay, addExerciseDataToWorkout, stripTimeAndCompareDates } from "../utils";
 // Context
 import { useStoreState } from "../store";
 // API
@@ -217,7 +217,7 @@ export default function workoutLog() {
 
       const lastWorkoutDate = user.workoutLog[user.workoutLog.length - 1].isoDate;
 
-      lastWorkoutDate.substring(0, 10) === currIsoDate.substring(0, 10)
+      stripTimeAndCompareDates(lastWorkoutDate, currIsoDate)
         ? setDataToToday(currIsoDate)
         : setPageState(null);
     }
