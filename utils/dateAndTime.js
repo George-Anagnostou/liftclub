@@ -74,3 +74,8 @@ export const formatIsoDate = (isoDate) => {
 
   return `${MONTHS[month]} ${day}, ${year}`;
 };
+
+export const stripTimeAndCompareDates = (date1, date2) => {
+  if (!date1 || !date2) return false;
+  return date1.substring(0, 10) === date2.substring(0, 10);
+};
