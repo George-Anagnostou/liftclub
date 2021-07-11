@@ -152,6 +152,7 @@ const WorkoutList = styled.ul`
             box-shadow: none;
             border: none;
             border-bottom: 1px solid ${({ theme }) => theme.border};
+            border-radius: 0;
             width: 5rem;
             font-size: 1.5rem;
             font-weight: 100;
