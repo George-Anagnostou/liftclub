@@ -150,8 +150,8 @@ const WorkoutList = styled.ul`
           input {
             text-align: center;
             box-shadow: none;
-            border: 1px solid ${({ theme }) => theme.border};
-            border-radius: 5px;
+            border: none;
+            border-bottom: 1px solid ${({ theme }) => theme.border};
             width: 5rem;
             font-size: 1.5rem;
             font-weight: 100;
