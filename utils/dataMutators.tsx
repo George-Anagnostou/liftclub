@@ -1,5 +1,5 @@
 import { getExercisesFromIdArray } from "./api";
-import { Exercise, Workout, WorkoutLogItem } from "./interfaces";
+import { Workout, WorkoutLogItem } from "./interfaces";
 
 export const addExerciseDataToLoggedWorkout = async (workout: WorkoutLogItem) => {
   // Grab all exercise_ids from the workout
