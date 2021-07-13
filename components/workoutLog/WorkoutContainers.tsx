@@ -1,13 +1,26 @@
 import styled from "styled-components";
+// Interfaces
+import { WorkoutLogItem } from "../../utils/interfaces";
 
-export default function Workout({
+interface Props {
+  currentDayData: WorkoutLogItem;
+  handleWeightChange: (
+    { target }: React.ChangeEvent<HTMLInputElement>,
+    exerciseIndex: number,
+    setIndex: number
+  ) => void;
+  handleWorkoutNoteChange: ({ target }: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  prevBestData: WorkoutLogItem | null;
+  deleteWorkout: () => Promise<void>;
+}
+
+const WorkoutContainer: React.FC<Props> = ({
   currentDayData,
   handleWeightChange,
   handleWorkoutNoteChange,
-  workoutNote,
   prevBestData,
   deleteWorkout,
-}) {
+}) => {
   return (
     <>
       <WorkoutName>
@@ -18,7 +31,7 @@ export default function Workout({
       <WorkoutList>
         {currentDayData.exerciseData.map(({ exercise, exercise_id, sets }, i) => (
           <li className="exercise" key={exercise_id}>
-            <h3 className="exercise-name">{exercise.name}</h3>
+            <h3 className="exercise-name">{exercise!.name}</h3>
             <ul>
               <li className="set-title">
                 <p>Reps</p>
@@ -41,7 +54,7 @@ export default function Workout({
                   </div>
 
                   <div className="prev">
-                    {prevBestData?.exerciseData[i]?.sets[j]?.weight >= 0 ? (
+                    {prevBestData && prevBestData.exerciseData[i].sets[j].weight >= 0 ? (
                       <p>{prevBestData?.exerciseData[i]?.sets[j]?.weight}</p>
                     ) : (
                       <span>None</span>
@@ -58,9 +71,9 @@ export default function Workout({
         <h3>Notes:</h3>
         <textarea
           name="workoutNote"
-          cols="30"
-          rows="5"
-          value={workoutNote}
+          cols={30}
+          rows={5}
+          value={currentDayData.workoutNote}
           onChange={handleWorkoutNoteChange}
         ></textarea>
       </WorkoutNote>
@@ -68,7 +81,9 @@ export default function Workout({
       <DeleteBtn onClick={deleteWorkout}>Delete Workout</DeleteBtn>
     </>
   );
-}
+};
+
+export default WorkoutContainer;
 
 const WorkoutName = styled.div`
   display: flex;
