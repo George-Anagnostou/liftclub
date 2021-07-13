@@ -12,8 +12,14 @@ interface Props {
 
 const SaveButton: React.FC<Props> = ({ saveWorkout, saveLoading, saveSuccess }) => {
   return (
-    <SaveBtn onClick={saveWorkout}>
-      {saveLoading ? <LoadingSpinner /> : !saveSuccess ? "SAVE" : "SAVED"}
+    <SaveBtn onClick={saveWorkout} disabled={saveLoading}>
+      {saveLoading ? (
+        <LoadingSpinner styles={{ height: 24, width: 24 }} />
+      ) : saveSuccess ? (
+        "SAVED"
+      ) : (
+        "SAVE"
+      )}
       {saveSuccess && <Checkmark position={{ position: "absolute", top: "5px", right: "15px" }} />}
     </SaveBtn>
   );
@@ -34,4 +40,8 @@ const SaveBtn = styled.button`
   background: ${({ theme }) => theme.background};
   border: 3px solid ${({ theme }) => theme.border};
   box-shadow: 0 2px 5px ${({ theme }) => theme.boxShadow};
+
+  &:disabled {
+    opacity: 0.5;
+  }
 `;
