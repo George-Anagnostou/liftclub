@@ -1,8 +1,23 @@
 import { createContext, useContext, useReducer } from "react";
 import userReducer from "../reducers/userReducer";
+import { User } from "../../utils/interfaces";
 
-const StoreStateContext = createContext();
-const StoreDispatchContext = createContext();
+interface StoreContextState {
+  user: User | undefined;
+  isSignedIn: boolean;
+  isUsingPWA: boolean;
+  platform: string;
+}
+
+const InitialStoreState = {
+  user: undefined,
+  isSignedIn: false,
+  isUsingPWA: false,
+  platform: "web",
+};
+
+const StoreStateContext = createContext<StoreContextState>(InitialStoreState);
+const StoreDispatchContext = createContext<any>(null);
 
 export function useStoreState() {
   const context = useContext(StoreStateContext);
@@ -19,11 +34,7 @@ export function useStoreDispatch() {
 }
 
 export const StoreProvider = ({ children }) => {
-  const [user, dispatch] = useReducer(userReducer, {
-    user: undefined,
-    isUsingPWA: false,
-    platform: "web",
-  });
+  const [user, dispatch] = useReducer(userReducer, InitialStoreState);
 
   return (
     <StoreStateContext.Provider value={user}>
