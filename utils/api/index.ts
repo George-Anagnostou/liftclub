@@ -1,4 +1,4 @@
-import { Exercise, WorkoutLogItem } from "../interfaces";
+import { Exercise, Routine, Team, User, Workout, WorkoutLog, WorkoutLogItem } from "../interfaces";
 
 /*
  *
@@ -9,10 +9,11 @@ import { Exercise, WorkoutLogItem } from "../interfaces";
  *
  *
  */
-export const getUserFromUsername = async (username) => {
+export const getUserFromUsername = async (username: string): Promise<User | false> => {
   try {
     const res = await fetch(`/api/users/null?username=${username}`);
     const userData = await res.json();
+    console.log(userData);
     return userData;
   } catch (e) {
     console.log(e);
@@ -20,7 +21,7 @@ export const getUserFromUsername = async (username) => {
   }
 };
 
-export const userJoiningTeam = async (user_id, team_id) => {
+export const userJoiningTeam = async (user_id: string, team_id: string) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
@@ -34,7 +35,7 @@ export const userJoiningTeam = async (user_id, team_id) => {
   }
 };
 
-export const userLeavingTeam = async (user_id, team_id) => {
+export const userLeavingTeam = async (user_id: string, team_id: string) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
@@ -48,7 +49,7 @@ export const userLeavingTeam = async (user_id, team_id) => {
   }
 };
 
-export const addUserSavedWorkout = async (user_id, workout_id) => {
+export const addUserSavedWorkout = async (user_id: string, workout_id: string) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
@@ -62,7 +63,7 @@ export const addUserSavedWorkout = async (user_id, workout_id) => {
   }
 };
 
-export const removeUserSavedWorkout = async (user_id, workout_id) => {
+export const removeUserSavedWorkout = async (user_id: string, workout_id: string) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
@@ -76,22 +77,21 @@ export const removeUserSavedWorkout = async (user_id, workout_id) => {
   }
 };
 
-export const saveUserWorkoutLog = async (workoutLog, user_id) => {
+export const saveUserWorkoutLog = async (workoutLog: WorkoutLog, user_id: string) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
       body: JSON.stringify({ workoutLog }),
     });
 
-    const userData = await res.json();
-    return userData;
+    return res.status === 201;
   } catch (e) {
     console.log(e);
     return false;
   }
 };
 
-export const saveUserWeight = async (weight, user_id) => {
+export const saveUserWeight = async (weight: number, user_id: string) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
@@ -106,7 +106,7 @@ export const saveUserWeight = async (weight, user_id) => {
   }
 };
 
-export const addFollow = async (user_id, followee_id) => {
+export const addFollow = async (user_id: string, followee_id: string) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
@@ -120,7 +120,7 @@ export const addFollow = async (user_id, followee_id) => {
   }
 };
 
-export const removeFollow = async (user_id, followee_id) => {
+export const removeFollow = async (user_id: string, followee_id: string) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
@@ -134,7 +134,7 @@ export const removeFollow = async (user_id, followee_id) => {
   }
 };
 
-export const saveUserBio = async (user_id, bio) => {
+export const saveUserBio = async (user_id: string, bio: string) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
@@ -173,7 +173,7 @@ export const getDateFromUserWorkoutLog = async (
   }
 };
 
-export const deleteWorkoutFromWorkoutLog = async (user_id: string, isoDate) => {
+export const deleteWorkoutFromWorkoutLog = async (user_id: string, isoDate: string) => {
   try {
     const res = await fetch(`/api/users/${user_id}?field=workoutLog&date=${isoDate}`, {
       method: "DELETE",
@@ -187,7 +187,7 @@ export const deleteWorkoutFromWorkoutLog = async (user_id: string, isoDate) => {
 };
 
 // Multiple
-export const getUsersFromIdArr = async (idArr) => {
+export const getUsersFromIdArr = async (idArr: string[]): Promise<User[] | false> => {
   try {
     const res = await fetch(`/api/users/queryMultiple`, {
       method: "POST",
@@ -211,7 +211,7 @@ export const getUsersFromIdArr = async (idArr) => {
  *
  *
  */
-export const getExercisesFromIdArray = async (idArr: string[]) => {
+export const getExercisesFromIdArray = async (idArr: string[]): Promise<Exercise[]> => {
   try {
     const res = await fetch("/api/exercises/queryMultiple", {
       method: "POST",
@@ -222,7 +222,7 @@ export const getExercisesFromIdArray = async (idArr: string[]) => {
     return exercises;
   } catch (e) {
     console.log(e);
-    return false;
+    return [];
   }
 };
 
@@ -233,7 +233,7 @@ export const createExercise = async (exercise: Exercise) => {
       body: JSON.stringify(exercise),
     });
 
-    return { status: res.status };
+    return res.status === 201;
   } catch (e) {
     console.log(e);
     return false;
@@ -249,7 +249,7 @@ export const createExercise = async (exercise: Exercise) => {
  *
  *
  */
-export const postNewWorkout = async (workout) => {
+export const postNewWorkout = async (workout: Workout) => {
   try {
     const res = await fetch(`/api/workouts`, {
       method: "POST",
@@ -263,7 +263,7 @@ export const postNewWorkout = async (workout) => {
   }
 };
 
-export const updateExistingWorkout = async (workout) => {
+export const updateExistingWorkout = async (workout: Workout) => {
   try {
     const res = await fetch(`/api/workouts/${workout._id}`, {
       method: "PUT",
@@ -277,7 +277,7 @@ export const updateExistingWorkout = async (workout) => {
   }
 };
 
-export const deleteWorkout = async (workout_id) => {
+export const deleteWorkout = async (workout_id: string) => {
   try {
     const res = await fetch(`/api/workouts/${workout_id}`, {
       method: "DELETE",
@@ -290,7 +290,7 @@ export const deleteWorkout = async (workout_id) => {
   }
 };
 
-export const getWorkoutFromId = async (workout_id) => {
+export const getWorkoutFromId = async (workout_id: string): Promise<Workout | false> => {
   try {
     const res = await fetch(`/api/workouts/${workout_id}`);
 
@@ -298,11 +298,12 @@ export const getWorkoutFromId = async (workout_id) => {
     return workoutData;
   } catch (e) {
     console.log(e);
+    return false;
   }
 };
 
 // Queries
-export const getUserMadeWorkouts = async (user_id) => {
+export const getUserMadeWorkouts = async (user_id: string): Promise<Workout[]> => {
   try {
     const res = await fetch(`/api/workouts?creator_id=${user_id}`);
 
@@ -312,10 +313,11 @@ export const getUserMadeWorkouts = async (user_id) => {
     return userMadeWorkouts.reverse();
   } catch (e) {
     console.log(e);
+    return [];
   }
 };
 
-export const getPublicWorkouts = async () => {
+export const getPublicWorkouts = async (): Promise<Workout[]> => {
   try {
     const res = await fetch("/api/workouts?isPublic=true");
 
@@ -325,11 +327,12 @@ export const getPublicWorkouts = async () => {
     return publicWorkouts.reverse();
   } catch (e) {
     console.log(e);
+    return [];
   }
 };
 
 // Multiple
-export const getWorkoutsFromIdArray = async (idArr) => {
+export const getWorkoutsFromIdArray = async (idArr: string[]): Promise<Workout[]> => {
   try {
     const res = await fetch("/api/workouts/queryMultiple", {
       method: "POST",
@@ -339,11 +342,12 @@ export const getWorkoutsFromIdArray = async (idArr) => {
     const workouts = await res.json();
 
     // Sort workouts to be in the same order that the irArr requests them
-    workouts.sort((a, b) => idArr.indexOf(a._id) - idArr.indexOf(b._id));
+    workouts.sort((a: Workout, b: Workout) => idArr.indexOf(a._id) - idArr.indexOf(b._id));
 
     return workouts;
   } catch (e) {
     console.log(e);
+    return [];
   }
 };
 
@@ -357,7 +361,7 @@ export const getWorkoutsFromIdArray = async (idArr) => {
  *
  */
 
-export const getRoutineFromId = async (routine_id) => {
+export const getRoutineFromId = async (routine_id: string): Promise<Routine | false> => {
   try {
     const res = await fetch(`/api/routines/${routine_id}`);
 
@@ -369,7 +373,7 @@ export const getRoutineFromId = async (routine_id) => {
     return false;
   }
 };
-export const postNewRoutine = async (newRoutine) => {
+export const postNewRoutine = async (newRoutine: Routine) => {
   try {
     const res = await fetch(`/api/routines}`, {
       method: "POST",
@@ -383,7 +387,7 @@ export const postNewRoutine = async (newRoutine) => {
   }
 };
 
-export const updateRoutine = async (updatedRoutine) => {
+export const updateRoutine = async (updatedRoutine: Routine) => {
   try {
     const res = await fetch(`/api/routines/${updatedRoutine._id}`, {
       method: "PUT",
@@ -406,7 +410,7 @@ export const updateRoutine = async (updatedRoutine) => {
  *
  *
  */
-export const getTeamById = async (team_id) => {
+export const getTeamById = async (team_id: string): Promise<Team | false> => {
   try {
     const res = await fetch(`/api/teams/${team_id}`);
 
@@ -418,7 +422,7 @@ export const getTeamById = async (team_id) => {
   }
 };
 
-export const getUserMadeTeams = async (user_id) => {
+export const getUserMadeTeams = async (user_id: string): Promise<Team[] | false> => {
   try {
     const res = await fetch(`/api/teams?creator_id=${user_id}`);
     const teams = await res.json();
@@ -430,7 +434,7 @@ export const getUserMadeTeams = async (user_id) => {
   }
 };
 
-export const addTrainerToTeam = async (team_id, trainer_id) => {
+export const addTrainerToTeam = async (team_id: string, trainer_id: string) => {
   try {
     const res = await fetch(`/api/teams/${team_id}?addTrainer=${trainer_id}`, { method: "PUT" });
 
@@ -441,7 +445,7 @@ export const addTrainerToTeam = async (team_id, trainer_id) => {
   }
 };
 
-export const removeTrainerFromTeam = async (team_id, trainer_id) => {
+export const removeTrainerFromTeam = async (team_id: string, trainer_id: string) => {
   try {
     const res = await fetch(`/api/teams/${team_id}?removeTrainer=${trainer_id}`, { method: "PUT" });
 
