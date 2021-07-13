@@ -98,7 +98,6 @@ export const saveUserWeight = async (weight: number, user_id: string) => {
       body: JSON.stringify({ weight }),
     });
 
-    const userData = await res.json();
     return true;
   } catch (e) {
     console.log(e);
