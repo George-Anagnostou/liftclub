@@ -28,7 +28,7 @@ const feed: React.FC = () => {
 
   const addToSavedWorkouts = async (workout: Workout) => {
     const added = await addUserSavedWorkout(user!._id, workout._id);
-    if (added) setSavedWorkouts((prev) => [...prev, workout]);
+    if (added) setSavedWorkouts((prev) => [workout, ...prev]);
   };
 
   const removeFromSavedWorkouts = async (workout: Workout) => {
