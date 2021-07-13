@@ -1,13 +1,25 @@
 import React from "react";
 import styled from "styled-components";
+// Interfaces
+import { WorkoutLogItem } from "../../utils/interfaces";
 
-export default function DateScroll({
+interface Props {
+  changeCurrentDayData: (numOfDaysToShift: number) => Promise<void>;
+  getDayDataFromWorkoutLog: (targetIsoDate: string) => WorkoutLogItem | undefined;
+  displayedDate: {
+    year: number;
+    month: number;
+    day: number;
+  };
+}
+
+const DateScroll: React.FC<Props> = ({
   changeCurrentDayData,
   getDayDataFromWorkoutLog,
-  yearMonthDay,
-}) {
+  displayedDate,
+}) => {
   // Format the date for the DateBar
-  const formatDate = (numOfDaysToShift) => {
+  const formatDate = (numOfDaysToShift: number) => {
     const currDate = new Date();
     const date = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate());
 
@@ -15,7 +27,7 @@ export default function DateScroll({
 
     const dayData = getDayDataFromWorkoutLog(date.toISOString());
 
-    const { year, month, day } = yearMonthDay;
+    const { year, month, day } = displayedDate;
     const dayIsSelected =
       date.getFullYear() === year && date.getMonth() === month && date.getDate() === day;
 
@@ -34,14 +46,16 @@ export default function DateScroll({
 
   return (
     <DateScrollContainer>
-      {[...Array(90).keys()].map((numDays) => (
+      {Array.from(Array(90).keys()).map((numDays) => (
         <li onClick={() => changeCurrentDayData(-numDays)} className="date" key={-numDays}>
           {formatDate(-numDays)}
         </li>
       ))}
     </DateScrollContainer>
   );
-}
+};
+
+export default DateScroll;
 
 const DateScrollContainer = styled.ul`
   display: flex;
