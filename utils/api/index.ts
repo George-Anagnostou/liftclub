@@ -1,3 +1,5 @@
+import { Exercise, WorkoutLogItem } from "../interfaces";
+
 /*
  *
  *
@@ -22,7 +24,6 @@ export const userJoiningTeam = async (user_id, team_id) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
-      contentType: "application/json",
       body: JSON.stringify({ joinTeam: team_id }),
     });
 
@@ -37,7 +38,6 @@ export const userLeavingTeam = async (user_id, team_id) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
-      contentType: "application/json",
       body: JSON.stringify({ leaveTeam: team_id }),
     });
 
@@ -52,7 +52,6 @@ export const addUserSavedWorkout = async (user_id, workout_id) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
-      contentType: "application/json",
       body: JSON.stringify({ addSavedWorkout: workout_id }),
     });
 
@@ -67,7 +66,6 @@ export const removeUserSavedWorkout = async (user_id, workout_id) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
-      contentType: "application/json",
       body: JSON.stringify({ removeSavedWorkout: workout_id }),
     });
 
@@ -82,7 +80,6 @@ export const saveUserWorkoutLog = async (workoutLog, user_id) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
-      contentType: "application/json",
       body: JSON.stringify({ workoutLog }),
     });
 
@@ -98,7 +95,6 @@ export const saveUserWeight = async (weight, user_id) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
-      contentType: "application/json",
       body: JSON.stringify({ weight }),
     });
 
@@ -114,7 +110,6 @@ export const addFollow = async (user_id, followee_id) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
-      contentType: "application/json",
       body: JSON.stringify({ follow: followee_id }),
     });
 
@@ -129,7 +124,6 @@ export const removeFollow = async (user_id, followee_id) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
-      contentType: "application/json",
       body: JSON.stringify({ unfollow: followee_id }),
     });
 
@@ -144,7 +138,6 @@ export const saveUserBio = async (user_id, bio) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
-      contentType: "application/json",
       body: JSON.stringify({ bio }),
     });
 
@@ -166,7 +159,10 @@ export const saveUserBio = async (user_id, bio) => {
 //   }
 // };
 
-export const getDateFromUserWorkoutLog = async (user_id, isoDate) => {
+export const getDateFromUserWorkoutLog = async (
+  user_id: string,
+  isoDate: string
+): Promise<WorkoutLogItem | false> => {
   try {
     const res = await fetch(`/api/users/${user_id}?field=workoutLog&date=${isoDate}`);
 
@@ -177,7 +173,7 @@ export const getDateFromUserWorkoutLog = async (user_id, isoDate) => {
   }
 };
 
-export const deleteWorkoutFromWorkoutLog = async (user_id, isoDate) => {
+export const deleteWorkoutFromWorkoutLog = async (user_id: string, isoDate) => {
   try {
     const res = await fetch(`/api/users/${user_id}?field=workoutLog&date=${isoDate}`, {
       method: "DELETE",
@@ -195,7 +191,6 @@ export const getUsersFromIdArr = async (idArr) => {
   try {
     const res = await fetch(`/api/users/queryMultiple`, {
       method: "POST",
-      contentType: "application/json",
       body: JSON.stringify({ idArr }),
     });
 
@@ -216,11 +211,10 @@ export const getUsersFromIdArr = async (idArr) => {
  *
  *
  */
-export const getExercisesFromIdArray = async (idArr) => {
+export const getExercisesFromIdArray = async (idArr: string[]) => {
   try {
     const res = await fetch("/api/exercises/queryMultiple", {
       method: "POST",
-      contentType: "application/json",
       body: JSON.stringify(idArr),
     });
 
@@ -232,11 +226,10 @@ export const getExercisesFromIdArray = async (idArr) => {
   }
 };
 
-export const createExercise = async (exercise) => {
+export const createExercise = async (exercise: Exercise) => {
   try {
     const res = await fetch("/api/exercises", {
       method: "POST",
-      contentType: "application/json",
       body: JSON.stringify(exercise),
     });
 
@@ -260,7 +253,6 @@ export const postNewWorkout = async (workout) => {
   try {
     const res = await fetch(`/api/workouts`, {
       method: "POST",
-      contentType: "application/json",
       body: JSON.stringify(workout),
     });
 
@@ -275,7 +267,6 @@ export const updateExistingWorkout = async (workout) => {
   try {
     const res = await fetch(`/api/workouts/${workout._id}`, {
       method: "PUT",
-      contentType: "application/json",
       body: JSON.stringify(workout),
     });
 
@@ -290,7 +281,6 @@ export const deleteWorkout = async (workout_id) => {
   try {
     const res = await fetch(`/api/workouts/${workout_id}`, {
       method: "DELETE",
-      contentType: "application/json",
     });
 
     return res.status === 204;
@@ -343,7 +333,6 @@ export const getWorkoutsFromIdArray = async (idArr) => {
   try {
     const res = await fetch("/api/workouts/queryMultiple", {
       method: "POST",
-      contentType: "application/json",
       body: JSON.stringify(idArr),
     });
 
@@ -384,7 +373,6 @@ export const postNewRoutine = async (newRoutine) => {
   try {
     const res = await fetch(`/api/routines}`, {
       method: "POST",
-      contentType: "application/json",
       body: JSON.stringify({ newRoutine }),
     });
 
@@ -399,7 +387,6 @@ export const updateRoutine = async (updatedRoutine) => {
   try {
     const res = await fetch(`/api/routines/${updatedRoutine._id}`, {
       method: "PUT",
-      contentType: "application/json",
       body: JSON.stringify({ updatedRoutine }),
     });
 
