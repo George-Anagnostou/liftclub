@@ -156,7 +156,8 @@ export default async (req, res) => {
               { $set: { workoutLog: workoutLog } },
               { returnOriginal: false }
             );
-          res.json(userData.value);
+            
+          userData.value ? res.status(201).send() : res.status(400).send();
           break;
 
         case "ADD_SAVED_WORKOUT":

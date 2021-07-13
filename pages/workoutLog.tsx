@@ -148,10 +148,13 @@ export default function workoutLog() {
       ].sort((a, b) => a.isoDate.localeCompare(b.isoDate));
     }
 
-    const userData = await saveUserWorkoutLog(updatedWorkoutLog, user!._id);
+    const saved = await saveUserWorkoutLog(updatedWorkoutLog, user!._id);
 
-    setWorkoutLog(userData.workoutLog);
-    setSaveSuccess(userData);
+    setWorkoutLog(updatedWorkoutLog);
+
+    // Re-trigger animations
+    setSaveSuccess(false);
+    setSaveSuccess(saved);
 
     setSaveLoading(false);
   };
@@ -232,7 +235,7 @@ export default function workoutLog() {
       <DateScroll
         changeCurrentDayData={changeCurrentDayData}
         getDayDataFromWorkoutLog={getDayDataFromWorkoutLog}
-        yearMonthDay={displayedDate}
+        displayedDate={displayedDate}
       />
 
       {loading ? (
