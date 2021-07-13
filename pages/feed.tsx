@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 // Components
-import SavedWorkouts from "../components/workoutFeed/SavedWorkouts";
-import PublicWorkouts from "../components/workoutFeed/PublicWorkouts";
+import SavedWorkouts from "../components/feed/SavedWorkouts";
+import PublicWorkouts from "../components/feed/PublicWorkouts";
 // Utils
 import {
   addUserSavedWorkout,
@@ -12,32 +12,32 @@ import {
 } from "../utils/api";
 // Context
 import { useStoreState } from "../store";
+// Interfaces
+import { Workout } from "../utils/interfaces";
 
-export default function workoutFeed() {
+const feed: React.FC = () => {
   const { user } = useStoreState();
 
-  const [savedWorkouts, setSavedWorkouts] = useState([]);
-  const [publicWorkouts, setPublicWorkouts] = useState([]);
+  const [savedWorkouts, setSavedWorkouts] = useState<Workout[]>([]);
+  const [publicWorkouts, setPublicWorkouts] = useState<Workout[]>([]);
 
   // Returns boolean for if a workout is in savedWorkouts
-  const workoutIsSaved = (workout) => {
+  const workoutIsSaved = (workout: Workout) => {
     return savedWorkouts.map((each) => each._id).includes(workout._id);
   };
 
-  const addToSavedWorkouts = async (workout) => {
-    const added = await addUserSavedWorkout(user._id, workout._id);
-
+  const addToSavedWorkouts = async (workout: Workout) => {
+    const added = await addUserSavedWorkout(user!._id, workout._id);
     if (added) setSavedWorkouts((prev) => [...prev, workout]);
   };
 
-  const removeFromSavedWorkouts = async (workout) => {
-    const removed = await removeUserSavedWorkout(user._id, workout._id);
-
+  const removeFromSavedWorkouts = async (workout: Workout) => {
+    const removed = await removeUserSavedWorkout(user!._id, workout._id);
     if (removed) setSavedWorkouts((prev) => prev.filter((item) => item._id !== workout._id));
   };
 
   const getSavedWorkouts = async () => {
-    const workouts = await getWorkoutsFromIdArray(user.savedWorkouts);
+    const workouts = await getWorkoutsFromIdArray(user!.savedWorkouts!);
     setSavedWorkouts(workouts.reverse());
   };
 
@@ -66,7 +66,8 @@ export default function workoutFeed() {
       <SavedWorkouts workouts={savedWorkouts} removeFromSavedWorkouts={removeFromSavedWorkouts} />
     </WorkoutFeedContainer>
   );
-}
+};
+export default feed;
 
 const WorkoutFeedContainer = styled.div`
   display: flex;

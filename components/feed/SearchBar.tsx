@@ -1,11 +1,20 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+// Components
 import SearchIcon from "./SearchIcon";
+// Interfaces
+import { Workout } from "../../utils/interfaces";
 
-export default function SearchBar({ workouts, setFilteredWorkouts, setLoading }) {
+interface Props {
+  workouts: Workout[];
+  setFilteredWorkouts: React.Dispatch<React.SetStateAction<any>>;
+  setLoading: React.Dispatch<React.SetStateAction<any>>;
+}
+const SearchBar: React.FC<Props> = ({ workouts, setFilteredWorkouts, setLoading }) => {
   const [filter, setFilter] = useState("");
 
-  const handleFilterChange = (e) => setFilter(e.target.value);
+  const handleFilterChange = ({ target }: React.ChangeEvent<HTMLInputElement>) =>
+    setFilter(target.value);
 
   useEffect(() => {
     if (workouts.length) {
@@ -30,7 +39,8 @@ export default function SearchBar({ workouts, setFilteredWorkouts, setLoading })
       <button onClick={() => setFilter("")}>Cancel</button>
     </SearchContainer>
   );
-}
+};
+export default SearchBar;
 
 const SearchContainer = styled.div`
   display: flex;

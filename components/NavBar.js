@@ -17,7 +17,7 @@ export default function NavBar() {
 
   const [routes, setRoutes] = useState([
     { pathname: "/workoutLog", icon: <Notebook />, slug: "log" },
-    { pathname: "/workoutFeed", icon: <Search />, slug: "feed" },
+    { pathname: "/feed", icon: <Search />, slug: "feed" },
     { pathname: "/builder", icon: <Create />, slug: "builder" },
     { pathname: `/users/${user.username}`, icon: <Profile />, slug: "profile" },
   ]);

@@ -4,14 +4,23 @@ import styled from "styled-components";
 import PublicWorkoutTile from "./PublicWorkoutTile";
 import SearchBar from "./SearchBar";
 import LoadingSpinner from "../LoadingSpinner";
+// Interfaces
+import { Workout } from "../../utils/interfaces";
 
-export default function PublicWorkouts({
+interface Props {
+  workouts: Workout[];
+  workoutIsSaved: (workout: Workout) => boolean;
+  removeFromSavedWorkouts: (workout: Workout) => Promise<void>;
+  addToSavedWorkouts: (workout: Workout) => Promise<void>;
+}
+
+const PublicWorkouts: React.FC<Props> = ({
   workouts,
   workoutIsSaved,
   removeFromSavedWorkouts,
   addToSavedWorkouts,
-}) {
-  const [filteredWorkouts, setFilteredWorkouts] = useState([]);
+}) => {
+  const [filteredWorkouts, setFilteredWorkouts] = useState<Workout[]>([]);
   const [loading, setLoading] = useState(true);
 
   return (
@@ -39,7 +48,8 @@ export default function PublicWorkouts({
       )}
     </WorkoutList>
   );
-}
+};
+export default PublicWorkouts;
 
 const WorkoutList = styled.ul`
   width: 100%;

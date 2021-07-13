@@ -5,23 +5,32 @@ import Link from "next/link";
 import LoadingSpinner from "../LoadingSpinner";
 // Utils
 import { addExerciseDataToWorkout, timeSince } from "../../utils";
+// Interfaces
+import { Exercise, Workout } from "../../utils/interfaces";
 
-export default function PublicWorkoutTile({
+interface Props {
+  workout: Workout;
+  workoutIsSaved: (workout: Workout) => boolean;
+  removeFromSavedWorkouts: (workout: Workout) => Promise<void>;
+  addToSavedWorkouts: (workout: Workout) => Promise<void>;
+}
+
+const PublicWorkoutTile: React.FC<Props> = ({
   workout,
   workoutIsSaved,
   removeFromSavedWorkouts,
   addToSavedWorkouts,
-}) {
+}) => {
+  const [workoutExercises, setWorkoutExercises] = useState<Workout["exercises"]>([]);
   const [showWorkoutInfo, setShowWorkoutInfo] = useState(false);
-  const [workoutExercises, setWorkoutExercises] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const toggleWorkoutInfo = () => setShowWorkoutInfo((prev) => !prev);
 
   // Get all exercises for a workout
   const getWorkoutExercises = async () => {
-    const mergedData = await addExerciseDataToWorkout(workout);
-    setWorkoutExercises(mergedData.exercises);
+    const { exercises } = await addExerciseDataToWorkout(workout);
+    setWorkoutExercises(exercises);
     setLoading(false);
   };
 
@@ -79,7 +88,8 @@ export default function PublicWorkoutTile({
       )}
     </WorkoutTile>
   );
-}
+};
+export default PublicWorkoutTile;
 
 const WorkoutTile = styled.li`
   border-radius: 10px;

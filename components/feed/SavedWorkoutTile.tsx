@@ -5,10 +5,16 @@ import Link from "next/link";
 import LoadingSpinner from "../LoadingSpinner";
 // Utils
 import { addExerciseDataToWorkout, timeSince } from "../../utils";
+import { Workout } from "../../utils/interfaces";
 
-export default function SavedWorkoutTile({ workout, removeFromSavedWorkouts }) {
+interface Props {
+  workout: Workout;
+  removeFromSavedWorkouts: (workout: Workout) => Promise<void>;
+}
+
+const SavedWorkoutTile: React.FC<Props> = ({ workout, removeFromSavedWorkouts }) => {
+  const [workoutExercises, setWorkoutExercises] = useState<Workout["exercises"]>([]);
   const [showWorkoutInfo, setShowWorkoutInfo] = useState(false);
-  const [workoutExercises, setWorkoutExercises] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const toggleWorkoutView = () => setShowWorkoutInfo((prev) => !prev);
@@ -69,7 +75,8 @@ export default function SavedWorkoutTile({ workout, removeFromSavedWorkouts }) {
       )}
     </WorkoutTile>
   );
-}
+};
+export default SavedWorkoutTile;
 
 const WorkoutTile = styled.li`
   border-radius: 10px;

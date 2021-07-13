@@ -1,18 +1,25 @@
 import { useRef, useState } from "react";
 import styled from "styled-components";
+// Hooks
 import useTouchSwipe from "../hooks/useTouchSwipe";
 // Components
 import SavedWorkoutTile from "./SavedWorkoutTile";
+// Interfaces
+import { Workout } from "../../utils/interfaces";
 
-export default function SavedWorkouts({ workouts, removeFromSavedWorkouts }) {
-  const downSwipe = useRef(null);
-  const upSwipe = useRef(null);
+interface Props {
+  workouts: Workout[];
+  removeFromSavedWorkouts: (workout: Workout) => Promise<void>;
+}
+
+const SavedWorkouts: React.FC<Props> = ({ workouts, removeFromSavedWorkouts }) => {
+  const swipeRef = useRef(null);
 
   const [showDrawer, setShowDrawer] = useState(false);
 
   const toggleShow = () => setShowDrawer((prev) => !prev);
 
-  useTouchSwipe(downSwipe, ["down", "up"], () => toggleShow(true));
+  useTouchSwipe(swipeRef, ["down", "up"], () => toggleShow());
 
   return (
     <WorkoutList style={showDrawer ? { top: "0%" } : null}>
@@ -28,21 +35,21 @@ export default function SavedWorkouts({ workouts, removeFromSavedWorkouts }) {
         ))}
       </div>
 
-      <div ref={upSwipe}>
-        <div ref={downSwipe} className="list-heading" onClick={toggleShow}>
-          <h3>Saved Workouts</h3>
-          <span className="drawer-indicator"></span>
-        </div>
+      <div ref={swipeRef} className="list-heading" onClick={toggleShow}>
+        <h3>Saved Workouts</h3>
+        <span className="drawer-indicator"></span>
       </div>
     </WorkoutList>
   );
-}
+};
+export default SavedWorkouts;
 
 const WorkoutList = styled.ul`
-  width: 100%;
+  width: 98%;
   height: 85%;
   position: fixed;
-  top: calc(-85% + 50px);
+  top: calc(-85% + 40px);
+  left: 1%;
   background: ${({ theme }) => theme.body};
   box-shadow: 0 5px 5px ${({ theme }) => theme.boxShadow};
 
@@ -76,7 +83,7 @@ const WorkoutList = styled.ul`
 
     h3 {
       line-height: 1rem;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 300;
     }
 
