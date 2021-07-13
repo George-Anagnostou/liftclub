@@ -5,6 +5,7 @@ import { lightTheme, darkTheme } from "../components/Themes/Themes";
 import { useThemeState, ThemeToggleContext } from "../components/Themes/useThemeState";
 // Components
 import Layout from "../components/Layout";
+import React from "react";
 
 const MyApp = ({ Component, pageProps }) => {
   const { themeMode, themeToggler } = useThemeState();
