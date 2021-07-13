@@ -13,7 +13,7 @@ interface Props {
 }
 
 const SavedWorkouts: React.FC<Props> = ({ workouts, removeFromSavedWorkouts }) => {
-  const swipeRef = useRef(null);
+  const swipeRef = useRef<HTMLDivElement>(null);
 
   const [showDrawer, setShowDrawer] = useState(false);
 

@@ -6,13 +6,17 @@ import { useEffect, useState } from "react";
  * @param {string or array} targetDirection
  * @param {function} callback that gets called
  */
-export default function useTouchSwipe(ref, targetDirection, callback) {
+const useTouchSwipe = (
+  ref: React.RefObject<HTMLDivElement>,
+  targetDirection: string[],
+  callback: () => void
+) => {
   const [isSwipping, setIsSwipping] = useState(false);
-  const [startPos, setStartPos] = useState(null);
-  const [direction, setDirection] = useState(null);
+  const [startPos, setStartPos] = useState<{ x: number; y: number } | null>(null);
+  const [direction, setDirection] = useState<string[] | null>(null);
 
   const isOutsideBox = ({ target }) => {
-    if (ref.current && !ref.current.contains(target)) return true;
+    return ref.current && !ref.current.contains(target);
   };
 
   const touchStart = (e) => {
@@ -57,15 +61,16 @@ export default function useTouchSwipe(ref, targetDirection, callback) {
     window.addEventListener("touchend", touchEnd, { passive: false });
 
     return () => {
-      window.removeEventListener("touchstart", touchStart, { passive: false });
-      window.removeEventListener("touchmove", touchMove, { passive: false });
-      window.removeEventListener("touchend", touchEnd, { passive: false });
+      window.removeEventListener("touchstart", touchStart, { capture: false });
+      window.removeEventListener("touchmove", touchMove, { capture: false });
+      window.removeEventListener("touchend", touchEnd, { capture: false });
     };
   }, [touchStart, touchEnd]);
 
   useEffect(() => {
-    const targetArr = [].concat(targetDirection).map((dir) => dir);
+    const isSwipingInTargetDirection = targetDirection.some((dir) => direction?.includes(dir));
 
-    if (isSwipping && direction && targetArr.some((dir) => direction.includes(dir))) callback();
+    if (isSwipping && direction && isSwipingInTargetDirection) callback();
   }, [direction, isSwipping]);
-}
+};
+export default useTouchSwipe;
