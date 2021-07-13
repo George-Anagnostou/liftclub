@@ -11,6 +11,7 @@ export interface User {
   teamsJoined?: Array<string>;
   settings?: { showBio: boolean };
   profileImg?: number;
+  password?: string;
 }
 
 export interface Workout {
