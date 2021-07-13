@@ -24,15 +24,16 @@ export default function CreateExerciseModal({ setShowModal, showModal }) {
   const [muscleGroup, setMuscleGroup] = useState("");
   const [muscleWorked, setMuscleWorked] = useState("");
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
 
-    createExercise({ name, equipment, muscleGroup, muscleWorked });
-
-    setName("");
-    setEquipment("");
-    setMuscleGroup("");
-    setMuscleWorked("");
+    const saved = await createExercise({ name, equipment, muscleGroup, muscleWorked });
+    if (saved) {
+      setName("");
+      setEquipment("");
+      setMuscleGroup("");
+      setMuscleWorked("");
+    }
   };
 
   const handleNameChange = (e) => {
