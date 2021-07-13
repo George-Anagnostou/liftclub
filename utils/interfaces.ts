@@ -2,7 +2,7 @@ export interface User {
   _id: string;
   username: string;
   savedWorkouts?: Array<string>;
-  workoutLog: WorkoutLogItem[];
+  workoutLog: WorkoutLog;
   weight?: Array<number>;
   following?: Array<string>;
   followers?: Array<string>;
@@ -21,6 +21,7 @@ export interface Workout {
   exercises: {
     exercise_id: string;
     sets: { reps: number; weight: number }[];
+    exercise?: Exercise;
   }[];
   isPublic: boolean;
   date_created: string;
@@ -37,6 +38,7 @@ export interface WorkoutLogItem {
   exerciseData: {
     exercise_id: string;
     sets: { reps: number; weight: number | string }[];
+    exercise?: Exercise;
   }[];
 }
 

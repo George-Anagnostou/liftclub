@@ -1,8 +1,14 @@
 import styled from "styled-components";
 
-export default function LoadingSpinner() {
-  return <Loader className="loadingSpinner" />;
+interface Props {
+  styles?: any;
 }
+
+const LoadingSpinner: React.FC<Props> = ({ styles }) => {
+  return <Loader style={styles} className="loadingSpinner" />;
+};
+
+export default LoadingSpinner;
 
 const Loader = styled.div`
   margin: auto;
