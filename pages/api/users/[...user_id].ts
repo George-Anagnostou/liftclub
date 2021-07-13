@@ -1,12 +1,14 @@
 import { connectToDatabase } from "../../../utils/mongodb";
 import { ObjectId } from "mongodb";
+// Interfaces
+import { User } from "../../../utils/interfaces";
 
 export default async (req, res) => {
   const httpMethod = req.method;
   const { db } = await connectToDatabase();
 
-  const user_id = req.query.user_id[0];
-  let userData;
+  const user_id: string = req.query.user_id[0];
+  let userData: User;
 
   switch (httpMethod) {
     case "GET":
@@ -18,7 +20,7 @@ export default async (req, res) => {
 
       if (req.query.field === "savedWorkouts") {
         // GET aggregated savedWorkouts with interpolated workout data
-        // /users/user_id?field=savedWorkouts
+        // ACCESSED WITH: /users/user_id?field=savedWorkouts
 
         const data = await db
           .collection("users")
@@ -38,7 +40,7 @@ export default async (req, res) => {
         res.json(data[0].data);
       } else if (req.query.field === "workoutLog") {
         // GET aggregated workoutLog with interpolated workout and exercise data
-        // /users/user_id?field=workoutLog&date=isoDate
+        // ACCESSED WITH: /users/user_id?field=workoutLog&date=isoDate
 
         const data = await db
           .collection("users")
@@ -96,11 +98,14 @@ export default async (req, res) => {
         // Get a specific user from username
 
         userData = await db.collection("users").findOne({ username: req.query.username });
+
+        delete userData.password;
         res.json(userData);
       } else {
         // Get a specific user from _id
 
         userData = await db.collection("users").findOne({ _id: ObjectId(user_id) });
+        delete userData.password;
         res.json(userData);
       }
 
@@ -110,7 +115,7 @@ export default async (req, res) => {
 
     case "PUT":
       // Declare a field to update
-      let fieldToUpdate;
+      let fieldToUpdate = "";
 
       const { workoutLog } = JSON.parse(req.body);
       if (workoutLog) fieldToUpdate = "WORKOUT_LOG";
@@ -156,8 +161,8 @@ export default async (req, res) => {
               { $set: { workoutLog: workoutLog } },
               { returnOriginal: false }
             );
-            
-          userData.value ? res.status(201).send() : res.status(400).send();
+
+          userData ? res.status(201).send() : res.status(400).send();
           break;
 
         case "ADD_SAVED_WORKOUT":
@@ -193,7 +198,8 @@ export default async (req, res) => {
               { $push: { weight: Number(weight) } },
               { returnOriginal: false }
             );
-          res.json(userData.value);
+
+          res.json({});
           break;
 
         case "FOLLOW":
