@@ -3,7 +3,7 @@ import { useEffect, useState, createContext } from "react";
 export const useThemeState = () => {
   const [themeMode, setThemeMode] = useState("light");
 
-  const setMode = (mode) => {
+  const setMode = (mode: string) => {
     window.localStorage.setItem("theme", mode);
     setThemeMode(mode);
   };
@@ -14,14 +14,10 @@ export const useThemeState = () => {
 
   useEffect(() => {
     const localTheme = window.localStorage.getItem("theme");
-    if (localTheme) {
-      setMode(localTheme);
-    } else {
-      setMode("light");
-    }
+    localTheme ? setMode(localTheme) : setMode("light");
   }, []);
 
   return { themeMode, themeToggler };
 };
 
-export const ThemeToggleContext = createContext();
+export const ThemeToggleContext = createContext<null | (() => void)>(null);
