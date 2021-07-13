@@ -1,17 +1,25 @@
 import React from "react";
 import styled from "styled-components";
+// Components
 import Checkmark from "../Checkmark";
+import LoadingSpinner from "../LoadingSpinner";
 
-export default function SaveButton({ saveWorkout, savedSuccessfully }) {
+interface Props {
+  saveWorkout: () => Promise<void>;
+  saveLoading: boolean;
+  saveSuccess: boolean | null;
+}
+
+const SaveButton: React.FC<Props> = ({ saveWorkout, saveLoading, saveSuccess }) => {
   return (
     <SaveBtn onClick={saveWorkout}>
-      Save Workout
-      {savedSuccessfully && (
-        <Checkmark position={{ position: "absolute", top: "5px", right: "15px" }} />
-      )}
+      {saveLoading ? <LoadingSpinner /> : !saveSuccess ? "SAVE" : "SAVED"}
+      {saveSuccess && <Checkmark position={{ position: "absolute", top: "5px", right: "15px" }} />}
     </SaveBtn>
   );
-}
+};
+
+export default SaveButton;
 
 const SaveBtn = styled.button`
   width: 100%;
