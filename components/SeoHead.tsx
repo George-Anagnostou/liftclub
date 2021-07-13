@@ -1,6 +1,10 @@
 import Head from "next/head";
 
-const SeoHead = ({ title }) => {
+interface Props {
+  title: string;
+}
+
+const SeoHead: React.FC<Props> = ({ title }) => {
   return (
     <Head>
       <title>{title}</title>

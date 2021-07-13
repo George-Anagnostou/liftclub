@@ -1,8 +1,14 @@
 import { useRef, useEffect } from "react";
 import styled from "styled-components";
 
-export default function Modal({ children, removeModal, isOpen }) {
-  const shadow = useRef(null);
+interface Props {
+  children: React.ReactNode;
+  removeModal: () => void;
+  isOpen: boolean;
+}
+
+const Modal: React.FC<Props> = ({ children, removeModal, isOpen }) => {
+  const shadow = useRef<HTMLDivElement>(null);
 
   const handleShadowClick = ({ target }) => {
     if (target.classList.contains("shadow")) removeModal();
@@ -25,7 +31,8 @@ export default function Modal({ children, removeModal, isOpen }) {
       {children}
     </Shadow>
   );
-}
+};
+export default Modal;
 
 const Shadow = styled.div`
   position: fixed;

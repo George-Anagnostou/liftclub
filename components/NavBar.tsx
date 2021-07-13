@@ -3,23 +3,22 @@ import { useState, useRef } from "react";
 import Link from "next/link";
 // Components
 import Notebook from "../public/navIcons/Notebook";
-import Builder from "../public/navIcons/Builder";
 import Search from "../public/navIcons/Magnifying";
 import Profile from "../public/navIcons/Profile";
 import Create from "../public/navIcons/Create";
 // Context
 import { useStoreState } from "../store";
 
-export default function NavBar() {
+const NavBar: React.FC = () => {
   const { platform, user } = useStoreState();
 
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   const [routes, setRoutes] = useState([
-    { pathname: "/workoutLog", icon: <Notebook />, slug: "log" },
+    { pathname: "/log", icon: <Notebook />, slug: "log" },
     { pathname: "/feed", icon: <Search />, slug: "feed" },
     { pathname: "/builder", icon: <Create />, slug: "builder" },
-    { pathname: `/users/${user.username}`, icon: <Profile />, slug: "profile" },
+    { pathname: `/users/${user!.username}`, icon: <Profile />, slug: "profile" },
   ]);
   const [currSlug, setCurrSlug] = useState("log");
 
@@ -36,7 +35,8 @@ export default function NavBar() {
       </NavBarContainer>
     </Nav>
   );
-}
+};
+export default NavBar;
 
 const Nav = styled.nav`
   position: fixed;

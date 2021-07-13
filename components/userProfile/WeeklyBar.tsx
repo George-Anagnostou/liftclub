@@ -1,15 +1,20 @@
 import React from "react";
 import styled from "styled-components";
+import { User } from "../../utils/interfaces";
 
-export default function WeeklyBar({ profileData }) {
+interface Props {
+  profileData: User;
+}
+
+const WeeklyBar: React.FC<Props> = ({ profileData }) => {
   // Accepts an ISO date and finds the matching date in user.workoutLog
-  const getDayDataFromWorkoutLog = (targetIsoDate) => {
+  const getDayDataFromWorkoutLog = (targetIsoDate: string) => {
     const dayData = profileData.workoutLog.find((item) => item.isoDate === targetIsoDate);
     return dayData;
   };
 
   // Format the date for the DateBar
-  const formatDate = (numOfDaysToShift) => {
+  const formatDate = (numOfDaysToShift: number) => {
     const currDate = new Date();
     const date = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate());
 
@@ -27,14 +32,15 @@ export default function WeeklyBar({ profileData }) {
 
   return (
     <DateScrollContainer>
-      {[...Array(7).keys()].map((numDays) => (
+      {Array.from(Array(7).keys()).map((numDays) => (
         <li className="date" key={-numDays}>
           {formatDate(-numDays)}
         </li>
       ))}
     </DateScrollContainer>
   );
-}
+};
+export default WeeklyBar;
 
 const DateScrollContainer = styled.ul`
   display: flex;

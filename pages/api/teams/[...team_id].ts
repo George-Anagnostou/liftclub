@@ -1,19 +1,22 @@
+import type { NextApiRequest, NextApiResponse } from "next";
 import { connectToDatabase } from "../../../utils/mongodb";
 import { ObjectId } from "mongodb";
+// Interfaces
+import { Team } from "../../../utils/interfaces";
 
-export default async (req, res) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
   const httpMethod = req.method;
   const { db } = await connectToDatabase();
 
   const team_id = req.query.team_id[0];
-  let teamData;
+  let teamData: Team;
 
   switch (httpMethod) {
     case "GET":
       teamData = await db
         .collection("teams")
         .aggregate([
-          { $match: { _id: ObjectId(team_id) } },
+          { $match: { _id: new ObjectId(team_id) } },
           {
             $lookup: {
               from: "routines",
@@ -39,7 +42,7 @@ export default async (req, res) => {
     case "POST":
       break;
     case "PUT":
-      let fieldToUpdate;
+      let fieldToUpdate = "";
 
       const { addTrainer } = req.query;
       if (addTrainer) fieldToUpdate = "ADD_TRAINER";
@@ -52,8 +55,8 @@ export default async (req, res) => {
           teamData = await db
             .collection("teams")
             .findOneAndUpdate(
-              { _id: ObjectId(team_id) },
-              { $push: { trainers: ObjectId(addTrainer) } },
+              { _id: new ObjectId(team_id) },
+              { $push: { trainers: new ObjectId(addTrainer.toString()) } },
               { returnNewDocument: true }
             );
 
@@ -63,8 +66,8 @@ export default async (req, res) => {
           teamData = await db
             .collection("teams")
             .findOneAndUpdate(
-              { _id: ObjectId(team_id) },
-              { $pull: { trainers: ObjectId(removeTrainer) } },
+              { _id: new ObjectId(team_id) },
+              { $pull: { trainers: new ObjectId(removeTrainer.toString()) } },
               { returnNewDocument: true }
             );
 

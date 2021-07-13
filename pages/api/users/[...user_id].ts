@@ -1,9 +1,10 @@
+import type { NextApiRequest, NextApiResponse } from "next";
 import { connectToDatabase } from "../../../utils/mongodb";
 import { ObjectId } from "mongodb";
 // Interfaces
 import { User } from "../../../utils/interfaces";
 
-export default async (req, res) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
   const httpMethod = req.method;
   const { db } = await connectToDatabase();
 
@@ -25,7 +26,7 @@ export default async (req, res) => {
         const data = await db
           .collection("users")
           .aggregate([
-            { $match: { _id: ObjectId(user_id) } },
+            { $match: { _id: new ObjectId(user_id) } },
             {
               $lookup: {
                 from: "workouts",
@@ -100,12 +101,15 @@ export default async (req, res) => {
         userData = await db.collection("users").findOne({ username: req.query.username });
 
         delete userData.password;
+
         res.json(userData);
       } else {
         // Get a specific user from _id
 
-        userData = await db.collection("users").findOne({ _id: ObjectId(user_id) });
+        userData = await db.collection("users").findOne({ _id: new ObjectId(user_id) });
+
         delete userData.password;
+
         res.json(userData);
       }
 
@@ -148,8 +152,8 @@ export default async (req, res) => {
         case "WORKOUT_LOG":
           // Cast id strings to ObjIds
           workoutLog.map((entry) => {
-            entry.workout_id = ObjectId(entry.workout_id);
-            entry.exerciseData?.map((each) => (each.exercise_id = ObjectId(each.exercise_id)));
+            entry.workout_id = new ObjectId(entry.workout_id);
+            entry.exerciseData?.map((each) => (each.exercise_id = new ObjectId(each.exercise_id)));
             // Cast isoDate string to Date()
             entry.isoDate = new Date(entry.isoDate);
           });
@@ -157,20 +161,20 @@ export default async (req, res) => {
           userData = await db
             .collection("users")
             .findOneAndUpdate(
-              { _id: ObjectId(user_id) },
+              { _id: new ObjectId(user_id) },
               { $set: { workoutLog: workoutLog } },
               { returnOriginal: false }
             );
 
-          userData ? res.status(201).send() : res.status(400).send();
+          userData ? res.status(201).end() : res.status(400).end();
           break;
 
         case "ADD_SAVED_WORKOUT":
           userData = await db
             .collection("users")
             .findOneAndUpdate(
-              { _id: ObjectId(user_id) },
-              { $push: { savedWorkouts: ObjectId(addSavedWorkout) } },
+              { _id: new ObjectId(user_id) },
+              { $push: { savedWorkouts: new ObjectId(addSavedWorkout) } },
               { returnOriginal: false }
             );
 
@@ -182,8 +186,8 @@ export default async (req, res) => {
           userData = await db
             .collection("users")
             .findOneAndUpdate(
-              { _id: ObjectId(user_id) },
-              { $pull: { savedWorkouts: ObjectId(removeSavedWorkout) } },
+              { _id: new ObjectId(user_id) },
+              { $pull: { savedWorkouts: new ObjectId(removeSavedWorkout) } },
               { returnOriginal: false }
             );
 
@@ -194,7 +198,7 @@ export default async (req, res) => {
           userData = await db
             .collection("users")
             .findOneAndUpdate(
-              { _id: ObjectId(user_id) },
+              { _id: new ObjectId(user_id) },
               { $push: { weight: Number(weight) } },
               { returnOriginal: false }
             );
@@ -207,8 +211,8 @@ export default async (req, res) => {
           userData = await db
             .collection("users")
             .findOneAndUpdate(
-              { _id: ObjectId(user_id) },
-              { $push: { following: ObjectId(follow) } },
+              { _id: new ObjectId(user_id) },
+              { $push: { following: new ObjectId(follow) } },
               { returnOriginal: false }
             );
 
@@ -216,8 +220,8 @@ export default async (req, res) => {
           await db
             .collection("users")
             .findOneAndUpdate(
-              { _id: ObjectId(follow) },
-              { $push: { followers: ObjectId(user_id) } }
+              { _id: new ObjectId(follow) },
+              { $push: { followers: new ObjectId(user_id) } }
             );
 
           res.json({});
@@ -228,8 +232,8 @@ export default async (req, res) => {
           userData = await db
             .collection("users")
             .findOneAndUpdate(
-              { _id: ObjectId(user_id) },
-              { $pull: { following: ObjectId(unfollow) } },
+              { _id: new ObjectId(user_id) },
+              { $pull: { following: new ObjectId(unfollow) } },
               { returnOriginal: false }
             );
 
@@ -237,8 +241,8 @@ export default async (req, res) => {
           await db
             .collection("users")
             .findOneAndUpdate(
-              { _id: ObjectId(unfollow) },
-              { $pull: { followers: ObjectId(user_id) } }
+              { _id: new ObjectId(unfollow) },
+              { $pull: { followers: new ObjectId(user_id) } }
             );
 
           res.json({});
@@ -247,7 +251,7 @@ export default async (req, res) => {
         case "BIO":
           userData = await db
             .collection("users")
-            .findOneAndUpdate({ _id: ObjectId(user_id) }, { $set: { bio: bio } });
+            .findOneAndUpdate({ _id: new ObjectId(user_id) }, { $set: { bio: bio } });
 
           res.json({});
           break;
@@ -256,15 +260,15 @@ export default async (req, res) => {
           userData = await db
             .collection("users")
             .findOneAndUpdate(
-              { _id: ObjectId(user_id) },
-              { $push: { teamsJoined: ObjectId(joinTeam) } }
+              { _id: new ObjectId(user_id) },
+              { $push: { teamsJoined: new ObjectId(joinTeam) } }
             );
 
           await db
             .collection("teams")
             .findOneAndUpdate(
-              { _id: ObjectId(joinTeam) },
-              { $push: { members: ObjectId(user_id) } }
+              { _id: new ObjectId(joinTeam) },
+              { $push: { members: new ObjectId(user_id) } }
             );
 
           res.json({});
@@ -274,39 +278,39 @@ export default async (req, res) => {
           userData = await db
             .collection("users")
             .findOneAndUpdate(
-              { _id: ObjectId(user_id) },
-              { $pull: { teamsJoined: ObjectId(leaveTeam) } }
+              { _id: new ObjectId(user_id) },
+              { $pull: { teamsJoined: new ObjectId(leaveTeam) } }
             );
 
           await db
             .collection("teams")
             .findOneAndUpdate(
-              { _id: ObjectId(leaveTeam) },
-              { $pull: { members: ObjectId(user_id) } }
+              { _id: new ObjectId(leaveTeam) },
+              { $pull: { members: new ObjectId(user_id) } }
             );
 
           res.json({});
           break;
 
         default:
-          res.status(404).send();
+          res.status(404).end();
       }
 
       break;
     case "DELETE":
-      if (req.query.field === "workoutLog") {
+      if (req.query.field === "workoutLog" && typeof req.query.date === "string") {
         const updated = await db
           .collection("users")
           .findOneAndUpdate(
-            { _id: ObjectId(user_id) },
+            { _id: new ObjectId(user_id) },
             { $pull: { workoutLog: { isoDate: new Date(req.query.date) } } },
             { returnOriginal: false }
           );
 
-        res.json(updated.value.workoutLog);
+        updated.value.workoutLog ? res.status(204).end() : res.status(404).end();
       }
 
-      res.status(404).send();
+      res.status(404).end();
       break;
   }
 };

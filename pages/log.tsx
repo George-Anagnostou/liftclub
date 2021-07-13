@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 // Components
-import WorkoutContainer from "../components/workoutLog/WorkoutContainers";
+import WorkoutContainer from "../components/workoutLog/WorkoutContainer";
 import UserWorkouts from "../components/workoutLog/UserWorkouts";
 import LoadingSpinner from "../components/LoadingSpinner";
 import SaveButton from "../components/workoutLog/SaveButton";
@@ -19,7 +19,7 @@ import {
 // Interfaces
 import { WorkoutLogItem, WorkoutLog, Workout } from "../utils/interfaces";
 
-export default function workoutLog() {
+const log: React.FC = () => {
   const { user } = useStoreState();
 
   const [loading, setLoading] = useState(true);
@@ -81,7 +81,14 @@ export default function workoutLog() {
 
   // Accepts an ISO date and finds the matching date in user.workoutLog
   const getDayDataFromWorkoutLog = (targetIsoDate: string) => {
-    const dayData = workoutLog?.find((item: WorkoutLogItem) => item.isoDate === targetIsoDate);
+    if (!user) return;
+
+    let dayData;
+
+    dayData = workoutLog
+      ? workoutLog.find((item: WorkoutLogItem) => item.isoDate === targetIsoDate)
+      : user.workoutLog.find((item: WorkoutLogItem) => item.isoDate === targetIsoDate);
+
     return dayData;
   };
 
@@ -215,12 +222,14 @@ export default function workoutLog() {
   }, [saveSuccess]);
 
   useEffect(() => {
-    // Set page state if user is logged in
-    if (user) {
-      // workoutLog is used to update DateScroll UI when saving or removing a workout
-      setWorkoutLog(user.workoutLog);
+    // workoutLog is used to update DateScroll UI when saving or removing a workout
+    if (user) setWorkoutLog(user.workoutLog);
+  }, [user]);
 
-      const currIsoDate = new Date().toISOString();
+  useEffect(() => {
+    if (workoutLog && user) {
+      const { year, month, day } = getCurrYearMonthDay();
+      const currIsoDate = new Date(year, month, day).toISOString();
       const latestDate: string = user.workoutLog[user.workoutLog.length - 1].isoDate;
 
       // If latestDate is today's date, set page state with fetched data
@@ -228,7 +237,7 @@ export default function workoutLog() {
         ? fetchAndSetDateData(currIsoDate)
         : setPageState(null);
     }
-  }, [user]);
+  }, [workoutLog]);
 
   return (
     <MainContainer>
@@ -271,7 +280,8 @@ export default function workoutLog() {
       )}
     </MainContainer>
   );
-}
+};
+export default log;
 
 const MainContainer = styled.section`
   display: flex;

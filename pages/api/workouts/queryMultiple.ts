@@ -1,7 +1,9 @@
+import type { NextApiRequest, NextApiResponse } from "next";
 import { connectToDatabase } from "../../../utils/mongodb";
 import { ObjectId } from "mongodb";
+import { Workout } from "../../../utils/interfaces";
 
-export default async (req, res) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
   const httpMethod = req.method;
   const { db } = await connectToDatabase();
 
@@ -11,10 +13,10 @@ export default async (req, res) => {
     case "POST":
       const idArr = JSON.parse(req.body);
 
-      const foundWorkouts = await db
+      const foundWorkouts: Workout[] = await db
         .collection("workouts")
         .find({
-          _id: { $in: idArr.map((_id) => ObjectId(_id)) },
+          _id: { $in: idArr.map((_id) => new ObjectId(_id)) },
         })
         .toArray();
 

@@ -11,25 +11,31 @@ import NameTile from "../../components/userProfile/NameTile";
 import Bio from "../../components/userProfile/Bio";
 import WeeklyBar from "../../components/userProfile/WeeklyBar";
 import Teams from "../../components/userProfile/Teams";
+// Interfaces
+import { User, Workout } from "../../utils/interfaces";
 
-export default function User_id() {
+const User_id: React.FC = () => {
   const router = useRouter();
   const { username } = router.query;
   const { user } = useStoreState();
 
-  const [profileData, setProfileData] = useState(null);
-  const [createdWorkouts, setCreatedWorkouts] = useState([]);
+  const [profileData, setProfileData] = useState<User | null>(null);
+  const [createdWorkouts, setCreatedWorkouts] = useState<Workout[]>([]);
   const [isProfileOwner, setIsProfileOwner] = useState(false);
 
   useEffect(() => {
     const getProfileData = async () => {
+      if (typeof username !== "string") return;
+
       const profile = await getUserFromUsername(username);
 
-      setProfileData(profile);
-      setIsProfileOwner(user._id === profile._id);
+      if (profile) {
+        setProfileData(profile);
+        setIsProfileOwner(user!._id === profile._id);
 
-      const created = await getUserMadeWorkouts(profile._id);
-      setCreatedWorkouts(created || []);
+        const created = await getUserMadeWorkouts(profile._id);
+        setCreatedWorkouts(created || []);
+      }
     };
 
     if (username && user) getProfileData();
@@ -63,7 +69,8 @@ export default function User_id() {
       )}
     </Container>
   );
-}
+};
+export default User_id;
 
 const Container = styled.div`
   display: flex;

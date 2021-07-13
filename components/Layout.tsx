@@ -15,7 +15,12 @@ import {
 // Styles
 import { GlobalStyles } from "./GlobalStyles";
 
-export default function Layout({ title = "Ananostou Lift Club", children }) {
+interface Props {
+  children: React.ReactNode;
+  title: string;
+}
+
+const Layout: React.FC<Props> = ({ title = "Ananostou Lift Club", children }) => {
   const router = useRouter();
 
   const dispatch = useStoreDispatch();
@@ -23,7 +28,7 @@ export default function Layout({ title = "Ananostou Lift Club", children }) {
 
   const routeToWorkoutLog = () => router.push("/workoutLog");
 
-  const persistLogin = async (user_id) => {
+  const persistLogin = async (user_id: string) => {
     const loginSuccess = await loginUser(dispatch, user_id);
     if (loginSuccess && router.pathname === "/") routeToWorkoutLog();
   };
@@ -48,7 +53,7 @@ export default function Layout({ title = "Ananostou Lift Club", children }) {
     };
 
     // Detects if device is in standalone mode
-    const isInStandaloneMode = "standalone" in window.navigator && window.navigator.standalone;
+    const isInStandaloneMode = "standalone" in window.navigator && window.navigator["standalone"];
 
     if (isIos() && isInStandaloneMode) setPlatformToiOS(dispatch);
     if (isInStandaloneMode) setIsUsingPWA(dispatch);
@@ -66,7 +71,8 @@ export default function Layout({ title = "Ananostou Lift Club", children }) {
       </MainContainer>
     </>
   );
-}
+};
+export default Layout;
 
 const MainContainer = styled.main`
   text-align: center;

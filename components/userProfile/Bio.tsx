@@ -1,9 +1,18 @@
 import React, { useState } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
 // API
 import { saveUserBio } from "../../utils/api";
+// Interfaces
+import { User } from "../../utils/interfaces";
 
-export default function Bio({ profileData, isProfileOwner, setProfileData, user_id }) {
+interface Props {
+  profileData: User;
+  isProfileOwner: boolean;
+  setProfileData: React.Dispatch<React.SetStateAction<User | null>>;
+  user_id: string;
+}
+const Bio: React.FC<Props> = ({ profileData, isProfileOwner, setProfileData, user_id }) => {
   const [editing, setEditing] = useState(false);
   const [bioEdits, setBioEdits] = useState(profileData.bio || "");
 
@@ -17,12 +26,16 @@ export default function Bio({ profileData, isProfileOwner, setProfileData, user_
   const handleSaveClick = async () => {
     const saved = await saveUserBio(user_id, bioEdits);
     if (saved) {
-      setProfileData((prev) => ({ ...prev, bio: bioEdits }));
+      setProfileData((prev: User) => ({ ...prev, bio: bioEdits }));
       setEditing(false);
     }
   };
 
   const handleBioChange = ({ target }) => setBioEdits(target.value);
+
+  useEffect(() => {
+    setBioEdits(profileData.bio || "");
+  }, [profileData.bio]);
 
   return (
     <BioContainer>
@@ -36,11 +49,10 @@ export default function Bio({ profileData, isProfileOwner, setProfileData, user_
 
       {editing ? (
         <textarea
-          type="text"
           value={bioEdits}
           onChange={handleBioChange}
           placeholder="Add a summary about your fitness experience or share your workout goals."
-          rows="4"
+          rows={4}
           autoFocus
           onFocus={({ target }) => {
             const val = target.value;
@@ -55,7 +67,8 @@ export default function Bio({ profileData, isProfileOwner, setProfileData, user_
       {editing && <SaveBtn onClick={handleSaveClick}>Save</SaveBtn>}
     </BioContainer>
   );
-}
+};
+export default Bio;
 
 const BioContainer = styled.section`
   position: relative;

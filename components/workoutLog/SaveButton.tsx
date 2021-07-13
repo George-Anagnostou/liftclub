@@ -20,7 +20,7 @@ const SaveButton: React.FC<Props> = ({ saveWorkout, saveLoading, saveSuccess }) 
       ) : (
         "SAVE"
       )}
-      {saveSuccess && <Checkmark position={{ position: "absolute", top: "5px", right: "15px" }} />}
+      {saveSuccess && <Checkmark styles={{ position: "absolute", top: "5px", right: "15px" }} />}
     </SaveBtn>
   );
 };

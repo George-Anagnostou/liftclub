@@ -55,7 +55,7 @@ export default function TrainersTile({ team, setTeam, teamMembers, setTeamMember
               {trainer.isTrainer && (
                 <div className="verified">
                   <span>Verified</span>
-                  <Checkmark position={{ transform: "scale(.5)" }} />
+                  <Checkmark styles={{ transform: "scale(.5)" }} />
                 </div>
               )}
             </li>

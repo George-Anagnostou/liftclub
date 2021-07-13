@@ -2,8 +2,8 @@ import { useContext, useState } from "react";
 import styled from "styled-components";
 import { ThemeToggleContext } from "./useThemeState";
 
-export default function ThemeToggle() {
-  const themeToggler = useContext(ThemeToggleContext);
+const ThemeToggle: React.FC = () => {
+  const themeToggler = useContext(ThemeToggleContext)!;
 
   const [checked, setChecked] = useState(localStorage.getItem("theme") === "dark");
 
@@ -15,7 +15,8 @@ export default function ThemeToggle() {
       </div>
     </Switch>
   );
-}
+};
+export default ThemeToggle;
 
 const Switch = styled.label`
   --line: #000000;

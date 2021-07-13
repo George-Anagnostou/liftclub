@@ -116,7 +116,7 @@ export default function CustomWorkout({
           />
 
           {workoutSavedSuccessfuly && (
-            <Checkmark position={{ position: "absolute", right: "1.4rem" }} />
+            <Checkmark styles={{ position: "absolute", right: "1.4rem" }} />
           )}
         </div>
 

@@ -8,35 +8,46 @@ import { addFollow, removeFollow } from "../../utils/api";
 // Components
 import ProfileImg from "./ProfileImg";
 import Settings from "../../public/navIcons/Settings";
+// Interfaces
+import { User } from "../../utils/interfaces";
 
-export default function NameTile({ profileData, setProfileData, isProfileOwner }) {
+interface Props {
+  profileData: User;
+  setProfileData: React.Dispatch<React.SetStateAction<User | null>>;
+  isProfileOwner: boolean;
+}
+
+const NameTile: React.FC<Props> = ({ profileData, setProfileData, isProfileOwner }) => {
   const { user } = useStoreState();
 
   const [userIsFollowing, setUserIsFollowing] = useState(false);
 
   const handleFollowClick = async () => {
-    const success = await addFollow(user._id, profileData._id);
+    const success = await addFollow(user!._id, profileData._id);
 
     if (success) {
       setUserIsFollowing(true);
-      setProfileData((prev) => ({ ...prev, followers: [...(prev.followers || []), user._id] }));
+      setProfileData((prev: User) => ({
+        ...prev,
+        followers: [...(prev.followers || []), user!._id],
+      }));
     }
   };
 
   const handleUnfollowClick = async () => {
-    const success = await removeFollow(user._id, profileData._id);
+    const success = await removeFollow(user!._id, profileData._id);
 
     if (success) {
       setUserIsFollowing(false);
-      setProfileData((prev) => ({
+      setProfileData((prev: User) => ({
         ...prev,
-        followers: prev.followers.filter((entry) => entry !== user._id),
+        followers: prev.followers?.filter((entry) => entry !== user!._id) || [],
       }));
     }
   };
 
   useEffect(() => {
-    setUserIsFollowing(user.following?.includes(profileData._id));
+    if (user) setUserIsFollowing(user.following?.includes(profileData._id) || false);
   }, [user]);
 
   return (
@@ -73,7 +84,8 @@ export default function NameTile({ profileData, setProfileData, isProfileOwner }
       </div>
     </TileContainer>
   );
-}
+};
+export default NameTile;
 
 const TileContainer = styled.header`
   position: relative;

@@ -54,7 +54,7 @@ const WorkoutContainer: React.FC<Props> = ({
                   </div>
 
                   <div className="prev">
-                    {prevBestData && prevBestData.exerciseData[i].sets[j].weight >= 0 ? (
+                    {prevBestData && prevBestData.exerciseData[i]?.sets[j].weight >= 0 ? (
                       <p>{prevBestData?.exerciseData[i]?.sets[j]?.weight}</p>
                     ) : (
                       <span>None</span>

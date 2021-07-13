@@ -1,7 +1,9 @@
+import type { NextApiRequest, NextApiResponse } from "next";
 import { connectToDatabase } from "../../../utils/mongodb";
 import { ObjectId } from "mongodb";
+import { User } from "../../../utils/interfaces";
 
-export default async (req, res) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
   const httpMethod = req.method;
   const { db } = await connectToDatabase();
 
@@ -9,14 +11,16 @@ export default async (req, res) => {
     case "GET":
       break;
     case "POST":
-      const { idArr } = JSON.parse(req.body);
+      const { idArr }: { idArr: string[] } = JSON.parse(req.body);
 
-      const foundUsers = await db
+      const foundUsers: User[] = await db
         .collection("users")
         .find({
-          _id: { $in: idArr.map((_id) => ObjectId(_id)) },
+          _id: { $in: idArr.map((_id) => new ObjectId(_id)) },
         })
         .toArray();
+
+      foundUsers.map((each) => delete each.password);
 
       res.json(foundUsers);
       break;

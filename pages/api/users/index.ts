@@ -1,8 +1,10 @@
+import type { NextApiRequest, NextApiResponse } from "next";
 import { connectToDatabase } from "../../../utils/mongodb";
-const bcrypt = require("bcryptjs");
+import bcrypt from "bcryptjs";
+
 const saltRounds = 10;
 
-export default async (req, res) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
   const httpMethod = req.method;
   const { db } = await connectToDatabase();
 
@@ -12,23 +14,24 @@ export default async (req, res) => {
       break;
     case "POST":
       // Hash password input
-      const { username, password } = req.body;
+      const { username, password }: { username: string; password: string } = req.body;
       const hash = bcrypt.hashSync(password, saltRounds);
 
       const existingUser = await db.collection("users").findOne({ username: username });
 
-      if (!existingUser) {
+      if (existingUser) {
+        res.status(403).end();
+      } else {
         const userData = await db.collection("users").insertOne({
           username: username,
           password: hash,
           savedWorkouts: [],
           workoutLog: [],
-          daysLeftInRoutine: 0,
         });
 
+        delete userData.ops[0].password;
+
         res.json(userData.ops[0]);
-      } else {
-        res.status(403).end();
       }
       break;
     case "PUT":

@@ -13,7 +13,6 @@ export const getUserFromUsername = async (username: string): Promise<User | fals
   try {
     const res = await fetch(`/api/users/null?username=${username}`);
     const userData = await res.json();
-    console.log(userData);
     return userData;
   } catch (e) {
     console.log(e);
@@ -341,7 +340,9 @@ export const getWorkoutsFromIdArray = async (idArr: string[]): Promise<Workout[]
     const workouts = await res.json();
 
     // Sort workouts to be in the same order that the irArr requests them
-    workouts.sort((a: Workout, b: Workout) => idArr.indexOf(a._id) - idArr.indexOf(b._id));
+    workouts.sort(
+      (a: Workout, b: Workout) => idArr.indexOf(a._id.toString()) - idArr.indexOf(b._id.toString())
+    );
 
     return workouts;
   } catch (e) {

@@ -5,32 +5,39 @@ import styled from "styled-components";
 import { useStoreState } from "../../store";
 // API
 import { getUserMadeTeams, userJoiningTeam, userLeavingTeam } from "../../utils/api";
+// Interfaces
+import { Team, User } from "../../utils/interfaces";
 
-export default function Teams({ profileData, isProfileOwner }) {
+interface Props {
+  profileData: User;
+  isProfileOwner: boolean;
+}
+
+const Teams: React.FC<Props> = ({ profileData, isProfileOwner }) => {
   const { user } = useStoreState();
 
-  const [profileOwnedTeams, setProfileOwnedTeams] = useState([]);
+  const [profileOwnedTeams, setProfileOwnedTeams] = useState<Team[]>([]);
 
-  const handleJoinTeam = async (team_id) => {
-    const joined = await userJoiningTeam(user._id, team_id);
+  const handleJoinTeam = async (team_id: string) => {
+    const joined = await userJoiningTeam(user!._id, team_id);
 
     if (joined) {
       setProfileOwnedTeams((prev) => {
         const index = prev.findIndex((team) => team._id === team_id);
-        prev[index].members = [...prev[index].members, user._id];
+        prev[index].members = [...prev[index].members, user!._id];
 
         return [...prev];
       });
     }
   };
 
-  const handleLeaveTeam = async (team_id) => {
-    const left = await userLeavingTeam(user._id, team_id);
+  const handleLeaveTeam = async (team_id: string) => {
+    const left = await userLeavingTeam(user!._id, team_id);
 
     if (left) {
       setProfileOwnedTeams((prev) => {
         const index = prev.findIndex((team) => team._id === team_id);
-        prev[index].members = [...prev[index].members.filter((id) => id !== user._id)];
+        prev[index].members = [...prev[index].members.filter((id) => id !== user!._id)];
 
         return [...prev];
       });
@@ -40,7 +47,7 @@ export default function Teams({ profileData, isProfileOwner }) {
   useEffect(() => {
     const getTeams = async () => {
       const teamsRes = await getUserMadeTeams(profileData._id);
-      setProfileOwnedTeams(teamsRes);
+      setProfileOwnedTeams(teamsRes || []);
     };
 
     getTeams();
@@ -60,7 +67,7 @@ export default function Teams({ profileData, isProfileOwner }) {
       <TeamsList>
         {Boolean(profileOwnedTeams.length) ? (
           profileOwnedTeams.map((team) => (
-            <Team key={team._id}>
+            <TeamContainer key={team._id}>
               <div className="teamInfo">
                 <p className="name">{team.teamName}</p>
                 <p className="members">
@@ -75,16 +82,16 @@ export default function Teams({ profileData, isProfileOwner }) {
 
                 <button
                   onClick={
-                    team.members.includes(user._id)
+                    team.members.includes(user!._id)
                       ? () => handleLeaveTeam(team._id)
                       : () => handleJoinTeam(team._id)
                   }
-                  className={team.members.includes(user._id) ? "joined" : "join"}
+                  className={team.members.includes(user!._id) ? "joined" : "join"}
                 >
-                  {team.members.includes(user._id) ? "joined" : "join"}
+                  {team.members.includes(user!._id) ? "joined" : "join"}
                 </button>
               </div>
-            </Team>
+            </TeamContainer>
           ))
         ) : (
           <p className="noTeams">None</p>
@@ -92,7 +99,8 @@ export default function Teams({ profileData, isProfileOwner }) {
       </TeamsList>
     </Container>
   );
-}
+};
+export default Teams;
 
 const Container = styled.div`
   position: relative;
@@ -128,7 +136,7 @@ const TeamsList = styled.ul`
   }
 `;
 
-const Team = styled.li`
+const TeamContainer = styled.li`
   background: ${({ theme }) => theme.buttonMed};
   box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
   padding: 0.25rem 0.5rem;
