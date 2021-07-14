@@ -79,15 +79,11 @@ const log: React.FC = () => {
     setPrevBestData(null);
   };
 
-  // Accepts an ISO date and finds the matching date in user.workoutLog
+  // Accepts an ISO date and finds the matching date in workoutLog
   const getDayDataFromWorkoutLog = (targetIsoDate: string) => {
-    if (!user) return;
-
     let dayData: WorkoutLogItem | undefined;
 
-    dayData =
-      workoutLog.find((item: WorkoutLogItem) => item.isoDate === targetIsoDate) ||
-      user.workoutLog.find((item: WorkoutLogItem) => item.isoDate === targetIsoDate);
+    dayData = workoutLog.find((item: WorkoutLogItem) => item.isoDate === targetIsoDate);
 
     return dayData;
   };
@@ -173,13 +169,8 @@ const log: React.FC = () => {
     if (currentDayData && currentDayData.isoDate) {
       const deleted = await deleteWorkoutFromWorkoutLog(user!._id, currentDayData.isoDate);
 
-      console.log(workoutLog, currentDayData.isoDate);
       if (deleted) {
-        setWorkoutLog(
-          workoutLog.filter(
-            (each) => !stripTimeAndCompareDates(each.isoDate, currentDayData.isoDate)
-          )
-        );
+        setWorkoutLog(workoutLog.filter((each) => each.isoDate !== currentDayData.isoDate));
         setPageState(null);
       }
     }
@@ -233,6 +224,12 @@ const log: React.FC = () => {
   }, [saveSuccess]);
 
   useEffect(() => {
+    const loadCurrDayWorkout = async (isoDate: string) => {
+      // Fetch the workout for today
+      const dayData = await getDateFromUserWorkoutLog(user!._id, isoDate);
+      setPageState(dayData || null);
+    };
+
     // workoutLog is used to update DateScroll UI when saving or removing a workout
     if (user) {
       setWorkoutLog(user.workoutLog);
@@ -243,7 +240,7 @@ const log: React.FC = () => {
 
       // If latestDate is today's date, set page state with fetched data
       stripTimeAndCompareDates(latestDate, currIsoDate)
-        ? fetchAndSetDateData(currIsoDate)
+        ? loadCurrDayWorkout(currIsoDate)
         : setPageState(null);
     }
   }, [user]);
