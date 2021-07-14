@@ -4,6 +4,7 @@ import { useState } from "react";
 import { createExercise } from "../../../utils/api";
 // Components
 import Modal from "../../Wrappers/Modal";
+import { NewExercise } from "../../../utils/interfaces";
 
 const muscleGroups = [
   "upper back",
@@ -18,36 +19,29 @@ const muscleGroups = [
   "core",
 ];
 
-export default function CreateExerciseModal({ setShowModal, showModal }) {
-  const [name, setName] = useState("");
-  const [equipment, setEquipment] = useState("");
-  const [muscleGroup, setMuscleGroup] = useState("");
-  const [muscleWorked, setMuscleWorked] = useState("");
+const InitialNewState = { name: "", equipment: "", muscleGroup: "", muscleWorked: "" };
 
-  const handleFormSubmit = async (e) => {
+export default function CreateExerciseModal({ setShowModal, showModal }) {
+  const [formState, setFormState] = useState<NewExercise>(InitialNewState);
+
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const saved = await createExercise({ name, equipment, muscleGroup, muscleWorked });
-    if (saved) {
-      setName("");
-      setEquipment("");
-      setMuscleGroup("");
-      setMuscleWorked("");
-    }
+    const saved = await createExercise({ ...formState });
+    if (saved) setFormState(InitialNewState);
   };
 
-  const handleNameChange = (e) => {
-    setName(e.target.value);
-  };
-  const handleEquipmentChange = (e) => {
-    setEquipment(e.target.value);
-  };
-  const handleMuscleGroupChange = (e) => {
-    setMuscleGroup(e.target.value);
-  };
-  const handleMuscleWorkedChange = (e) => {
-    setMuscleWorked(e.target.value);
-  };
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setFormState((prev) => ({ ...prev, name: e.target.value }));
+
+  const handleEquipmentChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setFormState((prev) => ({ ...prev, equipment: e.target.value }));
+
+  const handleMuscleGroupChange = (e: React.ChangeEvent<HTMLSelectElement>) =>
+    setFormState((prev) => ({ ...prev, muscleGroup: e.target.value }));
+
+  const handleMuscleWorkedChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setFormState((prev) => ({ ...prev, muscleWorked: e.target.value }));
 
   return (
     <Modal isOpen={showModal} removeModal={() => setShowModal(false)}>
@@ -61,7 +55,13 @@ export default function CreateExerciseModal({ setShowModal, showModal }) {
 
           <div>
             <label htmlFor="name">Name:</label>
-            <input type="text" name="name" value={name} onChange={handleNameChange} required />
+            <input
+              type="text"
+              name="name"
+              value={formState.name}
+              onChange={handleNameChange}
+              required
+            />
           </div>
 
           <div>
@@ -69,7 +69,7 @@ export default function CreateExerciseModal({ setShowModal, showModal }) {
             <input
               type="text"
               name="equipment"
-              value={equipment}
+              value={formState.equipment}
               onChange={handleEquipmentChange}
               required
             />
@@ -100,7 +100,7 @@ export default function CreateExerciseModal({ setShowModal, showModal }) {
             <input
               type="text"
               name="muscleWorked"
-              value={muscleWorked}
+              value={formState.muscleWorked}
               onChange={handleMuscleWorkedChange}
               required
             />

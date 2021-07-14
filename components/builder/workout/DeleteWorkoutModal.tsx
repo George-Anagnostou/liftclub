@@ -3,8 +3,20 @@ import styled from "styled-components";
 import Modal from "../../Wrappers/Modal";
 // API
 import { deleteWorkout } from "../../../utils/api";
+// Interfaces
+import { Workout } from "../../../utils/interfaces";
 
-export default function DeleteWorkoutModal({ workout, setWorkoutToDelete, clearCustomWorkout }) {
+interface Props {
+  workout: Workout;
+  setWorkoutToDelete: React.Dispatch<React.SetStateAction<Workout | null>>;
+  clearCustomWorkout: () => void;
+}
+
+const DeleteWorkoutModal: React.FC<Props> = ({
+  workout,
+  setWorkoutToDelete,
+  clearCustomWorkout,
+}) => {
   const handleDeleteWorkout = async () => {
     const deleted = await deleteWorkout(workout._id);
 
@@ -15,7 +27,7 @@ export default function DeleteWorkoutModal({ workout, setWorkoutToDelete, clearC
   };
 
   return (
-    <Modal isOpen={workout} removeModal={() => setWorkoutToDelete(null)}>
+    <Modal isOpen={Boolean(workout)} removeModal={() => setWorkoutToDelete(null)}>
       <Container>
         <button className="close-btn" onClick={() => setWorkoutToDelete(null)}>
           X
@@ -32,7 +44,8 @@ export default function DeleteWorkoutModal({ workout, setWorkoutToDelete, clearC
       </Container>
     </Modal>
   );
-}
+};
+export default DeleteWorkoutModal;
 
 const Container = styled.div`
   position: relative;

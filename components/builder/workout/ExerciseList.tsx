@@ -75,9 +75,9 @@ const ExerciseList: React.FC<Props> = ({
 
         <button onClick={() => setSearchTerm("")}>Clear</button>
 
-        <button onClick={() => setShowExerciseList(false)}>X</button>
-
         {user?.isTrainer && <button onClick={() => setShowCreateExerciseModal(true)}>Add</button>}
+
+        <button onClick={() => setShowExerciseList(false)}>X</button>
       </header>
 
       {showCreateExerciseModal && (
@@ -119,7 +119,7 @@ const ExercisesContainer = styled.div`
     position: sticky;
     top: 0.5rem;
 
-    background: ${({ theme }) => theme.buttonMed};
+    background: ${({ theme }) => theme.buttonLight};
     width: 100%;
     margin-bottom: 0.5rem;
     border-radius: 5px;
@@ -129,9 +129,9 @@ const ExercisesContainer = styled.div`
     justify-content: center;
 
     input {
+      flex: 3;
       font-size: 1rem;
-      flex: 1;
-      margin: 0.5rem;
+      margin: 0.25rem 0.1rem 0.25rem 0.25rem;
       padding: 0.5rem;
       border: none;
       border-radius: 5px;
@@ -140,14 +140,16 @@ const ExercisesContainer = styled.div`
     }
 
     button {
+      flex: 1;
       font-size: 1rem;
+      color: ${({ theme }) => theme.textLight};
       background: ${({ theme }) => theme.background};
-      color: inherit;
       border: none;
-      margin: 0.5rem 0.5rem 0.5rem 0;
+      margin: 0.25rem 0.1rem;
       border-radius: 5px;
       padding: 0.5rem;
     }
+    padding-right: 0.15rem;
   }
 
   ul {

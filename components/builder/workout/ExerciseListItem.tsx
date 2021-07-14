@@ -1,13 +1,23 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+// Interfaces
+import { Exercise } from "../../../utils/interfaces";
 
-export default function ExerciseListItem({
+interface Props {
+  exercise: Exercise;
+  isExerciseInCustomWorkout: (exercise_id: string) => boolean;
+  removeExercise: (exercise: Exercise) => void;
+  addExercise: (exercise: Exercise) => void;
+}
+
+const ExerciseListItem: React.FC<Props> = ({
   exercise,
   isExerciseInCustomWorkout,
   removeExercise,
   addExercise,
-}) {
+}) => {
   const [showInfo, setShowInfo] = useState(false);
+
   return (
     <Item key={exercise._id} className={isExerciseInCustomWorkout(exercise._id) ? "highlight" : ""}>
       <div className="heading">
@@ -47,7 +57,8 @@ export default function ExerciseListItem({
       )}
     </Item>
   );
-}
+};
+export default ExerciseListItem;
 
 const Item = styled.li`
   border-radius: 5px;

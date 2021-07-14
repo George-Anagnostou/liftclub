@@ -2,35 +2,47 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 // Utils
 import { getUserMadeWorkouts, getWorkoutsFromIdArray } from "../../../utils/api";
+import { addExerciseDataToWorkout } from "../../../utils";
 // Context
 import { useStoreState } from "../../../store";
 import DeleteWorkoutModal from "./DeleteWorkoutModal";
-import { addExerciseDataToWorkout } from "../../../utils";
+// Utils
+// Interfaces
+import { Workout } from "../../../utils/interfaces";
 
-export default function UserWorkouts({
+interface Props {
+  setCustomWorkout: React.Dispatch<React.SetStateAction<Workout>>;
+  customWorkout: Workout;
+  workoutSavedSuccessfuly: boolean | null;
+  clearCustomWorkout: () => void;
+  showUserWorkouts: boolean;
+}
+
+const UserWorkouts: React.FC<Props> = ({
   setCustomWorkout,
   customWorkout,
   workoutSavedSuccessfuly,
   clearCustomWorkout,
   showUserWorkouts,
-}) {
+}) => {
   const { user } = useStoreState();
 
-  const [userMadeWorkouts, setUserMadeWorkouts] = useState([]);
-  const [userSavedWorkouts, setUserSavedWorkouts] = useState([]);
-  const [workoutToDelete, setWorkoutToDelete] = useState(null);
+  const [userMadeWorkouts, setUserMadeWorkouts] = useState<Workout[]>([]);
+  const [userSavedWorkouts, setUserSavedWorkouts] = useState<Workout[]>([]);
+  const [workoutToDelete, setWorkoutToDelete] = useState<Workout | null>(null);
 
-  const displaySavedWorkout = async (workout) => {
+  const displaySavedWorkout = async (workout: Workout) => {
     const mergedData = await addExerciseDataToWorkout(workout);
     setCustomWorkout(mergedData);
   };
 
   const loadUserMadeWorkouts = async () => {
-    const madeWorkouts = await getUserMadeWorkouts(user._id);
+    const madeWorkouts = await getUserMadeWorkouts(user!._id);
     setUserMadeWorkouts(madeWorkouts || []);
   };
 
   const loadUserSavedWorkouts = async () => {
+    if (!user?.savedWorkouts) return;
     const workouts = await getWorkoutsFromIdArray(user.savedWorkouts);
     setUserSavedWorkouts(workouts.reverse() || []);
   };
@@ -99,7 +111,8 @@ export default function UserWorkouts({
       )}
     </>
   );
-}
+};
+export default UserWorkouts;
 
 const Container = styled.div`
   width: calc(100vw - 1rem);
