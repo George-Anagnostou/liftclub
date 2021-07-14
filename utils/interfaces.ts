@@ -28,6 +28,19 @@ export interface Workout {
   date_created: string;
 }
 
+export interface NewWorkout {
+  creator_id: string;
+  creatorName: string;
+  name: string;
+  exercises: {
+    exercise_id: string;
+    sets: { reps: number; weight: number }[];
+    exercise?: Exercise;
+  }[];
+  isPublic: boolean;
+  date_created: string;
+}
+
 export type WorkoutLog = WorkoutLogItem[];
 
 export interface WorkoutLogItem {

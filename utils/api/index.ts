@@ -1,4 +1,13 @@
-import { Exercise, Routine, Team, User, Workout, WorkoutLog, WorkoutLogItem } from "../interfaces";
+import {
+  Exercise,
+  NewWorkout,
+  Routine,
+  Team,
+  User,
+  Workout,
+  WorkoutLog,
+  WorkoutLogItem,
+} from "../interfaces";
 
 /*
  *
@@ -247,7 +256,7 @@ export const createExercise = async (exercise: Exercise) => {
  *
  *
  */
-export const postNewWorkout = async (workout: Workout) => {
+export const postNewWorkout = async (workout: NewWorkout) => {
   try {
     const res = await fetch(`/api/workouts`, {
       method: "POST",
