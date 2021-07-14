@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 // Components
-import Branding from "../components/homepage/Branding";
-import Login from "../components/homepage/Login";
-import CreateAcc from "../components/homepage/CreateAcc";
+import Branding from "../components/homepage1/Branding";
+import Login from "../components/homepage1/Login";
+import CreateAcc from "../components/homepage1/CreateAcc";
 
 const Home: React.FC = () => {
   const router = useRouter();
