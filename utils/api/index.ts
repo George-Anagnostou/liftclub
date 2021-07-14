@@ -1,5 +1,6 @@
 import {
   Exercise,
+  NewExercise,
   NewWorkout,
   Routine,
   Team,
@@ -233,7 +234,7 @@ export const getExercisesFromIdArray = async (idArr: string[]): Promise<Exercise
   }
 };
 
-export const createExercise = async (exercise: Exercise) => {
+export const createExercise = async (exercise: NewExercise) => {
   try {
     const res = await fetch("/api/exercises", {
       method: "POST",

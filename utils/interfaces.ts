@@ -14,33 +14,6 @@ export interface User {
   password?: string;
 }
 
-export interface Workout {
-  _id: string;
-  creator_id: string;
-  creatorName: string;
-  name: string;
-  exercises: {
-    exercise_id: string;
-    sets: { reps: number; weight: number }[];
-    exercise?: Exercise;
-  }[];
-  isPublic: boolean;
-  date_created: string;
-}
-
-export interface NewWorkout {
-  creator_id: string;
-  creatorName: string;
-  name: string;
-  exercises: {
-    exercise_id: string;
-    sets: { reps: number; weight: number }[];
-    exercise?: Exercise;
-  }[];
-  isPublic: boolean;
-  date_created: string;
-}
-
 export type WorkoutLog = WorkoutLogItem[];
 
 export interface WorkoutLogItem {
@@ -77,8 +50,42 @@ export interface Routine {
   workoutPlan: { isoDate: string; workout_id: string }[];
 }
 
+export interface Workout {
+  _id: string;
+  creator_id: string;
+  creatorName: string;
+  name: string;
+  exercises: {
+    exercise_id: string;
+    sets: { reps: number; weight: number }[];
+    exercise?: Exercise;
+  }[];
+  isPublic: boolean;
+  date_created: string;
+}
+
+export interface NewWorkout {
+  creator_id: string;
+  creatorName: string;
+  name: string;
+  exercises: {
+    exercise_id: string;
+    sets: { reps: number; weight: number }[];
+    exercise?: Exercise;
+  }[];
+  isPublic: boolean;
+  date_created: string;
+}
+
 export interface Exercise {
   _id: string;
+  name: string;
+  equipment: string;
+  muscleGroup: string;
+  muscleWorked: string;
+}
+
+export interface NewExercise {
   name: string;
   equipment: string;
   muscleGroup: string;
