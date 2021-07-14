@@ -138,14 +138,13 @@ const RoutineInfo = styled.div`
 
 const UniqueWorkoutList = styled.ul`
   display: flex;
-  overflow-x: scroll;
-  overflow-y: hidden;
+  flex-wrap: wrap;
   border-radius: 5px;
 
   li {
     background: ${({ theme }) => theme.buttonMed};
     padding: 0.5rem 0.5rem;
-    margin-right: 0.25rem;
+    margin: 0 0.5rem 0.5rem;
     border-radius: 5px;
     display: flex;
     align-items: center;

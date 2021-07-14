@@ -2,10 +2,22 @@ import { useEffect } from "react";
 import styled from "styled-components";
 //Utils
 import { postNewWorkout, updateExistingWorkout } from "../../../utils/api";
+import { Exercise, User, Workout } from "../../../utils/interfaces";
 // Components
 import Checkmark from "../../Checkmark";
 
-export default function CustomWorkout({
+interface Props {
+  customWorkout: Workout;
+  setCustomWorkout: React.Dispatch<React.SetStateAction<Workout>>;
+  workoutSavedSuccessfuly: boolean | null;
+  setWorkoutSavedSuccessfuly: React.Dispatch<React.SetStateAction<boolean | null>>;
+  clearCustomWorkout: () => void;
+  removeExercise: (exercise: Exercise) => void;
+  user: User | undefined;
+  setShowExerciseList: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const CustomWorkout: React.FC<Props> = ({
   customWorkout,
   setCustomWorkout,
   workoutSavedSuccessfuly,
@@ -13,7 +25,8 @@ export default function CustomWorkout({
   clearCustomWorkout,
   removeExercise,
   user,
-}) {
+  setShowExerciseList,
+}) => {
   // Handles changes for customWorkoutName
   const handleWorkoutNameChange = (e) => {
     setCustomWorkout((prev) => {
@@ -28,8 +41,8 @@ export default function CustomWorkout({
   };
 
   // Update the reps for specified set
-  const handleRepChange = (e, exerciseIndex, setIndex) => {
-    const num = e.target.value === "" ? "" : Number(e.target.value);
+  const handleRepChange = (e, exerciseIndex: number, setIndex: number) => {
+    const num = Number(e.target.value);
 
     const { exercises } = customWorkout;
 
@@ -40,7 +53,7 @@ export default function CustomWorkout({
     });
   };
 
-  const handleSetChange = (method, exerciseIndex) => {
+  const handleSetChange = (method: "add" | "remove", exerciseIndex: number) => {
     const { exercises } = customWorkout;
 
     switch (method) {
@@ -60,11 +73,11 @@ export default function CustomWorkout({
   };
 
   const saveCustomWorkout = async () => {
+    if (!user) return;
+
     const { exercises } = customWorkout;
     // Only take exercise_id and sets (exercise data not needed for DB)
-    const composedExercises = exercises.map(({ exercise_id, sets }) => {
-      return { exercise_id, sets };
-    });
+    const composedExercises = exercises.map(({ exercise_id, sets }) => ({ exercise_id, sets }));
 
     const composedWorkout = {
       ...customWorkout,
@@ -87,11 +100,11 @@ export default function CustomWorkout({
       // Only allow admins to save public workouts
       if (!user.isTrainer) composedWorkout.isPublic = false;
       // Remove any existing _id
-      delete composedWorkout._id;
+      const { _id, ...rest } = composedWorkout;
       // Add date created
-      composedWorkout.date_created = new Date().toISOString();
+      rest.date_created = new Date().toISOString();
 
-      const saveStatus = await postNewWorkout(composedWorkout);
+      const saveStatus = await postNewWorkout(rest);
       setWorkoutSavedSuccessfuly(saveStatus);
     }
 
@@ -100,7 +113,7 @@ export default function CustomWorkout({
 
   // Remove saved successfully notification after 5 seconds
   useEffect(() => {
-    if (workoutSavedSuccessfuly) setTimeout(() => setWorkoutSavedSuccessfuly(null), 5000);
+    if (workoutSavedSuccessfuly) setTimeout(() => setWorkoutSavedSuccessfuly(null), 3000);
   }, [workoutSavedSuccessfuly]);
 
   return (
@@ -112,7 +125,7 @@ export default function CustomWorkout({
             name="workoutName"
             value={customWorkout.name}
             onChange={handleWorkoutNameChange}
-            placeholder="New Workout"
+            placeholder="Name your workout"
           />
 
           {workoutSavedSuccessfuly && (
@@ -141,50 +154,52 @@ export default function CustomWorkout({
         )}
       </header>
 
-      {customWorkout.exercises.map(({ exercise, sets }, i) => (
-        <Exercise key={exercise._id}>
-          <p className="exTitle">
-            <span>{i + 1}.</span> {exercise.name}
-          </p>
+      {customWorkout.exercises.map(
+        ({ exercise, sets }, i) =>
+          exercise && (
+            <ExerciseContainer key={exercise._id}>
+              <p className="exTitle">
+                <span>{i + 1}.</span> {exercise.name}
+              </p>
 
-          <div className="setControl">
-            <button onClick={() => handleSetChange("remove", i)} disabled={!Boolean(sets.length)}>
-              -
-            </button>
-            <p>Set</p>
-            <button onClick={() => handleSetChange("add", i)}>+</button>
-          </div>
+              <div className="setControl">
+                <button
+                  onClick={() => handleSetChange("remove", i)}
+                  disabled={!Boolean(sets.length)}
+                >
+                  -
+                </button>
+                <p>Set</p>
+                <button onClick={() => handleSetChange("add", i)}>+</button>
+              </div>
 
-          {sets.map(({ reps }, j) => (
-            <div key={j}>
-              <span>{j + 1}.</span>
-              <input
-                type="number"
-                name="reps"
-                value={reps}
-                onChange={(e) => handleRepChange(e, i, j)}
-              />
-              <span>reps</span>
-            </div>
-          ))}
+              {sets.map(({ reps }, j) => (
+                <div key={j}>
+                  <span>{j + 1}.</span>
+                  <input
+                    type="number"
+                    name="reps"
+                    value={reps}
+                    onChange={(e) => handleRepChange(e, i, j)}
+                  />
+                  <span>reps</span>
+                </div>
+              ))}
 
-          <button className="removeBtn" onClick={() => removeExercise(exercise)}>
-            Remove
-          </button>
-        </Exercise>
-      ))}
-
-      {!Boolean(customWorkout.exercises.length) && (
-        <FallbackText>
-          <p>
-            Add an exercise below to <br />
-            begin creating a workout.
-          </p>
-        </FallbackText>
+              <button className="removeBtn" onClick={() => removeExercise(exercise)}>
+                Remove
+              </button>
+            </ExerciseContainer>
+          )
       )}
+
+      <FallbackText onClick={() => setShowExerciseList(true)}>
+        <p>Add an exercise</p>
+      </FallbackText>
     </CustomWorkoutContainer>
   );
-}
+};
+export default CustomWorkout;
 
 const CustomWorkoutContainer = styled.ul`
   width: 100%;
@@ -264,7 +279,7 @@ const CustomWorkoutContainer = styled.ul`
   }
 `;
 
-const Exercise = styled.li`
+const ExerciseContainer = styled.li`
   border-radius: 5px;
   box-shadow: 0 0 5px ${({ theme }) => theme.boxShadow};
   background: ${({ theme }) => theme.background};
@@ -342,9 +357,9 @@ const Exercise = styled.li`
 const FallbackText = styled.div`
   background: ${({ theme }) => theme.background};
   color: ${({ theme }) => theme.textLight};
+  box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
 
-  width: 100%;
   border-radius: 5px;
   margin: 1rem;
-  padding: 1rem;
+  padding: 1rem 2rem;
 `;

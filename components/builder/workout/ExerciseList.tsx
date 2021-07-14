@@ -3,35 +3,49 @@ import styled from "styled-components";
 import useSWR from "swr";
 // Context
 import { useStoreState } from "../../../store";
+// Interfaces
+import { Exercise } from "../../../utils/interfaces";
 // Components
 import LoadingSpinner from "../../LoadingSpinner";
 import CreateExerciseModal from "./CreateExerciseModal";
 import ExerciseListItem from "./ExerciseListItem";
 
-// SWR fetcher
-const fetcher = (url) => fetch(url).then((r) => r.json());
+interface Props {
+  isExerciseInCustomWorkout: (exercise_id: string) => boolean;
+  addExercise: (exercise: Exercise) => void;
+  removeExercise: (exercise: Exercise) => void;
+  setShowExerciseList: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-export default function ExerciseList({ isExerciseInCustomWorkout, addExercise, removeExercise }) {
+// SWR fetcher
+const fetcher = (url: string) => fetch(url).then((r) => r.json());
+
+const ExerciseList: React.FC<Props> = ({
+  isExerciseInCustomWorkout,
+  addExercise,
+  removeExercise,
+  setShowExerciseList,
+}) => {
   const { data, error } = useSWR("/api/exercises", fetcher);
 
   const { user } = useStoreState();
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [displayedExercises, setDisplayedExercises] = useState([]);
+  const [displayedExercises, setDisplayedExercises] = useState<Exercise[]>([]);
   const [showCreateExerciseModal, setShowCreateExerciseModal] = useState(false);
 
   const handleSearchTermChange = (e) => setSearchTerm(e.target.value);
 
-  const filterExercisesBy = (term) => {
+  const filterExercisesBy = (term: string) => {
     if (term) {
-      const filtered = data.filter((exercise) => {
+      const filtered = data.filter((exercise: Exercise) => {
         const { _id, ...no_id } = exercise;
         return Object.values(no_id).some((val) => val.toLowerCase().includes(term.toLowerCase()));
       });
 
       setDisplayedExercises(filtered);
     } else {
-      const alphabetical = data.sort((a, b) => {
+      const alphabetical = data.sort((a: Exercise, b: Exercise) => {
         if (a.name.toLowerCase().charAt(0) < b.name.toLowerCase().charAt(0)) return -1;
         if (a.name.toLowerCase().charAt(0) > b.name.toLowerCase().charAt(0)) return 1;
         return 0;
@@ -61,6 +75,8 @@ export default function ExerciseList({ isExerciseInCustomWorkout, addExercise, r
 
         <button onClick={() => setSearchTerm("")}>Clear</button>
 
+        <button onClick={() => setShowExerciseList(false)}>X</button>
+
         {user?.isTrainer && <button onClick={() => setShowCreateExerciseModal(true)}>Add</button>}
       </header>
 
@@ -88,16 +104,20 @@ export default function ExerciseList({ isExerciseInCustomWorkout, addExercise, r
       )}
     </ExercisesContainer>
   );
-}
+};
+export default ExerciseList;
 
 const ExercisesContainer = styled.div`
   border: none;
-  width: 100%;
+  max-height: 100%;
+  width: 95%;
+  margin: auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
 
   header {
     position: sticky;
     top: 0.5rem;
-    /* z-index: 99; */
 
     background: ${({ theme }) => theme.buttonMed};
     width: 100%;
@@ -131,12 +151,11 @@ const ExercisesContainer = styled.div`
   }
 
   ul {
-    width: 100%;
+    margin: 1rem 0.5rem;
 
-    flex: 1;
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
-    flex-wrap: wrap;
+    align-items: center;
   }
 `;

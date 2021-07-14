@@ -126,8 +126,7 @@ const WorkoutsList = styled.div`
 
   ul {
     display: flex;
-    overflow-x: scroll;
-    overflow-y: hidden;
+    flex-wrap: wrap;
 
     li {
       position: relative;

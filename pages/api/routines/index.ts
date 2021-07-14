@@ -1,7 +1,8 @@
+import type { NextApiRequest, NextApiResponse } from "next";
 import { connectToDatabase } from "../../../utils/mongodb";
 import { ObjectId } from "mongodb";
 
-export default async (req, res) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
   const httpMethod = req.method;
   const { db } = await connectToDatabase();
 
@@ -13,14 +14,12 @@ export default async (req, res) => {
     case "POST":
       const { newRoutine } = JSON.parse(req.body);
 
-      console.log(newRoutine);
-
       newRoutine.workoutPlan.map((entry) => {
-        entry.workout_id = ObjectId(entry.workout_id);
+        entry.workout_id = new ObjectId(entry.workout_id);
         entry.isoDate = new Date(entry.isoDate);
       });
-      newRoutine.creator_id = ObjectId(newRoutine.creator_id);
-      newRoutine._id = ObjectId(newRoutine._id);
+      newRoutine.creator_id = new ObjectId(newRoutine.creator_id);
+      newRoutine._id = new ObjectId(newRoutine._id);
 
       const added = await db.collection("routines").insertOne(newRoutine);
 

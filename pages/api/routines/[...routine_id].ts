@@ -1,7 +1,8 @@
+import type { NextApiRequest, NextApiResponse } from "next";
 import { connectToDatabase } from "../../../utils/mongodb";
 import { ObjectId } from "mongodb";
 
-export default async (req, res) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
   const httpMethod = req.method;
   const { db } = await connectToDatabase();
 
@@ -12,7 +13,7 @@ export default async (req, res) => {
       const routineData = await db
         .collection("routines")
         .aggregate([
-          { $match: { _id: ObjectId(routine_id) } },
+          { $match: { _id: new ObjectId(routine_id) } },
           { $unwind: { path: "$workoutPlan" } },
           {
             $lookup: {
@@ -43,15 +44,15 @@ export default async (req, res) => {
       const { updatedRoutine } = JSON.parse(req.body);
 
       updatedRoutine.workoutPlan.map((entry) => {
-        entry.workout_id = ObjectId(entry.workout_id);
+        entry.workout_id = new ObjectId(entry.workout_id);
         entry.isoDate = new Date(entry.isoDate);
       });
-      updatedRoutine.creator_id = ObjectId(updatedRoutine.creator_id);
-      updatedRoutine._id = ObjectId(updatedRoutine._id);
+      updatedRoutine.creator_id = new ObjectId(updatedRoutine.creator_id);
+      updatedRoutine._id = new ObjectId(updatedRoutine._id);
 
       const updated = await db
         .collection("routines")
-        .replaceOne({ _id: ObjectId(routine_id) }, updatedRoutine);
+        .replaceOne({ _id: new ObjectId(routine_id) }, updatedRoutine);
 
       updated ? res.status(204).end() : res.status(404).end();
 

@@ -125,7 +125,7 @@ const WorkoutsList = styled.div`
 
   ul {
     display: flex;
-    overflow: scroll;
+    flex-wrap: wrap;
 
     li {
       background: ${({ theme }) => theme.buttonMed};

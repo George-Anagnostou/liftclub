@@ -160,11 +160,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
           userData = await db
             .collection("users")
-            .findOneAndUpdate(
-              { _id: new ObjectId(user_id) },
-              { $set: { workoutLog: workoutLog } },
-              { returnOriginal: false }
-            );
+            .findOneAndUpdate({ _id: new ObjectId(user_id) }, { $set: { workoutLog: workoutLog } });
 
           userData ? res.status(201).end() : res.status(400).end();
           break;
@@ -174,8 +170,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             .collection("users")
             .findOneAndUpdate(
               { _id: new ObjectId(user_id) },
-              { $push: { savedWorkouts: new ObjectId(addSavedWorkout) } },
-              { returnOriginal: false }
+              { $push: { savedWorkouts: new ObjectId(addSavedWorkout) } }
             );
 
           res.json({});
@@ -187,8 +182,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             .collection("users")
             .findOneAndUpdate(
               { _id: new ObjectId(user_id) },
-              { $pull: { savedWorkouts: new ObjectId(removeSavedWorkout) } },
-              { returnOriginal: false }
+              { $pull: { savedWorkouts: new ObjectId(removeSavedWorkout) } }
             );
 
           res.json({});
@@ -199,8 +193,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             .collection("users")
             .findOneAndUpdate(
               { _id: new ObjectId(user_id) },
-              { $push: { weight: Number(weight) } },
-              { returnOriginal: false }
+              { $push: { weight: Number(weight) } }
             );
 
           res.json({});
@@ -212,8 +205,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             .collection("users")
             .findOneAndUpdate(
               { _id: new ObjectId(user_id) },
-              { $push: { following: new ObjectId(follow) } },
-              { returnOriginal: false }
+              { $push: { following: new ObjectId(follow) } }
             );
 
           // Push user_id into followee's followers array
@@ -233,8 +225,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             .collection("users")
             .findOneAndUpdate(
               { _id: new ObjectId(user_id) },
-              { $pull: { following: new ObjectId(unfollow) } },
-              { returnOriginal: false }
+              { $pull: { following: new ObjectId(unfollow) } }
             );
 
           // Pull user_id from followee's followers array
@@ -304,7 +295,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           .findOneAndUpdate(
             { _id: new ObjectId(user_id) },
             { $pull: { workoutLog: { isoDate: new Date(req.query.date) } } },
-            { returnOriginal: false }
+            { returnNewDocument: true }
           );
 
         deleted.value.workoutLog ? res.status(204).end() : res.status(404).end();

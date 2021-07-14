@@ -1,6 +1,7 @@
+import type { NextApiRequest, NextApiResponse } from "next";
 import { connectToDatabase } from "../../../utils/mongodb";
 
-export default async (req, res) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
   const httpMethod = req.method;
   const { db } = await connectToDatabase();
 

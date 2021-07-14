@@ -1,7 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function BuilderSelectBar({ builderType, setBuilderType }) {
+interface Props {
+  builderType: string;
+  setBuilderType: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const BuilderSelectBar: React.FC<Props> = ({ builderType, setBuilderType }) => {
   return (
     <Bar>
       <ul>
@@ -17,7 +22,8 @@ export default function BuilderSelectBar({ builderType, setBuilderType }) {
       </ul>
     </Bar>
   );
-}
+};
+export default BuilderSelectBar;
 
 const Bar = styled.div`
   position: sticky;
@@ -25,7 +31,7 @@ const Bar = styled.div`
   width: calc(100% + 1rem);
   margin-left: -0.5rem;
   margin-bottom: 0.5rem;
-  
+
   ul {
     display: flex;
 

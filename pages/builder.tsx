@@ -19,9 +19,9 @@ export default function builder() {
 
   // Margin for SlideContainer
   const [margin, setMargin] = useState(0);
-  const [startPos, setStartPos] = useState(null); // position of touchstart
+  const [startPos, setStartPos] = useState<{ x: number; y: number } | null>(null); // position of touchstart
   const [slideDistance, setSlideDistance] = useState(0); // distance touch has slid (x-axis view width)
-  const [builderType, setBuilderType] = useState(router.query.builder || "workout"); // 'workout' 'routine' 'team'
+  const [builderType, setBuilderType] = useState(router.query.builder?.toString() || "workout"); // 'workout' 'routine' 'team'
 
   const slideBuilderRight = () => {
     if (builderType === "workout") {
@@ -56,13 +56,15 @@ export default function builder() {
   const touchStart = (e) => setStartPos({ x: e.touches[0].clientX, y: e.touches[0].clientY });
 
   const touchMove = (e) => {
+    if (!startPos?.x) return;
+
     const currPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
 
     // Number (0 - 100) in view width / view height units (vw / vh)
     const xDiff = (((startPos.x - currPos.x) / window.innerWidth) * 100).toFixed();
     const yDiff = (((startPos.y - currPos.y) / window.innerHeight) * 100).toFixed();
 
-    setSlideDistance(xDiff);
+    setSlideDistance(Number(xDiff));
 
     // In vw / vh units
     const horizThreshold = 5;
@@ -71,7 +73,7 @@ export default function builder() {
     // MOVE SLIDER TO FOLLOW TOUCH POSITION
     // yDiff must be less than 10vh AND xDiff must be greater than 5vw
     // If true, horizontal sliding will follow touch
-    if (Math.abs(yDiff) < vertThreshold && Math.abs(xDiff) > horizThreshold) {
+    if (Math.abs(Number(yDiff)) < vertThreshold && Math.abs(Number(xDiff)) > horizThreshold) {
       // Prevent scrolling vertically
       document.body.style.height = "100vh";
       document.body.style.overflow = "hidden";
@@ -105,14 +107,14 @@ export default function builder() {
     window.addEventListener("touchend", touchEnd, { passive: false });
 
     return () => {
-      window.removeEventListener("touchstart", touchStart, { passive: false });
-      window.removeEventListener("touchmove", touchMove, { passive: false });
-      window.removeEventListener("touchend", touchEnd, { passive: false });
+      window.removeEventListener("touchstart", touchStart, { capture: false });
+      window.removeEventListener("touchmove", touchMove, { capture: false });
+      window.removeEventListener("touchend", touchEnd, { capture: false });
     };
   }, [margin, startPos, slideDistance]);
 
   useEffect(() => {
-    if (router.query.builder) setBuilderType(router.query.builder);
+    if (router.query.builder) setBuilderType(router.query.builder.toString());
   }, [router.query]);
 
   // Sets margin when builder type changes
