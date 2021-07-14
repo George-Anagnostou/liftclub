@@ -26,7 +26,7 @@ const Layout: React.FC<Props> = ({ title = "Ananostou Lift Club", children }) =>
   const dispatch = useStoreDispatch();
   const { user, platform } = useStoreState();
 
-  const routeToWorkoutLog = () => router.push("/workoutLog");
+  const routeToWorkoutLog = () => router.push("/log");
 
   const persistLogin = async (user_id: string) => {
     const loginSuccess = await loginUser(dispatch, user_id);

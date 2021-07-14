@@ -1,7 +1,8 @@
 import React from "react";
+import { useCallback } from "react";
 import styled from "styled-components";
 // Interfaces
-import { WorkoutLogItem } from "../../utils/interfaces";
+import { WorkoutLog, WorkoutLogItem } from "../../utils/interfaces";
 
 interface Props {
   changeCurrentDayData: (numOfDaysToShift: number) => Promise<void>;
@@ -11,38 +12,43 @@ interface Props {
     month: number;
     day: number;
   };
+  workoutLog: WorkoutLog;
 }
 
 const DateScroll: React.FC<Props> = ({
   changeCurrentDayData,
   getDayDataFromWorkoutLog,
   displayedDate,
+  workoutLog,
 }) => {
   // Format the date for the DateBar
-  const formatDate = (numOfDaysToShift: number) => {
-    const currDate = new Date();
-    const date = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate());
+  const formatDate = useCallback(
+    (numOfDaysToShift: number) => {
+      const currDate = new Date();
+      const date = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate());
 
-    date.setDate(date.getDate() + numOfDaysToShift);
+      date.setDate(date.getDate() + numOfDaysToShift);
 
-    const dayData = getDayDataFromWorkoutLog(date.toISOString());
+      const dayData = getDayDataFromWorkoutLog(date.toISOString());
 
-    const { year, month, day } = displayedDate;
-    const dayIsSelected =
-      date.getFullYear() === year && date.getMonth() === month && date.getDate() === day;
+      const { year, month, day } = displayedDate;
+      const dayIsSelected =
+        date.getFullYear() === year && date.getMonth() === month && date.getDate() === day;
 
-    return (
-      <div
-        className={`${dayIsSelected ? "selected" : "notSelected"} ${
-          dayData ? "hasDayData" : "noDayData"
-        }`}
-      >
-        {date.getDate() === 1 && <p className="month">{String(date).substring(3, 7)}</p>}
-        <p className="dow">{String(date).substring(0, 3)}</p>
-        <p className="day">{String(date).substring(8, 11)}</p>
-      </div>
-    );
-  };
+      return (
+        <div
+          className={`${dayIsSelected ? "selected" : "notSelected"} ${
+            dayData ? "hasDayData" : "noDayData"
+          }`}
+        >
+          {date.getDate() === 1 && <p className="month">{String(date).substring(3, 7)}</p>}
+          <p className="dow">{String(date).substring(0, 3)}</p>
+          <p className="day">{String(date).substring(8, 11)}</p>
+        </div>
+      );
+    },
+    [workoutLog, displayedDate]
+  );
 
   return (
     <DateScrollContainer>

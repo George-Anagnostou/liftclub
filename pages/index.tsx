@@ -6,7 +6,7 @@ import Branding from "../components/HomePage/Branding";
 import Login from "../components/HomePage/Login";
 import CreateAcc from "../components/HomePage/CreateAcc";
 
-export default function Home() {
+const Home: React.FC = () => {
   const router = useRouter();
 
   const [formType, setFormType] = useState("login");
@@ -14,7 +14,7 @@ export default function Home() {
   const handleLinkClick = () => setFormType(formType === "login" ? "create" : "login");
 
   // Route to workoutLog
-  const routeToWorkoutLog = () => router.push("/workoutLog");
+  const routeToWorkoutLog = () => router.push("/log");
 
   return (
     <HomeContainer>
@@ -28,7 +28,8 @@ export default function Home() {
       )}
     </HomeContainer>
   );
-}
+};
+export default Home;
 
 const HomeContainer = styled.div`
   font-family: Tahoma, Helvetica;

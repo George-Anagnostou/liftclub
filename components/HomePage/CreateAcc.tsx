@@ -6,21 +6,27 @@ import { useStoreDispatch, createAccount } from "../../store";
 export default function createAcc({ routeToWorkoutLog, handleLinkClick }) {
   const dispatch = useStoreDispatch();
 
-  const [createAccUsername, setCreateAccUsername] = useState("");
-  const [createAccPassword, setCreateAccPassword] = useState("");
+  const [accCreds, setAccCreds] = useState<{ username: string; password: string }>({
+    username: "",
+    password: "",
+  });
   const [usernameExists, setUsernameExists] = useState(false);
 
   // CREATE ACCOUNT handlers
   // Username cannot contain special characters
-  const handleCreateAccUsernameChange = (e) =>
-    setCreateAccUsername(e.target.value.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, ""));
+  const handleAccCredsUsername = (e) =>
+    setAccCreds((prev) => ({
+      ...prev,
+      username: e.target.value.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, ""),
+    }));
 
-  const handleCreateAccPasswordChange = (e) => setCreateAccPassword(e.target.value);
+  const handleAccCredsPassword = (e) =>
+    setAccCreds((prev) => ({ ...prev, password: e.target.value }));
 
   const handleCreateAccount = async (e) => {
     e.preventDefault();
 
-    const userData = await createAccount(dispatch, createAccUsername, createAccPassword);
+    const userData = await createAccount(dispatch, accCreds.username, accCreds.password);
 
     if (userData) {
       setUsernameExists(false);
@@ -35,15 +41,14 @@ export default function createAcc({ routeToWorkoutLog, handleLinkClick }) {
     <CreateContainer>
       <form action="POST" onSubmit={handleCreateAccount}>
         <h3>Create Account</h3>
-        {usernameExists && <p>Username is already taken</p>}
 
         <div>
           <input
             type="text"
             name="username"
             id="username"
-            value={createAccUsername}
-            onChange={handleCreateAccUsernameChange}
+            value={accCreds.username}
+            onChange={handleAccCredsUsername}
             placeholder="Username"
             required
           />
@@ -52,8 +57,8 @@ export default function createAcc({ routeToWorkoutLog, handleLinkClick }) {
             type="text"
             name="password"
             id="password"
-            value={createAccPassword}
-            onChange={handleCreateAccPasswordChange}
+            value={accCreds.password}
+            onChange={handleAccCredsPassword}
             placeholder="Password"
             required
           />
@@ -61,9 +66,12 @@ export default function createAcc({ routeToWorkoutLog, handleLinkClick }) {
         <button type="submit">Join</button>
       </form>
 
+
       <a onClick={handleLinkClick}>
         <p>Have an account? Login here</p>
       </a>
+      
+      {usernameExists && <p>Username is already taken</p>}
     </CreateContainer>
   );
 }

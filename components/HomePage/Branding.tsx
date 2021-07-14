@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export default function Branding() {
+const Branding: React.FC = () => {
   return (
     <Brand>
       <span>
@@ -11,7 +11,8 @@ export default function Branding() {
       <h4>Anagnostou Lift Club</h4>
     </Brand>
   );
-}
+};
+export default Branding;
 
 const Brand = styled.div`
   display: flex;
@@ -23,7 +24,7 @@ const Brand = styled.div`
 
   span img {
     max-height: 130px;
-    margin-bottom: -.5rem;
+    margin-bottom: -0.5rem;
     border-radius: 50%;
   }
 

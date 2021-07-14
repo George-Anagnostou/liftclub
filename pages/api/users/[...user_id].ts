@@ -299,7 +299,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       break;
     case "DELETE":
       if (req.query.field === "workoutLog" && typeof req.query.date === "string") {
-        const updated = await db
+        const deleted = await db
           .collection("users")
           .findOneAndUpdate(
             { _id: new ObjectId(user_id) },
@@ -307,7 +307,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             { returnOriginal: false }
           );
 
-        updated.value.workoutLog ? res.status(204).end() : res.status(404).end();
+        deleted.value.workoutLog ? res.status(204).end() : res.status(404).end();
       }
 
       res.status(404).end();

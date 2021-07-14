@@ -29,7 +29,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             .collection("workouts")
             .find({ isPublic: Boolean(isPublic) })
             .toArray();
-
+          break;
         default:
           throw new Error("not a valid query to workouts GET API");
       }

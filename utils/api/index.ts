@@ -176,8 +176,8 @@ export const deleteWorkoutFromWorkoutLog = async (user_id: string, isoDate: stri
     const res = await fetch(`/api/users/${user_id}?field=workoutLog&date=${isoDate}`, {
       method: "DELETE",
     });
-    const updatedLog = await res.json();
-    return updatedLog;
+
+    return res.status === 204;
   } catch (e) {
     console.log(e);
     return false;

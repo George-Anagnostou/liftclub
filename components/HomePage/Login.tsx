@@ -3,20 +3,30 @@ import styled from "styled-components";
 
 import { useStoreDispatch, authLogin } from "../../store";
 
-export default function Login({ routeToWorkoutLog, handleLinkClick }) {
+interface Props {
+  routeToWorkoutLog: () => Promise<boolean>;
+  handleLinkClick: () => void;
+}
+
+const Login: React.FC<Props> = ({ routeToWorkoutLog, handleLinkClick }) => {
   const dispatch = useStoreDispatch();
 
-  const [loginUsername, setLoginUsername] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
+  const [loginCreds, setLoginCreds] = useState<{ username: string; password: string }>({
+    username: "",
+    password: "",
+  });
   const [invalidLoginCreds, setInvalidLoginCreds] = useState(false);
 
-  const handleLoginUsernameChange = (e) => setLoginUsername(e.target.value);
-  const handleLoginPasswordChange = (e) => setLoginPassword(e.target.value);
+  const handleLoginUsernameChange = (e) =>
+    setLoginCreds((prev) => ({ ...prev, username: e.target.value }));
+
+  const handleLoginPasswordChange = (e) =>
+    setLoginCreds((prev) => ({ ...prev, password: e.target.value }));
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    const userData = await authLogin(dispatch, loginUsername, loginPassword);
+    const userData = await authLogin(dispatch, loginCreds.username, loginCreds.password);
 
     if (userData) {
       localStorage.setItem("workoutID", userData._id);
@@ -37,7 +47,7 @@ export default function Login({ routeToWorkoutLog, handleLinkClick }) {
           type="text"
           name="username"
           id="username"
-          value={loginUsername}
+          value={loginCreds.username}
           onChange={handleLoginUsernameChange}
           placeholder="Username"
           required
@@ -47,7 +57,7 @@ export default function Login({ routeToWorkoutLog, handleLinkClick }) {
           type="password"
           name="password"
           id="password"
-          value={loginPassword}
+          value={loginCreds.password}
           onChange={handleLoginPasswordChange}
           placeholder="Password"
           required
@@ -61,7 +71,8 @@ export default function Login({ routeToWorkoutLog, handleLinkClick }) {
       </a>
     </LoginContainer>
   );
-}
+};
+export default Login;
 
 const LoginContainer = styled.div`
   text-align: center;

@@ -83,11 +83,11 @@ const log: React.FC = () => {
   const getDayDataFromWorkoutLog = (targetIsoDate: string) => {
     if (!user) return;
 
-    let dayData;
+    let dayData: WorkoutLogItem | undefined;
 
-    dayData = workoutLog
-      ? workoutLog.find((item: WorkoutLogItem) => item.isoDate === targetIsoDate)
-      : user.workoutLog.find((item: WorkoutLogItem) => item.isoDate === targetIsoDate);
+    dayData =
+      workoutLog.find((item: WorkoutLogItem) => item.isoDate === targetIsoDate) ||
+      user.workoutLog.find((item: WorkoutLogItem) => item.isoDate === targetIsoDate);
 
     return dayData;
   };
@@ -120,30 +120,33 @@ const log: React.FC = () => {
     setSaveLoading(true);
 
     // Make array for exerciseData in DB
-    const composedExercises = currentDayData.exerciseData.map((each) => {
-      return { exercise_id: each.exercise_id, sets: each.sets };
-    });
+    const composedExercises = currentDayData.exerciseData.map((each) => ({
+      exercise_id: each.exercise_id,
+      sets: each.sets,
+    }));
 
     // Get index of our currDayData
-    const indexOfCurrDayData = user!.workoutLog.findIndex(
+    const indexOfCurrDayData = workoutLog.findIndex(
       (workout) => workout.isoDate === currentDayData.isoDate
     );
 
     // Define log to send to DB
     let updatedWorkoutLog: WorkoutLog;
 
-    if (indexOfCurrDayData > 0) {
+    if (indexOfCurrDayData > -1) {
       // Update existing workout
-      user!.workoutLog[indexOfCurrDayData] = {
+      const clone = [...workoutLog];
+
+      clone[indexOfCurrDayData] = {
         ...currentDayData,
         exerciseData: composedExercises,
       };
 
-      updatedWorkoutLog = user!.workoutLog;
+      updatedWorkoutLog = clone;
     } else {
       // Create new workoutLog entry aand sort by isoDate
       updatedWorkoutLog = [
-        ...user!.workoutLog,
+        ...workoutLog,
         {
           isoDate: currentDayData.isoDate,
           workout_id: currentDayData.workout_id,
@@ -168,10 +171,18 @@ const log: React.FC = () => {
 
   const deleteWorkout = async () => {
     if (currentDayData && currentDayData.isoDate) {
-      const updatedLog = await deleteWorkoutFromWorkoutLog(user!._id, currentDayData.isoDate);
-      setWorkoutLog(updatedLog);
+      const deleted = await deleteWorkoutFromWorkoutLog(user!._id, currentDayData.isoDate);
+
+      console.log(workoutLog, currentDayData.isoDate);
+      if (deleted) {
+        setWorkoutLog(
+          workoutLog.filter(
+            (each) => !stripTimeAndCompareDates(each.isoDate, currentDayData.isoDate)
+          )
+        );
+        setPageState(null);
+      }
     }
-    setPageState(null);
   };
 
   const displayWorkout = async (clicked: Workout) => {
@@ -223,21 +234,19 @@ const log: React.FC = () => {
 
   useEffect(() => {
     // workoutLog is used to update DateScroll UI when saving or removing a workout
-    if (user) setWorkoutLog(user.workoutLog);
-  }, [user]);
+    if (user) {
+      setWorkoutLog(user.workoutLog);
 
-  useEffect(() => {
-    if (workoutLog && user) {
       const { year, month, day } = getCurrYearMonthDay();
       const currIsoDate = new Date(year, month, day).toISOString();
-      const latestDate: string = user.workoutLog[user.workoutLog.length - 1].isoDate;
+      const latestDate: string = user.workoutLog[workoutLog.length - 1]?.isoDate || currIsoDate;
 
       // If latestDate is today's date, set page state with fetched data
       stripTimeAndCompareDates(latestDate, currIsoDate)
         ? fetchAndSetDateData(currIsoDate)
         : setPageState(null);
     }
-  }, [workoutLog]);
+  }, [user]);
 
   return (
     <MainContainer>
@@ -245,6 +254,7 @@ const log: React.FC = () => {
         changeCurrentDayData={changeCurrentDayData}
         getDayDataFromWorkoutLog={getDayDataFromWorkoutLog}
         displayedDate={displayedDate}
+        workoutLog={workoutLog}
       />
 
       {loading ? (
