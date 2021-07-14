@@ -22,7 +22,7 @@ const SavedWorkouts: React.FC<Props> = ({ workouts, removeFromSavedWorkouts }) =
   useTouchSwipe(swipeRef, ["down", "up"], () => toggleShow());
 
   return (
-    <WorkoutList style={showDrawer ? { top: "0%" } : null}>
+    <WorkoutList style={showDrawer ? { top: "0%" } : {}}>
       <div className="drawer">
         {!Boolean(workouts.length) && <h3 className="tip">You don't have any saved workouts.</h3>}
 

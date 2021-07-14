@@ -19,7 +19,7 @@ import {
 // Interfaces
 import { WorkoutLogItem, WorkoutLog, Workout } from "../utils/interfaces";
 
-const log: React.FC = () => {
+export default function log() {
   const { user } = useStoreState();
 
   const [loading, setLoading] = useState(true);
@@ -287,8 +287,7 @@ const log: React.FC = () => {
       )}
     </MainContainer>
   );
-};
-export default log;
+}
 
 const MainContainer = styled.section`
   display: flex;

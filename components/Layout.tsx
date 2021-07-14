@@ -16,8 +16,8 @@ import {
 import { GlobalStyles } from "./GlobalStyles";
 
 interface Props {
-  children: React.ReactNode;
-  title: string;
+  children?: React.ReactNode;
+  title?: string;
 }
 
 const Layout: React.FC<Props> = ({ title = "Ananostou Lift Club", children }) => {

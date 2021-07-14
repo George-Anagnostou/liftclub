@@ -24,8 +24,8 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "store/context/state.tsx"  ],
+    "**/*.tsx", "utils/mongodb.js"
+  ],
   "exclude": [
     "node_modules"
   ]
