@@ -41,29 +41,13 @@ export const timeSince = (previous, current = Date.now()) => {
   }
 };
 
-export const timeBetween = (first, second = Date.now()) => {
-  if (isNaN(first)) return;
-
+export const daysBetween = (first: string, second: string) => {
   var msPerDay = 1000 * 60 * 60 * 24;
-  var msPerWeek = msPerDay * 7;
-  var msPerMonth = msPerDay * 30;
-  var msPerYear = msPerDay * 365;
 
-  var elapsed = second - first;
+  var elapsed = new Date(second).getTime() - new Date(first).getTime();
 
   const days = Math.round(elapsed / msPerDay);
   return days > 1 ? days + " days" : days + " day";
-
-  // if (elapsed < msPerMonth) {
-  //   const days = Math.round(elapsed / msPerDay);
-  //   return days > 1 ? days + " days" : days + " day";
-  // } else if (elapsed < msPerMonth) {
-  //   const weeks = Math.round(elapsed / msPerWeek);
-  //   const remainingDays = Math.round((elapsed - msPerWeek * 4) / msPerDay);
-  //   return `${weeks} ${weeks > 1 ? "weeks" : "week"} ${
-  //     remainingDays && remainingDays > 1 ? remainingDays + " days" : remainingDays + " day"
-  //   } `;
-  // }
 };
 
 export const formatIsoDate = (isoDate) => {
