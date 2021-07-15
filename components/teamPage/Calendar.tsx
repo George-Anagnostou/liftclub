@@ -1,18 +1,28 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+// Utils
 import { getCurrYearMonthDay, stripTimeAndCompareDates } from "../../utils";
+// Interfaces
+import { Routine } from "../../utils/interfaces";
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu ", "Fri", "Sat"];
 
-export default function Calendar({ data, setSelectedDate, selectedDate }) {
+interface Props {
+  data: Routine["workoutPlan"];
+  setSelectedDate: React.Dispatch<React.SetStateAction<string>>;
+  selectedDate: string;
+}
+
+const Calendar: React.FC<Props> = ({ data, setSelectedDate, selectedDate }) => {
   const [{ year, month, day }, setYearMonthDay] = useState(getCurrYearMonthDay());
   const [daysInMonth, setDaysInMonth] = useState(0);
 
-  const isDayInData = (isoString) => data?.findIndex((item) => item.isoDate === isoString) > -1;
+  const isDayInData = (isoString: string) =>
+    data?.findIndex((item) => item.isoDate === isoString) > -1;
 
-  const handleDayClick = (date) =>
-    stripTimeAndCompareDates(date, selectedDate) ? setSelectedDate(null) : setSelectedDate(date);
+  const handleDayClick = (date: string) =>
+    stripTimeAndCompareDates(date, selectedDate) ? setSelectedDate("") : setSelectedDate(date);
 
   const incrementMonth = () => {
     const newMonth = (month + 1) % 12;
@@ -78,7 +88,8 @@ export default function Calendar({ data, setSelectedDate, selectedDate }) {
       </DaysCtrl>
     </Container>
   );
-}
+};
+export default Calendar;
 
 const Container = styled.div`
   margin: 0.5rem 0;

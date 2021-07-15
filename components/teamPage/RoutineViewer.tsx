@@ -12,39 +12,54 @@ import {
 } from "../../utils/api";
 // Components
 import Calendar from "./Calendar";
+// Interface
+import { Routine, Team, Workout } from "../../utils/interfaces";
 
-export default function RoutineEditor({ routine_id, setTeam }) {
+interface Props {
+  routine_id: string;
+  setTeam: React.Dispatch<React.SetStateAction<Team>>;
+}
+
+const RoutineContainer: React.FC<Props> = ({ routine_id, setTeam }) => {
   const { user } = useStoreState();
 
-  const [initialRoutineData, setInitialRoutineData] = useState(null);
-  const [routine, setRoutine] = useState(null);
+  const [initialRoutineData, setInitialRoutineData] = useState<Routine | null>(null);
+  const [routine, setRoutine] = useState<Routine | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString());
   const [isRoutineOwner, setIsRoutineOwner] = useState(false);
-  const [userMadeWorkouts, setUserMadeWorkouts] = useState([]);
-  const [userSavedWorkouts, setUserSavedWorkouts] = useState([]);
+  const [userMadeWorkouts, setUserMadeWorkouts] = useState<Workout[]>([]);
+  const [userSavedWorkouts, setUserSavedWorkouts] = useState<Workout[]>([]);
 
   const addWorkoutToRoutine = (workout) => {
-    setRoutine((prev) => ({
-      ...prev,
-      workoutPlan: [
-        ...prev.workoutPlan.filter((each) => each.isoDate !== selectedDate),
-        { isoDate: selectedDate, workout_id: workout._id, workout },
-      ].sort((a, b) => a.isoDate.localeCompare(b.isoDate)),
-    }));
+    setRoutine(
+      (prev) =>
+        prev && {
+          ...prev,
+          workoutPlan: [
+            ...prev.workoutPlan.filter((each) => each.isoDate !== selectedDate),
+            { isoDate: selectedDate, workout_id: workout._id, workout },
+          ].sort((a, b) => a.isoDate.localeCompare(b.isoDate)),
+        }
+    );
   };
 
   const removeWorkoutFromRoutine = () => {
-    setRoutine((prev) => ({
-      ...prev,
-      workoutPlan: [...prev.workoutPlan.filter((each) => each.isoDate !== selectedDate)],
-    }));
+    setRoutine(
+      (prev) =>
+        prev && {
+          ...prev,
+          workoutPlan: [...prev.workoutPlan.filter((each) => each.isoDate !== selectedDate)],
+        }
+    );
   };
 
   const handleSaveRoutine = async () => {
+    if (!routine) return;
+
     const routineForDB = {
       ...routine,
-      workoutPlan: routine.workoutPlan.map(({ isoDate, workout_id }) => ({
+      workoutPlan: routine!.workoutPlan.map(({ isoDate, workout_id }) => ({
         isoDate,
         workout_id,
       })),
@@ -53,8 +68,8 @@ export default function RoutineEditor({ routine_id, setTeam }) {
     const saved = await updateRoutine(routineForDB);
 
     if (saved) {
-      setIsEditing(false);
       setTeam((prev) => ({ ...prev, routine: routineForDB }));
+      setIsEditing(false);
     }
   };
 
@@ -68,11 +83,13 @@ export default function RoutineEditor({ routine_id, setTeam }) {
     const getRoutineData = async () => {
       const routineData = await getRoutineFromId(routine_id);
 
-      setRoutine(routineData);
+      if (routineData) {
+        setRoutine(routineData);
 
-      setInitialRoutineData(routineData);
+        setInitialRoutineData(routineData);
 
-      setIsRoutineOwner(user._id === routineData.creator_id);
+        setIsRoutineOwner(user!._id === routineData.creator_id);
+      }
     };
 
     if (!routine) getRoutineData();
@@ -81,20 +98,20 @@ export default function RoutineEditor({ routine_id, setTeam }) {
   // If the user is the owner of the routine, get their saved and created workouts to use in the editor
   useEffect(() => {
     const getUserWorkouts = async () => {
-      const workoutsMade = await getUserMadeWorkouts(user._id);
+      const workoutsMade = await getUserMadeWorkouts(user!._id);
       setUserMadeWorkouts(workoutsMade);
 
-      const workoutsSaved = await getWorkoutsFromIdArray(user.savedWorkouts);
+      const workoutsSaved = await getWorkoutsFromIdArray(user!.savedWorkouts || []);
       setUserSavedWorkouts(workoutsSaved.reverse());
     };
 
-    if (isRoutineOwner) getUserWorkouts();
-  }, [isRoutineOwner]);
+    if (isRoutineOwner && user) getUserWorkouts();
+  }, [isRoutineOwner, user]);
 
   // Displays the data for the selected date & editor if in editing mode
   // If there is a workout, displays the
   const displaySelectedDateData = () => {
-    const foundWorkout = routine.workoutPlan.filter((item) =>
+    const foundWorkout = routine!.workoutPlan.filter((item) =>
       stripTimeAndCompareDates(item.isoDate, selectedDate)
     )[0]?.workout;
 
@@ -194,7 +211,8 @@ export default function RoutineEditor({ routine_id, setTeam }) {
       )}
     </>
   );
-}
+};
+export default RoutineContainer;
 
 const Editor = styled.div`
   background: ${({ theme }) => theme.background};

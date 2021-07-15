@@ -10,30 +10,42 @@ import Modal from "../Wrappers/Modal";
 import { addTrainerToTeam, getUsersFromIdArr, removeTrainerFromTeam } from "../../utils/api";
 // Context
 import { useStoreState } from "../../store";
+// Interfaces
+import { Team, User } from "../../utils/interfaces";
 
-export default function TrainersTile({ team, setTeam, teamMembers, setTeamMembers }) {
+interface Props {
+  team: Team;
+  setTeam: React.Dispatch<React.SetStateAction<Team | null>>;
+  teamMembers: User[] | null;
+  setTeamMembers: React.Dispatch<React.SetStateAction<User[] | null>>;
+}
+
+const TrainersTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMembers }) => {
   const { user } = useStoreState();
 
   const [showTrainerManager, setShowTrainerManager] = useState(false);
 
-  const handleRemoveTrainer = async (trainer) => {
+  const handleRemoveTrainer = async (trainer: User) => {
     const removed = await removeTrainerFromTeam(team._id, trainer._id);
     if (removed)
-      setTeam((prev) => ({
-        ...prev,
-        trainers: prev.trainers.filter((item) => item._id !== trainer._id),
-      }));
+      setTeam(
+        (prev) =>
+          prev && {
+            ...prev,
+            trainers: prev.trainers.filter((item) => item._id !== trainer._id),
+          }
+      );
   };
 
-  const handleAddTrainer = async (trainer) => {
+  const handleAddTrainer = async (trainer: User) => {
     const added = await addTrainerToTeam(team._id, trainer._id);
-    if (added) setTeam((prev) => ({ ...prev, trainers: [...prev.trainers, trainer] }));
+    if (added) setTeam((prev) => prev && { ...prev, trainers: [...prev.trainers, trainer] });
   };
 
   useEffect(() => {
     const getTeamMembers = async () => {
       const members = await getUsersFromIdArr(team.members);
-      setTeamMembers(members);
+      setTeamMembers(members || []);
     };
 
     if (showTrainerManager && !teamMembers) getTeamMembers();
@@ -62,7 +74,7 @@ export default function TrainersTile({ team, setTeam, teamMembers, setTeamMember
           </Link>
         ))}
 
-        {user._id === team.creator_id && (
+        {user!._id === team.creator_id && (
           <li onClick={() => setShowTrainerManager(true)} key={"addTrainer"}>
             <div className="icon">
               <span></span>
@@ -104,7 +116,8 @@ export default function TrainersTile({ team, setTeam, teamMembers, setTeamMember
       )}
     </Tile>
   );
-}
+};
+export default TrainersTile;
 
 const Tile = styled.div`
   width: 100%;

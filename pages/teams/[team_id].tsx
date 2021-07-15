@@ -10,20 +10,22 @@ import TrainersTile from "../../components/teamPage/TrainersTile";
 import RoutineTile from "../../components/teamPage/RoutineTile";
 // Context
 import { useStoreState } from "../../store";
+// Interfaces
+import { User, Team } from "../../utils/interfaces";
 
-export default function Team_id() {
+const Team_id: React.FC = () => {
   const router = useRouter();
   const { team_id } = router.query;
 
   const { user } = useStoreState();
 
-  const [team, setTeam] = useState(null);
-  const [teamMembers, setTeamMembers] = useState(null);
+  const [team, setTeam] = useState<Team | null>(null);
+  const [teamMembers, setTeamMembers] = useState<User[] | null>(null);
 
   useEffect(() => {
     const getTeamData = async () => {
-      const teamData = await getTeamById(team_id);
-      setTeam(teamData);
+      const teamData = await getTeamById(String(team_id));
+      if (teamData) setTeam(teamData);
     };
 
     if (user && team_id && !team) getTeamData();
@@ -43,7 +45,6 @@ export default function Team_id() {
           <TrainersTile
             team={team}
             setTeam={setTeam}
-            user_id={user._id}
             teamMembers={teamMembers}
             setTeamMembers={setTeamMembers}
           />
@@ -57,7 +58,8 @@ export default function Team_id() {
       )}
     </Container>
   );
-}
+};
+export default Team_id;
 
 const Container = styled.section`
   display: flex;

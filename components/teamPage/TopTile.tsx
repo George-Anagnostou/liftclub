@@ -14,58 +14,64 @@ import {
 } from "../../utils/api";
 // Context
 import { useStoreState } from "../../store";
+import { Team, User } from "../../utils/interfaces";
 
-export default function TopTile({ team, setTeam, teamMembers, setTeamMembers }) {
+interface Props {
+  team: Team;
+  setTeam: React.Dispatch<React.SetStateAction<Team | null>>;
+  teamMembers: User[] | null;
+  setTeamMembers: React.Dispatch<React.SetStateAction<User[] | null>>;
+}
+
+const TopTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMembers }) => {
   const { user } = useStoreState();
 
   const [showMembers, setShowMembers] = useState(false);
-  const [userFollowing, setUserFollowing] = useState([]);
+  const [userFollowing, setUserFollowing] = useState<string[]>([]);
 
-  const userIsInTeam = () => team.members.includes(user._id);
+  const userIsInTeam = () => team.members.includes(user!._id);
 
-  const handleJoinTeam = async (team_id) => {
-    const joined = await userJoiningTeam(user._id, team_id);
+  const handleJoinTeam = async (team_id: string) => {
+    const joined = await userJoiningTeam(user!._id, team_id);
 
-    if (joined) {
-      setTeam((prev) => {
-        prev.members = [...prev.members, user._id];
-        return { ...prev };
-      });
-    }
+    if (joined) setTeam((prev) => prev && { ...prev, members: [...prev?.members, user!._id] });
   };
 
-  const handleLeaveTeam = async (team_id) => {
-    const left = await userLeavingTeam(user._id, team_id);
+  const handleLeaveTeam = async (team_id: string) => {
+    const left = await userLeavingTeam(user!._id, team_id);
 
     if (left) {
-      setTeam((prev) => {
-        prev.members = [...prev.members.filter((_id) => _id !== user._id)];
-        return { ...prev };
-      });
+      setTeam(
+        (prev) =>
+          prev && {
+            ...prev,
+            members: [...prev.members.filter((_id) => _id !== user!._id)],
+          }
+      );
     }
   };
 
-  const handleFollowClick = async (member_id) => {
-    const followed = await addFollow(user._id, member_id);
+  const handleFollowClick = async (member_id: string) => {
+    const followed = await addFollow(user!._id, member_id);
     if (followed) setUserFollowing((prev) => [...prev, member_id]);
   };
 
-  const handleUnfollowClick = async (member_id) => {
-    const unfollowed = await removeFollow(user._id, member_id);
+  const handleUnfollowClick = async (member_id: string) => {
+    const unfollowed = await removeFollow(user!._id, member_id);
     if (unfollowed) setUserFollowing((prev) => [...prev.filter((_id) => _id !== member_id)]);
   };
 
   useEffect(() => {
     const getTeamMembers = async () => {
       const members = await getUsersFromIdArr(team.members);
-      setTeamMembers(members);
+      if (members) setTeamMembers(members);
     };
 
     if (showMembers && !teamMembers) getTeamMembers();
   }, [showMembers]);
 
   useEffect(() => {
-    if (user) setUserFollowing(user.following);
+    if (user) setUserFollowing(user.following || []);
   }, [user]);
 
   return (
@@ -113,7 +119,7 @@ export default function TopTile({ team, setTeam, teamMembers, setTeamMembers }) 
                         following
                       </button>
                     ) : (
-                      user._id !== member._id && (
+                      user!._id !== member._id && (
                         <button className="follow" onClick={() => handleFollowClick(member._id)}>
                           follow
                         </button>
@@ -130,7 +136,8 @@ export default function TopTile({ team, setTeam, teamMembers, setTeamMembers }) 
       )}
     </Tile>
   );
-}
+};
+export default TopTile;
 
 const Tile = styled.div`
   width: 100%;

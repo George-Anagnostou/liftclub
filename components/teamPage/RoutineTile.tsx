@@ -3,50 +3,56 @@ import styled from "styled-components";
 // Context
 import { useStoreState } from "../../store";
 // Utils
-import { timeBetween } from "../../utils";
+import { daysBetween } from "../../utils";
 import {
   addUserSavedWorkout,
   getWorkoutsFromIdArray,
   removeUserSavedWorkout,
 } from "../../utils/api";
+import { Routine, Team, Workout } from "../../utils/interfaces";
 // Components
 import LoadingSpinner from "../LoadingSpinner";
 import RoutineViewer from "./RoutineViewer";
 
-export default function RoutineTile({ team, setTeam }) {
+interface Props {
+  team: Team;
+  setTeam: React.Dispatch<React.SetStateAction<Team>>;
+}
+
+const RoutineTile: React.FC<Props> = ({ team, setTeam }) => {
   const { user } = useStoreState();
 
-  const [uniqueWorkoutsInRoutine, setUniqueWorkoutsInRoutine] = useState(null);
-  const [userSavedWorkouts, setUserSavedWorkouts] = useState(null);
+  const [uniqueWorkoutsInRoutine, setUniqueWorkoutsInRoutine] = useState<Workout[] | null>(null);
+  const [userSavedWorkouts, setUserSavedWorkouts] = useState<string[] | null>(null);
 
-  const handleAddSavedWorkout = async (workout_id) => {
-    const added = await addUserSavedWorkout(user._id, workout_id);
-    if (added) setUserSavedWorkouts((prev) => [...prev, workout_id]);
+  const handleAddSavedWorkout = async (workout_id: string) => {
+    const added = await addUserSavedWorkout(user!._id, workout_id);
+    if (added) setUserSavedWorkouts((prev) => prev && [...prev, workout_id]);
   };
 
-  const handleRemoveSavedWorkout = async (workout_id) => {
-    const removed = await removeUserSavedWorkout(user._id, workout_id);
-    if (removed) setUserSavedWorkouts((prev) => prev.filter((id) => id !== workout_id));
+  const handleRemoveSavedWorkout = async (workout_id: string) => {
+    const removed = await removeUserSavedWorkout(user!._id, workout_id);
+    if (removed) setUserSavedWorkouts((prev) => prev && prev.filter((id) => id !== workout_id));
   };
 
-  const getUniqueWorkouts = async (plan) => {
+  const getUniqueWorkouts = async (plan: Routine["workoutPlan"]) => {
     const uniqueWorkoutIds = [...new Set(plan.map((workout) => workout.workout_id))];
     const workouts = await getWorkoutsFromIdArray(uniqueWorkoutIds);
     setUniqueWorkoutsInRoutine(workouts);
   };
 
   useEffect(() => {
-    if (team) getUniqueWorkouts(team.routine.workoutPlan);
+    if (team?.routine) getUniqueWorkouts(team.routine.workoutPlan);
   }, [team]);
 
   useEffect(() => {
     if (user) setUserSavedWorkouts(user.savedWorkouts || []);
   }, [user]);
 
-  const formatRoutineInfo = (routine) => {
+  const formatRoutineInfo = (routine: Routine) => {
     const plan = routine.workoutPlan;
 
-    const days = timeBetween(new Date(plan[0].isoDate), new Date(plan[plan.length - 1].isoDate));
+    const days = daysBetween(plan[0].isoDate, plan[plan.length - 1].isoDate);
 
     return (
       <RoutineInfo>
@@ -65,9 +71,13 @@ export default function RoutineTile({ team, setTeam }) {
         <h3 className="title">Routine</h3>
       </div>
 
-      {formatRoutineInfo(team.routine)}
+      {team.routine && (
+        <>
+          {formatRoutineInfo(team.routine)}
 
-      <RoutineViewer routine_id={team.routine._id} setTeam={setTeam} />
+          <RoutineViewer routine_id={team.routine._id} setTeam={setTeam} />
+        </>
+      )}
 
       {uniqueWorkoutsInRoutine && userSavedWorkouts ? (
         <>
@@ -94,7 +104,8 @@ export default function RoutineTile({ team, setTeam }) {
       )}
     </Container>
   );
-}
+};
+export default RoutineTile;
 
 const Container = styled.div`
   width: 100%;
