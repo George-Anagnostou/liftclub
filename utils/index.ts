@@ -3,7 +3,7 @@ import { addExerciseDataToWorkout } from "./dataMutators";
 import {
   getCurrYearMonthDay,
   timeSince,
-  timeBetween,
+  daysBetween,
   formatIsoDate,
   stripTimeAndCompareDates,
 } from "./dateAndTime";
@@ -14,7 +14,7 @@ export {
   addExerciseDataToWorkout,
   getCurrYearMonthDay,
   formatIsoDate,
-  timeBetween,
+  daysBetween,
   timeSince,
   stripTimeAndCompareDates,
   round,
