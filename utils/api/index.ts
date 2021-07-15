@@ -341,6 +341,8 @@ export const getPublicWorkouts = async (): Promise<Workout[]> => {
 
 // Multiple
 export const getWorkoutsFromIdArray = async (idArr: string[]): Promise<Workout[]> => {
+  if (!Boolean(idArr.length)) return [];
+  
   try {
     const res = await fetch("/api/workouts/queryMultiple", {
       method: "POST",
