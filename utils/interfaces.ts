@@ -36,7 +36,7 @@ export interface Team {
   dateCreated: string;
   creatorName: string;
   creator_id: string;
-  trainers: Array<string>;
+  trainers: Array<User>;
   routine_id: string;
   routineName?: string;
   routine?: Routine;
@@ -47,7 +47,7 @@ export interface Routine {
   creator_id: string;
   creatorName: string;
   name: string;
-  workoutPlan: { isoDate: string; workout_id: string }[];
+  workoutPlan: { isoDate: string; workout_id: string; workout?: Workout }[];
 }
 
 export interface Workout {
