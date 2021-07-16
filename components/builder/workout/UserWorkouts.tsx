@@ -155,6 +155,10 @@ const WorkoutsList = styled.div`
         text-transform: capitalize;
         width: max-content;
       }
+
+      &.highlight {
+        background: ${({ theme }) => theme.accentSoft};
+      }
     }
 
     @media (max-width: 425px) {
@@ -179,10 +183,6 @@ const WorkoutsList = styled.div`
 
     font-size: 8px;
     padding: 2px 4px;
-  }
-
-  &.highlight {
-    background: ${({ theme }) => theme.accentSoft};
   }
 
   .fallbackText {

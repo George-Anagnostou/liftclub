@@ -10,7 +10,7 @@ import { useStoreState } from "../../../store";
 import { Exercise, Workout } from "../../../utils/interfaces";
 import Modal from "../../Wrappers/Modal";
 
-const WorkoutState = {
+const CustomWorkoutInit = {
   _id: "",
   name: "",
   creator_id: "",
@@ -26,7 +26,7 @@ const WorkoutBuilder: React.FC = () => {
   const [showUserWorkouts, setShowUserWorkouts] = useState(false);
   const [showExerciseList, setShowExerciseList] = useState(false);
   const [workoutSavedSuccessfuly, setWorkoutSavedSuccessfuly] = useState<boolean | null>(null);
-  const [customWorkout, setCustomWorkout] = useState<Workout>(WorkoutState);
+  const [customWorkout, setCustomWorkout] = useState<Workout>(CustomWorkoutInit);
 
   // Returns boolean for whether or not an exercise exists in customWorkoutExercises
   const isExerciseInCustomWorkout = (exercise_id: string) => {
@@ -61,7 +61,7 @@ const WorkoutBuilder: React.FC = () => {
   };
 
   // Resets custom workout state
-  const clearCustomWorkout = () => setCustomWorkout(WorkoutState);
+  const clearCustomWorkout = () => setCustomWorkout(CustomWorkoutInit);
 
   return (
     <Container>
