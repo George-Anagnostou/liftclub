@@ -6,7 +6,7 @@ import Branding from "../components/homepage/Branding";
 import Login from "../components/homepage/Login";
 import CreateAcc from "../components/homepage/CreateAcc";
 
-const Home: React.FC = () => {
+export default function Home() {
   const router = useRouter();
 
   const [formType, setFormType] = useState("login");
@@ -28,8 +28,7 @@ const Home: React.FC = () => {
       )}
     </HomeContainer>
   );
-};
-export default Home;
+}
 
 const HomeContainer = styled.div`
   font-family: Tahoma, Helvetica;

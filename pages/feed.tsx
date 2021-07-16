@@ -15,7 +15,7 @@ import { useStoreState } from "../store";
 // Interfaces
 import { Workout } from "../utils/interfaces";
 
-const feed: React.FC = () => {
+export default function feed() {
   const { user } = useStoreState();
 
   const [savedWorkouts, setSavedWorkouts] = useState<Workout[]>([]);
@@ -66,8 +66,7 @@ const feed: React.FC = () => {
       <SavedWorkouts workouts={savedWorkouts} removeFromSavedWorkouts={removeFromSavedWorkouts} />
     </WorkoutFeedContainer>
   );
-};
-export default feed;
+}
 
 const WorkoutFeedContainer = styled.div`
   display: flex;
