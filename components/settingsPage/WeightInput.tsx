@@ -1,32 +1,34 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useStoreState } from "../../store";
 
 // API
 import { saveUserWeight } from "../../utils/api";
 
-export default function WeightInput() {
+const WeightInput: React.FC = () => {
   const { user } = useStoreState();
 
   const [inputWeight, setInputWeight] = useState("");
   const [displayWeight, setDisplayWeight] = useState(0);
   const [weightDiff, setWeightDiff] = useState(0);
 
-  const handleWeightChange = (e) => setInputWeight(e.target.value);
+  const handleWeightChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setInputWeight(e.target.value);
 
-  const handleSave = async (e) => {
+  const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!inputWeight) return;
+    const weight = Number(inputWeight);
 
     // send POST req
-    const isSaved = await saveUserWeight(inputWeight, user._id);
+    const isSaved = await saveUserWeight(weight, user!._id);
 
     if (isSaved) {
       // update weightDiff only if user has weight defined
-      if (displayWeight) setWeightDiff(weightDiff - (displayWeight - inputWeight));
+      if (displayWeight) setWeightDiff(weightDiff - (displayWeight - weight));
       // change displayWeight to newly inputWeight
-      setDisplayWeight(inputWeight);
+      setDisplayWeight(weight);
     }
 
     // Clear weight input
@@ -34,7 +36,7 @@ export default function WeightInput() {
   };
 
   useEffect(() => {
-    if (user.weight) {
+    if (user?.weight) {
       const currWeight = user.weight[user.weight.length - 1] || 0;
       const initialWeight = user.weight[0] || 0;
       setDisplayWeight(currWeight);
@@ -75,7 +77,8 @@ export default function WeightInput() {
       </div>
     </WeightContainer>
   );
-}
+};
+export default WeightInput;
 
 const WeightContainer = styled.div`
   position: relative;

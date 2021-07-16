@@ -4,7 +4,7 @@ import ThemeToggle from "../Themes/ThemeToggle";
 // Context
 import { useStoreState } from "../../store";
 
-export default function TopTile() {
+const TopTile: React.FC = () => {
   const { user } = useStoreState();
 
   return (
@@ -14,7 +14,7 @@ export default function TopTile() {
       <div className="info">
         <div className="row">
           <p>Status</p>
-          <p>{user.isTrainer ? "Trainer" : "Member"}</p>
+          <p>{user!.isTrainer ? "Trainer" : "Member"}</p>
         </div>
 
         <div className="row nightMode">
@@ -46,7 +46,8 @@ export default function TopTile() {
       </div>
     </Tile>
   );
-}
+};
+export default TopTile;
 
 const Tile = styled.div`
   width: 100%;

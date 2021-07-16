@@ -1,6 +1,13 @@
 import styled from "styled-components";
+// Interfaces
+import { Workout } from "../../utils/interfaces";
 
-export default function WorkoutSelect({ handleWorkoutOptionChange, workoutOptions }) {
+interface Props {
+  handleWorkoutOptionChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  workoutOptions: Workout[];
+}
+
+const WorkoutSelect: React.FC<Props> = ({ handleWorkoutOptionChange, workoutOptions }) => {
   return (
     <Select name="workoutOptions" onChange={handleWorkoutOptionChange} defaultValue="none">
       <option value="none">1. Select Workout</option>
@@ -11,7 +18,8 @@ export default function WorkoutSelect({ handleWorkoutOptionChange, workoutOption
       ))}
     </Select>
   );
-}
+};
+export default WorkoutSelect;
 
 const Select = styled.select`
   width: 90%;

@@ -1,11 +1,18 @@
 import styled from "styled-components";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
-export default function Chart({ data }) {
+interface Props {
+  data: {
+    date: string;
+    value: number;
+  }[];
+}
+
+const Chart: React.FC<Props> = ({ data }) => {
   return (
     <ChartContainer>
       <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={data} margin={{ top: 20, right: 25, left: -25, bottom: 0 }} baseValue={0}>
+        <AreaChart data={data} margin={{ top: 20, right: 25, left: -25, bottom: 0 }}>
           <defs>
             <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="#4361ee" stopOpacity={0.7} />
@@ -27,7 +34,8 @@ export default function Chart({ data }) {
       </ResponsiveContainer>
     </ChartContainer>
   );
-}
+};
+export default Chart;
 
 const ChartContainer = styled.div`
   height: 200px;
@@ -38,6 +46,9 @@ const ChartContainer = styled.div`
   text {
     fill: ${({ theme }) => theme.textLight} !important;
     stroke: ${({ theme }) => theme.textLight} !important;
+  }
+  text {
+    stroke-width: 0px;
   }
 
   .recharts-default-tooltip {

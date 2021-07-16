@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 // Components
 import WorkoutSelect from "./WorkoutSelect";
@@ -10,16 +10,22 @@ import { getWorkoutsFromIdArray } from "../../utils/api";
 import { addExerciseDataToLoggedWorkout, round } from "../../utils";
 // Context
 import { useStoreState } from "../../store";
+// Interfaces
+import { Workout, WorkoutLogItem } from "../../utils/interfaces";
 
-export default function ProgressTile() {
+const ProgressTile: React.FC = () => {
   const { user } = useStoreState();
 
-  const [workoutOptions, setWorkoutOptions] = useState([]); // Used in WorkoutSelect
-  const [exerciseOptions, setExerciseOptions] = useState([]); // Exercise id and name options in Exercise Select
-  const [filteredWorkouts, setFilteredWorkouts] = useState([]); // Workouts that match workout selected
-  const [statOption, setStatOption] = useState("avgWeight"); // Stat to chart
-  const [selectedExerciseId, setSelectedExerciseId] = useState(null);
-  const [chartData, setChartData] = useState([{ date: "", value: 0 }]);
+  const [workoutOptions, setWorkoutOptions] = useState<Workout[]>([]); // Used in WorkoutSelect
+  const [exerciseOptions, setExerciseOptions] = useState<
+    { exercise_id: string; exerciseName: string }[]
+  >([]); // Used in ExerciseSelect
+  const [filteredWorkouts, setFilteredWorkouts] = useState<WorkoutLogItem[]>([]); // Workouts from user.workoutLog that match workout selected
+  const [statOption, setStatOption] = useState<"avgWeight" | "totalWeight" | "maxWeight">(
+    "avgWeight"
+  ); // Stat to chart
+  const [selectedExerciseId, setSelectedExerciseId] = useState<string | null>(null);
+  const [chartData, setChartData] = useState<{ date: string; value: number }[]>([]);
 
   /**
    * 1. Set workout options to workouts that the user has logged
@@ -29,7 +35,7 @@ export default function ProgressTile() {
   }, [user]);
 
   const getWorkoutOptions = async () => {
-    const idArr = user.workoutLog.map((each) => each.workout_id);
+    const idArr = user!.workoutLog.map((each) => each.workout_id);
     // Returns all unique workouts
     const workouts = await getWorkoutsFromIdArray(idArr);
     setWorkoutOptions(workouts);
@@ -47,9 +53,10 @@ export default function ProgressTile() {
     const workout = await addExerciseDataToLoggedWorkout(filteredWorkouts[0]);
 
     // exerciseOptions is an arr of {exercise_id, exerciseName}
-    const options = workout.exerciseData.map(({ exercise }) => {
-      return { exercise_id: exercise._id, exerciseName: exercise.name };
-    });
+    const options = workout.exerciseData.map(({ exercise }) => ({
+      exercise_id: exercise!._id,
+      exerciseName: exercise!.name,
+    }));
 
     setExerciseOptions(options);
   };
@@ -59,25 +66,31 @@ export default function ProgressTile() {
    * @param {string} targetExId for exercise to chart
    * @param {string} stat to chart
    */
-  const chartExercise = (targetExId, stat) => {
+  const chartExercise = (targetExId: string, stat: "avgWeight" | "totalWeight" | "maxWeight") => {
+    // Define Sets type
+    type Set = {
+      reps: number;
+      weight: string | number;
+    };
+
     // Data to send as prop to chart component
-    const data = [];
+    const data: { date: string; value: number }[] = [];
 
     // Days without weight added by user (-1 weight) is replaced by 0
-    const formatWeight = (item) => (item.weight >= 0 ? item.weight : 0);
+    const formatWeight = (item: Set) => (item.weight >= 0 ? Number(item.weight) : 0);
 
     // Format date for X axis labels
-    const formatDate = (isoDate) => {
+    const formatDate = (isoDate: string) => {
       const date = new Date(isoDate);
       return date.getMonth() + 1 + "/" + date.getDate();
     };
 
-    const avgWeight = (sets) =>
+    const avgWeight = (sets: Set[]) =>
       round(sets.reduce((a, b) => a + formatWeight(b) || 0, 0) / sets.length, 1);
 
-    const totalWeight = (sets) => sets.reduce((a, b) => a + formatWeight(b) || 0, 0);
+    const totalWeight = (sets: Set[]) => sets.reduce((a, b) => a + formatWeight(b) || 0, 0);
 
-    const maxWeight = (sets) => Math.max(...sets.map((a) => formatWeight(a)));
+    const maxWeight = (sets: Set[]) => Math.max(...sets.map((a) => formatWeight(a)));
 
     filteredWorkouts.map(({ exerciseData, isoDate }) => {
       return exerciseData.map(({ exercise_id, sets }) => {
@@ -102,21 +115,22 @@ export default function ProgressTile() {
 
   // Trigger if the selected exercise changes or a stat option is selected
   useEffect(() => {
-    selectedExerciseId ? chartExercise(selectedExerciseId, statOption) : setChartData(null);
+    selectedExerciseId ? chartExercise(selectedExerciseId, statOption) : setChartData([]);
   }, [selectedExerciseId, statOption]);
 
   /**
    * Input handlers
    */
-  const handleWorkoutOptionChange = (e) => {
+  const handleWorkoutOptionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setExerciseOptions([]);
     setSelectedExerciseId(null);
     // Filter all workouts that match the id selected
-    const filtered = user.workoutLog.filter((workout) => workout.workout_id === e.target.value);
-    setFilteredWorkouts(filtered);
+    const filtered = user?.workoutLog.filter((workout) => workout.workout_id === e.target.value);
+    if (filtered?.length) setFilteredWorkouts(filtered);
   };
 
-  const handleExerciseOptionChange = (e) => setSelectedExerciseId(e.target.value);
+  const handleExerciseOptionChange = (e: React.ChangeEvent<HTMLSelectElement>) =>
+    setSelectedExerciseId(e.target.value);
 
   return (
     <Container>
@@ -139,7 +153,8 @@ export default function ProgressTile() {
       <Chart data={chartData} />
     </Container>
   );
-}
+};
+export default ProgressTile;
 
 const Container = styled.section`
   position: relative;
@@ -158,13 +173,11 @@ const Container = styled.section`
 const SelectContainer = styled.div`
   width: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   padding: 0.5rem;
 
   select {
-    width: 48%;
-    &:first-child {
-      margin-right: 0.25rem;
-    }
+    width: 100%;
   }
 `;
