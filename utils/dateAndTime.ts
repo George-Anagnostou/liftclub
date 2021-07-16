@@ -41,16 +41,15 @@ export const timeSince = (previous, current = Date.now()) => {
   }
 };
 
-export const daysBetween = (first: string, second: string) => {
+export const daysBetween = (iso1: string, iso2: string) => {
   var msPerDay = 1000 * 60 * 60 * 24;
-
-  var elapsed = new Date(second).getTime() - new Date(first).getTime();
+  var elapsed = new Date(iso2).getTime() - new Date(iso1).getTime();
 
   const days = Math.round(elapsed / msPerDay);
   return days > 1 ? days + " days" : days + " day";
 };
 
-export const formatIsoDate = (isoDate) => {
+export const formatIsoDate = (isoDate: string) => {
   const date = new Date(isoDate);
   const year = date.getFullYear();
   const month = date.getMonth();
