@@ -1,5 +1,5 @@
 import {
-  loginUser,
+  loginWithID,
   logoutUser,
   authLogin,
   createAccount,
@@ -12,7 +12,7 @@ export {
   StoreProvider,
   useStoreDispatch,
   useStoreState,
-  loginUser,
+  loginWithID,
   logoutUser,
   authLogin,
   createAccount,

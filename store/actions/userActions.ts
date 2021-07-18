@@ -1,4 +1,4 @@
-export const loginUser = async (dispatch, user_id) => {
+export const loginWithID = async (dispatch, user_id: string) => {
   try {
     const res = await fetch(`/api/users/${user_id}`);
     const userData = await res.json();
@@ -17,7 +17,7 @@ export const logoutUser = async (dispatch) => {
   localStorage.removeItem("workoutID");
 };
 
-export const authLogin = async (dispatch, username, password) => {
+export const authLogin = async (dispatch, username: string, password: string) => {
   // combine username & password into an object
   const loginCreds = { username, password };
   try {
@@ -37,7 +37,7 @@ export const authLogin = async (dispatch, username, password) => {
   }
 };
 
-export const createAccount = async (dispatch, username, password) => {
+export const createAccount = async (dispatch, username: string, password: string) => {
   try {
     const res = await fetch("/api/users", {
       method: "POST",

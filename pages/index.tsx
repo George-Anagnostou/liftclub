@@ -5,26 +5,30 @@ import styled from "styled-components";
 import Branding from "../components/homepage/Branding";
 import Login from "../components/homepage/Login";
 import CreateAcc from "../components/homepage/CreateAcc";
+// Interfaces
+import { User } from "../utils/interfaces";
 
 export default function Home() {
   const router = useRouter();
 
-  const [formType, setFormType] = useState("login");
+  const [formType, setFormType] = useState<"login" | "create">("login");
 
-  const handleLinkClick = () => setFormType(formType === "login" ? "create" : "login");
+  const changeFormType = () => setFormType(formType === "login" ? "create" : "login");
 
-  // Route to workoutLog
-  const routeToWorkoutLog = () => router.push("/log");
+  const handleAuthSuccess = (user: User) => {
+    localStorage.setItem("workoutID", user._id);
+    router.push(`/log`);
+  };
 
   return (
     <HomeContainer>
       <Branding />
 
       {formType === "login" && (
-        <Login routeToWorkoutLog={routeToWorkoutLog} handleLinkClick={handleLinkClick} />
+        <Login changeFormType={changeFormType} handleAuthSuccess={handleAuthSuccess} />
       )}
       {formType === "create" && (
-        <CreateAcc routeToWorkoutLog={routeToWorkoutLog} handleLinkClick={handleLinkClick} />
+        <CreateAcc changeFormType={changeFormType} handleAuthSuccess={handleAuthSuccess} />
       )}
     </HomeContainer>
   );

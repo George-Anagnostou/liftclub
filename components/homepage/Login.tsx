@@ -1,39 +1,36 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-
+// Context
 import { useStoreDispatch, authLogin } from "../../store";
+// Interfaces
+import { User } from "../../utils/interfaces";
 
 interface Props {
-  routeToWorkoutLog: () => Promise<boolean>;
-  handleLinkClick: () => void;
+  changeFormType: () => void;
+  handleAuthSuccess: (user: User) => void;
 }
 
-const Login: React.FC<Props> = ({ routeToWorkoutLog, handleLinkClick }) => {
+const Login: React.FC<Props> = ({ changeFormType, handleAuthSuccess }) => {
   const dispatch = useStoreDispatch();
 
   const [loginCreds, setLoginCreds] = useState<{ username: string; password: string }>({
     username: "",
     password: "",
   });
-  const [invalidLoginCreds, setInvalidLoginCreds] = useState(false);
 
-  const handleLoginUsernameChange = (e) =>
+  const [invalidLoginCreds, setInvalidLoginCreds] = useState(false);
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setLoginCreds((prev) => ({ ...prev, username: e.target.value }));
 
-  const handleLoginPasswordChange = (e) =>
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setLoginCreds((prev) => ({ ...prev, password: e.target.value }));
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const userData = await authLogin(dispatch, loginCreds.username, loginCreds.password);
 
-    if (userData) {
-      localStorage.setItem("workoutID", userData._id);
-      routeToWorkoutLog();
-    } else {
-      setInvalidLoginCreds(true);
-    }
+    userData ? handleAuthSuccess(userData) : setInvalidLoginCreds(true);
   };
 
   return (
@@ -41,14 +38,12 @@ const Login: React.FC<Props> = ({ routeToWorkoutLog, handleLinkClick }) => {
       <form action="POST" onSubmit={handleLogin}>
         <h3>Welcome</h3>
 
-        {invalidLoginCreds && <p>Email or Password was incorrect</p>}
-
         <input
           type="text"
           name="username"
           id="username"
           value={loginCreds.username}
-          onChange={handleLoginUsernameChange}
+          onChange={handleUsernameChange}
           placeholder="Username"
           required
         />
@@ -58,7 +53,7 @@ const Login: React.FC<Props> = ({ routeToWorkoutLog, handleLinkClick }) => {
           name="password"
           id="password"
           value={loginCreds.password}
-          onChange={handleLoginPasswordChange}
+          onChange={handlePasswordChange}
           placeholder="Password"
           required
         />
@@ -66,7 +61,9 @@ const Login: React.FC<Props> = ({ routeToWorkoutLog, handleLinkClick }) => {
         <button type="submit">Login</button>
       </form>
 
-      <a onClick={handleLinkClick}>
+      {invalidLoginCreds && <p>Email or Password was incorrect</p>}
+
+      <a onClick={changeFormType}>
         <p>Create an account here</p>
       </a>
     </LoginContainer>
