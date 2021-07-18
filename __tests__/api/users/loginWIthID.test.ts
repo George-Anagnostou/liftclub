@@ -1,6 +1,6 @@
 import loginWithID from "../../../pages/api/users/loginWithID";
 
-describe("Login route", () => {
+describe("LoginWithID route", () => {
   let req;
   let res;
 
@@ -13,7 +13,7 @@ describe("Login route", () => {
     };
   });
 
-  it("should return test user data if creds are correct.", async () => {
+  test("should return test user data if user_id is valid.", async () => {
     req.method = "POST";
     req.body = { user_id: "60ee1a6a45c7b811a0a9fad8" };
 
@@ -23,7 +23,7 @@ describe("Login route", () => {
     expect(res.json).toHaveBeenCalledTimes(1);
   });
 
-  it("should return a 400 if user_id does not exist.", async () => {
+  test("should return a 400 if user_id is invalid.", async () => {
     req.method = "POST";
     req.body = { user_id: "101010101010101010101010" };
 
@@ -33,7 +33,7 @@ describe("Login route", () => {
     expect(res.end).toHaveBeenCalledTimes(1);
   });
 
-  it("should return a 405 if the method is not POST.", async () => {
+  test("should return a 405 if the method is not POST.", async () => {
     req.method = "GET";
 
     await loginWithID(req, res);

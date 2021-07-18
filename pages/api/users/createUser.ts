@@ -28,6 +28,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     delete userData.ops[0].password;
 
-    res.json(userData.ops[0]);
+    res.status(201).json(userData.ops[0]);
   }
 };

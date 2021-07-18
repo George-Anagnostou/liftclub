@@ -13,7 +13,7 @@ describe("Login route", () => {
     };
   });
 
-  it("should return test user data if creds are correct.", async () => {
+  test("should return test user data if creds are correct.", async () => {
     req.method = "POST";
     req.body = { username: "Christian2", password: "123" };
 
@@ -23,7 +23,7 @@ describe("Login route", () => {
     expect(res.json).toHaveBeenCalledTimes(1);
   });
 
-  it("should return a 401 if username is incorrect.", async () => {
+  test("should return a 401 if username is incorrect.", async () => {
     req.method = "POST";
     req.body = { username: "Christian1", password: "123" };
 
@@ -33,7 +33,7 @@ describe("Login route", () => {
     expect(res.end).toHaveBeenCalledTimes(1);
   });
 
-  it("should return a 400 if password is incorrect.", async () => {
+  test("should return a 400 if password is incorrect.", async () => {
     req.method = "POST";
     req.body = { username: "Christian2", password: "321" };
 
@@ -43,7 +43,7 @@ describe("Login route", () => {
     expect(res.end).toHaveBeenCalledTimes(1);
   });
 
-  it("should return a 405 if the method is not POST.", async () => {
+  test("should return a 405 if the method is not POST.", async () => {
     req.method = "GET";
 
     await login(req, res);
