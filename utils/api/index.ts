@@ -156,17 +156,6 @@ export const saveUserBio = async (user_id: string, bio: string) => {
   }
 };
 
-// export const getUserSavedWorkouts = async (user_id) => {
-//   try {
-//     const res = await fetch(`/api/users/${user_id}?field=savedWorkouts`);
-//     const workouts = await res.json();
-
-//     return workouts;
-//   } catch (e) {
-//     console.log(e);
-//   }
-// };
-
 export const getDateFromUserWorkoutLog = async (
   user_id: string,
   isoDate: string
@@ -342,7 +331,7 @@ export const getPublicWorkouts = async (): Promise<Workout[]> => {
 // Multiple
 export const getWorkoutsFromIdArray = async (idArr: string[]): Promise<Workout[]> => {
   if (!Boolean(idArr.length)) return [];
-  
+
   try {
     const res = await fetch("/api/workouts/queryMultiple", {
       method: "POST",
