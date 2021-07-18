@@ -12,16 +12,17 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { username, password }: { username: string; password: string } = req.body;
 
   // Get user from db with username they entered
-  const user: User | null = await db.collection("users").findOne({ username: username });
+  const user: User | null = await db.collection("users").findOne({ username: String(username) });
 
   if (user && user.password) {
     // Validate password entered with user.password retrieved from db
-    const validLogin = bcrypt.compareSync(password, user.password);
+    const validLogin = bcrypt.compareSync(String(password), user.password);
 
     delete user.password;
 
-    validLogin ? res.json(user) : res.status(400).end();
+    validLogin ? res.status(201).json(user) : res.status(400).end(); // Status 400 for bad password
   } else {
+    // Status 401 for bad username
     res.status(401).end();
   }
 };

@@ -7,26 +7,18 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const httpMethod = req.method;
   const { db } = await connectToDatabase();
 
-  switch (httpMethod) {
-    case "GET":
-      break;
-    case "POST":
-      const { idArr }: { idArr: string[] } = JSON.parse(req.body);
+  if (httpMethod !== "POST") return res.status(405).end();
 
-      const foundUsers: User[] = await db
-        .collection("users")
-        .find({
-          _id: { $in: idArr.map((_id) => new ObjectId(_id)) },
-        })
-        .toArray();
+  const { idArr }: { idArr: string[] } = JSON.parse(req.body);
 
-      foundUsers.map((each) => delete each.password);
+  const foundUsers: User[] = await db
+    .collection("users")
+    .find({
+      _id: { $in: idArr.map((_id) => new ObjectId(_id)) },
+    })
+    .toArray();
 
-      res.json(foundUsers);
-      break;
-    case "PUT":
-      break;
-    case "DELETE":
-      break;
-  }
+  foundUsers.map((each) => delete each.password);
+
+  res.json(foundUsers);
 };

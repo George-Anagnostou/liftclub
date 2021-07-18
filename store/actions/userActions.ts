@@ -1,6 +1,10 @@
-export const loginWithID = async (dispatch, user_id: string) => {
+export const loginWithID = async (dispatch: any, user_id: string) => {
   try {
-    const res = await fetch(`/api/users/${user_id}`);
+    const res = await fetch(`/api/users/loginWithID`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user_id }),
+    });
     const userData = await res.json();
 
     dispatch({ type: "SET_USER", payload: { userData } });
@@ -17,14 +21,14 @@ export const logoutUser = async (dispatch) => {
   localStorage.removeItem("workoutID");
 };
 
-export const authLogin = async (dispatch, username: string, password: string) => {
+export const authLogin = async (dispatch: any, username: string, password: string) => {
   // combine username & password into an object
   const loginCreds = { username, password };
   try {
     const res = await fetch("/api/users/login", {
       method: "POST",
-      body: JSON.stringify(loginCreds),
       headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(loginCreds),
     });
     const userData = await res.json();
 
@@ -37,9 +41,9 @@ export const authLogin = async (dispatch, username: string, password: string) =>
   }
 };
 
-export const createAccount = async (dispatch, username: string, password: string) => {
+export const createAccount = async (dispatch: any, username: string, password: string) => {
   try {
-    const res = await fetch("/api/users", {
+    const res = await fetch("/api/users/createUser", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
@@ -59,10 +63,10 @@ export const createAccount = async (dispatch, username: string, password: string
   }
 };
 
-export const setIsUsingPWA = (dispatch) => {
+export const setIsUsingPWA = (dispatch: any) => {
   dispatch({ type: "USING_PWA" });
 };
 
-export const setPlatformToiOS = (dispatch) => {
+export const setPlatformToiOS = (dispatch: any) => {
   dispatch({ type: "USING_iOS_PWA" });
 };

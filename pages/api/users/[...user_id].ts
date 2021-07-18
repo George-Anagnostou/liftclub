@@ -104,13 +104,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
         res.json(userData);
       } else {
-        // Get a specific user from _id
-
-        userData = await db.collection("users").findOne({ _id: new ObjectId(user_id) });
-
-        delete userData.password;
-
-        res.json(userData);
+        res.status(400).end();
       }
 
       break;
