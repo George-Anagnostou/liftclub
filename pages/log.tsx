@@ -236,7 +236,7 @@ export default function log() {
 
       const { year, month, day } = getCurrYearMonthDay();
       const currIsoDate = new Date(year, month, day).toISOString();
-      const latestDate: string = user.workoutLog[workoutLog.length - 1]?.isoDate || currIsoDate;
+      const latestDate: string = user.workoutLog[workoutLog.length - 1]?.isoDate;
 
       // If latestDate is today's date, set page state with fetched data
       stripTimeAndCompareDates(latestDate, currIsoDate)
