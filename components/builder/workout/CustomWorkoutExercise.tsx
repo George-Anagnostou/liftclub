@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Exercise } from "../../../utils/interfaces";
 
 interface Props {
-  i: number;
+  exerciseIndex: number;
   sets: {
     reps: number;
     weight: number;
@@ -14,7 +14,7 @@ interface Props {
 }
 
 const CustomWorkoutExercise: React.FC<Props> = ({
-  i,
+  exerciseIndex,
   sets,
   exercise,
   handleSetChange,
@@ -24,15 +24,18 @@ const CustomWorkoutExercise: React.FC<Props> = ({
   return (
     <ExerciseContainer key={exercise._id}>
       <p className="exTitle">
-        <span>{i + 1}.</span> {exercise.name}
+        <span>{exerciseIndex + 1}.</span> {exercise.name}
       </p>
 
       <div className="setControl">
-        <button onClick={() => handleSetChange("remove", i)} disabled={!Boolean(sets.length)}>
+        <button
+          onClick={() => handleSetChange("remove", exerciseIndex)}
+          disabled={!Boolean(sets.length)}
+        >
           -
         </button>
         <p>Set</p>
-        <button onClick={() => handleSetChange("add", i)}>+</button>
+        <button onClick={() => handleSetChange("add", exerciseIndex)}>+</button>
       </div>
 
       {sets.map(({ reps }, j) => (
@@ -42,7 +45,7 @@ const CustomWorkoutExercise: React.FC<Props> = ({
             type="number"
             name="reps"
             value={reps}
-            onChange={(e) => handleRepChange(e, i, j)}
+            onChange={(e) => handleRepChange(e, exerciseIndex, j)}
           />
           <span>reps</span>
         </div>

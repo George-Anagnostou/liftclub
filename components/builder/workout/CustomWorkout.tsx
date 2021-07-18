@@ -163,7 +163,7 @@ const CustomWorkout: React.FC<Props> = ({
         ({ exercise, sets }, i) =>
           exercise && (
             <CustoWorkoutExercise
-              i={i}
+              exerciseIndex={i}
               sets={sets}
               exercise={exercise}
               handleSetChange={handleSetChange}
