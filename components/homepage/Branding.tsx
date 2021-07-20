@@ -4,11 +4,11 @@ const Branding: React.FC = () => {
   return (
     <Brand>
       <span>
-        <img src="favicon.jpeg" alt="brand logo" />
+        <img src="favicon.png" alt="brand logo" />
       </span>
 
       <h1>ALC</h1>
-      <h4>Anagnostou Lift Club</h4>
+      <h4>Lift Club</h4>
     </Brand>
   );
 };

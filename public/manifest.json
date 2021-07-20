@@ -1,9 +1,9 @@
 {
   "short_name": "Lift Club",
-  "name": "Anagnostou Lift Club",
+  "name": "Lift Club",
   "icons": [
     {
-      "src": "/favicon.jpeg",
+      "src": "/favicon.png",
       "sizes": "192x192",
       "type": "image/png"
     }

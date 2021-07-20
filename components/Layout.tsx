@@ -20,7 +20,7 @@ interface Props {
   title?: string;
 }
 
-const Layout: React.FC<Props> = ({ title = "Ananostou Lift Club", children }) => {
+const Layout: React.FC<Props> = ({ title = "Lift Club", children }) => {
   const router = useRouter();
 
   const dispatch = useStoreDispatch();

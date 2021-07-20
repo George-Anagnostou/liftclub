@@ -56,7 +56,7 @@ const ProfileImg: React.FC<Props> = ({ profileData, isProfileOwner }) => {
         {profileData.profileImg ? (
           // Show uploaded image
           <Image
-            src="/favicon.jpeg"
+            src="/favicon.png"
             height="100"
             width="100"
             onClick={isProfileOwner ? toggleShowIconSelect : () => {}}
@@ -70,7 +70,7 @@ const ProfileImg: React.FC<Props> = ({ profileData, isProfileOwner }) => {
           </div>
         ) : (
           // Show default image for users who have no profileImg saved
-          <Image src="/favicon.jpeg" height="100" width="100"></Image>
+          <Image src="/favicon.png" height="100" width="100"></Image>
         )}
       </ProfileImage>
 

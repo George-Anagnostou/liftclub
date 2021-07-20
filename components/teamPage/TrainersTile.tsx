@@ -60,7 +60,7 @@ const TrainersTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMemb
           <Link href={`/users/${trainer.username}`} key={trainer._id}>
             <li>
               <div className="icon">
-                <Image src="/favicon.jpeg" height="40" width="40"></Image>
+                <Image src="/favicon.png" height="40" width="40"></Image>
               </div>
               <p>{trainer.username}</p>
 
