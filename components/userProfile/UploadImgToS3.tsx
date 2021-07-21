@@ -53,7 +53,7 @@ const UploadImgToS3: React.FC<Props> = ({ setProfileData }) => {
     if (file.type && !file.type.startsWith("image/"))
       return console.log("File is not an image.", file.type, file);
 
-    if (file.size > 1000000)
+    if (file.size > 3000000)
       return console.log(`file too large. This was ${file.size} Max file size is 3mb`);
 
     setSelectedFile(file);
