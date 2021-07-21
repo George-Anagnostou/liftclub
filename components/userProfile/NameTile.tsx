@@ -61,7 +61,11 @@ const NameTile: React.FC<Props> = ({ profileData, setProfileData, isProfileOwner
       )}
 
       <div className="left">
-        <ProfileImg profileData={profileData} isProfileOwner={isProfileOwner} />
+        <ProfileImg
+          profileData={profileData}
+          setProfileData={setProfileData}
+          isProfileOwner={isProfileOwner}
+        />
 
         {!isProfileOwner && (
           <button
