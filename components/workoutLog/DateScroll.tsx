@@ -3,6 +3,7 @@ import { useCallback } from "react";
 import styled from "styled-components";
 // Interfaces
 import { WorkoutLog, WorkoutLogItem } from "../../utils/interfaces";
+import useCountRenders from "../hooks/useCountRenders";
 
 interface Props {
   changeCurrentDayData: (numOfDaysToShift: number) => Promise<void>;
@@ -21,8 +22,10 @@ const DateScroll: React.FC<Props> = ({
   displayedDate,
   workoutLog,
 }) => {
+  useCountRenders();
+
   // Format the date for the DateBar
-  const formatDate = useCallback(
+  const renderDate = useCallback(
     (numOfDaysToShift: number) => {
       const currDate = new Date();
       const date = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate());
@@ -54,13 +57,12 @@ const DateScroll: React.FC<Props> = ({
     <DateScrollContainer>
       {Array.from(Array(90).keys()).map((numDays) => (
         <li onClick={() => changeCurrentDayData(-numDays)} className="date" key={-numDays}>
-          {formatDate(-numDays)}
+          {renderDate(-numDays)}
         </li>
       ))}
     </DateScrollContainer>
   );
 };
-
 export default DateScroll;
 
 const DateScrollContainer = styled.ul`
