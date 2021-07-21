@@ -50,10 +50,11 @@ const UploadImgToS3: React.FC<Props> = ({ setProfileData }) => {
     if (!file) return;
 
     // Check if the file is an image.
-    if (file.type && !file.type.startsWith("image/")) {
-      console.log("File is not an image.", file.type, file);
-      return;
-    }
+    if (file.type && !file.type.startsWith("image/"))
+      return console.log("File is not an image.", file.type, file);
+
+    if (file.size > 1000000)
+      return console.log(`file too large. This was ${file.size} Max file size is 3mb`);
 
     setSelectedFile(file);
 
@@ -63,8 +64,6 @@ const UploadImgToS3: React.FC<Props> = ({ setProfileData }) => {
 
   const uploadFile = (file: File | undefined) => {
     if (!file) return console.log("please upload a valid file");
-    if (file.size > 3000000)
-      return console.log(`file too large. This was ${file.size} Max file size is 3mb`);
 
     const params = {
       ACL: "public-read",
@@ -95,7 +94,7 @@ const UploadImgToS3: React.FC<Props> = ({ setProfileData }) => {
           savingCircle!.current!.style.strokeDashoffset = String(offset);
         }
 
-        if (e.loaded === e.total) {
+        if (e.loaded >= e.total) {
           setSavingImg(false);
 
           const profileImgUrl = `https://lift-club-profile-imgs.s3.us-west-1.amazonaws.com/${
@@ -190,6 +189,7 @@ const Container = styled.div`
 
     button {
       flex: 1;
+      margin-bottom: 0.5rem;
       max-width: 150px;
       background: ${({ theme }) => theme.buttonMed};
       box-shadow: 0 1px 2px ${({ theme }) => theme.boxShadow};
