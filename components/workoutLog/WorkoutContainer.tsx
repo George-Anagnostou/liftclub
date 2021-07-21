@@ -24,10 +24,10 @@ const WorkoutContainer: React.FC<Props> = ({
   deleteWorkout,
   saveWorkout,
 }) => {
-  const [isTyping, setIsTyping] = useState<boolean | null>(null);
+  const [isTyping, setIsTyping] = useState<boolean>(false);
   const [timer, setTimer] = useState(0);
 
-  const handleUserInput = (callback: () => any) => {
+  const handleUserInput = (callback: () => void) => {
     setIsTyping(true);
     setTimer(0);
 
@@ -35,25 +35,23 @@ const WorkoutContainer: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: NodeJS.Timeout = setInterval(() => {}, 0);
 
     if (isTyping) {
-      interval = setInterval(
-        () =>
-          setTimer((prev) => {
-            if (prev === 2) {
-              saveWorkout();
-              setIsTyping(false);
-              return 0;
-            }
-            return (prev += 1);
-          }),
-        1000
-      );
+      interval = setInterval(() => setTimer((prev) => (prev += 1)), 1000);
+    } else {
+      clearInterval(interval);
     }
 
     return () => clearInterval(interval);
   }, [isTyping]);
+
+  useEffect(() => {
+    if (timer === 2) {
+      saveWorkout();
+      setIsTyping(false);
+    }
+  }, [timer]);
 
   return (
     <>
@@ -144,7 +142,7 @@ const WorkoutList = styled.ul`
 
   .exercise {
     width: 100%;
-    border-radius: 5px;
+    border-radius: 10px;
     padding: 0.5rem 0;
     margin: 0 auto 0.5rem;
     text-align: center;
@@ -231,7 +229,7 @@ const WorkoutList = styled.ul`
 const WorkoutNote = styled.div`
   width: 100%;
   margin: 1rem auto;
-  border-radius: 5px;
+  border-radius: 10px;
   padding: 1rem;
   text-align: left;
   background: ${({ theme }) => theme.background};
