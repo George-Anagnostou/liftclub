@@ -49,10 +49,10 @@ const UploadImgToS3: React.FC<Props> = ({ setProfileData }) => {
       return;
     }
 
+    setSelectedFile(file);
+
     const url = URL.createObjectURL(file);
     setUploadedImage(url);
-
-    setSelectedFile(file);
   };
 
   const uploadFile = (file: File | undefined) => {
@@ -137,7 +137,9 @@ const UploadImgToS3: React.FC<Props> = ({ setProfileData }) => {
         )}
       </Icon>
 
-      <button onClick={() => uploadFile(selectedFile)}>Save</button>
+      <button onClick={() => uploadFile(selectedFile)} disabled={!selectedFile}>
+        Save
+      </button>
     </Container>
   );
 };
@@ -147,8 +149,26 @@ export default UploadImgToS3;
 const Container = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
   padding: 0 2.5rem;
+
+  button {
+    background: ${({ theme }) => theme.buttonMed};
+    box-shadow: 0 1px 2px ${({ theme }) => theme.boxShadow};
+    color: inherit;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    border: 1px solid ${({ theme }) => theme.border};
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+
+    &:disabled {
+      color: ${({ theme }) => theme.border};
+      background: ${({ theme }) => theme.background};
+      border: 1px solid ${({ theme }) => theme.buttonLight};
+    }
+  }
 `;
 
 const Icon = styled.div`
