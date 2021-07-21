@@ -35,7 +35,8 @@ const Circle = styled.div`
   box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
 
   h3 {
-    font-size: 70%;
+    font-size: 60%;
+    font-weight: 300;
     color: ${({ theme }) => theme.textLight};
   }
 
