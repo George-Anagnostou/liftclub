@@ -6,6 +6,10 @@ import Modal from "../Wrappers/Modal";
 import UploadImgToS3 from "./UploadImgToS3";
 // Interfaces
 import { User } from "../../utils/interfaces";
+import { saveProfileImgUrl } from "../../utils/api";
+import { useStoreState } from "../../store";
+
+const icons = ["default-man", "default-woman"];
 
 interface Props {
   setShowIconSelect: React.Dispatch<React.SetStateAction<boolean>>;
@@ -18,13 +22,23 @@ const ProfileImgModal: React.FC<Props> = ({
   setProfileData,
   showIconSelect,
 }) => {
-  const [selectedIcon, setSelectedIcon] = useState("");
-  const [icons, setIcons] = useState(["ICON 1", "ICON 2", "ICON 3", "ICON 4", "ICON 5", "ICON 6"]);
+  const { user } = useStoreState();
 
-  const handleIconClick = (icon: string) => setSelectedIcon(icon);
+  const [selectedDefaultIcon, setSelectedDefaultIcon] = useState("");
 
-  const handleIconFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log(e);
+  const handleIconClick = (icon: string) =>
+    setSelectedDefaultIcon(icon === selectedDefaultIcon ? "" : icon);
+
+  const handleIconFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const profileImgUrl = `https://lift-club-profile-imgs.s3.us-west-1.amazonaws.com/${selectedDefaultIcon}.jpg`;
+
+    const saved = await saveProfileImgUrl(user!._id, profileImgUrl);
+    if (saved) {
+      setProfileData((prev) => prev && { ...prev, profileImgUrl: "" });
+      setProfileData((prev) => prev && { ...prev, profileImgUrl });
+    }
   };
 
   return (
@@ -41,11 +55,20 @@ const ProfileImgModal: React.FC<Props> = ({
             <Icon
               key={icon}
               onClick={() => handleIconClick(icon)}
-              className={selectedIcon === icon ? "selected" : ""}
+              className={
+                selectedDefaultIcon ? (selectedDefaultIcon === icon ? "selected" : "fade") : ""
+              }
             >
-              {icon}
+              <img
+                src={`https://lift-club-profile-imgs.s3.us-west-1.amazonaws.com/${icon}.jpg`}
+                alt=""
+              />
             </Icon>
           ))}
+
+          <button type="submit" disabled={!selectedDefaultIcon}>
+            Save
+          </button>
         </IconSelectForm>
       </Box>
     </Modal>
@@ -77,8 +100,27 @@ const Box = styled.div`
 const IconSelectForm = styled.form`
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
+
+  button {
+    width: 100px;
+    background: ${({ theme }) => theme.buttonMed};
+    box-shadow: 0 1px 2px ${({ theme }) => theme.boxShadow};
+    color: inherit;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    border: 1px solid ${({ theme }) => theme.border};
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+
+    &:disabled {
+      color: ${({ theme }) => theme.border};
+      background: ${({ theme }) => theme.background};
+      border: 1px solid ${({ theme }) => theme.buttonLight};
+    }
+  }
 `;
 
 const Icon = styled.div`
@@ -86,7 +128,7 @@ const Icon = styled.div`
   border: 3px solid ${({ theme }) => theme.buttonMed};
   height: 100px;
   width: 100px;
-  margin: 1rem 0.5rem;
+  margin-right: 0.5rem;
   border-radius: 50%;
   overflow: hidden;
 
@@ -98,6 +140,9 @@ const Icon = styled.div`
   &.selected {
     border: 3px solid ${({ theme }) => theme.border};
     transform: scale(1.1);
+  }
+  &.fade {
+    opacity: 0.5;
   }
 
   input {

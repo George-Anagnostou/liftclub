@@ -39,6 +39,12 @@ const UploadImgToS3: React.FC<Props> = ({ setProfileData }) => {
   const [uploadedImage, setUploadedImage] = useState("");
   const [savingImg, setSavingImg] = useState(false);
 
+  const clearInput = () => {
+    setSelectedFile(null);
+    setUploadedImage("");
+    setSavingImg(false);
+  };
+
   const handleFileInput = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -137,9 +143,20 @@ const UploadImgToS3: React.FC<Props> = ({ setProfileData }) => {
         )}
       </Icon>
 
-      <button onClick={() => uploadFile(selectedFile)} disabled={!selectedFile}>
-        Save
-      </button>
+      <p className="info">
+        Max img size
+        <br />
+        <span>3MB</span>
+      </p>
+
+      <div className="btn-container">
+        <button onClick={() => uploadFile(selectedFile)} disabled={!selectedFile}>
+          Save
+        </button>
+        <button onClick={clearInput} disabled={!selectedFile}>
+          Clear
+        </button>
+      </div>
     </Container>
   );
 };
@@ -150,34 +167,58 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  padding: 0 2.5rem;
+  padding: 1rem 0.5rem;
 
-  button {
-    background: ${({ theme }) => theme.buttonMed};
-    box-shadow: 0 1px 2px ${({ theme }) => theme.boxShadow};
-    color: inherit;
-    border: none;
-    border-radius: 5px;
-    padding: 0.5rem 1rem;
-    border: 1px solid ${({ theme }) => theme.border};
-    font-size: 1.2rem;
-    transition: all 0.3s ease;
+  .info {
+    flex: 1;
+    width: 100px;
+    margin-right: 0.5rem;
+    font-size: 75%;
+    color: ${({ theme }) => theme.textLight};
 
-    &:disabled {
-      color: ${({ theme }) => theme.border};
-      background: ${({ theme }) => theme.background};
-      border: 1px solid ${({ theme }) => theme.buttonLight};
+    span {
+      color: ${({ theme }) => theme.text};
+      font-size: 130%;
+    }
+  }
+
+  .btn-container {
+    flex: 1;
+    width: 100px;
+    display: flex;
+    flex-direction: column;
+
+    button {
+      flex: 1;
+      max-width: 150px;
+      background: ${({ theme }) => theme.buttonMed};
+      box-shadow: 0 1px 2px ${({ theme }) => theme.boxShadow};
+      color: inherit;
+      border: none;
+      border-radius: 5px;
+      padding: 0.5rem 1rem;
+      border: 1px solid ${({ theme }) => theme.border};
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+
+      &:disabled {
+        color: ${({ theme }) => theme.border};
+        background: ${({ theme }) => theme.background};
+        border: 1px solid ${({ theme }) => theme.buttonLight};
+      }
     }
   }
 `;
 
 const Icon = styled.div`
+  flex-shrink: 0;
   position: relative;
   background: ${({ theme }) => theme.buttonMed};
   border: 3px solid ${({ theme }) => theme.buttonMed};
   height: 100px;
   width: 100px;
   border-radius: 50%;
+  margin-right: 0.5rem;
 
   display: flex;
   justify-content: center;
