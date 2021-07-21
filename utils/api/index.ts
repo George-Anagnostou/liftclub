@@ -30,6 +30,20 @@ export const getUserFromUsername = async (username: string): Promise<User | fals
   }
 };
 
+export const saveProfileImgUrl = async (user_id: string, username: string) => {
+  try {
+    const res = await fetch(`/api/users/${user_id}`, {
+      method: "PUT",
+      body: JSON.stringify({ profileImgUrl: username }),
+    });
+
+    return res.status === 201;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
 export const userJoiningTeam = async (user_id: string, team_id: string) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {

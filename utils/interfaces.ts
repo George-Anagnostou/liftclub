@@ -10,7 +10,7 @@ export interface User {
   isTrainer?: boolean;
   teamsJoined?: Array<string>;
   settings?: { showBio: boolean };
-  profileImg?: number;
+  profileImgUrl?: string;
   password?: string;
 }
 

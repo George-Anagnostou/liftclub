@@ -142,6 +142,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       const { leaveTeam } = JSON.parse(req.body);
       if (leaveTeam) fieldToUpdate = "LEAVE_TEAM";
 
+      const { profileImgUrl } = JSON.parse(req.body);
+      if (profileImgUrl) fieldToUpdate = "PROFILE_IMG_URL";
+
       switch (fieldToUpdate) {
         case "WORKOUT_LOG":
           // Cast id strings to ObjIds
@@ -275,6 +278,18 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             );
 
           res.json({});
+          break;
+
+        case "PROFILE_IMG_URL":
+          userData = await db
+            .collection("users")
+            .findOneAndUpdate(
+              { _id: new ObjectId(user_id) },
+              { $set: { profileImgUrl: profileImgUrl } }
+            );
+
+          userData ? res.status(201).json({}) : res.status(400).end();
+
           break;
 
         default:
