@@ -60,7 +60,7 @@ const TrainersTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMemb
           <Link href={`/users/${trainer.username}`} key={trainer._id}>
             <li>
               <div className="icon">
-                <Image src="/favicon.png" height="40" width="40"></Image>
+                <img src={trainer.profileImgUrl || "/favicon.png"} />
               </div>
               <p>{trainer.username}</p>
 
@@ -150,6 +150,12 @@ const TrainerList = styled.ul`
       overflow: hidden;
       margin-bottom: 0.35rem;
       position: relative;
+
+      img {
+        height: 40px;
+        width: 40px;
+        object-fit: cover;
+      }
 
       span {
         position: absolute;
