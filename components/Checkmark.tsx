@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 interface Props {
-  styles: any;
+  styles?: any;
 }
 
 const Checkmark: React.FC<Props> = ({ styles }) => {

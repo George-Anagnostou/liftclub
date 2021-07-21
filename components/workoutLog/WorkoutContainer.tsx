@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 // Interfaces
 import { WorkoutLogItem } from "../../utils/interfaces";
@@ -12,6 +13,7 @@ interface Props {
   handleWorkoutNoteChange: ({ target }: React.ChangeEvent<HTMLTextAreaElement>) => void;
   prevBestData: WorkoutLogItem | null;
   deleteWorkout: () => Promise<void>;
+  saveWorkout: () => Promise<void>;
 }
 
 const WorkoutContainer: React.FC<Props> = ({
@@ -20,11 +22,43 @@ const WorkoutContainer: React.FC<Props> = ({
   handleWorkoutNoteChange,
   prevBestData,
   deleteWorkout,
+  saveWorkout,
 }) => {
+  const [isTyping, setIsTyping] = useState<boolean | null>(null);
+  const [timer, setTimer] = useState(0);
+
+  const handleUserInput = (callback: () => any) => {
+    setIsTyping(true);
+    setTimer(0);
+
+    callback();
+  };
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+
+    if (isTyping) {
+      interval = setInterval(
+        () =>
+          setTimer((prev) => {
+            if (prev === 2) {
+              saveWorkout();
+              setIsTyping(false);
+              return 0;
+            }
+            return (prev += 1);
+          }),
+        1000
+      );
+    }
+
+    return () => clearInterval(interval);
+  }, [isTyping]);
+
   return (
     <>
       <WorkoutName>
-        <h3 style={{ textTransform: "capitalize" }}>{currentDayData.workoutName}</h3>
+        <h3 style={{ textTransform: "capitalize" }}>name {currentDayData.workoutName}</h3>
         <h3>{currentDayData.exerciseData.length} exercises</h3>
       </WorkoutName>
 
@@ -49,7 +83,7 @@ const WorkoutContainer: React.FC<Props> = ({
                     <input
                       type="number"
                       value={weight >= 0 ? weight : ""}
-                      onChange={(e) => handleWeightChange(e, i, j)}
+                      onChange={(e) => handleUserInput(() => handleWeightChange(e, i, j))}
                     />
                   </div>
 
@@ -74,7 +108,7 @@ const WorkoutContainer: React.FC<Props> = ({
           cols={30}
           rows={5}
           value={currentDayData.workoutNote}
-          onChange={handleWorkoutNoteChange}
+          onChange={(e) => handleUserInput(() => handleWorkoutNoteChange(e))}
         ></textarea>
       </WorkoutNote>
 
@@ -91,9 +125,8 @@ const WorkoutName = styled.div`
   align-items: flex-end;
 
   width: 100%;
-  border-radius: 10px;
-  background: ${({ theme }) => theme.background};
-  padding: 0.75rem 0;
+  text-align: left;
+  padding: 0.5rem 1rem;
   margin: 0 auto 0.5rem;
 
   h3 {
@@ -111,7 +144,7 @@ const WorkoutList = styled.ul`
 
   .exercise {
     width: 100%;
-    border-radius: 10px;
+    border-radius: 5px;
     padding: 0.5rem 0;
     margin: 0 auto 0.5rem;
     text-align: center;
@@ -225,11 +258,10 @@ const WorkoutNote = styled.div`
 `;
 
 const DeleteBtn = styled.button`
-  min-width: 50%;
-  margin: 0 0 0.5rem auto;
+  margin: 0 auto 0.5rem o;
   font-size: 1.2rem;
   padding: 0.5rem;
-  border-radius: 10px;
+  border-radius: 5px;
 
   border: none;
   color: ${({ theme }) => theme.border};

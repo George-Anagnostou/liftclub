@@ -18,6 +18,7 @@ import {
 } from "../utils/api";
 // Interfaces
 import { WorkoutLogItem, WorkoutLog, Workout } from "../utils/interfaces";
+import { SaveNotification } from "../components/workoutLog/SaveNotification";
 
 export default function log() {
   const { user } = useStoreState();
@@ -49,6 +50,7 @@ export default function log() {
 
   const fetchAndSetDateData = async (isoDate: string) => {
     const hasWorkout = getDayDataFromWorkoutLog(isoDate);
+
     if (!hasWorkout) return setPageState(null);
 
     setLoading(true);
@@ -236,7 +238,7 @@ export default function log() {
 
       const { year, month, day } = getCurrYearMonthDay();
       const currIsoDate = new Date(year, month, day).toISOString();
-      const latestDate: string = user.workoutLog[workoutLog.length - 1]?.isoDate;
+      const latestDate: string = user.workoutLog[user.workoutLog.length - 1]?.isoDate || "";
 
       // If latestDate is today's date, set page state with fetched data
       stripTimeAndCompareDates(latestDate, currIsoDate)
@@ -258,12 +260,8 @@ export default function log() {
         <LoadingSpinner />
       ) : (
         <>
-          {currentDayData && (
-            <SaveButton
-              saveWorkout={saveWorkout}
-              saveSuccess={saveSuccess}
-              saveLoading={saveLoading}
-            />
+          {currentDayData && (saveSuccess || saveLoading) && (
+            <SaveNotification saveLoading={saveLoading} />
           )}
 
           {currentDayData ? (
@@ -273,6 +271,7 @@ export default function log() {
               handleWorkoutNoteChange={handleWorkoutNoteChange}
               prevBestData={prevBestData}
               deleteWorkout={deleteWorkout}
+              saveWorkout={saveWorkout}
             />
           ) : (
             <>
@@ -295,7 +294,7 @@ const MainContainer = styled.section`
   justify-content: center;
   align-items: center;
   min-height: 30vh;
-  padding: 0 0.5rem;
+  padding: 0 0.5rem 1rem;
 `;
 
 const FallbackText = styled.h3`
