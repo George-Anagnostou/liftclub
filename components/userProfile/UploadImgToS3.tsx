@@ -57,8 +57,8 @@ const UploadImgToS3: React.FC<Props> = ({ setProfileData }) => {
 
   const uploadFile = (file: File | undefined) => {
     if (!file) return console.log("please upload a valid file");
-    if (file.size > 1000000)
-      return console.log(`file too large. This was ${file.size} Max file size is 1000000`);
+    if (file.size > 3000000)
+      return console.log(`file too large. This was ${file.size} Max file size is 3mb`);
 
     const params = {
       ACL: "public-read",
