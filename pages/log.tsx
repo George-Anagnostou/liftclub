@@ -174,6 +174,7 @@ export default function log() {
       if (deleted) {
         setWorkoutLog(workoutLog.filter((each) => each.isoDate !== currentDayData.isoDate));
         setPageState(null);
+        setPrevBestData(null)
       }
     }
   };
