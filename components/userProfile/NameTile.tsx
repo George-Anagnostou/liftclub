@@ -10,6 +10,7 @@ import ProfileImg from "./ProfileImg";
 import Settings from "../../public/navIcons/Settings";
 // Interfaces
 import { User } from "../../utils/interfaces";
+import FollowsModal from "./FollowsModal";
 
 interface Props {
   profileData: User;
@@ -21,6 +22,8 @@ const NameTile: React.FC<Props> = ({ profileData, setProfileData, isProfileOwner
   const { user } = useStoreState();
 
   const [userIsFollowing, setUserIsFollowing] = useState(false);
+  const [showFollowsModal, setShowFollowsModal] = useState(false);
+  const [modalData, setModalData] = useState<string[]>([]);
 
   const handleFollowClick = async () => {
     const success = await addFollow(user!._id, profileData._id);
@@ -44,6 +47,11 @@ const NameTile: React.FC<Props> = ({ profileData, setProfileData, isProfileOwner
         followers: prev.followers?.filter((entry) => entry !== user!._id) || [],
       }));
     }
+  };
+
+  const handleProfileFollowsClick = (type: "following" | "followers") => {
+    setShowFollowsModal(true);
+    setModalData(profileData[type] || []);
   };
 
   useEffect(() => {
@@ -80,12 +88,22 @@ const NameTile: React.FC<Props> = ({ profileData, setProfileData, isProfileOwner
       <div className="right">
         <h1>{profileData.username}</h1>
         <p>{profileData.workoutLog.length} days logged</p>
-        <p>
+        <p onClick={() => handleProfileFollowsClick("followers")}>
           {profileData.followers?.length || 0}{" "}
           {profileData.followers?.length === 1 ? "follower" : "followers"}
         </p>
-        <p>{profileData.following?.length || 0} following </p>
+        <p onClick={() => handleProfileFollowsClick("following")}>
+          {profileData.following?.length || 0} following{" "}
+        </p>
       </div>
+
+      {showFollowsModal && (
+        <FollowsModal
+          member_ids={modalData}
+          setShowFollowsModal={setShowFollowsModal}
+          showFollowsModal={showFollowsModal}
+        />
+      )}
     </TileContainer>
   );
 };

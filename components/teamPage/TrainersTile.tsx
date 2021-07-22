@@ -12,6 +12,7 @@ import { addTrainerToTeam, getUsersFromIdArr, removeTrainerFromTeam } from "../.
 import { useStoreState } from "../../store";
 // Interfaces
 import { Team, User } from "../../utils/interfaces";
+import TrainerModal from "./TrainerModal";
 
 interface Props {
   team: Team;
@@ -23,7 +24,7 @@ interface Props {
 const TrainersTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMembers }) => {
   const { user } = useStoreState();
 
-  const [showTrainerManager, setShowTrainerManager] = useState(false);
+  const [showTrainerModal, setShowTrainerModal] = useState(false);
 
   const handleRemoveTrainer = async (trainer: User) => {
     const removed = await removeTrainerFromTeam(team._id, trainer._id);
@@ -48,8 +49,8 @@ const TrainersTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMemb
       setTeamMembers(members || []);
     };
 
-    if (showTrainerManager && !teamMembers) getTeamMembers();
-  }, [showTrainerManager]);
+    if (showTrainerModal && !teamMembers) getTeamMembers();
+  }, [showTrainerModal]);
 
   return (
     <Tile>
@@ -75,7 +76,7 @@ const TrainersTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMemb
         ))}
 
         {user!._id === team.creator_id && (
-          <li onClick={() => setShowTrainerManager(true)} key={"addTrainer"}>
+          <li onClick={() => setShowTrainerModal(true)} key={"addTrainer"}>
             <div className="icon">
               <span></span>
               <span></span>
@@ -85,34 +86,15 @@ const TrainersTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMemb
         )}
       </TrainerList>
 
-      {showTrainerManager && (
-        <Modal removeModal={() => setShowTrainerManager(false)} isOpen={showTrainerManager}>
-          <TrainerManager>
-            <h3 className="title">Members</h3>
-
-            {teamMembers ? (
-              <ul>
-                {teamMembers.map((member) => (
-                  <li key={member._id}>
-                    <p>{member.username}</p>
-
-                    {team.trainers.findIndex((trainer) => trainer._id === member._id) >= 0 ? (
-                      <button className="remove" onClick={() => handleRemoveTrainer(member)}>
-                        remove
-                      </button>
-                    ) : (
-                      <button className="add" onClick={() => handleAddTrainer(member)}>
-                        add
-                      </button>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <LoadingSpinner />
-            )}
-          </TrainerManager>
-        </Modal>
+      {showTrainerModal && (
+        <TrainerModal
+          setShowTrainerModal={setShowTrainerModal}
+          showTrainerModal={showTrainerModal}
+          teamMembers={teamMembers}
+          team={team}
+          handleRemoveTrainer={handleRemoveTrainer}
+          handleAddTrainer={handleAddTrainer}
+        />
       )}
     </Tile>
   );
@@ -203,48 +185,6 @@ const TrainerList = styled.ul`
 
     &::-webkit-scrollbar {
       display: none;
-    }
-  }
-`;
-
-const TrainerManager = styled.div`
-  margin: 1rem auto 0;
-  padding: 0.5rem;
-  border-radius: 10px;
-  background: ${({ theme }) => theme.background};
-  max-width: 400px;
-  width: 95%;
-  position: relative;
-
-  ul {
-    li {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-
-      padding: 0.5rem;
-      margin-bottom: 0.5rem;
-      border-radius: 5px;
-      background: ${({ theme }) => theme.buttonMed};
-
-      button {
-        min-width: max-content;
-        cursor: pointer;
-        border-radius: 5px;
-        border: none;
-        padding: 0.25rem;
-        box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
-
-        &.add {
-          background: ${({ theme }) => theme.accentSoft};
-          color: ${({ theme }) => theme.accentText};
-        }
-
-        &.remove {
-          background: ${({ theme }) => theme.buttonLight};
-          color: ${({ theme }) => theme.textLight};
-        }
-      }
     }
   }
 `;
