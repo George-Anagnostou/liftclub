@@ -51,8 +51,6 @@ const FollowsModal: React.FC<Props> = ({ member_ids, setShowFollowsModal, showFo
     if (user) setUserFollowing(user.following || []);
   }, [user]);
 
-  console.log(userFollowing);
-
   return (
     <Modal removeModal={() => setShowFollowsModal(false)} isOpen={showFollowsModal}>
       <MembersList>

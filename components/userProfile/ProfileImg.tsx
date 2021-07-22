@@ -55,6 +55,7 @@ const ProfileImage = styled.div`
   height: 100px;
   width: 100px;
   background: ${({ theme }) => theme.buttonMed};
+  border: 3px solid ${({ theme }) => theme.buttonMed};
   overflow: hidden;
   display: grid;
   place-items: center;
