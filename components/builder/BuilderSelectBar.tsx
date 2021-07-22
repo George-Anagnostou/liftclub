@@ -40,11 +40,11 @@ const Bar = styled.div`
       flex: 1;
       padding: 0.5rem 0;
       color: ${({ theme }) => theme.text};
-      background: ${({ theme }) => theme.background};
+      border-bottom: 3px solid ${({ theme }) => theme.buttonMed};
 
       &.selected {
         color: ${({ theme }) => theme.accentText};
-        background: ${({ theme }) => theme.accentSoft};
+        border-bottom: 3px solid ${({ theme }) => theme.accentSoft};
       }
     }
   }
