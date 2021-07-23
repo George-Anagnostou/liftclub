@@ -12,7 +12,7 @@ export const GlobalStyles = createGlobalStyle`
   body {
     background: ${({ theme }) => theme.body};
     color: ${({ theme }) => theme.text};
-    font-family: Tahoma, Helvetica, Arial, Roboto, sans-serif;
+    font-family: Poppins ,Tahoma, Helvetica, Arial, Roboto, sans-serif;
     transition: all 0.25s linear;
     scroll-behavior: smooth
   }
