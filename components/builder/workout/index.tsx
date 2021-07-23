@@ -53,9 +53,9 @@ const WorkoutBuilder: React.FC = () => {
   };
 
   // Removes an exercise from customWorkout.exercises
-  const removeExercise = (exercise: Exercise) => {
+  const removeExercise = (exercise_id: string) => {
     const { exercises } = customWorkout;
-    const filteredArr = exercises.filter((each) => each.exercise_id !== exercise._id);
+    const filteredArr = exercises.filter((each) => each.exercise_id !== exercise_id);
 
     setCustomWorkout((prev) => {
       return { ...prev, exercises: filteredArr };
@@ -66,8 +66,8 @@ const WorkoutBuilder: React.FC = () => {
   const clearCustomWorkout = () => setCustomWorkout(CustomWorkoutInit);
 
   const handleDragEnd = (result: any) => {
-    const startIndex = result.source?.index;
-    const endIndex = result.destination?.index || 0;
+    const startIndex: number = result.source?.index;
+    const endIndex: number = result.destination?.index > -1 ? result.destination.index : startIndex;
 
     if (startIndex === endIndex) return;
 
@@ -134,13 +134,14 @@ const UserWorkoutToggle = styled.button`
   margin: 0 0 0.5rem;
   border-radius: 5px;
   padding: 0.5rem;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  border: none;
 
-  border: 2px solid ${({ theme }) => theme.accent};
-  background: ${({ theme }) => theme.accent};
-  color: ${({ theme }) => theme.accentText};
+  background: ${({ theme }) => theme.background};
+  color: ${({ theme }) => theme.textLight};
 
   &.pressed {
+    color: ${({ theme }) => theme.accentText};
     background: ${({ theme }) => theme.accentSoft};
   }
 `;

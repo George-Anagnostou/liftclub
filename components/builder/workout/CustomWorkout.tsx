@@ -14,7 +14,7 @@ interface Props {
   workoutSavedSuccessfully: boolean | null;
   setWorkoutSavedSuccessfully: React.Dispatch<React.SetStateAction<boolean | null>>;
   clearCustomWorkout: () => void;
-  removeExercise: (exercise: Exercise) => void;
+  removeExercise: (exercise_id: string) => void;
   user: User | undefined;
   setShowExerciseList: React.Dispatch<React.SetStateAction<boolean>>;
 }

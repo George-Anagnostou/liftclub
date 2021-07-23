@@ -13,7 +13,7 @@ import ExerciseListItem from "./ExerciseListItem";
 interface Props {
   isExerciseInCustomWorkout: (exercise_id: string) => boolean;
   addExercise: (exercise: Exercise) => void;
-  removeExercise: (exercise: Exercise) => void;
+  removeExercise: (exercise_id: string) => void;
   setShowExerciseList: React.Dispatch<React.SetStateAction<boolean>>;
 }
 

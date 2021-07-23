@@ -158,6 +158,12 @@ const WorkoutsList = styled.div`
 
       &.highlight {
         background: ${({ theme }) => theme.accentSoft};
+        color: ${({ theme }) => theme.accentText};
+
+        button {
+          background: ${({ theme }) => theme.accent};
+          color: ${({ theme }) => theme.accentText};
+        }
       }
     }
 

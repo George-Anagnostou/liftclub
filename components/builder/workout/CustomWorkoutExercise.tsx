@@ -12,7 +12,7 @@ interface Props {
   exercise: Exercise;
   handleSetChange: (method: "add" | "remove", exerciseIndex: number) => void;
   handleRepChange: (e: any, exerciseIndex: number, setIndex: number) => void;
-  removeExercise: (exercise: Exercise) => void;
+  removeExercise: (exercise_id: string) => void;
 }
 
 const CustomWorkoutExercise: React.FC<Props> = ({
@@ -30,17 +30,20 @@ const CustomWorkoutExercise: React.FC<Props> = ({
           className={snapshot.isDragging ? "dragging" : ""}
           data-key={exercise._id.toString()}
           {...provided.draggableProps}
-          {...provided.dragHandleProps}
           ref={provided.innerRef}
         >
           <div className="header">
             <div className="title">
-              <span>{exerciseIndex + 1}</span>
+              <span {...provided.dragHandleProps} className="drag-handle">
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
               <p className="name">{exercise.name}</p>
             </div>
 
             <div className="buttons">
-              {/* <button className="removeBtn" onClick={() => removeExercise(exercise)}>
+              {/* <button className="removeBtn" onClick={() => removeExercise(exercise._id)}>
             X
           </button> */}
 
@@ -102,16 +105,26 @@ const ExerciseContainer = styled.li`
       text-align: left;
       color: ${({ theme }) => theme.textLight};
       padding: 0.5rem;
-      text-transform: capitalize;
 
-      span {
+      .drag-handle {
         max-width: min-content;
         font-size: 1rem;
         margin-right: 0.6rem;
+        display: flex;
+        flex-direction: column;
+
+        span {
+          height: 2px;
+          width: 20px;
+          margin: 0.1rem;
+          display: block;
+          background: ${({ theme }) => theme.accentSoft};
+        }
       }
       .name {
         flex: 1;
         font-size: 1.3rem;
+        text-transform: capitalize;
       }
     }
 
@@ -142,8 +155,8 @@ const ExerciseContainer = styled.li`
         button {
           flex: 1;
           border: none;
-          background: ${({ theme }) => theme.accent};
-          color: inherit;
+          background: ${({ theme }) => theme.accentSoft};
+          color: ${({ theme }) => theme.accentText};
           border-radius: 10px;
           height: 2.5rem;
           width: 2.5rem;
@@ -153,42 +166,54 @@ const ExerciseContainer = styled.li`
 
           &:disabled {
             color: ${({ theme }) => theme.border};
-            background: ${({ theme }) => theme.buttonLight};
+            background: ${({ theme }) => theme.buttonMed};
           }
         }
       }
     }
   }
-  
+
   &.dragging {
-    background: ${({ theme }) => theme.buttonMed};
+    background: ${({ theme }) => theme.buttonLight};
     .title {
-      color: white;
+      color: ${({ theme }) => theme.text};
     }
   }
 `;
 
-const RepsList = styled.ul``;
+const RepsList = styled.ul`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  width: 100%;
+`;
 
 const RepListItem = styled.li`
-  margin: 0.2rem 0;
+  margin: 0.2rem;
+  flex: 1;
+  min-width: 150px;
+  width: fit-content;
+  background: ${({ theme }) => theme.buttonMed};
+  padding: 0.5rem;
+
   display: flex;
   align-items: center;
+  justify-content: space-evenly;
 
   input {
     width: 3rem;
     font-size: 1.25rem;
     padding: 0.25rem 0;
     margin: 0 0.25rem;
-    background: ${({ theme }) => theme.body};
+    background: inherit;
     color: inherit;
     text-align: center;
-    border-radius: 3px;
-    border: 1px solid ${({ theme }) => theme.border};
+    border-radius: 0;
+    border: none;
+    border-bottom: 2px solid ${({ theme }) => theme.accentSoft};
   }
   span {
     font-weight: 300;
-    font-size: 0.7rem;
-    flex: 1;
+    font-size: 0.9rem;
   }
 `;

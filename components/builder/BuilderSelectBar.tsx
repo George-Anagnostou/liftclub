@@ -39,11 +39,11 @@ const Bar = styled.div`
       text-transform: capitalize;
       flex: 1;
       padding: 0.5rem 0;
-      color: ${({ theme }) => theme.text};
+      color: ${({ theme }) => theme.textLight};
       border-bottom: 3px solid ${({ theme }) => theme.buttonMed};
 
       &.selected {
-        color: ${({ theme }) => theme.accentText};
+        color: ${({ theme }) => theme.text};
         border-bottom: 3px solid ${({ theme }) => theme.accentSoft};
       }
     }

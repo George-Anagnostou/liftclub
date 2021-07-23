@@ -6,7 +6,7 @@ import { Exercise } from "../../../utils/interfaces";
 interface Props {
   exercise: Exercise;
   isExerciseInCustomWorkout: (exercise_id: string) => boolean;
-  removeExercise: (exercise: Exercise) => void;
+  removeExercise: (exercise_id: string) => void;
   addExercise: (exercise: Exercise) => void;
 }
 
@@ -25,7 +25,7 @@ const ExerciseListItem: React.FC<Props> = ({
 
         <div>
           {isExerciseInCustomWorkout(exercise._id) ? (
-            <button className="ctrlBtn" onClick={() => removeExercise(exercise)}>
+            <button className="ctrlBtn" onClick={() => removeExercise(exercise._id)}>
               Remove
             </button>
           ) : (
