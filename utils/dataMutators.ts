@@ -32,3 +32,12 @@ export const addExerciseDataToWorkout = async (workout: Workout) => {
 
   return workout;
 };
+
+export const moveItemInArray = (arr: any | undefined[], startIndex: number, endIndex: number) => {
+  if (endIndex >= arr.length) {
+    let k = endIndex - arr.length + 1;
+    while (k--) arr.push(undefined);
+  }
+  arr.splice(endIndex, 0, arr.splice(startIndex, 1)[0]);
+  return arr; // for testing
+};

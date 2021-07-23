@@ -1,5 +1,9 @@
-import { addExerciseDataToLoggedWorkout } from "./dataMutators";
-import { addExerciseDataToWorkout } from "./dataMutators";
+import {
+  addExerciseDataToLoggedWorkout,
+  addExerciseDataToWorkout,
+  moveItemInArray,
+} from "./dataMutators";
+
 import {
   getCurrYearMonthDay,
   timeSince,
@@ -12,6 +16,7 @@ import { round } from "./math";
 export {
   addExerciseDataToLoggedWorkout,
   addExerciseDataToWorkout,
+  moveItemInArray,
   getCurrYearMonthDay,
   formatIsoDate,
   daysBetween,

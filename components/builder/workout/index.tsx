@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { DragDropContext } from "react-beautiful-dnd";
 // Components
 import ExerciseList from "./ExerciseList";
 import UserWorkouts from "./UserWorkouts";
@@ -9,6 +10,7 @@ import { useStoreState } from "../../../store";
 // Interfaces
 import { Exercise, Workout } from "../../../utils/interfaces";
 import Modal from "../../Wrappers/Modal";
+import { moveItemInArray } from "../../../utils/";
 
 const CustomWorkoutInit = {
   _id: "",
@@ -25,7 +27,7 @@ const WorkoutBuilder: React.FC = () => {
 
   const [showUserWorkouts, setShowUserWorkouts] = useState(false);
   const [showExerciseList, setShowExerciseList] = useState(false);
-  const [workoutSavedSuccessfuly, setWorkoutSavedSuccessfuly] = useState<boolean | null>(null);
+  const [workoutSavedSuccessfully, setWorkoutSavedSuccessfully] = useState<boolean | null>(null);
   const [customWorkout, setCustomWorkout] = useState<Workout>(CustomWorkoutInit);
 
   // Returns boolean for whether or not an exercise exists in customWorkoutExercises
@@ -63,6 +65,18 @@ const WorkoutBuilder: React.FC = () => {
   // Resets custom workout state
   const clearCustomWorkout = () => setCustomWorkout(CustomWorkoutInit);
 
+  const handleDragEnd = (result: any) => {
+    const startIndex = result.source?.index;
+    const endIndex = result.destination?.index || 0;
+
+    if (startIndex === endIndex) return;
+
+    setCustomWorkout((prev) => ({
+      ...prev,
+      exercises: moveItemInArray(prev.exercises, startIndex, endIndex),
+    }));
+  };
+
   return (
     <Container>
       <UserWorkoutToggle
@@ -73,23 +87,25 @@ const WorkoutBuilder: React.FC = () => {
       </UserWorkoutToggle>
 
       <UserWorkouts
-        workoutSavedSuccessfuly={workoutSavedSuccessfuly}
+        workoutSavedSuccessfully={workoutSavedSuccessfully}
         customWorkout={customWorkout}
         clearCustomWorkout={clearCustomWorkout}
         setCustomWorkout={setCustomWorkout}
         showUserWorkouts={showUserWorkouts}
       />
 
-      <CustomWorkout
-        user={user}
-        customWorkout={customWorkout}
-        setCustomWorkout={setCustomWorkout}
-        workoutSavedSuccessfuly={workoutSavedSuccessfuly}
-        clearCustomWorkout={clearCustomWorkout}
-        removeExercise={removeExercise}
-        setWorkoutSavedSuccessfuly={setWorkoutSavedSuccessfuly}
-        setShowExerciseList={setShowExerciseList}
-      />
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <CustomWorkout
+          user={user}
+          customWorkout={customWorkout}
+          setCustomWorkout={setCustomWorkout}
+          workoutSavedSuccessfully={workoutSavedSuccessfully}
+          clearCustomWorkout={clearCustomWorkout}
+          removeExercise={removeExercise}
+          setWorkoutSavedSuccessfully={setWorkoutSavedSuccessfully}
+          setShowExerciseList={setShowExerciseList}
+        />
+      </DragDropContext>
 
       {showExerciseList && (
         <Modal removeModal={() => setShowExerciseList(false)} isOpen={showExerciseList}>

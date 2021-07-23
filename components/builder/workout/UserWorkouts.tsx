@@ -13,7 +13,7 @@ import { Workout } from "../../../utils/interfaces";
 interface Props {
   setCustomWorkout: React.Dispatch<React.SetStateAction<Workout>>;
   customWorkout: Workout;
-  workoutSavedSuccessfuly: boolean | null;
+  workoutSavedSuccessfully: boolean | null;
   clearCustomWorkout: () => void;
   showUserWorkouts: boolean;
 }
@@ -21,7 +21,7 @@ interface Props {
 const UserWorkouts: React.FC<Props> = ({
   setCustomWorkout,
   customWorkout,
-  workoutSavedSuccessfuly,
+  workoutSavedSuccessfully,
   clearCustomWorkout,
   showUserWorkouts,
 }) => {
@@ -54,7 +54,7 @@ const UserWorkouts: React.FC<Props> = ({
       // Get all workotus saved by the user
       loadUserSavedWorkouts();
     }
-  }, [user, workoutSavedSuccessfuly, workoutToDelete]);
+  }, [user, workoutSavedSuccessfully, workoutToDelete]);
 
   return (
     <>

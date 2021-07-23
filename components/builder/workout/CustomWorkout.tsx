@@ -1,17 +1,18 @@
 import { useEffect } from "react";
 import styled from "styled-components";
+import { Droppable } from "react-beautiful-dnd";
 //Utils
 import { postNewWorkout, updateExistingWorkout } from "../../../utils/api";
 import { Exercise, User, Workout } from "../../../utils/interfaces";
 // Components
-import Checkmark from "../../Checkmark";
-import CustoWorkoutExercise from "./CustomWorkoutExercise";
+import CustomWorkoutExercise from "./CustomWorkoutExercise";
+import CustomWorkoutControls from "./CustomWorkoutControls";
 
 interface Props {
   customWorkout: Workout;
   setCustomWorkout: React.Dispatch<React.SetStateAction<Workout>>;
-  workoutSavedSuccessfuly: boolean | null;
-  setWorkoutSavedSuccessfuly: React.Dispatch<React.SetStateAction<boolean | null>>;
+  workoutSavedSuccessfully: boolean | null;
+  setWorkoutSavedSuccessfully: React.Dispatch<React.SetStateAction<boolean | null>>;
   clearCustomWorkout: () => void;
   removeExercise: (exercise: Exercise) => void;
   user: User | undefined;
@@ -21,8 +22,8 @@ interface Props {
 const CustomWorkout: React.FC<Props> = ({
   customWorkout,
   setCustomWorkout,
-  workoutSavedSuccessfuly,
-  setWorkoutSavedSuccessfuly,
+  workoutSavedSuccessfully,
+  setWorkoutSavedSuccessfully,
   clearCustomWorkout,
   removeExercise,
   user,
@@ -93,7 +94,7 @@ const CustomWorkout: React.FC<Props> = ({
       // Workout owner is editing existing workout
 
       const saveStatus = await updateExistingWorkout(composedWorkout);
-      setWorkoutSavedSuccessfuly(saveStatus);
+      setWorkoutSavedSuccessfully(saveStatus);
     } else {
       // User is saving their version of a saved workout or building a new workout
 
@@ -110,7 +111,7 @@ const CustomWorkout: React.FC<Props> = ({
       rest.date_created = new Date().toISOString();
 
       const saveStatus = await postNewWorkout(rest);
-      setWorkoutSavedSuccessfuly(saveStatus);
+      setWorkoutSavedSuccessfully(saveStatus);
     }
 
     clearCustomWorkout();
@@ -118,145 +119,59 @@ const CustomWorkout: React.FC<Props> = ({
 
   // Remove saved successfully notification after 5 seconds
   useEffect(() => {
-    if (workoutSavedSuccessfuly) setTimeout(() => setWorkoutSavedSuccessfuly(null), 3000);
-  }, [workoutSavedSuccessfuly]);
+    if (workoutSavedSuccessfully) setTimeout(() => setWorkoutSavedSuccessfully(null), 3000);
+  }, [workoutSavedSuccessfully]);
 
   return (
-    <CustomWorkoutContainer>
-      <header>
-        <div className="wrapper">
-          <input
-            type="text"
-            name="workoutName"
-            value={customWorkout.name}
-            onChange={handleWorkoutNameChange}
-            placeholder="Name your workout"
-          />
+    <>
+      <CustomWorkoutControls
+        customWorkout={customWorkout}
+        handleWorkoutNameChange={handleWorkoutNameChange}
+        workoutSavedSuccessfully={workoutSavedSuccessfully}
+        saveCustomWorkout={saveCustomWorkout}
+        clearCustomWorkout={clearCustomWorkout}
+        handlePrivacyChange={handlePrivacyChange}
+      />
 
-          {workoutSavedSuccessfuly && (
-            <Checkmark styles={{ position: "absolute", right: "1.4rem" }} />
-          )}
-        </div>
-
-        {Boolean(customWorkout.exercises.length) && (
-          <div className="controls">
-            <button onClick={saveCustomWorkout}>Save</button>
-
-            <button onClick={clearCustomWorkout}>Clear</button>
-
-            {user?.isTrainer && (
-              <div className="checkbox" onClick={handlePrivacyChange}>
-                <label htmlFor="public">Public</label>
-                <input
-                  type="checkbox"
-                  name="public"
-                  checked={customWorkout.isPublic}
-                  readOnly={true}
-                />
-              </div>
+      <Droppable droppableId={"workout"}>
+        {(provided) => (
+          <ExerciseList {...provided.droppableProps} ref={provided.innerRef}>
+            {customWorkout.exercises.map(
+              ({ exercise, sets }, i) =>
+                exercise && (
+                  <CustomWorkoutExercise
+                    key={exercise._id}
+                    exerciseIndex={i}
+                    sets={sets}
+                    exercise={exercise}
+                    handleSetChange={handleSetChange}
+                    handleRepChange={handleRepChange}
+                    removeExercise={removeExercise}
+                  />
+                )
             )}
-          </div>
+            {provided.placeholder}
+          </ExerciseList>
         )}
-      </header>
-
-      {customWorkout.exercises.map(
-        ({ exercise, sets }, i) =>
-          exercise && (
-            <CustoWorkoutExercise
-              exerciseIndex={i}
-              sets={sets}
-              exercise={exercise}
-              handleSetChange={handleSetChange}
-              handleRepChange={handleRepChange}
-              removeExercise={removeExercise}
-            />
-          )
-      )}
+      </Droppable>
 
       <FallbackText onClick={() => setShowExerciseList(true)}>
         <p>Add an exercise</p>
       </FallbackText>
-    </CustomWorkoutContainer>
+    </>
   );
 };
 export default CustomWorkout;
 
-const CustomWorkoutContainer = styled.ul`
+const ExerciseList = styled.ul`
   width: 100%;
 
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
 
-  header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-
-    background: ${({ theme }) => theme.buttonMed};
-    border-radius: 5px;
-    width: 100%;
-    padding: 0.5rem;
-
-    .wrapper {
-      border-radius: 5px;
-      width: 100%;
-      background: ${({ theme }) => theme.background};
-
-      display: flex;
-      align-items: center;
-
-      input[type="text"] {
-        width: 100%;
-        padding: 0.5rem;
-        font-size: 1.1rem;
-        border: none;
-        border-radius: 5px;
-        color: ${({ theme }) => theme.text};
-        background: inherit;
-      }
-    }
-
-    .controls {
-      display: flex;
-      align-items: center;
-      justify-content: space-evenly;
-      width: 100%;
-
-      button {
-        border: none;
-        border-radius: 5px;
-        background: ${({ theme }) => theme.background};
-        color: ${({ theme }) => theme.text};
-        box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
-        display: inline-block;
-        margin: 0.5rem;
-        padding: 0.5rem 1rem;
-        font-size: 1.1rem;
-      }
-
-      .checkbox {
-        border: none;
-        border-radius: 5px;
-        background: ${({ theme }) => theme.background};
-        color: ${({ theme }) => theme.text};
-        box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
-        display: inline-block;
-        margin: 0.5rem;
-        padding: 0.5rem 1rem;
-        font-size: 1.1rem;
-
-        input[type="checkbox"] {
-          margin: 0 0.5rem;
-          transform: scale(1.5);
-          border: none;
-          box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
-        }
-      }
-    }
-  }
+  position: relative;
 `;
 
 const FallbackText = styled.div`
