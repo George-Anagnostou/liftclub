@@ -53,6 +53,20 @@ const WorkoutContainer: React.FC<Props> = ({
     }
   }, [timer]);
 
+  useEffect(() => {
+    const useEnterAsTab = (e) => {
+      if (e.keyCode === 13 && e.target.nodeName === "INPUT") {
+        const form = e.target.form;
+        const index = Array.prototype.indexOf.call(form, e.target);
+        form.elements[index + 1].focus();
+        e.preventDefault();
+      }
+    };
+    document.addEventListener("keydown", useEnterAsTab);
+
+    return () => document.removeEventListener("keydown", useEnterAsTab);
+  }, []);
+
   return (
     <>
       <WorkoutName>
@@ -62,55 +76,57 @@ const WorkoutContainer: React.FC<Props> = ({
         </h3>
       </WorkoutName>
 
-      <WorkoutList>
-        {currentDayData.exerciseData.map(({ exercise, exercise_id, sets }, i) => (
-          <li className="exercise" key={exercise_id}>
-            <h3 className="exercise-name">{exercise!.name}</h3>
-            <ul>
-              <li className="set-title">
-                <p>Reps</p>
-                <p>Weight</p>
-                <p>Previous</p>
-              </li>
-
-              {sets.map(({ reps, weight }, j) => (
-                <li className="set" key={`${exercise_id} ${j}`}>
-                  <div className="reps">
-                    <p>{reps}</p>
-                  </div>
-
-                  <div className="weight">
-                    <input
-                      type="number"
-                      value={weight >= 0 ? weight : ""}
-                      onChange={(e) => handleUserInput(() => handleWeightChange(e, i, j))}
-                    />
-                  </div>
-
-                  <div className="prev">
-                    {prevBestData && prevBestData.exerciseData[i]?.sets[j].weight >= 0 ? (
-                      <p>{prevBestData?.exerciseData[i]?.sets[j]?.weight}</p>
-                    ) : (
-                      <span>None</span>
-                    )}
-                  </div>
+      <Form>
+        <WorkoutList>
+          {currentDayData.exerciseData.map(({ exercise, exercise_id, sets }, i) => (
+            <li className="exercise" key={exercise_id}>
+              <h3 className="exercise-name">{exercise!.name}</h3>
+              <ul>
+                <li className="set-title">
+                  <p>Reps</p>
+                  <p>Weight</p>
+                  <p>Previous</p>
                 </li>
-              ))}
-            </ul>
-          </li>
-        ))}
-      </WorkoutList>
 
-      <WorkoutNote>
-        <h3>Notes:</h3>
-        <textarea
-          name="workoutNote"
-          cols={30}
-          rows={5}
-          value={currentDayData.workoutNote}
-          onChange={(e) => handleUserInput(() => handleWorkoutNoteChange(e))}
-        ></textarea>
-      </WorkoutNote>
+                {sets.map(({ reps, weight }, j) => (
+                  <li className="set" key={`${exercise_id} ${j}`}>
+                    <div className="reps">
+                      <p>{reps}</p>
+                    </div>
+
+                    <div className="weight">
+                      <input
+                        type="number"
+                        value={weight >= 0 ? weight : ""}
+                        onChange={(e) => handleUserInput(() => handleWeightChange(e, i, j))}
+                      />
+                    </div>
+
+                    <div className="prev">
+                      {prevBestData && prevBestData.exerciseData[i]?.sets[j].weight >= 0 ? (
+                        <p>{prevBestData?.exerciseData[i]?.sets[j]?.weight}</p>
+                      ) : (
+                        <span>None</span>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </WorkoutList>
+
+        <WorkoutNote>
+          <h3>Notes:</h3>
+          <textarea
+            name="workoutNote"
+            cols={30}
+            rows={5}
+            value={currentDayData.workoutNote}
+            onChange={(e) => handleUserInput(() => handleWorkoutNoteChange(e))}
+          ></textarea>
+        </WorkoutNote>
+      </Form>
 
       <DeleteBtn onClick={deleteWorkout}>Delete Workout</DeleteBtn>
     </>
@@ -118,6 +134,10 @@ const WorkoutContainer: React.FC<Props> = ({
 };
 
 export default WorkoutContainer;
+
+const Form = styled.form`
+  width: 100%;
+`;
 
 const WorkoutName = styled.div`
   display: flex;
