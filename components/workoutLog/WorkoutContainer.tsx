@@ -56,8 +56,10 @@ const WorkoutContainer: React.FC<Props> = ({
   return (
     <>
       <WorkoutName>
-        <h3 style={{ textTransform: "capitalize" }}>name {currentDayData.workoutName}</h3>
-        <h3>{currentDayData.exerciseData.length} exercises</h3>
+        <h3 style={{ textTransform: "capitalize" }}>{currentDayData.workoutName}</h3>
+        <h3>
+          {currentDayData.exerciseData.length} <span>Exercises</span>
+        </h3>
       </WorkoutName>
 
       <WorkoutList>
@@ -119,16 +121,14 @@ export default WorkoutContainer;
 
 const WorkoutName = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: space-evenly;
-  align-items: flex-end;
-
+  align-items: center;
   width: 100%;
-  text-align: left;
-  padding: 0.5rem 1rem;
-  margin: 0 auto 0.5rem;
+  padding: 0.5rem;
 
   h3 {
-    font-weight: 100;
+    font-weight: 400;
   }
 `;
 
@@ -197,17 +197,19 @@ const WorkoutList = styled.ul`
             text-align: center;
             box-shadow: none;
             border: none;
-            border-bottom: 1px solid ${({ theme }) => theme.border};
+            border-bottom: 2px solid ${({ theme }) => theme.accentSoft};
             border-radius: 0;
             width: 5rem;
             font-size: 1.5rem;
-            font-weight: 100;
+            font-weight: 300;
             transition: all 0.1s ease-in-out;
             background: inherit;
             color: inherit;
 
             &:focus {
-              box-shadow: 0 2px 4px #8f8f8f;
+              box-shadow: 0 0 6px ${({ theme }) => theme.boxShadow};
+              outline: 1px solid ${({ theme }) => theme.accentSoft};
+              -moz-outline-radius: 5px;
             }
           }
           &::after {

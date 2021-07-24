@@ -30,7 +30,7 @@ const Brand = styled.div`
 
   h1 {
     text-align: center;
-    font-weight: 100;
+    font-weight: 300;
     font-size: 3.5rem;
     color: #5d78ee;
   }

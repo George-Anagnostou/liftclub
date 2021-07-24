@@ -134,7 +134,7 @@ const DaysCtrl = styled.div`
 
     span {
       font-size: 0.75rem;
-      font-weight: 100;
+      font-weight: 200;
     }
   }
 

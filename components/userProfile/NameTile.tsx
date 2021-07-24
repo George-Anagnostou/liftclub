@@ -149,7 +149,7 @@ const TileContainer = styled.header`
     h1 {
       margin-bottom: 0.5rem;
       letter-spacing: 1px;
-      font-weight: 200;
+      font-weight: 300;
       min-width: max-content;
     }
     p {

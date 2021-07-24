@@ -109,7 +109,7 @@ const WorkoutTile = styled.li`
       flex: 3;
 
       h3 {
-        font-weight: 100;
+        font-weight: 300;
         text-transform: capitalize;
       }
 

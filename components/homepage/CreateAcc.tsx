@@ -80,7 +80,7 @@ const CreateContainer = styled.div`
   text-align: center;
 
   h3 {
-    font-weight: 100;
+    font-weight: 300;
     color: grey;
   }
 

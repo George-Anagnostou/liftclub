@@ -104,7 +104,7 @@ const TitleBar = styled.div`
     padding-left: 0.75rem;
     font-size: 1.1rem;
     color: ${({ theme }) => theme.textLight};
-    font-weight: 100;
+    font-weight: 300;
   }
 
   button {
