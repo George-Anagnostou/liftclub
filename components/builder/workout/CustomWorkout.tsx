@@ -63,6 +63,8 @@ const CustomWorkout: React.FC<Props> = ({
       switch (method) {
         case "add":
           // Add empty set to spedified exercise
+          if (prev.exercises[exerciseIndex].sets.length >= 100) break;
+          
           prev.exercises[exerciseIndex].sets.push({ reps: 0, weight: -1 });
           break;
         case "remove":

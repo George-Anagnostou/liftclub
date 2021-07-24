@@ -77,6 +77,7 @@ const UserWorkouts: React.FC<Props> = ({
                     key={i}
                     onClick={() => displaySavedWorkout(workout)}
                     className={customWorkout._id === workout._id ? "highlight" : ""}
+                    style={{ paddingRight: "1.75rem" }}
                   >
                     {workout.name}
 
@@ -147,13 +148,16 @@ const WorkoutsList = styled.div`
       box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
       border-radius: 5px;
       cursor: pointer;
-      padding: 0.5rem 1.2rem 0.5rem 1rem;
+      padding: 0.5rem 1rem;
       margin: 0 0.5rem 0.5rem;
       min-width: max-content;
 
       p {
         text-transform: capitalize;
         width: max-content;
+      }
+      button {
+        font-size: 0.6rem;
       }
 
       &.highlight {
