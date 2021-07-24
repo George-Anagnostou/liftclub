@@ -66,7 +66,8 @@ const CustomWorkoutExercise: React.FC<Props> = ({
                 <input
                   type="number"
                   name="reps"
-                  value={reps}
+                  value={reps || ""}
+                  placeholder={"0"}
                   onChange={(e) => handleRepChange(e, exerciseIndex, j)}
                 />
                 <span>reps</span>
@@ -195,6 +196,7 @@ const RepListItem = styled.li`
   width: fit-content;
   background: ${({ theme }) => theme.buttonMed};
   padding: 0.5rem;
+  border-radius: 5px;
 
   display: flex;
   align-items: center;

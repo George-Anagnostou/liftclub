@@ -48,33 +48,30 @@ const CustomWorkout: React.FC<Props> = ({
     exerciseIndex: number,
     setIndex: number
   ) => {
-    const num = Number(e.target.value);
+    const num = Number(e.target.value || 0);
 
-    const { exercises } = customWorkout;
-
-    exercises[exerciseIndex].sets[setIndex].reps = num;
+    console.log(num);
 
     setCustomWorkout((prev) => {
-      return { ...prev, exercises: exercises };
+      prev.exercises[exerciseIndex].sets[setIndex].reps = num;
+      return { ...prev };
     });
   };
 
   const handleSetChange = (method: "add" | "remove", exerciseIndex: number) => {
-    const { exercises } = customWorkout;
-
-    switch (method) {
-      case "add":
-        // Add empty set to spedified exercise
-        exercises[exerciseIndex].sets.push({ reps: 0, weight: -1 });
-        break;
-      case "remove":
-        // Remove last set from spedified exercise
-        exercises[exerciseIndex].sets.pop();
-        break;
-    }
-
     setCustomWorkout((prev) => {
-      return { ...prev, exercises: exercises };
+      switch (method) {
+        case "add":
+          // Add empty set to spedified exercise
+          prev.exercises[exerciseIndex].sets.push({ reps: 0, weight: -1 });
+          break;
+        case "remove":
+          // Remove last set from spedified exercise
+          prev.exercises[exerciseIndex].sets.pop();
+          break;
+      }
+
+      return { ...prev };
     });
   };
 

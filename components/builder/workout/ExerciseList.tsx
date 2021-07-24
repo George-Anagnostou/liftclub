@@ -73,11 +73,9 @@ const ExerciseList: React.FC<Props> = ({
           placeholder="Search"
         />
 
-        <button onClick={() => setSearchTerm("")}>Clear</button>
-
         {user?.isTrainer && <button onClick={() => setShowCreateExerciseModal(true)}>Add</button>}
 
-        <button onClick={() => setShowExerciseList(false)}>X</button>
+        <button onClick={() => setShowExerciseList(false)}>Close</button>
       </header>
 
       {showCreateExerciseModal && (
@@ -130,6 +128,7 @@ const ExercisesContainer = styled.div`
 
     input {
       flex: 3;
+      width: 100%;
       font-size: 1rem;
       margin: 0.25rem 0.1rem 0.25rem 0.25rem;
       padding: 0.5rem;

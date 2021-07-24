@@ -82,7 +82,7 @@ const Item = styled.li`
       text-align: left;
       padding: 0.5rem;
       font-size: 1.1rem;
-      font-weight: 100;
+      font-weight: 300;
       letter-spacing: 1px;
     }
     div {
@@ -99,8 +99,8 @@ const Item = styled.li`
         p {
           border: 1px solid ${({ theme }) => theme.textLight};
           color: ${({ theme }) => theme.text};
-          height: 1rem;
-          width: 1rem;
+          height: 1.2rem;
+          width: 1.2rem;
           border-radius: 50%;
         }
       }
