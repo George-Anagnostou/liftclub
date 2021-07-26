@@ -29,13 +29,13 @@ export const lightTheme = {
 };
 
 export const darkTheme = {
-  body: "#1c2032",
+  body: "#20222c",
   text: "#FAFAFA",
   textLight: "#c4c4c4",
   border: "#666666",
   boxShadow: "#111111",
   // background: "#303030",
-  background: "linear-gradient(to bottom, #303030 20%, #2e2d31 100%)",
+  background: "linear-gradient(to bottom, #2b2b32 20%, #2d2d31 100%)",
   buttonLight: "#4b4b4b",
   buttonMed: "#3f3f3f",
   accent: "#4361ee",
