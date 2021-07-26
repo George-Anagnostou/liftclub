@@ -1,41 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-// API
-import { getUserMadeWorkouts, getWorkoutsFromIdArray } from "../../utils/api";
-// Context
-import { useStoreState } from "../../store";
 // Interfaces
 import { Workout } from "../../utils/interfaces";
 
 interface Props {
   displayWorkout: (clicked: Workout) => Promise<void>;
+  userMadeWorkouts: Workout[];
+  userSavedWorkouts: Workout[];
 }
-const UserWorkouts: React.FC<Props> = ({ displayWorkout }) => {
-  const { user } = useStoreState();
 
-  const [userMadeWorkouts, setUserMadeWorkouts] = useState<Workout[]>([]);
-  const [userSavedWorkouts, setUserSavedWorkouts] = useState<Workout[]>([]);
+const UserWorkouts: React.FC<Props> = ({ displayWorkout, userMadeWorkouts, userSavedWorkouts }) => {
   const [showUserMade, setShowUserMade] = useState(true);
   const [showUserSaved, setShowUserSaved] = useState(true);
-
-  const loadUserMadeWorkouts = async () => {
-    const madeWorkouts = await getUserMadeWorkouts(user!._id);
-    setUserMadeWorkouts(madeWorkouts || []);
-  };
-
-  const loadUserSavedWorkouts = async () => {
-    const savedWorkouts = await getWorkoutsFromIdArray(user!.savedWorkouts || []);
-    setUserSavedWorkouts(savedWorkouts.reverse() || []);
-  };
-
-  useEffect(() => {
-    if (user) {
-      // Get all workouts made by the user
-      loadUserMadeWorkouts();
-      // Get all workotus saved by the user
-      loadUserSavedWorkouts();
-    }
-  }, [user]);
 
   return (
     <Container>

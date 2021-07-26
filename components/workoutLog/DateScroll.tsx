@@ -44,7 +44,6 @@ const DateScroll: React.FC<Props> = ({
             dayData ? "hasDayData" : "noDayData"
           }`}
         >
-          {date.getDate() === 1 && <p className="month">{String(date).substring(3, 7)}</p>}
           <p className="dow">{String(date).substring(0, 3)}</p>
           <p className="day">{String(date).substring(8, 11)}</p>
         </div>

@@ -70,10 +70,9 @@ const WorkoutContainer: React.FC<Props> = ({
   return (
     <>
       <WorkoutName>
-        <h3 style={{ textTransform: "capitalize" }}>{currentDayData.workoutName}</h3>
-        <h3>
-          {currentDayData.exerciseData.length} <span>Exercises</span>
-        </h3>
+        <h3 className="date">{String(new Date(currentDayData.isoDate)).substring(3, 10)}</h3>
+
+        <h3 className="workout-name">{currentDayData.workoutName}</h3>
       </WorkoutName>
 
       <Form>
@@ -140,15 +139,25 @@ const Form = styled.form`
 `;
 
 const WorkoutName = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
   width: 100%;
   padding: 0.5rem;
 
+  display: flex;
+  justify-content: space-evenly;
+
   h3 {
-    font-weight: 400;
+    font-size: 1.4rem;
+    font-weight: 300;
+    text-transform: capitalize;
+    color: ${({ theme }) => theme.textLight};
+  }
+
+  .date {
+    min-width: max-content;
+  }
+
+  .workout-name {
+    text-align: right;
   }
 `;
 
@@ -171,7 +180,9 @@ const WorkoutList = styled.ul`
     h3 {
       text-transform: uppercase;
       margin-bottom: 0.5rem;
-      font-weight: 300;
+      font-weight: 400;
+      font-size: 1.3rem;
+      letter-spacing: 1px;
     }
 
     ul {
@@ -181,6 +192,7 @@ const WorkoutList = styled.ul`
       justify-content: center;
 
       .set-title {
+        color: ${({ theme }) => theme.textLight};
         display: flex;
         justify-content: space-evenly;
         align-items: flex-end;
@@ -208,6 +220,7 @@ const WorkoutList = styled.ul`
         }
 
         p {
+          color: ${({ theme }) => theme.textLight};
           font-weight: 300;
           font-size: 1.5rem;
         }

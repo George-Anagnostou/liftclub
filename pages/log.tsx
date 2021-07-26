@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 // Components
 import WorkoutContainer from "../components/workoutLog/WorkoutContainer";
@@ -15,6 +15,8 @@ import {
   saveUserWorkoutLog,
   deleteWorkoutFromWorkoutLog,
   getDateFromUserWorkoutLog,
+  getWorkoutsFromIdArray,
+  getUserMadeWorkouts,
 } from "../utils/api";
 // Interfaces
 import { WorkoutLogItem, WorkoutLog, Workout } from "../utils/interfaces";
@@ -30,6 +32,8 @@ export default function log() {
   const [prevBestData, setPrevBestData] = useState<WorkoutLogItem | null>(null);
   const [saveSuccess, setSaveSuccess] = useState<boolean | null>(null);
   const [saveLoading, setSaveLoading] = useState(false);
+  const [userMadeWorkouts, setUserMadeWorkouts] = useState<Workout[]>([]);
+  const [userSavedWorkouts, setUserSavedWorkouts] = useState<Workout[]>([]);
 
   // Accepts a workout from user's workoutLog and sets page state
   const setPageState = (dayData: WorkoutLogItem | null) => {
@@ -82,34 +86,40 @@ export default function log() {
   };
 
   // Accepts an ISO date and finds the matching date in workoutLog
-  const getDayDataFromWorkoutLog = (targetIsoDate: string) => {
-    let dayData: WorkoutLogItem | undefined;
+  const getDayDataFromWorkoutLog = useCallback(
+    (targetIsoDate: string) => {
+      let dayData: WorkoutLogItem | undefined;
 
-    dayData = workoutLog.find((item: WorkoutLogItem) => item.isoDate === targetIsoDate);
+      dayData = workoutLog.find((item: WorkoutLogItem) => item.isoDate === targetIsoDate);
 
-    return dayData;
-  };
+      return dayData;
+    },
+    [workoutLog]
+  );
 
   // Set page state when a new date is selected
-  const changeCurrentDayData = async (numOfDaysToShift: number): Promise<void> => {
-    const { year, month, day } = getCurrYearMonthDay();
-    const date = new Date(year, month, day);
+  const changeCurrentDayData = useCallback(
+    async (numOfDaysToShift: number): Promise<void> => {
+      const { year, month, day } = getCurrYearMonthDay();
+      const date = new Date(year, month, day);
 
-    date.setDate(date.getDate() + numOfDaysToShift);
+      date.setDate(date.getDate() + numOfDaysToShift);
 
-    // Selected date must be different than the current
-    if (date.toISOString() !== currentDayData?.isoDate) {
-      setLoading(true);
+      // Selected date must be different than the current
+      if (date.toISOString() !== currentDayData?.isoDate) {
+        setLoading(true);
 
-      const newYear = date.getFullYear();
-      const newMonth = date.getMonth();
-      const newDay = date.getDate();
-      setDisplayedDate({ year: newYear, month: newMonth, day: newDay });
+        const newYear = date.getFullYear();
+        const newMonth = date.getMonth();
+        const newDay = date.getDate();
+        setDisplayedDate({ year: newYear, month: newMonth, day: newDay });
 
-      // Find the workout for the new date
-      fetchAndSetDateData(date.toISOString());
-    }
-  };
+        // Find the workout for the new date
+        fetchAndSetDateData(date.toISOString());
+      }
+    },
+    [currentDayData?.isoDate]
+  );
 
   // Posts currentDayData to DB
   const saveWorkout = async () => {
@@ -174,7 +184,7 @@ export default function log() {
       if (deleted) {
         setWorkoutLog(workoutLog.filter((each) => each.isoDate !== currentDayData.isoDate));
         setPageState(null);
-        setPrevBestData(null)
+        setPrevBestData(null);
       }
     }
   };
@@ -233,9 +243,24 @@ export default function log() {
       setPageState(dayData || null);
     };
 
+    const loadUserMadeWorkouts = async () => {
+      const madeWorkouts = await getUserMadeWorkouts(user!._id);
+      setUserMadeWorkouts(madeWorkouts || []);
+    };
+
+    const loadUserSavedWorkouts = async () => {
+      const savedWorkouts = await getWorkoutsFromIdArray(user!.savedWorkouts || []);
+      setUserSavedWorkouts(savedWorkouts.reverse() || []);
+    };
+
     // workoutLog is used to update DateScroll UI when saving or removing a workout
     if (user) {
       setWorkoutLog(user.workoutLog);
+
+      // Get all workouts made by the user
+      loadUserMadeWorkouts();
+      // Get all workotus saved by the user
+      loadUserSavedWorkouts();
 
       const { year, month, day } = getCurrYearMonthDay();
       const currIsoDate = new Date(year, month, day).toISOString();
@@ -280,7 +305,11 @@ export default function log() {
                 No workout logged. To start a workout, select a workout from one of the tabs below.
               </FallbackText>
 
-              <UserWorkouts displayWorkout={displayWorkout} />
+              <UserWorkouts
+                displayWorkout={displayWorkout}
+                userMadeWorkouts={userMadeWorkouts}
+                userSavedWorkouts={userMadeWorkouts}
+              />
             </>
           )}
         </>
