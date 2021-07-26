@@ -13,8 +13,8 @@ export const SaveNotification: React.FC<Props> = ({ saveLoading }) => {
         <LoadingDots />
       ) : (
         <div className="saved">
-          <h3>SAVED</h3>
-          <Checkmark styles={{ height: 28, width: 18, transform: "scale(.5)" }} />
+          {/* <h3>SAVED</h3> */}
+          <Checkmark styles={{ height: 30, width: 30, transform: "scale(.85)" }} />
         </div>
       )}
     </Circle>
@@ -22,8 +22,8 @@ export const SaveNotification: React.FC<Props> = ({ saveLoading }) => {
 };
 
 const Circle = styled.div`
-  width: 68px;
-  height: 28px;
+  width: 65px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -35,7 +35,7 @@ const Circle = styled.div`
   box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
 
   h3 {
-    font-size: 60%;
+    font-size: 70%;
     font-weight: 300;
     color: ${({ theme }) => theme.textLight};
   }
@@ -57,13 +57,13 @@ const Circle = styled.div`
 
 const LoadingDots = styled.div`
   position: relative;
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 5px;
   background-color: ${({ theme }) => theme.accentSoft};
   color: ${({ theme }) => theme.accentSoft};
-  animation: dotFlashing 0.7s infinite linear alternate;
-  animation-delay: 0.35s;
+  animation: dotFlashing 0.5s infinite linear alternate;
+  animation-delay: 0.2s;
 
   &::before,
   &::after {
@@ -74,25 +74,25 @@ const LoadingDots = styled.div`
   }
 
   &::before {
-    left: -15px;
-    width: 10px;
-    height: 10px;
+    left: -17px;
+    width: 12px;
+    height: 12px;
     border-radius: 5px;
     background-color: ${({ theme }) => theme.accentSoft};
     color: ${({ theme }) => theme.accentSoft};
-    animation: dotFlashing 0.7s infinite alternate;
+    animation: dotFlashing 0.5s infinite alternate;
     animation-delay: 0s;
   }
 
   &::after {
-    left: 15px;
-    width: 10px;
-    height: 10px;
+    left: 17px;
+    width: 12px;
+    height: 12px;
     border-radius: 5px;
     background-color: ${({ theme }) => theme.accentSoft};
     color: ${({ theme }) => theme.accentSoft};
-    animation: dotFlashing 0.7s infinite alternate;
-    animation-delay: 0.7s;
+    animation: dotFlashing 0.5s infinite alternate;
+    animation-delay: 0.4s;
   }
 
   @keyframes dotFlashing {
