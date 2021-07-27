@@ -308,7 +308,7 @@ export default function log() {
               <UserWorkouts
                 displayWorkout={displayWorkout}
                 userMadeWorkouts={userMadeWorkouts}
-                userSavedWorkouts={userMadeWorkouts}
+                userSavedWorkouts={userSavedWorkouts}
               />
             </>
           )}
