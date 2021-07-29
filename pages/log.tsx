@@ -98,28 +98,25 @@ export default function log() {
   );
 
   // Set page state when a new date is selected
-  const changeCurrentDayData = useCallback(
-    async (numOfDaysToShift: number): Promise<void> => {
-      const { year, month, day } = getCurrYearMonthDay();
-      const date = new Date(year, month, day);
+  const changeCurrentDayData = async (numOfDaysToShift: number): Promise<void> => {
+    const { year, month, day } = getCurrYearMonthDay();
+    const date = new Date(year, month, day);
 
-      date.setDate(date.getDate() + numOfDaysToShift);
+    date.setDate(date.getDate() + numOfDaysToShift);
 
-      // Selected date must be different than the current
-      if (date.toISOString() !== currentDayData?.isoDate) {
-        setLoading(true);
+    // Selected date must be different than the current
+    if (date.toISOString() !== currentDayData?.isoDate) {
+      setLoading(true);
 
-        const newYear = date.getFullYear();
-        const newMonth = date.getMonth();
-        const newDay = date.getDate();
-        setDisplayedDate({ year: newYear, month: newMonth, day: newDay });
+      const newYear = date.getFullYear();
+      const newMonth = date.getMonth();
+      const newDay = date.getDate();
+      setDisplayedDate({ year: newYear, month: newMonth, day: newDay });
 
-        // Find the workout for the new date
-        fetchAndSetDateData(date.toISOString());
-      }
-    },
-    [currentDayData?.isoDate]
-  );
+      // Find the workout for the new date
+      fetchAndSetDateData(date.toISOString());
+    }
+  };
 
   // Posts currentDayData to DB
   const saveWorkout = async () => {
