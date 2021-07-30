@@ -1,4 +1,4 @@
-import { useEffect, useState, createContext } from "react";
+import { useState, createContext, useLayoutEffect } from "react";
 
 export const useThemeState = () => {
   const [themeMode, setThemeMode] = useState("light");
@@ -12,7 +12,7 @@ export const useThemeState = () => {
     themeMode === "light" ? setMode("dark") : setMode("light");
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const localTheme = window.localStorage.getItem("theme");
     localTheme ? setMode(localTheme) : setMode("light");
   }, []);
