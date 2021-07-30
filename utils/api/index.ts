@@ -1,14 +1,4 @@
-import {
-  Exercise,
-  NewExercise,
-  NewWorkout,
-  Routine,
-  Team,
-  User,
-  Workout,
-  WorkoutLog,
-  WorkoutLogItem,
-} from "../interfaces";
+import { Exercise, NewExercise, NewWorkout, Routine, Team, User, Workout } from "../interfaces";
 
 /*
  *
@@ -100,20 +90,6 @@ export const removeUserSavedWorkout = async (user_id: string, workout_id: string
   }
 };
 
-export const saveUserWorkoutLog = async (workoutLog: WorkoutLog, user_id: string) => {
-  try {
-    const res = await fetch(`/api/users/${user_id}`, {
-      method: "PUT",
-      body: JSON.stringify({ workoutLog }),
-    });
-
-    return res.status === 201;
-  } catch (e) {
-    console.log(e);
-    return false;
-  }
-};
-
 export const saveUserWeight = async (weight: number, user_id: string) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
@@ -170,32 +146,6 @@ export const saveUserBio = async (user_id: string, bio: string) => {
   }
 };
 
-export const getDateFromUserWorkoutLog = async (
-  user_id: string,
-  isoDate: string
-): Promise<WorkoutLogItem | false> => {
-  try {
-    const res = await fetch(`/api/users/${user_id}?field=workoutLog&date=${isoDate}`);
-
-    return res.status === 200 ? await res.json() : false;
-  } catch (e) {
-    console.log(e);
-    return false;
-  }
-};
-
-export const deleteWorkoutFromWorkoutLog = async (user_id: string, isoDate: string) => {
-  try {
-    const res = await fetch(`/api/users/${user_id}?field=workoutLog&date=${isoDate}`, {
-      method: "DELETE",
-    });
-
-    return res.status === 204;
-  } catch (e) {
-    console.log(e);
-    return false;
-  }
-};
 
 // Multiple
 export const getUsersFromIdArr = async (idArr: string[]): Promise<User[] | false> => {

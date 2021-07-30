@@ -10,6 +10,7 @@ import {
   daysBetween,
   formatIsoDate,
   stripTimeAndCompareDates,
+  dateToISOWithLocal,
 } from "./dateAndTime";
 import { round } from "./math";
 
@@ -22,5 +23,6 @@ export {
   daysBetween,
   timeSince,
   stripTimeAndCompareDates,
+  dateToISOWithLocal,
   round,
 };

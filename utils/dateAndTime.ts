@@ -67,3 +67,12 @@ export const stripTimeAndCompareDates = (date1: string, date2: string): boolean 
   if (!date1 || !date2) return false;
   return date1.substring(0, 10) === date2.substring(0, 10);
 };
+
+export const dateToISOWithLocal = (date: Date) => {
+  const offsetMs = date.getTimezoneOffset() * 60 * 1000;
+  const msLocal = date.getTime() - offsetMs;
+  const dateLocal = new Date(msLocal);
+  const iso = dateLocal.toISOString();
+  const isoLocal = iso.slice(0, 19);
+  return isoLocal;
+};
