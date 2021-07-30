@@ -35,7 +35,8 @@ const ProgressTile: React.FC = () => {
   }, [user]);
 
   const getWorkoutOptions = async () => {
-    const idArr = user!.workoutLog.map((each) => each.workout_id);
+    const keyArr = Object.keys(user!.workoutLog);
+    const idArr = keyArr.map((key) => user!.workoutLog[key].workout_id);
     // Returns all unique workouts
     const workouts = await getWorkoutsFromIdArray(idArr);
     setWorkoutOptions(workouts);
@@ -94,7 +95,7 @@ const ProgressTile: React.FC = () => {
 
     filteredWorkouts.map(({ exerciseData, isoDate }) => {
       return exerciseData.map(({ exercise_id, sets }) => {
-        if (exercise_id === targetExId) {
+        if (exercise_id === targetExId && isoDate) {
           switch (stat) {
             case "avgWeight":
               data.push({ date: formatDate(isoDate), value: avgWeight(sets) });
@@ -122,11 +123,22 @@ const ProgressTile: React.FC = () => {
    * Input handlers
    */
   const handleWorkoutOptionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const targetWorkout_id = e.target.value;
+
     setExerciseOptions([]);
     setSelectedExerciseId(null);
+
     // Filter all workouts that match the id selected
-    const filtered = user?.workoutLog.filter((workout) => workout.workout_id === e.target.value);
-    if (filtered?.length) setFilteredWorkouts(filtered);
+    const keyArr = Object.keys(user!.workoutLog);
+    let filtered = keyArr
+      .filter((key) => user!.workoutLog[key].workout_id === targetWorkout_id)
+      .sort((a, b) => new Date(a).getTime() - new Date(b).getTime())
+      .map((key) => {
+        user!.workoutLog[key].isoDate = key;
+        return user!.workoutLog[key];
+      });
+
+    if (filtered && filtered.length) setFilteredWorkouts(filtered);
   };
 
   const handleExerciseOptionChange = (e: React.ChangeEvent<HTMLSelectElement>) =>

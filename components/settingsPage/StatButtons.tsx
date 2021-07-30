@@ -37,7 +37,7 @@ const Buttons = styled.div`
   display: flex;
   width: 100%;
   margin-bottom: 0.5rem;
-  
+
   button {
     flex: 1;
     font-size: 1rem;

@@ -28,6 +28,7 @@ export interface WorkoutLogItem {
   workoutNote: string;
   workout_id: string;
   workout?: Workout;
+  isoDate?: string;
 }
 
 export interface Team {
