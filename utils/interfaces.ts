@@ -14,19 +14,20 @@ export interface User {
   password?: string;
 }
 
-export type WorkoutLog = WorkoutLogItem[];
+export interface WorkoutLog {
+  [isoDate: string]: WorkoutLogItem;
+}
 
 export interface WorkoutLogItem {
-  isoDate: string;
   completed: boolean;
-  workoutName: string;
-  workout_id: string;
-  workoutNote: string;
   exerciseData: {
     exercise_id: string;
     sets: { reps: number; weight: number | string }[];
     exercise?: Exercise;
   }[];
+  workoutNote: string;
+  workout_id: string;
+  workout?: Workout;
 }
 
 export interface Team {
