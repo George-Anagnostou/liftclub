@@ -53,6 +53,7 @@ export default PublicWorkouts;
 
 const WorkoutList = styled.ul`
   width: 100%;
+  flex: 1;
 
   .listTitle {
     margin-left: 1.5rem;
