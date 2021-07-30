@@ -7,20 +7,14 @@ interface Props {
 }
 
 const WeeklyBar: React.FC<Props> = ({ profileData }) => {
-  // Accepts an ISO date and finds the matching date in user.workoutLog
-  const getDayDataFromWorkoutLog = (targetIsoDate: string) => {
-    const dayData = profileData.workoutLog.find((item) => item.isoDate === targetIsoDate);
-    return dayData;
-  };
-
   // Format the date for the DateBar
-  const formatDate = (numOfDaysToShift: number) => {
+  const renderDate = (numOfDaysToShift: number) => {
     const currDate = new Date();
     const date = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate());
 
     date.setDate(date.getDate() + numOfDaysToShift);
 
-    const dayData = getDayDataFromWorkoutLog(date.toISOString());
+    const dayData = profileData.workoutLog[date.toISOString().substring(0, 10)];
 
     return (
       <div className={dayData ? "hasDayData" : "noDayData"}>
@@ -34,7 +28,7 @@ const WeeklyBar: React.FC<Props> = ({ profileData }) => {
     <DateScrollContainer>
       {Array.from(Array(7).keys()).map((numDays) => (
         <li className="date" key={-numDays}>
-          {formatDate(-numDays)}
+          {renderDate(-numDays)}
         </li>
       ))}
     </DateScrollContainer>
