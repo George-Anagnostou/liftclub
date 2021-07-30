@@ -121,12 +121,13 @@ const WorkoutTile = styled.li`
       margin-right: 0;
     }
     .buttons {
-      width: 155px;
+      width: min-content;
       display: flex;
       justify-content: flex-end;
       align-items: center;
 
       button {
+        font-size: 0.6rem;
         cursor: pointer;
         border-radius: 5px;
         border: none;
@@ -140,6 +141,16 @@ const WorkoutTile = styled.li`
       .remove {
         color: ${({ theme }) => theme.accentText};
         background: ${({ theme }) => theme.accentSoft};
+      }
+
+      @media (max-width: 350px) {
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: center;
+
+        button {
+          margin: 0.25rem 0;
+        }
       }
     }
   }

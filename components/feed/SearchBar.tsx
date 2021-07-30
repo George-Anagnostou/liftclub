@@ -66,6 +66,7 @@ const SearchContainer = styled.div`
 
     input {
       flex: 1;
+      width: 100%;
       border: none;
       outline: none;
       padding: 0.5rem 0 0.5rem 0.5rem;
