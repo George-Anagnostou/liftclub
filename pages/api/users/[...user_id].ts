@@ -39,62 +39,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           .toArray();
 
         res.json(data[0].data);
-      } else if (req.query.field === "workoutLog") {
-        // GET aggregated workoutLog with interpolated workout and exercise data
-        // ACCESSED WITH: /users/user_id?field=workoutLog&date=isoDate
-
-        const data = await db
-          .collection("users")
-          .aggregate([
-            { $match: { _id: new ObjectId(user_id) } },
-            { $unwind: "$workoutLog" },
-            {
-              $lookup: {
-                from: "workouts",
-                localField: "workoutLog.workout_id",
-                foreignField: "_id",
-                as: "workoutLog.workout",
-              },
-            },
-            { $unwind: "$workoutLog.workout" },
-            { $unwind: "$workoutLog.exerciseData" },
-            {
-              $lookup: {
-                from: "exercises",
-                localField: "workoutLog.exerciseData.exercise_id",
-                foreignField: "_id",
-                as: "workoutLog.exerciseData.exercise",
-              },
-            },
-            { $unwind: "$workoutLog.exerciseData.exercise" },
-            {
-              $group: {
-                _id: "$workoutLog.isoDate",
-                root: { $mergeObjects: "$$ROOT" },
-                exerciseData: { $push: "$workoutLog.exerciseData" },
-              },
-            },
-            { $sort: { _id: 1 } },
-            { $replaceRoot: { newRoot: { $mergeObjects: ["$root", "$$ROOT"] } } },
-            { $set: { "workoutLog.exerciseData": "$exerciseData" } },
-            {
-              $group: {
-                _id: "$root._id",
-                root: { $mergeObjects: "$$ROOT" },
-                workoutLog: { $push: "$workoutLog" },
-              },
-            },
-            { $replaceRoot: { newRoot: { $mergeObjects: ["$root", "$$ROOT"] } } },
-            { $project: { root: 0 } },
-          ])
-          .toArray();
-
-        // Find queried workout and return
-        const foundWorkout = data[0].workoutLog.filter(
-          (item) => item.isoDate.toISOString() === req.query.date
-        );
-
-        foundWorkout[0] ? res.status(200).json(foundWorkout[0]) : res.status(204).json({});
       } else if (req.query.username) {
         // Get a specific user from username
 
@@ -114,9 +58,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     case "PUT":
       // Declare a field to update
       let fieldToUpdate = "";
-
-      const { workoutLog } = JSON.parse(req.body);
-      if (workoutLog) fieldToUpdate = "WORKOUT_LOG";
 
       const { addSavedWorkout } = JSON.parse(req.body);
       if (addSavedWorkout) fieldToUpdate = "ADD_SAVED_WORKOUT";
@@ -145,23 +86,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       const { profileImgUrl } = JSON.parse(req.body);
       if (profileImgUrl) fieldToUpdate = "PROFILE_IMG_URL";
 
+      if (req.query.fieldToUpdate === "ADD_WORKOUT_TO_WORKOUT_LOG")
+        fieldToUpdate = "ADD_WORKOUT_TO_WORKOUT_LOG";
+
       switch (fieldToUpdate) {
-        case "WORKOUT_LOG":
-          // Cast id strings to ObjIds
-          workoutLog.map((entry) => {
-            entry.workout_id = new ObjectId(entry.workout_id);
-            entry.exerciseData?.map((each) => (each.exercise_id = new ObjectId(each.exercise_id)));
-            // Cast isoDate string to Date()
-            entry.isoDate = new Date(entry.isoDate);
-          });
-
-          userData = await db
-            .collection("users")
-            .findOneAndUpdate({ _id: new ObjectId(user_id) }, { $set: { workoutLog: workoutLog } });
-
-          userData ? res.status(201).end() : res.status(400).end();
-          break;
-
         case "ADD_SAVED_WORKOUT":
           userData = await db
             .collection("users")
@@ -292,24 +220,49 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
           break;
 
+        case "ADD_WORKOUT_TO_WORKOUT_LOG":
+          const key = String(req.query.workoutLogKey);
+
+          const workoutData = JSON.parse(req.body);
+
+          // Format workoutData correctly for DB
+          delete workoutData.workout;
+          workoutData.exerciseData.map((each) => {
+            delete each.exercise;
+            each.exercise_id = new ObjectId(each.exercise_id);
+          });
+          workoutData.workout_id = new ObjectId(workoutData.workout_id);
+
+          userData = await db
+            .collection("users")
+            .findOneAndUpdate(
+              { _id: new ObjectId(user_id) },
+              { $set: { [`workoutLog.${key}`]: workoutData } }
+            );
+
+          userData ? res.status(201).json({}) : res.status(400).end();
+          break;
+
         default:
           res.status(404).end();
       }
 
       break;
     case "DELETE":
-      if (req.query.field === "workoutLog" && typeof req.query.date === "string") {
+      if (req.query.fieldToUpdate === "DELETE_WORKOUT_FROM_WORKOUT_LOG") {
+        const key = req.query.workoutLogKey;
+
         const deleted = await db
           .collection("users")
           .findOneAndUpdate(
             { _id: new ObjectId(user_id) },
-            { $pull: { workoutLog: { isoDate: new Date(req.query.date) } } },
+            { $unset: { [`workoutLog.${key}`]: 1 } },
             { returnNewDocument: true }
           );
 
         deleted.value.workoutLog ? res.status(204).end() : res.status(404).end();
+        break;
       }
-
       res.status(404).end();
       break;
   }
