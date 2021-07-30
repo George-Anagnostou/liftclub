@@ -8,9 +8,11 @@ interface AppState {
 }
 
 export default function userReducer(state: AppState, action) {
-  switch (action.type) {
+  const { type, payload } = action;
+
+  switch (type) {
     case "SET_USER":
-      return { ...state, user: action.payload.userData, isSignedIn: true };
+      return { ...state, user: payload.userData, isSignedIn: true };
 
     case "LOGOUT":
       return { ...state, user: undefined, isSignedIn: false };
@@ -20,6 +22,19 @@ export default function userReducer(state: AppState, action) {
 
     case "USING_iOS_PWA":
       return { ...state, platform: "ios" };
+
+    case "ADD_DAY_TO_WORKOUT_LOG":
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          workoutLog: { ...state.user?.workoutLog, [payload.key]: payload.value },
+        },
+      };
+
+    case "DELETE_DAY_FROM_WORKOUT_LOG":
+      delete state.user?.workoutLog[payload.key];
+      return { ...state };
 
     default:
       throw new Error();
