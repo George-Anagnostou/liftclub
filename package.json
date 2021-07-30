@@ -12,7 +12,6 @@
     "aws-sdk": "^2.950.0",
     "bcryptjs": "^2.4.3",
     "mongodb": "^3.6.6",
-    "nanoid": "^3.1.23",
     "next": "^10.2.3",
     "react": "17.0.2",
     "react-beautiful-dnd": "^13.1.0",
