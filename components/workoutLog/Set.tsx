@@ -41,7 +41,7 @@ const Set: React.FC<Props> = ({
       </div>
 
       <div className="prev">
-        {prevBestData && prevBestData.exerciseData[exerciseIndex]?.sets[setIndex].weight >= 0 ? (
+        {prevBestData && prevBestData.exerciseData[exerciseIndex]?.sets[setIndex]?.weight >= 0 ? (
           <p>{prevBestData?.exerciseData[exerciseIndex]?.sets[setIndex]?.weight}</p>
         ) : (
           <span>None</span>
