@@ -4,7 +4,7 @@ import styled from "styled-components";
 // Context
 import { useStoreState } from "../../store";
 // Utils
-import { getCurrYearMonthDay } from "../../utils";
+import { addExerciseDataToLoggedWorkout, getCurrYearMonthDay } from "../../utils";
 import { getWorkoutFromId } from "../../utils/api";
 // Interfaces
 import { WorkoutLogItem } from "../../utils/interfaces";
@@ -55,7 +55,8 @@ const DateScrollClone: React.FC<Props> = ({
       if (logItem) {
         const workoutData = await getWorkoutFromId(logItem.workout_id);
         logItem.workout = workoutData || undefined;
-        setPageState(logItem);
+        const composedWorkout = await addExerciseDataToLoggedWorkout(logItem);
+        setPageState(composedWorkout);
       } else {
         setPageState(null);
       }
