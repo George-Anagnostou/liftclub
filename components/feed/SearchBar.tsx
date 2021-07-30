@@ -46,7 +46,8 @@ const SearchContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-
+  
+  flex: 1;
   width: 100%;
   padding: 0.5rem;
   color: ${({ theme }) => theme.text};
