@@ -150,12 +150,9 @@ const WorkoutsList = styled.div`
       cursor: pointer;
       padding: 0.5rem 1rem;
       margin: 0 0.5rem 0.5rem;
-      min-width: max-content;
+      word-wrap: break-word;
+      text-align: left;
 
-      p {
-        text-transform: capitalize;
-        width: max-content;
-      }
       button {
         font-size: 0.6rem;
       }
@@ -188,11 +185,11 @@ const WorkoutsList = styled.div`
     border: none;
     border-radius: 3px;
     position: absolute;
-    top: 2px;
-    right: 2px;
+    top: 3px;
+    right: 3px;
 
     font-size: 8px;
-    padding: 2px 4px;
+    padding: 0px 4px;
   }
 
   .fallbackText {
