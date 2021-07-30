@@ -94,10 +94,8 @@ export default function log() {
     const index = keysArr.indexOf(searchDate);
 
     for (let i = index + 1; i < keysArr.length; i++) {
-      if (user.workoutLog[keysArr[i]].workout_id === searchId) {
-        setPrevBestData(user.workoutLog[keysArr[i]]);
-        return;
-      }
+      if (user.workoutLog[keysArr[i]].workout_id === searchId)
+        return setPrevBestData(user.workoutLog[keysArr[i]]);
     }
     setPrevBestData(null);
   };
