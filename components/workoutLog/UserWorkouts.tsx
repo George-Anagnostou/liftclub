@@ -28,7 +28,7 @@ const UserWorkouts: React.FC<Props> = ({ displayWorkout, userMadeWorkouts, userS
             <ul>
               {userMadeWorkouts.map((workout) => (
                 <li key={workout._id} onClick={() => displayWorkout(workout)}>
-                  <p>{workout.name}</p>
+                  {workout.name}
                 </li>
               ))}
             </ul>
@@ -50,7 +50,7 @@ const UserWorkouts: React.FC<Props> = ({ displayWorkout, userMadeWorkouts, userS
             <ul>
               {userSavedWorkouts.map((workout) => (
                 <li key={workout._id} onClick={() => displayWorkout(workout)}>
-                  <p>{workout.name}</p>
+                  {workout.name}
                 </li>
               ))}
             </ul>
@@ -104,18 +104,15 @@ const WorkoutsList = styled.div`
     flex-wrap: wrap;
 
     li {
+     position: relative;
       background: ${({ theme }) => theme.buttonMed};
       box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
       border-radius: 5px;
       cursor: pointer;
-      padding: 0.5rem;
+      padding: 0.5rem 1rem;
       margin: 0 0.5rem 0.5rem;
-      min-width: max-content;
-
-      p {
-        text-transform: capitalize;
-        width: max-content;
-      }
+      word-wrap: break-word;
+      text-align: left;
     }
 
     @media (max-width: 425px) {

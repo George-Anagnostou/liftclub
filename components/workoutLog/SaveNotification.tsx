@@ -13,7 +13,6 @@ export const SaveNotification: React.FC<Props> = ({ saveLoading }) => {
         <LoadingDots />
       ) : (
         <div className="saved">
-          {/* <h3>SAVED</h3> */}
           <Checkmark styles={{ height: 30, width: 30, transform: "scale(.85)" }} />
         </div>
       )}
@@ -32,13 +31,7 @@ const Circle = styled.div`
   right: 1rem;
   border-radius: 10px;
   background: ${({ theme }) => theme.buttonMed};
-  box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
-
-  h3 {
-    font-size: 70%;
-    font-weight: 300;
-    color: ${({ theme }) => theme.textLight};
-  }
+  box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
 
   .saved {
     display: flex;

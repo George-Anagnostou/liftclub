@@ -1,42 +1,79 @@
 import React from "react";
 import { useCallback } from "react";
 import styled from "styled-components";
+// Context
+import { useStoreState } from "../../store";
+// Utils
+import { getCurrYearMonthDay } from "../../utils";
+import { getWorkoutFromId } from "../../utils/api";
 // Interfaces
-import { WorkoutLog, WorkoutLogItem } from "../../utils/interfaces";
+import { WorkoutLogItem } from "../../utils/interfaces";
+// Hooks
 import useCountRenders from "../hooks/useCountRenders";
 
 interface Props {
-  changeCurrentDayData: (numOfDaysToShift: number) => Promise<void>;
-  getDayDataFromWorkoutLog: (targetIsoDate: string) => WorkoutLogItem | undefined;
-  displayedDate: {
-    year: number;
-    month: number;
-    day: number;
-  };
-  workoutLog: WorkoutLog;
+  selectedDate: string;
+  setSelectedDate: React.Dispatch<React.SetStateAction<string>>;
+  setPageState: (dayData: WorkoutLogItem | null | undefined) => void;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const DateScroll: React.FC<Props> = ({
-  changeCurrentDayData,
-  getDayDataFromWorkoutLog,
-  displayedDate,
-  workoutLog,
+const DateScrollClone: React.FC<Props> = ({
+  selectedDate,
+  setSelectedDate,
+  setPageState,
+  setLoading,
 }) => {
   useCountRenders();
+
+  const { user } = useStoreState();
+
+  const getClickedDate = (numOfDaysToShift: number) => {
+    const { year, month, day } = getCurrYearMonthDay();
+    // Current date
+    const date = new Date(year, month, day);
+
+    // Shifted date
+    date.setDate(date.getDate() + numOfDaysToShift);
+
+    const newDate = date.toISOString().substring(0, 10);
+
+    return newDate;
+  };
+
+  const handleDateClick = async (numberOfDaysToShift: number) => {
+    const newDate = getClickedDate(numberOfDaysToShift);
+
+    if (newDate !== selectedDate) {
+      setLoading(true);
+
+      setSelectedDate(newDate);
+
+      // Find the workout for the new date
+      const logItem = user?.workoutLog[newDate];
+
+      if (logItem) {
+        const workoutData = await getWorkoutFromId(logItem.workout_id);
+        logItem.workout = workoutData || undefined;
+        setPageState(logItem);
+      } else {
+        setPageState(null);
+      }
+    }
+  };
 
   // Format the date for the DateBar
   const renderDate = useCallback(
     (numOfDaysToShift: number) => {
-      const currDate = new Date();
-      const date = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate());
+      const newDate = getClickedDate(numOfDaysToShift);
 
-      date.setDate(date.getDate() + numOfDaysToShift);
+      const dayData = user?.workoutLog[newDate];
 
-      const dayData = getDayDataFromWorkoutLog(date.toISOString());
+      const dayIsSelected = selectedDate === newDate;
 
-      const { year, month, day } = displayedDate;
-      const dayIsSelected =
-        date.getFullYear() === year && date.getMonth() === month && date.getDate() === day;
+      const arr = newDate.split("-");
+
+      const displayDate = new Date(`${arr[0]}-${arr[1]}-${Number(arr[2]) + 1}`).toString();
 
       return (
         <div
@@ -44,25 +81,25 @@ const DateScroll: React.FC<Props> = ({
             dayData ? "hasDayData" : "noDayData"
           }`}
         >
-          <p className="dow">{String(date).substring(0, 3)}</p>
-          <p className="day">{String(date).substring(8, 11)}</p>
+          <p className="dow">{displayDate.substring(0, 3)}</p>
+          <p className="day">{displayDate.substring(8, 11)}</p>
         </div>
       );
     },
-    [workoutLog, displayedDate]
+    [user?.workoutLog, selectedDate]
   );
 
   return (
     <DateScrollContainer>
       {Array.from(Array(90).keys()).map((numDays) => (
-        <li onClick={() => changeCurrentDayData(-numDays)} className="date" key={-numDays}>
+        <li onClick={() => handleDateClick(-numDays)} className="date" key={-numDays}>
           {renderDate(-numDays)}
         </li>
       ))}
     </DateScrollContainer>
   );
 };
-export default DateScroll;
+export default DateScrollClone;
 
 const DateScrollContainer = styled.ul`
   display: flex;

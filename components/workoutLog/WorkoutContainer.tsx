@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+// Context
+import { useStoreDispatch, useStoreState } from "../../store";
+import { addDayToWorkoutLog } from "../../store/actions/userActions";
 // Interfaces
 import { WorkoutLogItem } from "../../utils/interfaces";
+// Components
+import { SaveNotification } from "./SaveNotification";
+import Set from "./Set";
 
 interface Props {
   currentDayData: WorkoutLogItem;
@@ -13,46 +19,70 @@ interface Props {
   handleWorkoutNoteChange: ({ target }: React.ChangeEvent<HTMLTextAreaElement>) => void;
   prevBestData: WorkoutLogItem | null;
   deleteWorkout: () => Promise<void>;
-  saveWorkout: () => Promise<void>;
+  selectedDate: string;
 }
 
-const WorkoutContainer: React.FC<Props> = ({
+const WorkoutContainerClone: React.FC<Props> = ({
   currentDayData,
   handleWeightChange,
   handleWorkoutNoteChange,
   prevBestData,
   deleteWorkout,
-  saveWorkout,
+  selectedDate,
 }) => {
+  const { user } = useStoreState();
+  const dispatch = useStoreDispatch();
+
+  const [saveSuccess, setSaveSuccess] = useState<boolean | null>(null);
+  const [saveLoading, setSaveLoading] = useState(false);
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const [timer, setTimer] = useState(0);
 
+  // Posts currentDayData to DB
+  const saveWorkout = async () => {
+    if (!currentDayData || !user) return;
+
+    setSaveLoading(true);
+
+    const { workout, ...rest } = currentDayData;
+
+    const saved = await addDayToWorkoutLog(dispatch, user._id, rest, selectedDate);
+
+    // Re-trigger animations
+    setSaveSuccess(false);
+    // setSaveSuccess(saved);
+    setSaveSuccess(saved);
+
+    setSaveLoading(false);
+  };
+
+  // Intermediary function that handles all Workout inputs
   const handleUserInput = (callback: () => void) => {
     setIsTyping(true);
     setTimer(0);
-
     callback();
   };
 
+  // Handle updates with timer and isTyping states
   useEffect(() => {
     let interval: NodeJS.Timeout = setInterval(() => {}, 0);
 
-    if (isTyping) {
-      interval = setInterval(() => setTimer((prev) => (prev += 1)), 1000);
-    } else {
-      clearInterval(interval);
-    }
+    isTyping
+      ? (interval = setInterval(() => setTimer((prev) => (prev += 1)), 1000))
+      : clearInterval(interval);
 
     return () => clearInterval(interval);
   }, [isTyping]);
 
+  // Save workout if timer reaches 3 (seconds)
   useEffect(() => {
-    if (timer === 2) {
+    if (timer === 3) {
       saveWorkout();
       setIsTyping(false);
     }
   }, [timer]);
 
+  // Enable user to use "Enter" key to go down the list of inputs
   useEffect(() => {
     const useEnterAsTab = (e) => {
       if (e.keyCode === 13 && e.target.nodeName === "INPUT") {
@@ -67,19 +97,32 @@ const WorkoutContainer: React.FC<Props> = ({
     return () => document.removeEventListener("keydown", useEnterAsTab);
   }, []);
 
+  // Remove Saved notification after 3 seconds
+  useEffect(() => {
+    let resetTimeout: NodeJS.Timeout;
+
+    if (saveSuccess) resetTimeout = setTimeout(() => setSaveSuccess(null), 3000);
+
+    return () => clearTimeout(resetTimeout);
+  }, [saveSuccess]);
+
+  const formatDate = (date: string) => {
+    const arr = date.split("-");
+    return new Date(`${arr[0]}-${arr[1]}-${Number(arr[2]) + 1}`).toString();
+  };
+
   return (
     <>
       <WorkoutName>
-        <h3 className="date">{String(new Date(currentDayData.isoDate)).substring(3, 10)}</h3>
-
-        <h3 className="workout-name">{currentDayData.workoutName}</h3>
+        <h3 className="date">{formatDate(selectedDate).substring(3, 10)}</h3>
+        <h3 className="workout-name">{currentDayData.workout?.name}</h3>
       </WorkoutName>
 
       <Form>
         <WorkoutList>
           {currentDayData.exerciseData.map(({ exercise, exercise_id, sets }, i) => (
             <li className="exercise" key={exercise_id}>
-              <h3 className="exercise-name">{exercise!.name}</h3>
+              <h3 className="exercise-name">{exercise?.name}</h3>
               <ul>
                 <li className="set-title">
                   <p>Reps</p>
@@ -87,28 +130,17 @@ const WorkoutContainer: React.FC<Props> = ({
                   <p>Previous</p>
                 </li>
 
-                {sets.map(({ reps, weight }, j) => (
-                  <li className="set" key={`${exercise_id} ${j}`}>
-                    <div className="reps">
-                      <p>{reps}</p>
-                    </div>
-
-                    <div className="weight">
-                      <input
-                        type="number"
-                        value={weight >= 0 ? weight : ""}
-                        onChange={(e) => handleUserInput(() => handleWeightChange(e, i, j))}
-                      />
-                    </div>
-
-                    <div className="prev">
-                      {prevBestData && prevBestData.exerciseData[i]?.sets[j].weight >= 0 ? (
-                        <p>{prevBestData?.exerciseData[i]?.sets[j]?.weight}</p>
-                      ) : (
-                        <span>None</span>
-                      )}
-                    </div>
-                  </li>
+                {sets.map(({ weight, reps }, j) => (
+                  <Set
+                    key={`${exercise_id} ${j}`}
+                    reps={reps}
+                    weight={weight}
+                    setIndex={j}
+                    exerciseIndex={i}
+                    handleUserInput={handleUserInput}
+                    handleWeightChange={handleWeightChange}
+                    prevBestData={prevBestData}
+                  />
                 ))}
               </ul>
             </li>
@@ -118,6 +150,7 @@ const WorkoutContainer: React.FC<Props> = ({
         <WorkoutNote>
           <h3>Notes:</h3>
           <textarea
+            key={"workoutNote"}
             name="workoutNote"
             cols={30}
             rows={5}
@@ -128,11 +161,15 @@ const WorkoutContainer: React.FC<Props> = ({
       </Form>
 
       <DeleteBtn onClick={deleteWorkout}>Delete Workout</DeleteBtn>
+
+      {currentDayData && (saveSuccess || saveLoading) && (
+        <SaveNotification saveLoading={saveLoading} />
+      )}
     </>
   );
 };
 
-export default WorkoutContainer;
+export default WorkoutContainerClone;
 
 const Form = styled.form`
   width: 100%;
@@ -201,60 +238,6 @@ const WorkoutList = styled.ul`
         p {
           flex: 1;
           text-align: center;
-        }
-      }
-
-      .set {
-        display: flex;
-        justify-content: space-evenly;
-        align-items: flex-end;
-
-        width: 100%;
-        margin: 0.5rem 0;
-
-        div {
-          flex: 1;
-          display: flex;
-          justify-content: center;
-          align-items: flex-end;
-        }
-
-        p {
-          color: ${({ theme }) => theme.textLight};
-          font-weight: 300;
-          font-size: 1.5rem;
-        }
-
-        .weight {
-          input {
-            text-align: center;
-            box-shadow: none;
-            border: none;
-            border-bottom: 2px solid ${({ theme }) => theme.accentSoft};
-            border-radius: 0;
-            width: 5rem;
-            font-size: 1.5rem;
-            font-weight: 300;
-            transition: all 0.1s ease-in-out;
-            background: inherit;
-            color: inherit;
-
-            &:focus {
-              box-shadow: 0 0 6px ${({ theme }) => theme.boxShadow};
-              outline: 1px solid ${({ theme }) => theme.accentSoft};
-              -moz-outline-radius: 5px;
-            }
-          }
-          &::after {
-            content: " lbs";
-            width: 0;
-            color: ${({ theme }) => theme.textLight};
-          }
-        }
-
-        .prev {
-          p {
-          }
         }
       }
     }
