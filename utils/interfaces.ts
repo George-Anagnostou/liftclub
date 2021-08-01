@@ -1,4 +1,4 @@
-export interface User {
+export type User = {
   _id: string;
   username: string;
   savedWorkouts?: Array<string>;
@@ -12,7 +12,7 @@ export interface User {
   settings?: { showBio: boolean };
   profileImgUrl?: string;
   password?: string;
-}
+};
 
 export interface WorkoutLog {
   [isoDate: string]: WorkoutLogItem;
