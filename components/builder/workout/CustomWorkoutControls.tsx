@@ -53,7 +53,7 @@ const CustomWorkoutControls: React.FC<Props> = ({
         </button>
 
         <div
-          className={`checkbox ${!user!.isTrainer && "disabled"}`}
+          className={`checkbox ${!user?.isTrainer && "disabled"}`}
           onClick={user?.isTrainer ? handlePrivacyChange : () => {}}
         >
           <label htmlFor="public">Public</label>
@@ -62,7 +62,7 @@ const CustomWorkoutControls: React.FC<Props> = ({
             name="public"
             checked={customWorkout.isPublic}
             readOnly={true}
-            disabled={!user!.isTrainer}
+            disabled={!user?.isTrainer}
           />
         </div>
       </div>
