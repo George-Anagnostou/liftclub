@@ -9,14 +9,12 @@ import { Workout } from "../../utils/interfaces";
 
 interface Props {
   workouts: Workout[];
-  workoutIsSaved: (workout: Workout) => boolean;
-  removeFromSavedWorkouts: (workout: Workout) => Promise<void>;
-  addToSavedWorkouts: (workout: Workout) => Promise<void>;
+  removeFromSavedWorkouts: (workout: Workout) => void;
+  addToSavedWorkouts: (workout: Workout) => void;
 }
 
 const PublicWorkouts: React.FC<Props> = ({
   workouts,
-  workoutIsSaved,
   removeFromSavedWorkouts,
   addToSavedWorkouts,
 }) => {
@@ -40,7 +38,6 @@ const PublicWorkouts: React.FC<Props> = ({
           <PublicWorkoutTile
             key={`public${workout._id}`}
             workout={workout}
-            workoutIsSaved={workoutIsSaved}
             removeFromSavedWorkouts={removeFromSavedWorkouts}
             addToSavedWorkouts={addToSavedWorkouts}
           />

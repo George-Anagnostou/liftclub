@@ -9,7 +9,7 @@ import { Workout } from "../../utils/interfaces";
 
 interface Props {
   workout: Workout;
-  removeFromSavedWorkouts: (workout: Workout) => Promise<void>;
+  removeFromSavedWorkouts: (workout: Workout) => void;
 }
 
 const SavedWorkoutTile: React.FC<Props> = ({ workout, removeFromSavedWorkouts }) => {

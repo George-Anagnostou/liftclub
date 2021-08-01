@@ -6,26 +6,35 @@ import LoadingSpinner from "../LoadingSpinner";
 // Utils
 import { addExerciseDataToWorkout, timeSince } from "../../utils";
 // Interfaces
-import { Exercise, Workout } from "../../utils/interfaces";
+import { Workout } from "../../utils/interfaces";
+// Context
+import { useStoreState } from "../../store";
 
 interface Props {
   workout: Workout;
-  workoutIsSaved: (workout: Workout) => boolean;
-  removeFromSavedWorkouts: (workout: Workout) => Promise<void>;
-  addToSavedWorkouts: (workout: Workout) => Promise<void>;
+  removeFromSavedWorkouts: (workout: Workout) => void;
+  addToSavedWorkouts: (workout: Workout) => void;
 }
 
 const PublicWorkoutTile: React.FC<Props> = ({
   workout,
-  workoutIsSaved,
   removeFromSavedWorkouts,
   addToSavedWorkouts,
 }) => {
+  const { user } = useStoreState();
+
   const [workoutExercises, setWorkoutExercises] = useState<Workout["exercises"]>([]);
   const [showWorkoutInfo, setShowWorkoutInfo] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const toggleWorkoutInfo = () => setShowWorkoutInfo((prev) => !prev);
+
+  // Returns boolean for if a workout is in savedWorkouts
+  const workoutIsSaved = (workout: Workout) => {
+    if (user?.savedWorkouts && user?.savedWorkouts?.indexOf(workout._id) > -1) {
+      return true;
+    } else return false;
+  };
 
   // Get all exercises for a workout
   const getWorkoutExercises = async () => {
