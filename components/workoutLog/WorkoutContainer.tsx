@@ -106,15 +106,12 @@ const WorkoutContainerClone: React.FC<Props> = ({
     return () => clearTimeout(resetTimeout);
   }, [saveSuccess]);
 
-  const formatDate = (date: string) => {
-    const arr = date.split("-");
-    return new Date(`${arr[0]}-${arr[1]}-${Number(arr[2]) + 1}`).toString();
-  };
-
   return (
     <>
       <WorkoutName>
-        <h3 className="date">{formatDate(selectedDate).substring(3, 10)}</h3>
+        <h3 className="date">
+          {new Date(selectedDate + "T08:00:00.000Z").toDateString().substring(3, 10)}
+        </h3>
         <h3 className="workout-name">{currentDayData.workout?.name}</h3>
       </WorkoutName>
 
