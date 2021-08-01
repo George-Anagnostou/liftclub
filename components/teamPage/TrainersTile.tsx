@@ -63,14 +63,14 @@ const TrainersTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMemb
               <div className="icon">
                 <img src={trainer.profileImgUrl || "/favicon.png"} />
               </div>
+
               <p>{trainer.username}</p>
 
-              {trainer.isTrainer && (
+              {/* {trainer.isTrainer && (
                 <div className="verified">
-                  <span>Verified</span>
                   <Checkmark styles={{ transform: "scale(.5)" }} />
                 </div>
-              )}
+              )} */}
             </li>
           </Link>
         ))}
@@ -116,26 +116,29 @@ const TrainerList = styled.ul`
   padding: 4px 0;
 
   li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     margin: 0 0.5rem;
     background: ${({ theme }) => theme.buttonMed};
-    display: grid;
-    place-items: center;
+
     padding: 0.5rem;
     border-radius: 10px;
     box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
 
     .icon {
       background: ${({ theme }) => theme.buttonLight};
-      height: 40px;
-      width: 40px;
+      box-shadow: 0 0 3px ${({ theme }) => theme.boxShadow};
+      height: 25px;
+      width: 25px;
       border-radius: 50%;
       overflow: hidden;
-      margin-bottom: 0.35rem;
       position: relative;
 
       img {
-        height: 40px;
-        width: 40px;
+        height: 25px;
+        width: 25px;
         object-fit: cover;
       }
 
@@ -147,8 +150,8 @@ const TrainerList = styled.ul`
         top: 0;
         margin: auto;
         display: block;
-        height: 3px;
-        width: 20px;
+        height: 2px;
+        width: 15px;
         background: ${({ theme }) => theme.textLight};
         border-radius: 7px;
 
@@ -158,23 +161,8 @@ const TrainerList = styled.ul`
       }
     }
 
-    .verified {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: ${({ theme }) => theme.background};
-      border-radius: 5px;
-      margin-top: 0.25rem;
-      height: 20px;
-      width: fit-content;
-
-      span {
-        margin-left: 0.5rem;
-        font-size: 0.6rem;
-        color: ${({ theme }) => theme.accentSoft};
-        font-weight: 600;
-        letter-spacing: 0px;
-      }
+    p {
+      margin-left: 0.25rem;
     }
   }
 
