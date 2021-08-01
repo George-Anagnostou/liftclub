@@ -13,24 +13,24 @@ interface Props {
 const Login: React.FC<Props> = ({ changeFormType, handleAuthSuccess }) => {
   const dispatch = useStoreDispatch();
 
+  const [invalidLoginCreds, setInvalidLoginCreds] = useState(false);
   const [loginCreds, setLoginCreds] = useState<{ username: string; password: string }>({
     username: "",
     password: "",
   });
 
-  const [invalidLoginCreds, setInvalidLoginCreds] = useState(false);
-  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setLoginCreds((prev) => ({ ...prev, username: e.target.value }));
-
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setLoginCreds((prev) => ({ ...prev, password: e.target.value }));
-
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const userData = await authLogin(dispatch, loginCreds.username, loginCreds.password);
-
     userData ? handleAuthSuccess(userData) : setInvalidLoginCreds(true);
+  };
+
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLoginCreds((prev) => ({ ...prev, username: e.target.value }));
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLoginCreds((prev) => ({ ...prev, password: e.target.value }));
   };
 
   return (

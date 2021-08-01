@@ -13,28 +13,28 @@ interface Props {
 const CreateAcc: React.FC<Props> = ({ changeFormType, handleAuthSuccess }) => {
   const dispatch = useStoreDispatch();
 
+  const [usernameExists, setUsernameExists] = useState(false);
   const [accCreds, setAccCreds] = useState<{ username: string; password: string }>({
     username: "",
     password: "",
   });
-  const [usernameExists, setUsernameExists] = useState(false);
 
-  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+  const handleCreateAccount = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const userData = await createAccount(dispatch, accCreds.username, accCreds.password);
+    userData ? handleAuthSuccess(userData) : setUsernameExists(true);
+  };
+
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Username cannot contain special characters
     setAccCreds((prev) => ({
       ...prev,
       username: e.target.value.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, ""),
     }));
+  };
 
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAccCreds((prev) => ({ ...prev, password: e.target.value }));
-
-  const handleCreateAccount = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const userData = await createAccount(dispatch, accCreds.username, accCreds.password);
-
-    userData ? handleAuthSuccess(userData) : setUsernameExists(true);
   };
 
   return (
