@@ -13,16 +13,14 @@ interface Props {
   setShowMembers: React.Dispatch<React.SetStateAction<boolean>>;
   showMembers: boolean;
   teamMembers: User[] | null;
-  userFollowing: string[];
-  handleUnfollowClick: (member_id: string) => Promise<void>;
-  handleFollowClick: (member_id: string) => Promise<void>;
+  handleUnfollowClick: (member_id: string) => void;
+  handleFollowClick: (member_id: string) => void;
 }
 
 const MembersModal: React.FC<Props> = ({
   setShowMembers,
   showMembers,
   teamMembers,
-  userFollowing,
   handleUnfollowClick,
   handleFollowClick,
 }) => {
@@ -41,7 +39,7 @@ const MembersModal: React.FC<Props> = ({
                   <p>{member.username}</p>
                 </Link>
 
-                {userFollowing.includes(member._id) ? (
+                {user?.following?.includes(member._id) ? (
                   <button className="following" onClick={() => handleUnfollowClick(member._id)}>
                     following
                   </button>

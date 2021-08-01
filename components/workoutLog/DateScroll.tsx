@@ -28,7 +28,7 @@ const DateScrollClone: React.FC<Props> = ({
 
   const { user } = useStoreState();
 
-  const getClickedDate = (numOfDaysToShift: number) => {
+  const makeDateString = (numOfDaysToShift: number) => {
     const { year, month, day } = getCurrYearMonthDay();
     // Current date
     const date = new Date(year, month, day);
@@ -42,7 +42,7 @@ const DateScrollClone: React.FC<Props> = ({
   };
 
   const handleDateClick = async (numberOfDaysToShift: number) => {
-    const newDate = getClickedDate(numberOfDaysToShift);
+    const newDate = makeDateString(numberOfDaysToShift);
 
     if (newDate !== selectedDate) {
       setLoading(true);
@@ -66,15 +66,13 @@ const DateScrollClone: React.FC<Props> = ({
   // Format the date for the DateBar
   const renderDate = useCallback(
     (numOfDaysToShift: number) => {
-      const newDate = getClickedDate(numOfDaysToShift);
+      const newDate = makeDateString(numOfDaysToShift);
 
       const dayData = user?.workoutLog[newDate];
 
       const dayIsSelected = selectedDate === newDate;
 
-      const arr = newDate.split("-");
-
-      const displayDate = new Date(`${arr[0]}-${arr[1]}-${Number(arr[2]) + 1}`).toString();
+      const displayDate = new Date(newDate + "T08:00:00.000Z").toDateString();
 
       return (
         <div

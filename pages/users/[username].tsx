@@ -17,7 +17,7 @@ import { User, Workout } from "../../utils/interfaces";
 const User_id: React.FC = () => {
   const router = useRouter();
   const { username } = router.query;
-  const { user } = useStoreState();
+  const { user, isSignedIn } = useStoreState();
 
   const [profileData, setProfileData] = useState<User | null>(null);
   const [createdWorkouts, setCreatedWorkouts] = useState<Workout[]>([]);
@@ -38,8 +38,8 @@ const User_id: React.FC = () => {
       }
     };
 
-    if (username && user) getProfileData();
-  }, [username, user, router]);
+    if (username && isSignedIn) getProfileData();
+  }, [isSignedIn, username]);
 
   return (
     <Container>

@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import styled from "styled-components";
 // Context
-import { useStoreState } from "../../store";
-// API
-import { addFollow, removeFollow } from "../../utils/api";
+import { useStoreDispatch, useStoreState } from "../../store";
+import { addUserFollow, removeUserFollow } from "../../store/actions/userActions";
 // Components
 import ProfileImg from "./ProfileImg";
 import Settings from "../../public/navIcons/Settings";
+import FollowsModal from "./FollowsModal";
 // Interfaces
 import { User } from "../../utils/interfaces";
-import FollowsModal from "./FollowsModal";
 
 interface Props {
   profileData: User;
@@ -20,16 +19,15 @@ interface Props {
 
 const NameTile: React.FC<Props> = ({ profileData, setProfileData, isProfileOwner }) => {
   const { user } = useStoreState();
+  const dispatch = useStoreDispatch();
 
-  const [userIsFollowing, setUserIsFollowing] = useState(false);
   const [showFollowsModal, setShowFollowsModal] = useState(false);
   const [modalData, setModalData] = useState<string[]>([]);
 
   const handleFollowClick = async () => {
-    const success = await addFollow(user!._id, profileData._id);
+    const success = await addUserFollow(dispatch, user!._id, profileData._id);
 
     if (success) {
-      setUserIsFollowing(true);
       setProfileData((prev: User) => ({
         ...prev,
         followers: [...(prev.followers || []), user!._id],
@@ -38,10 +36,9 @@ const NameTile: React.FC<Props> = ({ profileData, setProfileData, isProfileOwner
   };
 
   const handleUnfollowClick = async () => {
-    const success = await removeFollow(user!._id, profileData._id);
+    const success = await removeUserFollow(dispatch, user!._id, profileData._id);
 
     if (success) {
-      setUserIsFollowing(false);
       setProfileData((prev: User) => ({
         ...prev,
         followers: prev.followers?.filter((entry) => entry !== user!._id) || [],
@@ -53,10 +50,6 @@ const NameTile: React.FC<Props> = ({ profileData, setProfileData, isProfileOwner
     setShowFollowsModal(true);
     setModalData(profileData[type] || []);
   };
-
-  useEffect(() => {
-    if (user) setUserIsFollowing(user.following?.includes(profileData._id) || false);
-  }, [user]);
 
   return (
     <TileContainer>
@@ -75,14 +68,16 @@ const NameTile: React.FC<Props> = ({ profileData, setProfileData, isProfileOwner
           isProfileOwner={isProfileOwner}
         />
 
-        {!isProfileOwner && (
-          <button
-            className={userIsFollowing ? "unfollowBtn" : "followBtn"}
-            onClick={userIsFollowing ? handleUnfollowClick : handleFollowClick}
-          >
-            {userIsFollowing ? "Following" : "Follow"}
-          </button>
-        )}
+        {!isProfileOwner &&
+          (user!.following?.includes(profileData._id) || false ? (
+            <button className={"unfollowBtn"} onClick={handleUnfollowClick}>
+              Following
+            </button>
+          ) : (
+            <button className={"followBtn"} onClick={handleFollowClick}>
+              Follow
+            </button>
+          ))}
       </div>
 
       <div className="right">

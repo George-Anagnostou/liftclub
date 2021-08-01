@@ -14,7 +14,7 @@ import { useStoreState } from "../../store";
 import { Workout, WorkoutLogItem } from "../../utils/interfaces";
 
 const ProgressTile: React.FC = () => {
-  const { user } = useStoreState();
+  const { user, isSignedIn } = useStoreState();
 
   const [workoutOptions, setWorkoutOptions] = useState<Workout[]>([]); // Used in WorkoutSelect
   const [exerciseOptions, setExerciseOptions] = useState<
@@ -31,8 +31,8 @@ const ProgressTile: React.FC = () => {
    * 1. Set workout options to workouts that the user has logged
    */
   useEffect(() => {
-    if (user) getWorkoutOptions();
-  }, [user]);
+    if (isSignedIn) getWorkoutOptions();
+  }, [isSignedIn]);
 
   const getWorkoutOptions = async () => {
     const keyArr = Object.keys(user!.workoutLog);

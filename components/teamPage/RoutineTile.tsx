@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 // Context
-import { useStoreState } from "../../store";
+import { useStoreDispatch, useStoreState } from "../../store";
+import { addSavedWorkout, removeSavedWorkout } from "../../store/actions/userActions";
 // Utils
 import { daysBetween } from "../../utils";
-import {
-  addUserSavedWorkout,
-  getWorkoutsFromIdArray,
-  removeUserSavedWorkout,
-} from "../../utils/api";
+import { getWorkoutsFromIdArray } from "../../utils/api";
 import { Routine, Team, Workout } from "../../utils/interfaces";
 // Components
 import LoadingSpinner from "../LoadingSpinner";
@@ -21,18 +18,16 @@ interface Props {
 
 const RoutineTile: React.FC<Props> = ({ team, setTeam }) => {
   const { user } = useStoreState();
+  const dispatch = useStoreDispatch();
 
   const [uniqueWorkoutsInRoutine, setUniqueWorkoutsInRoutine] = useState<Workout[] | null>(null);
-  const [userSavedWorkouts, setUserSavedWorkouts] = useState<string[] | null>(null);
 
   const handleAddSavedWorkout = async (workout_id: string) => {
-    const added = await addUserSavedWorkout(user!._id, workout_id);
-    if (added) setUserSavedWorkouts((prev) => prev && [...prev, workout_id]);
+    addSavedWorkout(dispatch, user!._id, workout_id);
   };
 
   const handleRemoveSavedWorkout = async (workout_id: string) => {
-    const removed = await removeUserSavedWorkout(user!._id, workout_id);
-    if (removed) setUserSavedWorkouts((prev) => prev && prev.filter((id) => id !== workout_id));
+    removeSavedWorkout(dispatch, user!._id, workout_id);
   };
 
   const getUniqueWorkouts = async (plan: Routine["workoutPlan"]) => {
@@ -45,13 +40,8 @@ const RoutineTile: React.FC<Props> = ({ team, setTeam }) => {
     if (team?.routine) getUniqueWorkouts(team.routine.workoutPlan);
   }, [team]);
 
-  useEffect(() => {
-    if (user) setUserSavedWorkouts(user.savedWorkouts || []);
-  }, [user]);
-
   const formatRoutineInfo = (routine: Routine) => {
     const plan = routine.workoutPlan;
-
     const days = daysBetween(plan[0].isoDate, plan[plan.length - 1].isoDate);
 
     return (
@@ -79,14 +69,14 @@ const RoutineTile: React.FC<Props> = ({ team, setTeam }) => {
         </>
       )}
 
-      {uniqueWorkoutsInRoutine && userSavedWorkouts ? (
+      {uniqueWorkoutsInRoutine ? (
         <>
           <h3 className="title">All workouts</h3>
           <UniqueWorkoutList>
             {uniqueWorkoutsInRoutine.map((workout) => (
               <li key={workout._id}>
                 <p>{workout.name}</p>
-                {userSavedWorkouts.includes(workout._id) ? (
+                {user?.savedWorkouts?.includes(workout._id) ? (
                   <button className="saved" onClick={() => handleRemoveSavedWorkout(workout._id)}>
                     saved
                   </button>
@@ -162,6 +152,7 @@ const UniqueWorkoutList = styled.ul`
     min-width: max-content;
 
     button {
+      width: 52px;
       margin-left: 0.5rem;
       cursor: pointer;
       border-radius: 5px;

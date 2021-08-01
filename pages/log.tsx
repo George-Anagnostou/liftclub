@@ -16,7 +16,7 @@ import { getWorkoutsFromIdArray, getUserMadeWorkouts, getWorkoutFromId } from ".
 import { Workout, WorkoutLogItem } from "../utils/interfaces";
 
 export default function log() {
-  const { user } = useStoreState();
+  const { user, isSignedIn } = useStoreState();
   const dispatch = useStoreDispatch();
 
   const [loading, setLoading] = useState(true);
@@ -116,13 +116,13 @@ export default function log() {
     };
 
     // workoutLog is used to update DateScroll UI when saving or removing a workout
-    if (user) {
+    if (isSignedIn) {
       // Get all workouts made by the user
       loadUserMadeWorkouts();
       // Get all workotus saved by the user
       loadUserSavedWorkouts();
     }
-  }, [user]);
+  }, [isSignedIn]);
 
   useEffect(() => {
     const insertWorkoutData = async (logItem: WorkoutLogItem) => {
@@ -135,8 +135,8 @@ export default function log() {
       }
     };
 
-    if (user) insertWorkoutData(user.workoutLog[selectedDate]);
-  }, [user]);
+    if (isSignedIn && user) insertWorkoutData(user.workoutLog[selectedDate]);
+  }, [isSignedIn]);
 
   return (
     <MainContainer>

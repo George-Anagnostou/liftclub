@@ -2,18 +2,18 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import styled from "styled-components";
 // API
-import {
-  addFollow,
-  getUsersFromIdArr,
-  userJoiningTeam,
-  userLeavingTeam,
-  removeFollow,
-} from "../../utils/api";
+import { getUsersFromIdArr } from "../../utils/api";
 // Context
-import { useStoreState } from "../../store";
+import { useStoreDispatch, useStoreState } from "../../store";
 import { Team, User } from "../../utils/interfaces";
 // Components
 import MembersModal from "./MembersModal";
+import {
+  addUserFollow,
+  removeUserFollow,
+  userJoiningTeam,
+  userLeavingTeam,
+} from "../../store/actions/userActions";
 
 interface Props {
   team: Team;
@@ -24,20 +24,17 @@ interface Props {
 
 const TopTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMembers }) => {
   const { user } = useStoreState();
+  const dispatch = useStoreDispatch();
 
   const [showMembers, setShowMembers] = useState(false);
-  const [userFollowing, setUserFollowing] = useState<string[]>([]);
-
-  const userIsInTeam = () => team.members.includes(user!._id);
 
   const handleJoinTeam = async (team_id: string) => {
-    const joined = await userJoiningTeam(user!._id, team_id);
-
-    if (joined) setTeam((prev) => prev && { ...prev, members: [...prev?.members, user!._id] });
+    const joined = await userJoiningTeam(dispatch, user!._id, team_id);
+    if (joined) setTeam((prev) => prev && { ...prev, members: [...prev.members, user!._id] });
   };
 
   const handleLeaveTeam = async (team_id: string) => {
-    const left = await userLeavingTeam(user!._id, team_id);
+    const left = await userLeavingTeam(dispatch, user!._id, team_id);
 
     if (left) {
       setTeam(
@@ -50,14 +47,12 @@ const TopTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMembers }
     }
   };
 
-  const handleFollowClick = async (member_id: string) => {
-    const followed = await addFollow(user!._id, member_id);
-    if (followed) setUserFollowing((prev) => [...prev, member_id]);
+  const handleFollowClick = (member_id: string) => {
+    addUserFollow(dispatch, user!._id, member_id);
   };
 
-  const handleUnfollowClick = async (member_id: string) => {
-    const unfollowed = await removeFollow(user!._id, member_id);
-    if (unfollowed) setUserFollowing((prev) => [...prev.filter((_id) => _id !== member_id)]);
+  const handleUnfollowClick = (member_id: string) => {
+    removeUserFollow(dispatch, user!._id, member_id);
   };
 
   useEffect(() => {
@@ -69,35 +64,35 @@ const TopTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMembers }
     if (showMembers && !teamMembers) getTeamMembers();
   }, [showMembers]);
 
-  useEffect(() => {
-    if (user) setUserFollowing(user.following || []);
-  }, [user]);
-
   return (
     <Tile>
       <h1>{team.teamName}</h1>
 
       <div className="info">
-        <p>
-          Leader -{" "}
-          <Link href={`/users/${team.creatorName}`}>
-            <a className="leader">{team.creatorName}</a>
-          </Link>
-        </p>
+        <div>
+          <p>
+            Leader -{" "}
+            <Link href={`/users/${team.creatorName}`}>
+              <a className="leader">{team.creatorName}</a>
+            </Link>
+          </p>
 
-        <p>•</p>
+          <p className="membersCount" onClick={() => setShowMembers(true)}>
+            {team.members.length} {team.members.length === 1 ? "member" : "members"}
+          </p>
+        </div>
 
-        <p className="membersCount" onClick={() => setShowMembers(true)}>
-          {team.members.length} {team.members.length === 1 ? "member" : "members"}
-        </p>
-        <button
-          onClick={
-            userIsInTeam() ? () => handleLeaveTeam(team._id) : () => handleJoinTeam(team._id)
-          }
-          className={userIsInTeam() ? "joined" : "join"}
-        >
-          {userIsInTeam() ? "Joined" : "Join"}
-        </button>
+        {(function () {
+          const joined = user?.teamsJoined?.includes(team._id);
+          return (
+            <button
+              onClick={joined ? () => handleLeaveTeam(team._id) : () => handleJoinTeam(team._id)}
+              className={joined ? "joined" : "join"}
+            >
+              {joined ? "Joined" : "Join"}
+            </button>
+          );
+        })()}
       </div>
 
       {showMembers && (
@@ -105,7 +100,6 @@ const TopTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMembers }
           setShowMembers={setShowMembers}
           showMembers={showMembers}
           teamMembers={teamMembers}
-          userFollowing={userFollowing}
           handleUnfollowClick={handleUnfollowClick}
           handleFollowClick={handleFollowClick}
         />

@@ -2,8 +2,9 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 // Context
-import { useStoreState } from "../../store";
-import { addFollow, getUsersFromIdArr, removeFollow } from "../../utils/api";
+import { useStoreDispatch, useStoreState } from "../../store";
+import { addUserFollow, removeUserFollow } from "../../store/actions/userActions";
+import { getUsersFromIdArr } from "../../utils/api";
 // Interfaces
 import { User } from "../../utils/interfaces";
 // Components
@@ -18,19 +19,17 @@ interface Props {
 
 const FollowsModal: React.FC<Props> = ({ member_ids, setShowFollowsModal, showFollowsModal }) => {
   const { user } = useStoreState();
+  const dispatch = useStoreDispatch();
 
   const [members, setMembers] = useState<User[] | null>(null);
   const [loading, setLoading] = useState(false);
-  const [userFollowing, setUserFollowing] = useState<string[]>([]);
 
-  const handleFollowClick = async (mem_id: string) => {
-    const followed = await addFollow(user!._id, mem_id);
-    if (followed) setUserFollowing((prev) => [...prev, mem_id]);
+  const handleFollowClick = (mem_id: string) => {
+    addUserFollow(dispatch, user!._id, mem_id);
   };
 
-  const handleUnfollowClick = async (mem_id: string) => {
-    const unfollowed = await removeFollow(user!._id, mem_id);
-    if (unfollowed) setUserFollowing((prev) => [...prev.filter((_id) => _id !== mem_id)]);
+  const handleUnfollowClick = (mem_id: string) => {
+    removeUserFollow(dispatch, user!._id, mem_id);
   };
 
   useEffect(() => {
@@ -47,10 +46,6 @@ const FollowsModal: React.FC<Props> = ({ member_ids, setShowFollowsModal, showFo
     if (member_ids.length) getMembers();
   }, [member_ids]);
 
-  useEffect(() => {
-    if (user) setUserFollowing(user.following || []);
-  }, [user]);
-
   return (
     <Modal removeModal={() => setShowFollowsModal(false)} isOpen={showFollowsModal}>
       <MembersList>
@@ -66,7 +61,7 @@ const FollowsModal: React.FC<Props> = ({ member_ids, setShowFollowsModal, showFo
                   <p onClick={() => setShowFollowsModal(false)}>{member.username}</p>
                 </Link>
 
-                {userFollowing.includes(member._id) ? (
+                {user?.following?.includes(member._id) ? (
                   <button className="following" onClick={() => handleUnfollowClick(member._id)}>
                     following
                   </button>
