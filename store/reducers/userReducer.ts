@@ -1,11 +1,11 @@
 import { User } from "../../utils/interfaces";
 
-interface AppState {
+type AppState = {
   user: User | undefined;
   isSignedIn: boolean;
   isUsingPWA: boolean;
   platform: string;
-}
+};
 
 export default function userReducer(state: AppState, action) {
   const { type, payload } = action;
@@ -35,6 +35,50 @@ export default function userReducer(state: AppState, action) {
     case "DELETE_DAY_FROM_WORKOUT_LOG":
       delete state.user?.workoutLog[payload.key];
       return { ...state };
+
+    case "ADD_ID_TO_FOLLOWING":
+      return {
+        ...state,
+        user: { ...state.user, following: [...(state.user?.following || []), payload.id] },
+      };
+
+    case "REMOVE_ID_FROM_FOLLOWING":
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          following: state.user?.following?.filter((_id) => _id !== payload.id) || [],
+        },
+      };
+
+    case "ADD_ID_TO_TEAMS_JOINED":
+      return {
+        ...state,
+        user: { ...state.user, teamsJoined: [...(state.user?.teamsJoined || []), payload.id] },
+      };
+
+    case "REMOVE_ID_FROM_TEAMS_JOINED":
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          teamsJoined: state.user?.teamsJoined?.filter((_id) => _id !== payload.id) || [],
+        },
+      };
+
+    case "ADD_ID_TO_SAVED_WORKOUTS":
+      return {
+        ...state,
+        user: { ...state.user, savedWorkouts: [...(state.user?.savedWorkouts || []), payload.id] },
+      };
+    case "REMOVE_ID_FROM_SAVED_WORKOUTS":
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          savedWorkouts: state.user?.savedWorkouts?.filter((_id) => _id !== payload.id) || [],
+        },
+      };
 
     default:
       throw new Error();

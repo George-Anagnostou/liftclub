@@ -6,6 +6,7 @@ import { WorkoutLogItem } from "../../utils/interfaces";
  * @param user_id User id as type string
  * @returns Boolean for the outcome of login request
  */
+
 export const loginWithID = async (dispatch: any, user_id: string) => {
   try {
     const res = await fetch(`/api/users/loginWithID`, {
@@ -28,6 +29,7 @@ export const loginWithID = async (dispatch: any, user_id: string) => {
  *
  * @param dispatch Dispatch function from useStoreDispatch()
  */
+
 export const logoutUser = async (dispatch) => {
   dispatch({ type: "LOGOUT" });
   localStorage.removeItem("workoutID");
@@ -40,6 +42,7 @@ export const logoutUser = async (dispatch) => {
  * @param password Password from login form
  * @returns If successful login, returns user data, else returns false
  */
+
 export const authLogin = async (dispatch: any, username: string, password: string) => {
   // combine username & password into an object
   const loginCreds = { username, password };
@@ -67,6 +70,7 @@ export const authLogin = async (dispatch: any, username: string, password: strin
  * @param password Password from create account from
  * @returns If successful account creation, returns user data, else returns false
  */
+
 export const createAccount = async (dispatch: any, username: string, password: string) => {
   try {
     const res = await fetch("/api/users/createUser", {
@@ -93,6 +97,7 @@ export const createAccount = async (dispatch: any, username: string, password: s
  *
  * @param dispatch Dispatch function from useStoreDispatch()
  */
+
 export const setIsUsingPWA = (dispatch: any) => {
   dispatch({ type: "USING_PWA" });
 };
@@ -101,6 +106,7 @@ export const setIsUsingPWA = (dispatch: any) => {
  *
  * @param dispatch Dispatch function from useStoreDispatch()
  */
+
 export const setPlatformToiOS = (dispatch: any) => {
   dispatch({ type: "USING_iOS_PWA" });
 };
@@ -109,10 +115,11 @@ export const setPlatformToiOS = (dispatch: any) => {
  *
  * @param dispatch Dispatch function from useStoreDispatch()
  * @param user_id User id string
- * @param logValue An object with
- * @param logKey
- * @returns
+ * @param logValue An object with workout log data
+ * @param logKey Date string (ex: 2021-07-22)
+ * @returns Boolean for the success of the api call
  */
+
 export const addDayToWorkoutLog = async (
   dispatch: any,
   user_id: string,
@@ -137,6 +144,14 @@ export const addDayToWorkoutLog = async (
   }
 };
 
+/**
+ *
+ * @param dispatch Dispatch function from useStoreDispatch()
+ * @param user_id User id string
+ * @param logKey Date string (ex: 2021-07-22)
+ * @returns Boolean for the success of the api call
+ */
+
 export const deleteDayFromWorkoutLog = async (dispatch: any, user_id: string, logKey: string) => {
   try {
     const res = await fetch(
@@ -147,6 +162,174 @@ export const deleteDayFromWorkoutLog = async (dispatch: any, user_id: string, lo
     dispatch({ type: "DELETE_DAY_FROM_WORKOUT_LOG", payload: { key: logKey } });
 
     return res.status === 204;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
+/**
+ *
+ * @param dispatch Dispatch function from useStoreDispatch()
+ * @param user_id User id string
+ * @param target_id id of the user to be followed
+ * @returns Boolean for the success of the api call
+ */
+
+export const addUserFollow = async (dispatch, user_id: string, target_id: string) => {
+  try {
+    dispatch({ type: "ADD_ID_TO_FOLLOWING", payload: { id: target_id } });
+
+    const res = await fetch(`/api/users/${user_id}`, {
+      method: "PUT",
+      body: JSON.stringify({ follow: target_id }),
+    });
+
+    if (res.status !== 201) {
+      dispatch({ type: "REMOVE_ID_FROM_FOLLOWING", payload: { id: target_id } });
+    }
+
+    return res.status === 201;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
+/**
+ *
+ * @param dispatch Dispatch function from useStoreDispatch()
+ * @param user_id User id string
+ * @param target_id id of the user to be unfollowed
+ * @returns Boolean for the success of the api call
+ */
+
+export const removeUserFollow = async (dispatch, user_id: string, target_id: string) => {
+  try {
+    dispatch({ type: "REMOVE_ID_FROM_FOLLOWING", payload: { id: target_id } });
+
+    const res = await fetch(`/api/users/${user_id}`, {
+      method: "PUT",
+      body: JSON.stringify({ unfollow: target_id }),
+    });
+
+    if (res.status !== 201) {
+      dispatch({ type: "ADD_ID_TO_FOLLOWING", payload: { id: target_id } });
+    }
+
+    return res.status === 201;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
+/**
+ *
+ * @param dispatch Dispatch function from useStoreDispatch()
+ * @param user_id User id string
+ * @param team_id Team id string
+ * @returns Boolean for the success of the api call
+ */
+
+export const userJoiningTeam = async (dispatch, user_id: string, team_id: string) => {
+  try {
+    dispatch({ type: "ADD_ID_TO_TEAMS_JOINED", payload: { id: team_id } });
+
+    const res = await fetch(`/api/users/${user_id}`, {
+      method: "PUT",
+      body: JSON.stringify({ joinTeam: team_id }),
+    });
+
+    if (res.status !== 201) {
+      dispatch({ type: "REMOVE_ID_FROM_TEAMS_JOINED", payload: { id: team_id } });
+    }
+
+    return res.status === 201;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
+/**
+ *
+ * @param dispatch Dispatch function from useStoreDispatch()
+ * @param user_id User id string
+ * @param team_id Team id string
+ * @returns Boolean for the success of the api call
+ */
+
+export const userLeavingTeam = async (dispatch, user_id: string, team_id: string) => {
+  try {
+    dispatch({ type: "REMOVE_ID_FROM_TEAMS_JOINED", payload: { id: team_id } });
+
+    const res = await fetch(`/api/users/${user_id}`, {
+      method: "PUT",
+      body: JSON.stringify({ leaveTeam: team_id }),
+    });
+
+    if (res.status !== 201) {
+      dispatch({ type: "ADD_ID_TO_TEAMS_JOINED", payload: { id: team_id } });
+    }
+
+    return res.status === 201;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
+/**
+ *
+ * @param dispatch Dispatch function from useStoreDispatch()
+ * @param user_id User id string
+ * @param workout_id Workout id string
+ * @returns Boolean for the success of the api call
+ */
+
+export const addSavedWorkout = async (dispatch, user_id: string, workout_id: string) => {
+  try {
+    dispatch({ type: "ADD_ID_TO_SAVED_WORKOUTS", payload: { id: workout_id } });
+
+    const res = await fetch(`/api/users/${user_id}`, {
+      method: "PUT",
+      body: JSON.stringify({ addSavedWorkout: workout_id }),
+    });
+
+    if (res.status !== 201) {
+      dispatch({ type: "REMOVE_ID_FROM_SAVED_WORKOUTS", payload: { id: workout_id } });
+    }
+
+    return res.status === 201;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
+/**
+ *
+ * @param dispatch Dispatch function from useStoreDispatch()
+ * @param user_id User id string
+ * @param workout_id Workout id string
+ * @returns Boolean for the success of the api call
+ */
+
+export const removeSavedWorkout = async (dispatch, user_id: string, workout_id: string) => {
+  try {
+    dispatch({ type: "REMOVE_ID_FROM_SAVED_WORKOUTS", payload: { id: workout_id } });
+
+    const res = await fetch(`/api/users/${user_id}`, {
+      method: "PUT",
+      body: JSON.stringify({ removeSavedWorkout: workout_id }),
+    });
+
+    if (res.status !== 201) {
+      dispatch({ type: "ADD_ID_TO_SAVED_WORKOUTS", payload: { id: workout_id } });
+    }
+
+    return res.status === 201;
   } catch (e) {
     console.log(e);
     return false;

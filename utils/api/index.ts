@@ -34,95 +34,11 @@ export const saveProfileImgUrl = async (user_id: string, username: string) => {
   }
 };
 
-export const userJoiningTeam = async (user_id: string, team_id: string) => {
-  try {
-    const res = await fetch(`/api/users/${user_id}`, {
-      method: "PUT",
-      body: JSON.stringify({ joinTeam: team_id }),
-    });
-
-    return true;
-  } catch (e) {
-    console.log(e);
-    return false;
-  }
-};
-
-export const userLeavingTeam = async (user_id: string, team_id: string) => {
-  try {
-    const res = await fetch(`/api/users/${user_id}`, {
-      method: "PUT",
-      body: JSON.stringify({ leaveTeam: team_id }),
-    });
-
-    return true;
-  } catch (e) {
-    console.log(e);
-    return false;
-  }
-};
-
-export const addUserSavedWorkout = async (user_id: string, workout_id: string) => {
-  try {
-    const res = await fetch(`/api/users/${user_id}`, {
-      method: "PUT",
-      body: JSON.stringify({ addSavedWorkout: workout_id }),
-    });
-
-    return true;
-  } catch (e) {
-    console.log(e);
-    return false;
-  }
-};
-
-export const removeUserSavedWorkout = async (user_id: string, workout_id: string) => {
-  try {
-    const res = await fetch(`/api/users/${user_id}`, {
-      method: "PUT",
-      body: JSON.stringify({ removeSavedWorkout: workout_id }),
-    });
-
-    return true;
-  } catch (e) {
-    console.log(e);
-    return false;
-  }
-};
-
 export const saveUserWeight = async (weight: number, user_id: string) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
       body: JSON.stringify({ weight }),
-    });
-
-    return true;
-  } catch (e) {
-    console.log(e);
-    return false;
-  }
-};
-
-export const addFollow = async (user_id: string, followee_id: string) => {
-  try {
-    const res = await fetch(`/api/users/${user_id}`, {
-      method: "PUT",
-      body: JSON.stringify({ follow: followee_id }),
-    });
-
-    return true;
-  } catch (e) {
-    console.log(e);
-    return false;
-  }
-};
-
-export const removeFollow = async (user_id: string, followee_id: string) => {
-  try {
-    const res = await fetch(`/api/users/${user_id}`, {
-      method: "PUT",
-      body: JSON.stringify({ unfollow: followee_id }),
     });
 
     return true;
@@ -145,7 +61,6 @@ export const saveUserBio = async (user_id: string, bio: string) => {
     return false;
   }
 };
-
 
 // Multiple
 export const getUsersFromIdArr = async (idArr: string[]): Promise<User[] | false> => {
