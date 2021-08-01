@@ -38,9 +38,9 @@ const RoutineTile: React.FC<Props> = ({ team, setTeam }) => {
 
   useEffect(() => {
     if (team?.routine) getUniqueWorkouts(team.routine.workoutPlan);
-  }, [team]);
+  }, [team.routine]);
 
-  const formatRoutineInfo = (routine: Routine) => {
+  const renderRoutineInfo = (routine: Routine) => {
     const plan = routine.workoutPlan;
     const days = daysBetween(plan[0].isoDate, plan[plan.length - 1].isoDate);
 
@@ -63,7 +63,7 @@ const RoutineTile: React.FC<Props> = ({ team, setTeam }) => {
 
       {team.routine && (
         <>
-          {formatRoutineInfo(team.routine)}
+          {renderRoutineInfo(team.routine)}
 
           <RoutineViewer routine_id={team.routine._id} setTeam={setTeam} />
         </>
@@ -145,14 +145,15 @@ const UniqueWorkoutList = styled.ul`
   li {
     background: ${({ theme }) => theme.buttonMed};
     padding: 0.5rem 0.5rem;
-    margin: 0 0.5rem 0.5rem;
+    margin: 0 0.25rem 0.5rem;
     border-radius: 5px;
     display: flex;
     align-items: center;
     min-width: max-content;
 
     button {
-      width: 52px;
+      font-size: 0.7rem;
+      width: 45px;
       margin-left: 0.5rem;
       cursor: pointer;
       border-radius: 5px;

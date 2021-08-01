@@ -30,7 +30,10 @@ const TopTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMembers }
 
   const handleJoinTeam = async (team_id: string) => {
     const joined = await userJoiningTeam(dispatch, user!._id, team_id);
-    if (joined) setTeam((prev) => prev && { ...prev, members: [...prev.members, user!._id] });
+    if (joined) {
+      setTeam((prev) => prev && { ...prev, members: [...prev.members, user!._id] });
+      setTeamMembers((prev) => prev && [...prev, user!]);
+    }
   };
 
   const handleLeaveTeam = async (team_id: string) => {
@@ -44,6 +47,7 @@ const TopTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMembers }
             members: [...prev.members.filter((_id) => _id !== user!._id)],
           }
       );
+      setTeamMembers((prev) => prev && prev.filter((member) => member._id !== user!._id));
     }
   };
 
@@ -141,17 +145,23 @@ const Tile = styled.div`
       border-radius: 5px;
       padding: 0.5rem 0.75rem;
       border: none;
-      box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
       margin-left: auto;
 
       &.join {
-        background: ${({ theme }) => theme.accent};
+        padding: 0.25rem 1rem;
+        font-size: 0.9rem;
+        border-radius: 5px;
         color: ${({ theme }) => theme.accentText};
+        background: ${({ theme }) => theme.accent};
+        border: 1px solid ${({ theme }) => theme.accentSoft};
       }
       &.joined {
-        background: ${({ theme }) => theme.buttonMed};
+        padding: 0.25rem 0.5rem;
+        font-size: 0.9rem;
+        border-radius: 5px;
         color: ${({ theme }) => theme.textLight};
-        box-shadow: none;
+        background: ${({ theme }) => theme.buttonMed};
+        border: 1px solid ${({ theme }) => theme.buttonMed};
       }
     }
   }

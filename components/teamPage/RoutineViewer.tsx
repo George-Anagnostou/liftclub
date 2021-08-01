@@ -21,7 +21,7 @@ interface Props {
 }
 
 const RoutineContainer: React.FC<Props> = ({ routine_id, setTeam }) => {
-  const { user } = useStoreState();
+  const { user, isSignedIn } = useStoreState();
 
   const [initialRoutineData, setInitialRoutineData] = useState<Routine | null>(null);
   const [routine, setRoutine] = useState<Routine | null>(null);
@@ -105,8 +105,8 @@ const RoutineContainer: React.FC<Props> = ({ routine_id, setTeam }) => {
       setUserSavedWorkouts(workoutsSaved.reverse());
     };
 
-    if (isRoutineOwner && user) getUserWorkouts();
-  }, [isRoutineOwner, user]);
+    if (isRoutineOwner && isSignedIn) getUserWorkouts();
+  }, [isRoutineOwner, isSignedIn]);
 
   // Displays the data for the selected date & editor if in editing mode
   // If there is a workout, displays the
@@ -134,6 +134,7 @@ const RoutineContainer: React.FC<Props> = ({ routine_id, setTeam }) => {
 
         {isEditing && (
           <EditingWorkoutOptions>
+            <h3 className="title">Created</h3>
             <ul>
               {userMadeWorkouts.map((workout) => (
                 <li
@@ -153,6 +154,7 @@ const RoutineContainer: React.FC<Props> = ({ routine_id, setTeam }) => {
               ))}
             </ul>
 
+            <h3 className="title">Saved</h3>
             <ul>
               {userSavedWorkouts.map((workout) => (
                 <li
@@ -268,11 +270,14 @@ const EditingWorkoutOptions = styled.div`
   border-radius: 5px;
   background: ${({ theme }) => theme.buttonLight};
 
+  h3 {
+    margin-left: 0.5rem;
+  }
+
   ul {
     width: 100%;
-    overflow-x: scroll;
-    overflow-y: hidden;
     display: flex;
+    flex-wrap: wrap;
 
     &:first-of-type {
       margin-bottom: 0.5rem;
@@ -280,7 +285,7 @@ const EditingWorkoutOptions = styled.div`
 
     li {
       background: ${({ theme }) => theme.background};
-      margin: 0 0.5rem;
+      margin: 0.25rem;
       padding: 0.5rem;
       border-radius: 5px;
       min-width: max-content;
