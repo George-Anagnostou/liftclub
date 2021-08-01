@@ -98,8 +98,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
               { $push: { savedWorkouts: new ObjectId(addSavedWorkout) } }
             );
 
-          res.json({});
-
+          res.status(201).json({});
           break;
 
         case "REMOVE_SAVED_WORKOUT":
@@ -110,7 +109,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
               { $pull: { savedWorkouts: new ObjectId(removeSavedWorkout) } }
             );
 
-          res.json({});
+          res.status(201).json({});
           break;
 
         case "WEIGHT":
@@ -121,7 +120,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
               { $push: { weight: Number(weight) } }
             );
 
-          res.json({});
+          res.status(201).json({});
           break;
 
         case "FOLLOW":
@@ -141,7 +140,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
               { $push: { followers: new ObjectId(user_id) } }
             );
 
-          res.json({});
+          res.status(201).json({});
           break;
 
         case "UNFOLLOW":
@@ -161,7 +160,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
               { $pull: { followers: new ObjectId(user_id) } }
             );
 
-          res.json({});
+          res.status(201).json({});
           break;
 
         case "BIO":
@@ -169,7 +168,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             .collection("users")
             .findOneAndUpdate({ _id: new ObjectId(user_id) }, { $set: { bio: bio } });
 
-          res.json({});
+          res.status(201).json({});
           break;
 
         case "JOIN_TEAM":
@@ -187,7 +186,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
               { $push: { members: new ObjectId(user_id) } }
             );
 
-          res.json({});
+          res.status(201).json({});
           break;
 
         case "LEAVE_TEAM":
@@ -205,7 +204,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
               { $pull: { members: new ObjectId(user_id) } }
             );
 
-          res.json({});
+          res.status(201).json({});
           break;
 
         case "PROFILE_IMG_URL":
@@ -217,7 +216,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             );
 
           userData ? res.status(201).json({}) : res.status(400).end();
-
           break;
 
         case "ADD_WORKOUT_TO_WORKOUT_LOG":
