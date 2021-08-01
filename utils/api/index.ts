@@ -335,3 +335,27 @@ export const removeTrainerFromTeam = async (team_id: string, trainer_id: string)
     return false;
   }
 };
+
+// Multiple
+export const getTeamsFromIdArray = async (idArr: string[]): Promise<Team[]> => {
+  if (!Boolean(idArr.length)) return [];
+
+  try {
+    const res = await fetch("/api/teams/queryMultiple", {
+      method: "POST",
+      body: JSON.stringify(idArr),
+    });
+
+    const teams = await res.json();
+
+    // Sort teams to be in the same order that the irArr requests them
+    teams.sort(
+      (a: Team, b: Team) => idArr.indexOf(a._id.toString()) - idArr.indexOf(b._id.toString())
+    );
+
+    return teams;
+  } catch (e) {
+    console.log(e);
+    return [];
+  }
+};
