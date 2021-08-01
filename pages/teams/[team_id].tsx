@@ -17,7 +17,7 @@ const Team_id: React.FC = () => {
   const router = useRouter();
   const { team_id } = router.query;
 
-  const { user } = useStoreState();
+  const { isSignedIn } = useStoreState();
 
   const [team, setTeam] = useState<Team | null>(null);
   const [teamMembers, setTeamMembers] = useState<User[] | null>(null);
@@ -28,8 +28,8 @@ const Team_id: React.FC = () => {
       if (teamData) setTeam(teamData);
     };
 
-    if (user && team_id && !team) getTeamData();
-  }, [team_id, user]);
+    if (isSignedIn && team_id && !team) getTeamData();
+  }, [team_id, isSignedIn]);
 
   return (
     <Container>
