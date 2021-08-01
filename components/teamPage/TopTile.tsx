@@ -141,7 +141,7 @@ const Tile = styled.div`
       border-radius: 5px;
       padding: 0.5rem 0.75rem;
       border: none;
-      box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
+      box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
       margin-left: auto;
 
       &.join {
@@ -151,7 +151,7 @@ const Tile = styled.div`
       &.joined {
         background: ${({ theme }) => theme.buttonMed};
         color: ${({ theme }) => theme.textLight};
-        box-shadow: 0 1px 0px ${({ theme }) => theme.boxShadow};
+        box-shadow: none;
       }
     }
   }
