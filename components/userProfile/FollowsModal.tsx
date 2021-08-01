@@ -118,7 +118,8 @@ const MembersList = styled.div`
         border-radius: 5px;
         border: none;
         padding: 0.25rem;
-        box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
+        transition: all 0.2s ease;
+        font-size: 0.7rem;
 
         &.follow {
           background: ${({ theme }) => theme.accentSoft};

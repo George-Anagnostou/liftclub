@@ -2,41 +2,40 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import styled from "styled-components";
 // API
-import { getUserMadeTeams } from "../../utils/api";
+import { getTeamsFromIdArray } from "../../utils/api";
 // Interfaces
 import { Team, User } from "../../utils/interfaces";
 
 interface Props {
   profileData: User;
-  isProfileOwner: boolean;
 }
 
-const Teams: React.FC<Props> = ({ profileData, isProfileOwner }) => {
-  const [profileOwnedTeams, setProfileOwnedTeams] = useState<Team[]>([]);
+const TeamsTile: React.FC<Props> = ({ profileData }) => {
+  const [profileTeamsJoined, setProfileTeamsJoined] = useState<Team[]>([]);
 
   useEffect(() => {
     const getTeams = async () => {
-      const teamsRes = await getUserMadeTeams(profileData._id);
-      setProfileOwnedTeams(teamsRes || []);
+      const teamsRes = await getTeamsFromIdArray(profileData.teamsJoined || []);
+      console.log(teamsRes);
+      setProfileTeamsJoined(teamsRes || []);
     };
 
     getTeams();
-  }, [profileData]);
+  }, [profileData.username]);
 
   return (
     <Container>
       <div className="topbar">
-        <h3 className="title">Owned Teams</h3>
-        {isProfileOwner && (
-          <Link href="/builder?builder=team">
-            <button>Make Team</button>
-          </Link>
-        )}
+        <h3 className="title">Teams Joined</h3>
+
+        <Link href="/builder?builder=team">
+          <button>+</button>
+        </Link>
       </div>
 
       <TeamsList>
-        {Boolean(profileOwnedTeams.length) ? (
-          profileOwnedTeams.map((team) => (
+        {Boolean(profileTeamsJoined.length) ? (
+          profileTeamsJoined.map((team) => (
             <TeamItem key={team._id}>
               <Link href={`/teams/${team._id}`}>
                 <div className="teamInfo">
@@ -55,9 +54,9 @@ const Teams: React.FC<Props> = ({ profileData, isProfileOwner }) => {
     </Container>
   );
 };
-export default Teams;
+export default TeamsTile;
 
-const Container = styled.div`
+const Container = styled.section`
   position: relative;
   width: 100%;
   background: ${({ theme }) => theme.background};
@@ -71,13 +70,14 @@ const Container = styled.div`
     align-items: center;
 
     button {
+      min-width: max-content;
       border-radius: 5px;
-      padding: 0.25rem 0.5rem;
+      padding: 0rem 0.4rem;
       margin-bottom: 0.5rem;
-      font-size: 0.8rem;
       border: ${({ theme }) => theme.border};
       color: ${({ theme }) => theme.textLight};
       background: ${({ theme }) => theme.buttonMed};
+      font-size: 1rem;
     }
   }
 `;

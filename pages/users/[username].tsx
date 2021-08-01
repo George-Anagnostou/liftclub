@@ -10,7 +10,8 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import NameTile from "../../components/userProfile/NameTile";
 import Bio from "../../components/userProfile/Bio";
 import WeeklyBar from "../../components/userProfile/WeeklyBar";
-import Teams from "../../components/userProfile/Teams";
+import TeamsTile from "../../components/userProfile/TeamsTile";
+import CreatedWorkoutsTile from "../../components/userProfile/CreatedWorkoutsTile";
 // Interfaces
 import { User, Workout } from "../../utils/interfaces";
 
@@ -60,7 +61,9 @@ const User_id: React.FC = () => {
 
           <WeeklyBar profileData={profileData} />
 
-          <Teams profileData={profileData} isProfileOwner={isProfileOwner} />
+          <TeamsTile profileData={profileData} />
+
+          <CreatedWorkoutsTile createdWorkouts={createdWorkouts} />
         </>
       ) : (
         <div className="loadingContainer">

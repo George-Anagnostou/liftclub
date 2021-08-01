@@ -61,7 +61,6 @@ const DateScrollContainer = styled.ul`
       transition: all 0.2s ease-in-out;
 
       color: ${({ theme }) => theme.text};
-      /* border: 1px solid ${({ theme }) => theme.boxShadow}; */
 
       p {
         margin: 0.2rem 0;
