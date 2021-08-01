@@ -54,8 +54,6 @@ const SavedWorkoutTile: React.FC<Props> = ({ workout, removeFromSavedWorkouts })
           <button className="remove" onClick={() => removeFromSavedWorkouts(workout)}>
             saved
           </button>
-
-          <button onClick={toggleWorkoutView}>{showWorkoutInfo ? "close" : "view"}</button>
         </div>
       </div>
 
@@ -139,8 +137,8 @@ const WorkoutTile = styled.li`
       }
 
       .remove {
-        color: ${({ theme }) => theme.accentText};
-        background: ${({ theme }) => theme.accentSoft};
+        color: ${({ theme }) => theme.textLight};
+        background: ${({ theme }) => theme.buttonMed};
       }
 
       @media (max-width: 350px) {

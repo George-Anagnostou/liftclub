@@ -18,12 +18,16 @@ export default function feed() {
   const [savedWorkouts, setSavedWorkouts] = useState<Workout[]>([]);
   const [publicWorkouts, setPublicWorkouts] = useState<Workout[]>([]);
 
-  const addToSavedWorkouts = (workout: Workout) => {
-    addSavedWorkout(dispatch, user!._id, workout._id);
+  const addToSavedWorkouts = async (workout: Workout) => {
+    setSavedWorkouts((prev) => [...prev, workout]);
+    const added = await addSavedWorkout(dispatch, user!._id, workout._id);
+    if (!added) setSavedWorkouts((prev) => prev.filter((saved) => saved._id !== workout._id));
   };
 
-  const removeFromSavedWorkouts = (workout: Workout) => {
-    removeSavedWorkout(dispatch, user!._id, workout._id);
+  const removeFromSavedWorkouts = async (workout: Workout) => {
+    setSavedWorkouts((prev) => prev.filter((saved) => saved._id !== workout._id));
+    const removed = await removeSavedWorkout(dispatch, user!._id, workout._id);
+    if (!removed) setSavedWorkouts((prev) => [...prev, workout]);
   };
 
   useEffect(() => {

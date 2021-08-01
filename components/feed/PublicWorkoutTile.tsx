@@ -70,14 +70,13 @@ const PublicWorkoutTile: React.FC<Props> = ({
 
           {workoutIsSaved(workout) ? (
             <button className="remove" onClick={() => removeFromSavedWorkouts(workout)}>
-              remove
+              saved
             </button>
           ) : (
             <button className="add" onClick={() => addToSavedWorkouts(workout)}>
               save
             </button>
           )}
-          <button onClick={toggleWorkoutInfo}>{showWorkoutInfo ? "close" : "view"}</button>
         </div>
       </div>
 
@@ -161,8 +160,8 @@ const WorkoutTile = styled.li`
       }
 
       .remove {
-        color: ${({ theme }) => theme.accentText};
-        background: ${({ theme }) => theme.accentSoft};
+        color: ${({ theme }) => theme.textLight};
+        background: ${({ theme }) => theme.buttonMed};
       }
       .add {
         color: ${({ theme }) => theme.accentText};
