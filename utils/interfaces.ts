@@ -1,6 +1,6 @@
 export type User = {
-  _id: string;
-  username: string;
+  readonly _id: string;
+  readonly username: string;
   savedWorkouts?: Array<string>;
   workoutLog: WorkoutLog;
   weight?: Array<number>;
@@ -32,7 +32,7 @@ export interface WorkoutLogItem {
 }
 
 export interface Team {
-  _id: string;
+  readonly _id: string;
   teamName: string;
   members: Array<string>;
   dateCreated: string;
@@ -45,7 +45,7 @@ export interface Team {
 }
 
 export interface Routine {
-  _id: string;
+  readonly _id: string;
   creator_id: string;
   creatorName: string;
   name: string;
@@ -53,7 +53,7 @@ export interface Routine {
 }
 
 export interface Workout {
-  _id: string;
+  readonly _id: string;
   creator_id: string;
   creatorName: string;
   name: string;
@@ -80,7 +80,7 @@ export interface NewWorkout {
 }
 
 export interface Exercise {
-  _id: string;
+  readonly _id: string;
   name: string;
   equipment: string;
   muscleGroup: string;
