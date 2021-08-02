@@ -70,7 +70,7 @@ export default function log() {
     setIndex: number
   ) => {
     // Cast value to number or use empty str
-    const value = target.value === "" ? "" : Number(target.value);
+    const value = target.value.trim() ?? Number(target.value);
 
     if (currentDayData?.exerciseData) {
       setCurrentDayData((prev) => {
