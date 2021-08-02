@@ -50,8 +50,6 @@ const CustomWorkout: React.FC<Props> = ({
   ) => {
     const num = Number(e.target.value || 0);
 
-    console.log(num);
-
     setCustomWorkout((prev) => {
       prev.exercises[exerciseIndex].sets[setIndex].reps = num;
       return { ...prev };
