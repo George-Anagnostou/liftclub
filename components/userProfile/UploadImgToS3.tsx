@@ -115,6 +115,7 @@ const UploadImgToS3: React.FC<Props> = ({ setProfileData }) => {
 
   return (
     <Container>
+      <h3 className="title">Change your profile image</h3>
       <Icon>
         {savingImg && (
           <SavingIndicator className="progress-ring" height="120" width="120">
@@ -133,7 +134,7 @@ const UploadImgToS3: React.FC<Props> = ({ setProfileData }) => {
         <input type="file" onChange={handleFileInput} />
 
         {uploadedImage ? (
-          <img src={uploadedImage} alt="" />
+          <img src={uploadedImage} alt="Uploaded Profile Image" />
         ) : (
           <PlusIcon>
             <span></span>
@@ -142,11 +143,7 @@ const UploadImgToS3: React.FC<Props> = ({ setProfileData }) => {
         )}
       </Icon>
 
-      <p className="info">
-        Max img size
-        <br />
-        <span>3MB</span>
-      </p>
+      <p className="info">Max image size 3MB</p>
 
       <div className="btn-container">
         <button onClick={() => uploadFile(selectedFile)} disabled={!selectedFile}>
@@ -163,42 +160,32 @@ const UploadImgToS3: React.FC<Props> = ({ setProfileData }) => {
 export default UploadImgToS3;
 
 const Container = styled.div`
+  padding: 0.5rem 0.5rem 1rem;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  justify-content: space-evenly;
-  padding: 1rem 0.5rem;
 
   .info {
-    flex: 1;
-    width: 100px;
-    margin-right: 0.5rem;
+    width: fit-content;
     font-size: 75%;
     color: ${({ theme }) => theme.textLight};
-
-    span {
-      color: ${({ theme }) => theme.text};
-      font-size: 130%;
-    }
+    margin: 0.5rem;
   }
 
   .btn-container {
-    flex: 1;
-    width: 100px;
     display: flex;
-    flex-direction: column;
 
     button {
-      flex: 1;
-      margin-bottom: 0.5rem;
-      max-width: 150px;
       background: ${({ theme }) => theme.buttonMed};
       box-shadow: 0 1px 2px ${({ theme }) => theme.boxShadow};
       color: inherit;
       border: none;
       border-radius: 5px;
-      padding: 0.5rem 1rem;
+      padding: 0.25rem 0.5rem;
+      margin: 0 0.5rem;
       border: 1px solid ${({ theme }) => theme.border};
-      font-size: 1.2rem;
+      font-size: 1rem;
       transition: all 0.3s ease;
 
       &:disabled {
@@ -211,7 +198,6 @@ const Container = styled.div`
 `;
 
 const Icon = styled.div`
-  flex-shrink: 0;
   position: relative;
   background: ${({ theme }) => theme.buttonMed};
   border: 3px solid ${({ theme }) => theme.buttonMed};

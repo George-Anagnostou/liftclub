@@ -64,7 +64,11 @@ const Bio: React.FC<Props> = ({ profileData, isProfileOwner, setProfileData, use
         <p>{profileData.bio || "None"}</p>
       )}
 
-      {editing && <SaveBtn onClick={handleSaveClick}>Save</SaveBtn>}
+      {editing && (
+        <SaveBtn onClick={handleSaveClick} disabled={editing && bioEdits === profileData.bio}>
+          Save
+        </SaveBtn>
+      )}
     </BioContainer>
   );
 };
@@ -81,7 +85,7 @@ const BioContainer = styled.section`
   .topbar {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: flex-start;
 
     button {
       border-radius: 5px;
@@ -95,9 +99,10 @@ const BioContainer = styled.section`
 
   textarea {
     line-height: 1.3rem;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.25px;
     font-family: inherit;
     font-size: 1rem;
+    font-weight: 300;
     width: 100%;
     min-height: 75px;
     resize: vertical;
@@ -105,15 +110,16 @@ const BioContainer = styled.section`
     border: none;
     border-radius: 5px;
     color: ${({ theme }) => theme.text};
-    background: ${({ theme }) => theme.buttonMed};
-    margin: 0.5rem 0 0.25rem;
+    background: ${({ theme }) => theme.body};
+    margin: 0rem 0 0.25rem;
   }
 
   p {
     line-height: 1.3rem;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.25px;
     padding: 0.5rem;
-    margin: 0.5rem 0;
+    margin: 0;
+    font-weight: 300;
   }
 `;
 
@@ -125,4 +131,8 @@ const SaveBtn = styled.button`
   border: ${({ theme }) => theme.border};
   color: ${({ theme }) => theme.accentText};
   background: ${({ theme }) => theme.accentSoft};
+
+  &:disabled {
+    background: ${({ theme }) => theme.buttonMed};
+  }
 `;

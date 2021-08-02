@@ -50,7 +50,7 @@ const ProfileImgModal: React.FC<Props> = ({
 
         <UploadImgToS3 setProfileData={setProfileData} />
 
-        <IconSelectForm onSubmit={handleIconFormSubmit} action="POST">
+        <DefaultIcons onSubmit={handleIconFormSubmit} action="POST">
           {icons.map((icon) => (
             <Icon
               key={icon}
@@ -69,7 +69,7 @@ const ProfileImgModal: React.FC<Props> = ({
           <button type="submit" disabled={!selectedDefaultIcon}>
             Save
           </button>
-        </IconSelectForm>
+        </DefaultIcons>
       </Box>
     </Modal>
   );
@@ -97,23 +97,19 @@ const Box = styled.div`
   }
 `;
 
-const IconSelectForm = styled.form`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  align-items: center;
-
+const DefaultIcons = styled.form`
   button {
-    width: 100px;
     background: ${({ theme }) => theme.buttonMed};
     box-shadow: 0 1px 2px ${({ theme }) => theme.boxShadow};
     color: inherit;
     border: none;
     border-radius: 5px;
-    padding: 0.5rem 1rem;
+    padding: 0.25rem 0.5rem;
     border: 1px solid ${({ theme }) => theme.border};
-    font-size: 1.2rem;
+    font-size: 1rem;
     transition: all 0.3s ease;
+    display: block;
+    margin: auto;
 
     &:disabled {
       color: ${({ theme }) => theme.border};
@@ -128,11 +124,11 @@ const Icon = styled.div`
   border: 3px solid ${({ theme }) => theme.buttonMed};
   height: 100px;
   width: 100px;
-  margin-right: 0.5rem;
+  margin: 0 0.5rem;
   border-radius: 50%;
   overflow: hidden;
 
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
   transition: all 0.2s ease;
@@ -145,11 +141,6 @@ const Icon = styled.div`
     opacity: 0.5;
   }
 
-  input {
-    height: 100%;
-    width: 100%;
-    background: inherit;
-  }
   img {
     height: 100%;
     width: 100%;

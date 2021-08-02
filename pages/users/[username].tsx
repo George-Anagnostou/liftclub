@@ -51,6 +51,8 @@ const User_id: React.FC = () => {
             setProfileData={setProfileData}
             isProfileOwner={isProfileOwner}
           />
+          
+          <WeeklyBar profileData={profileData} />
 
           <Bio
             profileData={profileData}
@@ -58,8 +60,6 @@ const User_id: React.FC = () => {
             setProfileData={setProfileData}
             user_id={user._id}
           />
-
-          <WeeklyBar profileData={profileData} />
 
           <TeamsTile profileData={profileData} />
 
