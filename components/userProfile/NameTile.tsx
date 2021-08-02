@@ -84,16 +84,14 @@ const NameTile: React.FC<Props> = ({ profileData, setProfileData, isProfileOwner
         <h1>{profileData.username}</h1>
         <p>{Object.keys(profileData.workoutLog).length} days logged</p>
 
-        <div className="follows-info">
-          <p onClick={() => handleProfileFollowsClick("followers")}>
-            {profileData.followers?.length || 0}{" "}
-            {profileData.followers?.length === 1 ? "follower" : "followers"}
-          </p>
+        <p onClick={() => handleProfileFollowsClick("followers")}>
+          {profileData.followers?.length || 0}{" "}
+          {profileData.followers?.length === 1 ? "follower" : "followers"}
+        </p>
 
-          <p onClick={() => handleProfileFollowsClick("following")}>
-            {profileData.following?.length || 0} following{" "}
-          </p>
-        </div>
+        <p onClick={() => handleProfileFollowsClick("following")}>
+          {profileData.following?.length || 0} following{" "}
+        </p>
       </div>
 
       {showFollowsModal && (
@@ -154,9 +152,6 @@ const TileContainer = styled.header`
       margin: 0.1rem;
       font-size: 0.9rem;
       color: ${({ theme }) => theme.textLight};
-    }
-
-    .follows {
     }
   }
 `;
