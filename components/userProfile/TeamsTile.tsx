@@ -16,7 +16,6 @@ const TeamsTile: React.FC<Props> = ({ profileData }) => {
   useEffect(() => {
     const getTeams = async () => {
       const teamsRes = await getTeamsFromIdArray(profileData.teamsJoined || []);
-      console.log(teamsRes);
       setProfileTeamsJoined(teamsRes || []);
     };
 

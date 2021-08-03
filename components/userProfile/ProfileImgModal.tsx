@@ -12,15 +12,15 @@ import { useStoreState } from "../../store";
 const icons = ["default-man", "default-woman"];
 
 interface Props {
-  setShowIconSelect: React.Dispatch<React.SetStateAction<boolean>>;
-  showIconSelect: boolean;
+  setShowProfileImgModal: React.Dispatch<React.SetStateAction<boolean>>;
+  showProfileImgModal: boolean;
   setProfileData: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
 const ProfileImgModal: React.FC<Props> = ({
-  setShowIconSelect,
+  setShowProfileImgModal,
+  showProfileImgModal,
   setProfileData,
-  showIconSelect,
 }) => {
   const { user } = useStoreState();
 
@@ -42,9 +42,9 @@ const ProfileImgModal: React.FC<Props> = ({
   };
 
   return (
-    <Modal removeModal={() => setShowIconSelect(false)} isOpen={showIconSelect}>
+    <Modal removeModal={() => setShowProfileImgModal(false)} isOpen={showProfileImgModal}>
       <Box>
-        <button className="close-btn" onClick={() => setShowIconSelect(false)}>
+        <button className="close-btn" onClick={() => setShowProfileImgModal(false)}>
           X
         </button>
 

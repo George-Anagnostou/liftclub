@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import AWS from "aws-sdk";
+import { config, S3 } from "aws-sdk";
 import styled from "styled-components";
 // Utils
 import { useStoreState } from "../../store";
@@ -7,12 +7,13 @@ import { saveProfileImgUrl } from "../../utils/api";
 // Interface
 import { User } from "../../utils/interfaces";
 
-AWS.config.update({
+// AWS
+config.update({
   accessKeyId: String(process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID),
   secretAccessKey: String(process.env.NEXT_PUBLIC_AWS_SECRET_KEY),
 });
-
-const myBucket = new AWS.S3({
+// AWS
+const myBucket = new S3({
   params: { Bucket: process.env.NEXT_PUBLIC_AWS_PROFILE_IMG_BUCKET },
   region: process.env.NEXT_PUBLIC_AWS_REGION,
 });
@@ -35,18 +36,18 @@ const UploadImgToS3: React.FC<Props> = ({ setProfileData }) => {
 
   const savingCircle = useRef<SVGCircleElement>(null);
 
-  const [selectedFile, setSelectedFile] = useState<any>(null);
-  const [uploadedImage, setUploadedImage] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState("");
   const [savingImg, setSavingImg] = useState(false);
 
   const clearInput = () => {
     setSelectedFile(null);
-    setUploadedImage("");
+    setPreviewUrl("");
     setSavingImg(false);
   };
 
   const handleFileInput = (e) => {
-    const file = e.target.files[0];
+    const file: File | null = e.target.files[0];
     if (!file) return;
 
     // Check if the file is an image.
@@ -54,16 +55,19 @@ const UploadImgToS3: React.FC<Props> = ({ setProfileData }) => {
       return console.log("File is not an image.", file.type, file);
 
     if (file.size > 3000000)
-      return console.log(`file too large. This was ${file.size} Max file size is 3mb`);
+      return console.log(`File too large. This was ${file.size} Max file size is 3mb`);
 
     setSelectedFile(file);
 
     const url = URL.createObjectURL(file);
-    setUploadedImage(url);
+
+    setPreviewUrl(url);
   };
 
-  const uploadFile = (file: File | undefined) => {
-    if (!file) return console.log("please upload a valid file");
+  const uploadFile = (file: File | null) => {
+    if (!file) return console.log("Please upload a valid file");
+
+    console.log(file);
 
     const params = {
       ACL: "public-read",
@@ -85,13 +89,13 @@ const UploadImgToS3: React.FC<Props> = ({ setProfileData }) => {
         savingCircle.current.style.strokeDasharray = `${circumference} ${circumference}`;
         savingCircle.current.style.strokeDashoffset = `${circumference}`;
 
-        if (progressPct < 101 && progressPct > -1) {
-          setProgress(progressPct);
-        }
-
         function setProgress(percent: number) {
           const offset = circumference - (percent / 100) * circumference;
           savingCircle!.current!.style.strokeDashoffset = String(offset);
+        }
+
+        if (progressPct < 101 && progressPct > -1) {
+          setProgress(progressPct);
         }
 
         if (e.loaded >= e.total) {
@@ -133,8 +137,8 @@ const UploadImgToS3: React.FC<Props> = ({ setProfileData }) => {
 
         <input type="file" onChange={handleFileInput} />
 
-        {uploadedImage ? (
-          <img src={uploadedImage} alt="Uploaded Profile Image" />
+        {previewUrl ? (
+          <img src={previewUrl} alt="Uploaded Profile Image" />
         ) : (
           <PlusIcon>
             <span></span>

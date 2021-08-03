@@ -12,9 +12,9 @@ interface Props {
 }
 
 const ProfileImg: React.FC<Props> = ({ profileData, setProfileData, isProfileOwner }) => {
-  const [showIconSelect, setShowIconSelect] = useState(false);
+  const [showProfileImgModal, setShowProfileImgModal] = useState(false);
 
-  const toggleShowIconSelect = () => setShowIconSelect(!showIconSelect);
+  const toggleShowIconSelect = () => setShowProfileImgModal(!showProfileImgModal);
 
   return (
     <>
@@ -26,22 +26,22 @@ const ProfileImg: React.FC<Props> = ({ profileData, setProfileData, isProfileOwn
             onClick={isProfileOwner ? toggleShowIconSelect : () => {}}
           />
         ) : isProfileOwner ? (
-          // User is profile owner and Add Icon is shown
+          // User is profile owner and doesn't have a profileImgUrl
           <div className="addImgIcon" onClick={toggleShowIconSelect}>
             <span></span>
             <span></span>
             <p>ADD IMAGE</p>
           </div>
         ) : (
-          // Show default image for users who have no profileImg saved
+          // Show default image for users who have no profileImgUrl saved
           <Image src="/favicon.png" height="100" width="100"></Image>
         )}
       </ProfileImage>
 
-      {showIconSelect && (
+      {showProfileImgModal && (
         <ProfileImgModal
-          setShowIconSelect={setShowIconSelect}
-          showIconSelect={showIconSelect}
+          setShowProfileImgModal={setShowProfileImgModal}
+          showProfileImgModal={showProfileImgModal}
           setProfileData={setProfileData}
         />
       )}
@@ -63,6 +63,7 @@ const ProfileImage = styled.div`
   img {
     height: 100%;
     width: 100%;
+    max-height: 94px;
     object-fit: cover;
   }
 
