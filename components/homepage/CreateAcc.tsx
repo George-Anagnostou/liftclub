@@ -40,8 +40,6 @@ const CreateAcc: React.FC<Props> = ({ changeFormType, handleAuthSuccess }) => {
   return (
     <CreateContainer>
       <form action="POST" onSubmit={handleCreateAccount}>
-        <h3>Create Account</h3>
-
         <div>
           <input
             type="text"
@@ -79,40 +77,36 @@ export default CreateAcc;
 const CreateContainer = styled.div`
   text-align: center;
 
-  h3 {
-    font-weight: 300;
-    color: grey;
-  }
-
   form {
     margin: 1rem 0.5rem;
     input {
-      width: 100%;
+      width: 90%;
       margin: 0.5rem 0;
       padding: 0.5rem 0 0.5rem 0.5rem;
-      font-size: 1.2rem;
+      font-size: 1rem;
       border: none;
       border-radius: 5px;
-      background: #e7e7e7;
+      background: ${({ theme }) => theme.buttonMed};
+      color: ${({ theme }) => theme.text};
     }
     button {
       padding: 0.5rem;
-      width: 100%;
-      color: #5d78ee;
-      border: 1px solid #5d78ee;
+      width: 90%;
+      color: ${({ theme }) => theme.accentSoft};
+      border: 1px solid ${({ theme }) => theme.accentSoft};
       background: inherit;
-      font-size: 1.2rem;
+      font-size: 1rem;
       border-radius: 5px;
 
       &:active {
-        background: #94a4ee;
+        background: ${({ theme }) => theme.background};
       }
     }
   }
 
   a {
     font-style: italic;
-    color: grey;
+    color: ${({ theme }) => theme.textLight};
     text-decoration: none;
 
     &:hover {

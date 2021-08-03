@@ -55,6 +55,7 @@ const Layout: React.FC<Props> = ({ title = "Lift Club", children }) => {
     const isInStandaloneMode = "standalone" in window.navigator && window.navigator["standalone"];
 
     if (isIos() && isInStandaloneMode) setPlatformToiOS(dispatch);
+
     if (isInStandaloneMode) setIsUsingPWA(dispatch);
   }, []);
 
@@ -66,6 +67,7 @@ const Layout: React.FC<Props> = ({ title = "Lift Club", children }) => {
 
       <MainContainer className={platform === "ios" && isUsingPWA ? "ios-safe-area" : ""}>
         {children}
+
         {user && <NavBar />}
       </MainContainer>
     </>

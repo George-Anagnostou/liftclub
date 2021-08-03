@@ -3,12 +3,11 @@ import styled from "styled-components";
 const Branding: React.FC = () => {
   return (
     <Brand>
-      <span>
+      <div>
         <img src="favicon.png" alt="brand logo" />
-      </span>
+      </div>
 
-      <h1>ALC</h1>
-      <h4>Lift Club</h4>
+      <h1>Lift Club</h1>
     </Brand>
   );
 };
@@ -19,25 +18,17 @@ const Brand = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-  height: 170px;
-  margin-bottom: 2rem;
+  margin-top: 2rem;
 
-  span img {
-    max-height: 130px;
+  div img {
+    max-height: 100px;
     margin-bottom: -0.5rem;
     border-radius: 50%;
   }
 
   h1 {
-    text-align: center;
-    font-weight: 300;
-    font-size: 3.5rem;
-    color: #5d78ee;
-  }
-  h4 {
-    font-size: 1rem;
-    text-align: center;
+    margin-top: 1rem;
     font-weight: 200;
-    color: grey;
+    color: ${({ theme }) => theme.text};
   }
 `;
