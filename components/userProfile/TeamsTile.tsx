@@ -70,7 +70,6 @@ const Container = styled.section`
 
 const TeamsList = styled.ul`
   display: flex;
-  margin: 0.5rem 0;
 
   .noTeams {
     margin-left: 0.5rem;
@@ -79,7 +78,7 @@ const TeamsList = styled.ul`
 
 const TeamItem = styled.li`
   background: ${({ theme }) => theme.buttonMed};
-  box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
+  box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
   padding: 0.25rem 0.5rem;
   border-radius: 10px;
   text-align: center;
