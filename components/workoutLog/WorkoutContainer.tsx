@@ -50,7 +50,6 @@ const WorkoutContainerClone: React.FC<Props> = ({
 
     // Re-trigger animations
     setSaveSuccess(false);
-    // setSaveSuccess(saved);
     setSaveSuccess(saved);
 
     setSaveLoading(false);
