@@ -1,12 +1,17 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import update from "immutability-helper";
 // Components
 import UserWorkouts from "../components/workoutLog/UserWorkouts";
 import LoadingSpinner from "../components/LoadingSpinner";
 import WorkoutContainer from "../components/workoutLog/WorkoutContainer";
 import DateScroll from "../components/workoutLog/DateScroll";
 // Utils
-import { addExerciseDataToWorkout, dateToISOWithLocal } from "../utils";
+import {
+  addExerciseDataToLoggedWorkout,
+  addExerciseDataToWorkout,
+  dateToISOWithLocal,
+} from "../utils";
 // Context
 import { useStoreDispatch, useStoreState } from "../store";
 import { deleteDayFromWorkoutLog } from "../store/actions/userActions";
@@ -70,14 +75,24 @@ export default function log() {
     setIndex: number
   ) => {
     // Cast value to number or use empty str
-    const value = target.value.trim() ?? Number(target.value);
+    const value = target.value === "" ? "" : Number(target.value);
 
     if (currentDayData?.exerciseData) {
-      setCurrentDayData((prev) => {
-        if (!prev) return null;
-        prev.exerciseData[exerciseIndex].sets[setIndex].weight = value;
-        return prev;
-      });
+      setCurrentDayData((prev) =>
+        update(prev, {
+          exerciseData: {
+            [exerciseIndex]: {
+              sets: {
+                [setIndex]: {
+                  weight: {
+                    $set: value,
+                  },
+                },
+              },
+            },
+          },
+        })
+      );
     }
   };
 
@@ -125,11 +140,13 @@ export default function log() {
   }, [isSignedIn]);
 
   useEffect(() => {
-    const insertWorkoutData = async (logItem: WorkoutLogItem) => {
+    const insertWorkoutData = async (logItem: WorkoutLogItem | undefined) => {
       if (logItem) {
         const workoutData = await getWorkoutFromId(logItem.workout_id);
-        logItem.workout = workoutData || undefined;
-        setPageState(logItem);
+        const mergedData = await addExerciseDataToLoggedWorkout(logItem);
+
+        mergedData.workout = workoutData || undefined;
+        setPageState(mergedData);
       } else {
         setPageState(null);
       }
