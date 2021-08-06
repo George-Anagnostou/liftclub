@@ -57,60 +57,57 @@ const UserWorkouts: React.FC<Props> = ({
   }, [user, workoutSavedSuccessfully, workoutToDelete]);
 
   return (
-    <>
-      {showUserWorkouts && (
-        <Container>
-          {workoutToDelete && (
-            <DeleteWorkoutModal
-              workout={workoutToDelete}
-              setWorkoutToDelete={setWorkoutToDelete}
-              clearCustomWorkout={clearCustomWorkout}
-            />
-          )}
-
-          <WorkoutsList>
-            <h3>Created</h3>
-            <ul>
-              {Boolean(userMadeWorkouts.length) ? (
-                userMadeWorkouts.map((workout, i) => (
-                  <li
-                    key={i}
-                    onClick={() => displaySavedWorkout(workout)}
-                    className={customWorkout._id === workout._id ? "highlight" : ""}
-                    style={{ paddingRight: "1.75rem" }}
-                  >
-                    {workout.name}
-
-                    <button onClick={() => setWorkoutToDelete(workout)}>X</button>
-                  </li>
-                ))
-              ) : (
-                <p className="fallbackText">None</p>
-              )}
-            </ul>
-          </WorkoutsList>
-
-          <WorkoutsList>
-            <h3>Saved</h3>
-            <ul>
-              {Boolean(userSavedWorkouts.length) ? (
-                userSavedWorkouts.map((workout, i) => (
-                  <li
-                    key={i}
-                    onClick={() => displaySavedWorkout(workout)}
-                    className={customWorkout._id === workout._id ? "highlight" : ""}
-                  >
-                    {workout.name}
-                  </li>
-                ))
-              ) : (
-                <p className="fallbackText">None</p>
-              )}
-            </ul>
-          </WorkoutsList>
-        </Container>
+    <Container>
+      {workoutToDelete && (
+        <DeleteWorkoutModal
+          workout={workoutToDelete}
+          setWorkoutToDelete={setWorkoutToDelete}
+          clearCustomWorkout={clearCustomWorkout}
+        />
       )}
-    </>
+
+      <WorkoutsList>
+        <h3>Created</h3>
+
+        <ul>
+          {Boolean(userMadeWorkouts.length) ? (
+            userMadeWorkouts.map((workout, i) => (
+              <li
+                key={i}
+                onClick={() => displaySavedWorkout(workout)}
+                className={customWorkout._id === workout._id ? "highlight" : ""}
+                style={{ paddingRight: "1.75rem" }}
+              >
+                {workout.name}
+
+                <button onClick={() => setWorkoutToDelete(workout)}>x</button>
+              </li>
+            ))
+          ) : (
+            <p className="fallbackText">None</p>
+          )}
+        </ul>
+      </WorkoutsList>
+
+      <WorkoutsList>
+        <h3>Saved</h3>
+        <ul>
+          {Boolean(userSavedWorkouts.length) ? (
+            userSavedWorkouts.map((workout, i) => (
+              <li
+                key={i}
+                onClick={() => displaySavedWorkout(workout)}
+                className={customWorkout._id === workout._id ? "highlight" : ""}
+              >
+                {workout.name}
+              </li>
+            ))
+          ) : (
+            <p className="fallbackText">None</p>
+          )}
+        </ul>
+      </WorkoutsList>
+    </Container>
   );
 };
 export default UserWorkouts;
@@ -154,7 +151,17 @@ const WorkoutsList = styled.div`
       text-align: left;
 
       button {
-        font-size: 0.6rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+
+        background: ${({ theme }) => theme.buttonLight};
+        color: ${({ theme }) => theme.textLight};
+        border: none;
+        border-radius: 3px;
+        position: absolute;
+        top: 3px;
+        right: 3px;
+        padding: 0px 5px 1px;
       }
 
       &.highlight {
@@ -167,29 +174,6 @@ const WorkoutsList = styled.div`
         }
       }
     }
-
-    @media (max-width: 425px) {
-      /* Remove scroll bar on mobile */
-      -ms-overflow-style: none; /* IE and Edge */
-      scrollbar-width: none; /* Firefox */
-
-      &::-webkit-scrollbar {
-        display: none;
-      }
-    }
-  }
-
-  button {
-    background: ${({ theme }) => theme.buttonLight};
-    color: ${({ theme }) => theme.textLight};
-    border: none;
-    border-radius: 3px;
-    position: absolute;
-    top: 3px;
-    right: 3px;
-
-    font-size: 8px;
-    padding: 0px 4px;
   }
 
   .fallbackText {

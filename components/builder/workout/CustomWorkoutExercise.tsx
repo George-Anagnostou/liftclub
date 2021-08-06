@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
-
+// Interfaces
 import { Exercise } from "../../../utils/interfaces";
+// Icons
+import Garbage from "../../../public/navIcons/Garbage";
 
 interface Props {
   exerciseIndex: number;
@@ -26,7 +28,7 @@ const CustomWorkoutExercise: React.FC<Props> = ({
   return (
     <Draggable draggableId={exercise._id} index={exerciseIndex}>
       {(provided, snapshot) => (
-        <ExerciseContainer
+        <ExerciseItem
           className={snapshot.isDragging ? "dragging" : ""}
           data-key={exercise._id.toString()}
           {...provided.draggableProps}
@@ -43,18 +45,24 @@ const CustomWorkoutExercise: React.FC<Props> = ({
             </div>
 
             <div className="buttons">
-              {/* <button className="removeBtn" onClick={() => removeExercise(exercise._id)}>
-            X
-          </button> */}
-
               <div className="setControl">
+                <button className="removeBtn" onClick={() => removeExercise(exercise._id)}>
+                  <Garbage />
+                </button>
+
                 <button
                   onClick={() => handleSetChange("remove", exerciseIndex)}
                   disabled={!Boolean(sets.length)}
                 >
                   -
                 </button>
-                <button onClick={() => handleSetChange("add", exerciseIndex)}>+</button>
+
+                <button
+                  onClick={() => handleSetChange("add", exerciseIndex)}
+                  disabled={sets.length >= 100}
+                >
+                  +
+                </button>
               </div>
             </div>
           </div>
@@ -74,14 +82,14 @@ const CustomWorkoutExercise: React.FC<Props> = ({
               </RepListItem>
             ))}
           </RepsList>
-        </ExerciseContainer>
+        </ExerciseItem>
       )}
     </Draggable>
   );
 };
 export default CustomWorkoutExercise;
 
-const ExerciseContainer = styled.li`
+const ExerciseItem = styled.li`
   border-radius: 5px;
   box-shadow: 0 0 5px ${({ theme }) => theme.boxShadow};
   background: ${({ theme }) => theme.background};
@@ -89,6 +97,8 @@ const ExerciseContainer = styled.li`
   margin: 0.5rem 0;
   text-align: center;
   position: relative;
+
+  user-select: none;
 
   display: flex;
   flex-direction: column;
@@ -124,25 +134,13 @@ const ExerciseContainer = styled.li`
       }
       .name {
         flex: 1;
-        font-size: 1.3rem;
+        font-size: 1.2rem;
         text-transform: capitalize;
       }
     }
 
     .buttons {
-      flex: 1;
       padding: 0.5rem 0;
-
-      .removeBtn {
-        min-width: max-content;
-
-        border: none;
-        background: ${({ theme }) => theme.buttonMed};
-        color: ${({ theme }) => theme.textLight};
-        padding: 0.5rem;
-        font-size: 0.7rem;
-        margin-bottom: 0.5rem;
-      }
 
       .setControl {
         display: flex;
@@ -159,8 +157,8 @@ const ExerciseContainer = styled.li`
           background: ${({ theme }) => theme.accentSoft};
           color: ${({ theme }) => theme.accentText};
           border-radius: 10px;
-          height: 2.5rem;
-          width: 2.5rem;
+          height: 2.25rem;
+          width: 2.25rem;
           margin: 0 0.3rem;
           font-size: 1.5rem;
           transition: all 0.3s ease;
@@ -170,14 +168,26 @@ const ExerciseContainer = styled.li`
             background: ${({ theme }) => theme.buttonMed};
           }
         }
+
+        .removeBtn {
+          fill: ${({ theme }) => theme.textLight};
+          border: none;
+          background: ${({ theme }) => theme.buttonMed};
+          display: grid;
+          place-items: center;
+        }
       }
     }
   }
 
   &.dragging {
-    background: ${({ theme }) => theme.buttonLight};
+    background: ${({ theme }) => theme.buttonMed};
     .title {
       color: ${({ theme }) => theme.text};
+    }
+
+    li {
+      background: ${({ theme }) => theme.buttonLight};
     }
   }
 `;

@@ -117,9 +117,9 @@ const ControlsBar = styled.div`
       color: ${({ theme }) => theme.text};
       box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
       display: inline-block;
-      margin: 0 0.5rem;
-      padding: 0.5rem 1rem;
-      font-size: 1.1rem;
+      padding: 0.25rem 1rem;
+      font-size: 1rem;
+      margin-right: 0.5rem;
 
       &:disabled {
         color: ${({ theme }) => theme.border};
@@ -135,10 +135,9 @@ const ControlsBar = styled.div`
       box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
       color: ${({ theme }) => theme.text};
       display: inline-block;
-      margin: 0 0.5rem;
       min-width: max-content;
-      padding: 0.5rem 1rem;
-      font-size: 1.1rem;
+      padding: 0.25rem 1rem;
+      font-size: 1rem;
 
       &.disabled {
         color: ${({ theme }) => theme.border};
@@ -147,7 +146,7 @@ const ControlsBar = styled.div`
 
       input[type="checkbox"] {
         margin-left: 0.5rem;
-        transform: scale(1.3);
+        transform: scale(1.1);
         border: none;
       }
     }

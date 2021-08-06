@@ -79,21 +79,6 @@ const WorkoutBuilder: React.FC = () => {
 
   return (
     <Container>
-      <UserWorkoutToggle
-        onClick={() => setShowUserWorkouts(!showUserWorkouts)}
-        className={showUserWorkouts ? "pressed" : ""}
-      >
-        <p>Templates</p>
-      </UserWorkoutToggle>
-
-      <UserWorkouts
-        workoutSavedSuccessfully={workoutSavedSuccessfully}
-        customWorkout={customWorkout}
-        clearCustomWorkout={clearCustomWorkout}
-        setCustomWorkout={setCustomWorkout}
-        showUserWorkouts={showUserWorkouts}
-      />
-
       <DragDropContext onDragEnd={handleDragEnd}>
         <CustomWorkout
           user={user}
@@ -106,6 +91,14 @@ const WorkoutBuilder: React.FC = () => {
           setShowExerciseList={setShowExerciseList}
         />
       </DragDropContext>
+
+      <UserWorkouts
+        workoutSavedSuccessfully={workoutSavedSuccessfully}
+        customWorkout={customWorkout}
+        clearCustomWorkout={clearCustomWorkout}
+        setCustomWorkout={setCustomWorkout}
+        showUserWorkouts={showUserWorkouts}
+      />
 
       {showExerciseList && (
         <Modal removeModal={() => setShowExerciseList(false)} isOpen={showExerciseList}>
@@ -125,23 +118,4 @@ export default WorkoutBuilder;
 const Container = styled.section`
   display: flex;
   flex-direction: column;
-`;
-
-const UserWorkoutToggle = styled.button`
-  align-self: flex-end;
-  font-size: 1.1rem;
-  color: inherit;
-  margin: 0 0 0.5rem;
-  border-radius: 5px;
-  padding: 0.5rem;
-  transition: all 0.3s ease;
-  border: none;
-
-  background: ${({ theme }) => theme.background};
-  color: ${({ theme }) => theme.textLight};
-
-  &.pressed {
-    color: ${({ theme }) => theme.accentText};
-    background: ${({ theme }) => theme.accentSoft};
-  }
 `;

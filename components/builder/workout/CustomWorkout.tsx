@@ -62,7 +62,7 @@ const CustomWorkout: React.FC<Props> = ({
         case "add":
           // Add empty set to spedified exercise
           if (prev.exercises[exerciseIndex].sets.length >= 100) break;
-          
+
           prev.exercises[exerciseIndex].sets.push({ reps: 0, weight: -1 });
           break;
         case "remove":
@@ -152,9 +152,9 @@ const CustomWorkout: React.FC<Props> = ({
         )}
       </Droppable>
 
-      <FallbackText onClick={() => setShowExerciseList(true)}>
-        <p>Add an exercise</p>
-      </FallbackText>
+      <AddExerciseBtn onClick={() => setShowExerciseList(true)}>
+        <p>Add Exercise</p>
+      </AddExerciseBtn>
     </>
   );
 };
@@ -166,17 +166,21 @@ const ExerciseList = styled.ul`
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  justify-content: center;
   flex-direction: column;
 
   position: relative;
 `;
 
-const FallbackText = styled.div`
-  background: ${({ theme }) => theme.background};
-  color: ${({ theme }) => theme.textLight};
+const AddExerciseBtn = styled.button`
+  background: ${({ theme }) => theme.accentSoft};
+  color: ${({ theme }) => theme.accentText};
   box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
+  border: none;
+  width: fit-content;
+  margin: 1rem auto;
+  padding: 0.5rem 1rem;
 
   border-radius: 5px;
-  margin: 1rem;
-  padding: 1rem 2rem;
+  font-size: 1.2rem;
 `;
