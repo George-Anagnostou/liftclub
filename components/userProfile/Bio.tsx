@@ -101,7 +101,7 @@ const BioContainer = styled.section`
     line-height: 1.2rem;
     letter-spacing: 0.25px;
     font-family: inherit;
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 300;
     width: 100%;
     min-height: 75px;
@@ -116,7 +116,7 @@ const BioContainer = styled.section`
 
   p {
     line-height: 1.2rem;
-    font-size: 0.9rem;
+    font-size: 1rem;
     letter-spacing: 0.25px;
     padding: 0.25rem;
     margin: 0;
