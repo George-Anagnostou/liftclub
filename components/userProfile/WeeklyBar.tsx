@@ -47,6 +47,7 @@ const DateScrollContainer = styled.ul`
     height: fit-content;
     text-align: center;
     margin: 0 0.15rem;
+    font-size: 0.8rem;
 
     &:last-child {
       margin: 0 0.15rem 0 0;
@@ -56,7 +57,7 @@ const DateScrollContainer = styled.ul`
     }
 
     div {
-      border-radius: 10px;
+      border-radius: 8px;
       padding: 0.25rem 0rem;
       transition: all 0.2s ease-in-out;
 

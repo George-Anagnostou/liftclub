@@ -77,6 +77,7 @@ const WorkoutsList = styled.ul`
 
     p {
       text-transform: capitalize;
+      font-size: 0.8rem;
     }
 
     span {
@@ -85,7 +86,7 @@ const WorkoutsList = styled.ul`
       color: ${({ theme }) => theme.textLight};
     }
   }
-  
+
   .noWorkouts {
     margin-left: 0.5rem;
   }

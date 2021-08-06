@@ -28,7 +28,7 @@ const Chart: React.FC<Props> = ({ data }) => {
             stroke="#4361ee"
             fillOpacity={1}
             fill="url(#colorUv)"
-            dot={{ stroke: "#5d78ee", strokeWidth: 3 }}
+            dot={{ stroke: "#5d78ee", strokeWidth: 2 }}
           />
         </AreaChart>
       </ResponsiveContainer>
@@ -38,23 +38,26 @@ const Chart: React.FC<Props> = ({ data }) => {
 export default Chart;
 
 const ChartContainer = styled.div`
-  height: 200px;
+  height: 150px;
   width: 100%;
   padding-left: -30px;
+  overflow: hidden;
 
   line,
   text {
     fill: ${({ theme }) => theme.textLight} !important;
-    stroke: ${({ theme }) => theme.textLight} !important;
+    stroke: ${({ theme }) => theme.border} !important;
   }
   text {
     stroke-width: 0px;
+    font-size: 0.75rem;
   }
 
   .recharts-default-tooltip {
     background: ${({ theme }) => theme.body} !important;
     border-radius: 5px;
     border: 1px solid ${({ theme }) => theme.border} !important;
+    text-align: center;
 
     * {
       color: ${({ theme }) => theme.text} !important;

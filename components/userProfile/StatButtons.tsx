@@ -35,22 +35,22 @@ export default StatButtons;
 
 const Buttons = styled.div`
   display: flex;
-  width: 100%;
-  margin-bottom: 0.5rem;
+  width: 90%;
+  margin: 0 auto 0.5rem;
 
   button {
     flex: 1;
-    font-size: 1rem;
-    padding: 0.5rem;
+    font-size: 0.8rem;
+    padding: 0.25rem;
     border-radius: 0px;
     color: ${({ theme }) => theme.textLight};
     background: inherit;
     border: none;
-    border-bottom: 3px solid ${({ theme }) => theme.border};
+    border-bottom: 2px solid ${({ theme }) => theme.border};
 
     &.highlight {
       color: ${({ theme }) => theme.text};
-      border-bottom: 3px solid ${({ theme }) => theme.accentSoft};
+      border-bottom: 2px solid ${({ theme }) => theme.accentSoft};
     }
   }
 `;

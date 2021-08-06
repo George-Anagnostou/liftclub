@@ -1,5 +1,3 @@
-import styled from "styled-components";
-
 interface Props {
   handleExerciseOptionChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   exerciseOptions: {
@@ -10,7 +8,7 @@ interface Props {
 
 const ExerciseSelect: React.FC<Props> = ({ handleExerciseOptionChange, exerciseOptions }) => {
   return (
-    <Select
+    <select
       name="exerciseOptions"
       onChange={handleExerciseOptionChange}
       defaultValue="none"
@@ -22,24 +20,7 @@ const ExerciseSelect: React.FC<Props> = ({ handleExerciseOptionChange, exerciseO
           {exerciseName}
         </option>
       ))}
-    </Select>
+    </select>
   );
 };
 export default ExerciseSelect;
-
-const Select = styled.select`
-  width: 90%;
-  text-transform: capitalize;
-  margin: 0.25rem 0;
-  padding: 0.5rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 5px;
-  color: ${({ theme }) => theme.text};
-  border: 1px solid ${({ theme }) => theme.border};
-  background: ${({ theme }) => theme.buttonMed};
-
-  &:disabled {
-    opacity: 0.5;
-  }
-`;

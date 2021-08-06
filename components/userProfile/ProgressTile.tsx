@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 // Components
-import WorkoutSelect from "../settingsPage/WorkoutSelect";
-import ExerciseSelect from "../settingsPage/ExerciseSelect";
-import Chart from "../settingsPage/Chart";
-import StatButtons from "../settingsPage/StatButtons";
+import WorkoutSelect from "./WorkoutSelect";
+import ExerciseSelect from "./ExerciseSelect";
+import Chart from "./Chart";
+import StatButtons from "./StatButtons";
 // Utils
 import { getWorkoutsFromIdArray } from "../../utils/api";
 import { addExerciseDataToLoggedWorkout, round } from "../../utils";
@@ -202,6 +202,35 @@ const SelectContainer = styled.div`
   padding: 0.5rem;
 
   select {
+    width: 90%;
+    text-transform: capitalize;
+    margin: 0.25rem 0;
+    padding: 0.25rem 0.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    color: ${({ theme }) => theme.text};
+    border: 1px solid ${({ theme }) => theme.border};
+
+    --baseFg: ${({ theme }) => theme.buttonLight};
+    --accentFg: ${({ theme }) => theme.accentSoft};
+    --accentBg: ${({ theme }) => theme.buttonLight};
+
     width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+
+    background-color: ${({ theme }) => theme.buttonMed};
+    background-image: linear-gradient(var(--baseFg), var(--baseFg)),
+      linear-gradient(-135deg, transparent 50%, var(--accentBg) 50%),
+      linear-gradient(-225deg, transparent 50%, var(--accentBg) 50%),
+      linear-gradient(var(--accentBg) 42%, var(--accentFg) 42%);
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+    background-size: 1px 100%, 20px 22px, 20px 22px, 20px 100%;
+    background-position: right 20px center, right bottom, right bottom, right bottom;
+
+    &:disabled {
+      opacity: 0.25;
+    }
   }
 `;

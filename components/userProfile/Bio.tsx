@@ -98,26 +98,27 @@ const BioContainer = styled.section`
   }
 
   textarea {
-    line-height: 1.3rem;
+    line-height: 1.2rem;
     letter-spacing: 0.25px;
     font-family: inherit;
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 300;
     width: 100%;
     min-height: 75px;
     resize: vertical;
-    padding: 0.5rem;
+    padding: 0.25rem;
     border: none;
     border-radius: 5px;
     color: ${({ theme }) => theme.text};
     background: ${({ theme }) => theme.body};
-    margin: 0rem 0 0.25rem;
+    margin: 0;
   }
 
   p {
-    line-height: 1.3rem;
+    line-height: 1.2rem;
+    font-size: 0.9rem;
     letter-spacing: 0.25px;
-    padding: 0.5rem;
+    padding: 0.25rem;
     margin: 0;
     font-weight: 300;
   }
