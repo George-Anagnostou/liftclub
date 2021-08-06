@@ -6,7 +6,6 @@ export const lightTheme = {
   boxShadow: "#bbbbbb",
   // background: "#eeeeee",
   background: "linear-gradient(to bottom, #eeeeee 20%, #e9e8f1 100%)",
-
   buttonLight: "#ffffff",
   buttonMed: "#dddddd",
   accent: "#4361ee",
