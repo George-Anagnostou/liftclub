@@ -1,42 +1,53 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 // Components
-import WorkoutSelect from "./WorkoutSelect";
-import ExerciseSelect from "./ExerciseSelect";
-import Chart from "./Chart";
-import StatButtons from "./StatButtons";
+import WorkoutSelect from "../settingsPage/WorkoutSelect";
+import ExerciseSelect from "../settingsPage/ExerciseSelect";
+import Chart from "../settingsPage/Chart";
+import StatButtons from "../settingsPage/StatButtons";
 // Utils
 import { getWorkoutsFromIdArray } from "../../utils/api";
 import { addExerciseDataToLoggedWorkout, round } from "../../utils";
-// Context
-import { useStoreState } from "../../store";
 // Interfaces
-import { Workout, WorkoutLogItem } from "../../utils/interfaces";
+import { User, Workout, WorkoutLogItem } from "../../utils/interfaces";
 
-const ProgressTile: React.FC = () => {
-  const { user, isSignedIn } = useStoreState();
+interface Props {
+  profileData: User;
+}
 
+const ProgressTile: React.FC<Props> = ({ profileData }) => {
   const [workoutOptions, setWorkoutOptions] = useState<Workout[]>([]); // Used in WorkoutSelect
   const [exerciseOptions, setExerciseOptions] = useState<
     { exercise_id: string; exerciseName: string }[]
   >([]); // Used in ExerciseSelect
-  const [filteredWorkouts, setFilteredWorkouts] = useState<WorkoutLogItem[]>([]); // Workouts from user.workoutLog that match workout selected
+  const [filteredWorkouts, setFilteredWorkouts] = useState<WorkoutLogItem[]>([]); // Workouts from profileData.workoutLog that match workout selected
   const [statOption, setStatOption] = useState<"avgWeight" | "totalWeight" | "maxWeight">(
     "avgWeight"
   ); // Stat to chart
   const [selectedExerciseId, setSelectedExerciseId] = useState<string | null>(null);
   const [chartData, setChartData] = useState<{ date: string; value: number }[]>([]);
 
+  const resetTileState = () => {
+    setChartData([]);
+    setSelectedExerciseId(null);
+    setStatOption("avgWeight");
+    setFilteredWorkouts([]);
+    setExerciseOptions([]);
+  };
+
   /**
-   * 1. Set workout options to workouts that the user has logged
+   * 1. Set workout options to workouts that the profile has logged
    */
   useEffect(() => {
-    if (isSignedIn) getWorkoutOptions();
-  }, [isSignedIn]);
+    if (profileData) {
+      resetTileState();
+      getWorkoutOptions();
+    }
+  }, [profileData]);
 
   const getWorkoutOptions = async () => {
-    const keyArr = Object.keys(user!.workoutLog);
-    const idArr = keyArr.map((key) => user!.workoutLog[key].workout_id);
+    const keyArr = Object.keys(profileData.workoutLog);
+    const idArr = keyArr.map((key) => profileData.workoutLog[key].workout_id);
     // Returns all unique workouts
     const workouts = await getWorkoutsFromIdArray(idArr);
     setWorkoutOptions(workouts);
@@ -129,24 +140,29 @@ const ProgressTile: React.FC = () => {
     setSelectedExerciseId(null);
 
     // Filter all workouts that match the id selected
-    const keyArr = Object.keys(user!.workoutLog);
+    const keyArr = Object.keys(profileData.workoutLog);
     let filtered = keyArr
-      .filter((key) => user!.workoutLog[key].workout_id === targetWorkout_id)
+      .filter((key) => profileData.workoutLog[key].workout_id === targetWorkout_id)
       .sort((a, b) => new Date(a).getTime() - new Date(b).getTime())
       .map((key) => {
-        user!.workoutLog[key].isoDate = key;
-        return user!.workoutLog[key];
+        profileData.workoutLog[key].isoDate = key;
+        return profileData.workoutLog[key];
       });
 
     if (filtered && filtered.length) setFilteredWorkouts(filtered);
   };
 
-  const handleExerciseOptionChange = (e: React.ChangeEvent<HTMLSelectElement>) =>
+  const handleExerciseOptionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedExerciseId(e.target.value);
+  };
 
   return (
     <Container>
       <h3 className="title">Progression</h3>
+
+      <StatButtons setStatOption={setStatOption} statOption={statOption} />
+
+      <Chart data={chartData} />
 
       <SelectContainer>
         <WorkoutSelect
@@ -159,10 +175,6 @@ const ProgressTile: React.FC = () => {
           handleExerciseOptionChange={handleExerciseOptionChange}
         />
       </SelectContainer>
-
-      <StatButtons setStatOption={setStatOption} statOption={statOption} />
-
-      <Chart data={chartData} />
     </Container>
   );
 };

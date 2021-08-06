@@ -12,6 +12,7 @@ import Bio from "../../components/userProfile/Bio";
 import WeeklyBar from "../../components/userProfile/WeeklyBar";
 import TeamsTile from "../../components/userProfile/TeamsTile";
 import CreatedWorkoutsTile from "../../components/userProfile/CreatedWorkoutsTile";
+import ProgressTile from "../../components/userProfile/ProgressTile";
 // Interfaces
 import { User, Workout, Team } from "../../utils/interfaces";
 
@@ -71,6 +72,8 @@ const User_id: React.FC = () => {
           <TeamsTile profileTeamsJoined={profileTeamsJoined} />
 
           <CreatedWorkoutsTile createdWorkouts={createdWorkouts} />
+
+          <ProgressTile profileData={profileData} />
         </>
       ) : (
         <div className="loadingContainer">

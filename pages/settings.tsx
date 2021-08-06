@@ -6,7 +6,6 @@ import WeightInput from "../components/settingsPage/WeightInput";
 import TopTile from "../components/settingsPage/TopTile";
 // Context
 import { useStoreState, useStoreDispatch, logoutUser } from "../store";
-import ProgressTile from "../components/settingsPage/ProgressTile";
 
 export default function settings() {
   const dispatch = useStoreDispatch();
@@ -25,8 +24,6 @@ export default function settings() {
           <TopTile />
 
           <WeightInput />
-
-          <ProgressTile />
 
           <LogoutBtn onClick={handleLogoutClick}>sign out</LogoutBtn>
         </>
