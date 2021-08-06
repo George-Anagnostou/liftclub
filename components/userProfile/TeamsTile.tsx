@@ -1,27 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Link from "next/link";
 import styled from "styled-components";
-// API
-import { getTeamsFromIdArray } from "../../utils/api";
 // Interfaces
-import { Team, User } from "../../utils/interfaces";
+import { Team } from "../../utils/interfaces";
 
 interface Props {
-  profileData: User;
+  profileTeamsJoined: Team[];
 }
 
-const TeamsTile: React.FC<Props> = ({ profileData }) => {
-  const [profileTeamsJoined, setProfileTeamsJoined] = useState<Team[]>([]);
-
-  useEffect(() => {
-    const getTeams = async () => {
-      const teamsRes = await getTeamsFromIdArray(profileData.teamsJoined || []);
-      setProfileTeamsJoined(teamsRes || []);
-    };
-
-    getTeams();
-  }, [profileData.username]);
-
+const TeamsTile: React.FC<Props> = ({ profileTeamsJoined }) => {
   return (
     <Container>
       <div className="topbar">
