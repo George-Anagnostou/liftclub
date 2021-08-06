@@ -30,7 +30,7 @@ const CreatedWorkoutsTile: React.FC<Props> = ({ createdWorkouts }) => {
             </li>
           ))
         ) : (
-          <p>None</p>
+          <p className="noWorkouts">None</p>
         )}
       </WorkoutsList>
     </Container>
@@ -84,5 +84,9 @@ const WorkoutsList = styled.ul`
       font-size: 0.7rem;
       color: ${({ theme }) => theme.textLight};
     }
+  }
+  
+  .noWorkouts {
+    margin-left: 0.5rem;
   }
 `;
