@@ -33,6 +33,9 @@ const RoutineTile: React.FC<Props> = ({ team, setTeam }) => {
   const getUniqueWorkouts = async (plan: Routine["workoutPlan"]) => {
     const uniqueWorkoutIds = [...new Set(plan.map((workout) => workout.workout_id))];
     const workouts = await getWorkoutsFromIdArray(uniqueWorkoutIds);
+
+    //Sort by workout name length for UI effect
+    workouts.sort((a, b) => a.name.length - b.name.length);
     setUniqueWorkoutsInRoutine(workouts);
   };
 
