@@ -81,8 +81,8 @@ const LoginContainer = styled.div`
       font-size: 1rem;
       border: none;
       border-radius: 5px;
-      background: ${({ theme }) => theme.buttonMed};
-      color: ${({ theme }) => theme.text};
+      background: ${({ theme }) => theme.shades[1]};
+      color: ${({ theme }) => theme.shades[8]};
     }
     button {
       padding: 0.5rem;
