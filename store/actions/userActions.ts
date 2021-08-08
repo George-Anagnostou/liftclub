@@ -7,12 +7,12 @@ import { WorkoutLogItem } from "../../utils/interfaces";
  * @returns Boolean for the outcome of login request
  */
 
-export const loginWithID = async (dispatch: any, user_id: string) => {
+export const loginWithToken = async (dispatch: any, token: string) => {
   try {
-    const res = await fetch(`/api/users/loginWithID`, {
+    const res = await fetch(`/api/users/loginWithToken`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user_id }),
+      body: JSON.stringify({ token }),
     });
     const userData = await res.json();
 
@@ -30,9 +30,10 @@ export const loginWithID = async (dispatch: any, user_id: string) => {
  * @param dispatch Dispatch function from useStoreDispatch()
  */
 
-export const logoutUser = async (dispatch) => {
+export const logoutUser = async (dispatch: any) => {
   dispatch({ type: "LOGOUT" });
   localStorage.removeItem("workoutID");
+  localStorage.removeItem("authToken");
 };
 
 /**
@@ -52,7 +53,9 @@ export const authLogin = async (dispatch: any, username: string, password: strin
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(loginCreds),
     });
-    const userData = await res.json();
+    const { userData, token } = await res.json();
+
+    localStorage.setItem("authToken", token);
 
     dispatch({ type: "SET_USER", payload: { userData } });
 
@@ -82,7 +85,9 @@ export const createAccount = async (dispatch: any, username: string, password: s
     // Response status if username is already taken
     if (res.status === 403) return false;
 
-    const userData = await res.json();
+    const { userData, token } = await res.json();
+
+    localStorage.setItem("authToken", token);
 
     dispatch({ type: "SET_USER", payload: { userData } });
 
