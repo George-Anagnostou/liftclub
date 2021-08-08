@@ -1,8 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connectToDatabase } from "../../../utils/mongodb";
 import bcrypt from "bcryptjs";
+import * as jwt from "jsonwebtoken";
 
 const saltRounds = 10;
+const JWT_SECRET = process.env.JWT_SECRET || "";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const httpMethod = req.method;
@@ -28,6 +30,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     delete userData.ops[0].password;
 
-    res.status(201).json(userData.ops[0]);
+    const token = jwt.sign({ id: userData._id }, JWT_SECRET);
+
+    res.status(201).json({ userData: userData.ops[0], token: token });
   }
 };

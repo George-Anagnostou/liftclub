@@ -2,6 +2,9 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { User } from "../../../utils/interfaces";
 import { connectToDatabase } from "../../../utils/mongodb";
 import bcrypt from "bcryptjs";
+import * as jwt from "jsonwebtoken";
+
+const JWT_SECRET = process.env.JWT_SECRET || "";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const httpMethod = req.method;
@@ -20,7 +23,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     delete user.password;
 
-    validLogin ? res.status(201).json(user) : res.status(400).end(); // Status 400 for bad password
+    const token = jwt.sign({ id: user._id }, JWT_SECRET);
+
+    validLogin && token
+      ? res.status(201).json({ userData: user, token: token })
+      : res.status(400).end(); // Status 400 for bad password
   } else {
     // Status 401 for bad username
     res.status(401).end();
