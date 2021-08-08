@@ -26,20 +26,27 @@ const Layout: React.FC<Props> = ({ title = "Lift Club", children }) => {
   const dispatch = useStoreDispatch();
   const { user, platform, isUsingPWA, isSignedIn } = useStoreState();
 
-  const persistLogin = async (token: string) => {
-    const loginSuccess = await loginWithToken(dispatch, token);
-    loginSuccess ? router.push("/log") : router.push("/"), localStorage.removeItem("authToken");
-  };
-
   // Check local storage for user_id for persistant login
-  const checkLocalStorageForAuthId = async () => {
+  const checkForAuthToken = async () => {
     const token = localStorage.getItem("authToken");
-    // If local storage workoutID exists, login user
-    token ? persistLogin(token) : router.push("/");
+
+    // If local storage token exists, attempt login
+    if (token) {
+      const loginSuccess = await loginWithToken(dispatch, token);
+
+      if (loginSuccess) {
+        router.push("/log");
+      } else {
+        router.push("/");
+        localStorage.removeItem("authToken");
+      }
+    } else {
+      router.push("/");
+    }
   };
 
   useEffect(() => {
-    if (!isSignedIn) checkLocalStorageForAuthId();
+    if (!isSignedIn) checkForAuthToken();
   }, [router.pathname]);
 
   useEffect(() => {
