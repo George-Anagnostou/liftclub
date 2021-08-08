@@ -2,12 +2,10 @@ import React, { useState } from "react";
 import styled from "styled-components";
 // Context
 import { useStoreDispatch, createAccount } from "../../store";
-// Interfaces
-import { User } from "../../utils/interfaces";
 
 interface Props {
   changeFormType: () => void;
-  handleAuthSuccess: (user: User) => void;
+  handleAuthSuccess: () => void;
 }
 
 const CreateAcc: React.FC<Props> = ({ changeFormType, handleAuthSuccess }) => {
@@ -22,7 +20,7 @@ const CreateAcc: React.FC<Props> = ({ changeFormType, handleAuthSuccess }) => {
   const handleCreateAccount = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const userData = await createAccount(dispatch, accCreds.username, accCreds.password);
-    userData ? handleAuthSuccess(userData) : setUsernameExists(true);
+    userData ? handleAuthSuccess() : setUsernameExists(true);
   };
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {

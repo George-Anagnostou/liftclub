@@ -5,8 +5,6 @@ import styled from "styled-components";
 import Branding from "../components/homepage/Branding";
 import Login from "../components/homepage/Login";
 import CreateAcc from "../components/homepage/CreateAcc";
-// Interfaces
-import { User } from "../utils/interfaces";
 
 export default function Home() {
   const router = useRouter();
@@ -15,10 +13,7 @@ export default function Home() {
 
   const changeFormType = () => setFormType(formType === "login" ? "create" : "login");
 
-  const handleAuthSuccess = (user: User) => {
-    localStorage.setItem("workoutID", user._id);
-    router.push(`/log`);
-  };
+  const handleAuthSuccess = () => router.push(`/log`);
 
   return (
     <HomeContainer>

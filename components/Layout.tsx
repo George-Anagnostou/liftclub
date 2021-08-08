@@ -7,7 +7,7 @@ import NavBar from "./NavBar";
 // Context
 import {
   useStoreDispatch,
-  loginWithID,
+  loginWithToken,
   useStoreState,
   setIsUsingPWA,
   setPlatformToiOS,
@@ -26,16 +26,16 @@ const Layout: React.FC<Props> = ({ title = "Lift Club", children }) => {
   const dispatch = useStoreDispatch();
   const { user, platform, isUsingPWA, isSignedIn } = useStoreState();
 
-  const persistLogin = async (user_id: string) => {
-    const loginSuccess = await loginWithID(dispatch, user_id);
-    if (loginSuccess && router.pathname === "/") router.push("/log");
+  const persistLogin = async (token: string) => {
+    const loginSuccess = await loginWithToken(dispatch, token);
+    loginSuccess ? router.push("/log") : router.push("/"), localStorage.removeItem("authToken");
   };
 
   // Check local storage for user_id for persistant login
   const checkLocalStorageForAuthId = async () => {
-    const user_id = localStorage.getItem("workoutID");
+    const token = localStorage.getItem("authToken");
     // If local storage workoutID exists, login user
-    user_id ? persistLogin(user_id) : router.push("/");
+    token ? persistLogin(token) : router.push("/");
   };
 
   useEffect(() => {

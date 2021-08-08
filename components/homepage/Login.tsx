@@ -2,12 +2,10 @@ import React, { useState } from "react";
 import styled from "styled-components";
 // Context
 import { useStoreDispatch, authLogin } from "../../store";
-// Interfaces
-import { User } from "../../utils/interfaces";
 
 interface Props {
   changeFormType: () => void;
-  handleAuthSuccess: (user: User) => void;
+  handleAuthSuccess: () => void;
 }
 
 const Login: React.FC<Props> = ({ changeFormType, handleAuthSuccess }) => {
@@ -22,7 +20,7 @@ const Login: React.FC<Props> = ({ changeFormType, handleAuthSuccess }) => {
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const userData = await authLogin(dispatch, loginCreds.username, loginCreds.password);
-    userData ? handleAuthSuccess(userData) : setInvalidLoginCreds(true);
+    userData ? handleAuthSuccess() : setInvalidLoginCreds(true);
   };
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
