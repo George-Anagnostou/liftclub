@@ -24,7 +24,7 @@ const Layout: React.FC<Props> = ({ title = "Lift Club", children }) => {
   const router = useRouter();
 
   const dispatch = useStoreDispatch();
-  const { user, platform, isUsingPWA } = useStoreState();
+  const { user, platform, isUsingPWA, isSignedIn } = useStoreState();
 
   const persistLogin = async (user_id: string) => {
     const loginSuccess = await loginWithID(dispatch, user_id);
@@ -39,7 +39,7 @@ const Layout: React.FC<Props> = ({ title = "Lift Club", children }) => {
   };
 
   useEffect(() => {
-    checkLocalStorageForAuthId();
+    if (!isSignedIn) checkLocalStorageForAuthId();
   }, [router.pathname]);
 
   useEffect(() => {
