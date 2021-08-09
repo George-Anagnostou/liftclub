@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useState, useRef } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 // Components
 import Notebook from "../public/navIcons/Notebook";
 import Search from "../public/navIcons/Magnifying";
@@ -10,6 +11,23 @@ import Create from "../public/navIcons/Create";
 import { useStoreState } from "../store";
 
 const NavBar: React.FC = () => {
+  const router = useRouter();
+
+  const getSlugFromUrl = () => {
+    switch (router.route.split("/")[1]) {
+      case "log":
+        return "log";
+      case "feed":
+        return "feed";
+      case "builder":
+        return "builder";
+      case "users":
+        return "profile";
+      default:
+        return "log";
+    }
+  };
+
   const { platform, user } = useStoreState();
 
   const ref = useRef<HTMLDivElement>(null);
@@ -20,7 +38,7 @@ const NavBar: React.FC = () => {
     { pathname: "/builder", icon: <Create />, slug: "builder" },
     { pathname: `/users/${user!.username}`, icon: <Profile />, slug: "profile" },
   ]);
-  const [currSlug, setCurrSlug] = useState("log");
+  const [currSlug, setCurrSlug] = useState(() => getSlugFromUrl());
 
   return (
     <Nav ref={ref} className={platform === "ios" ? "ios-safe-area" : ""}>
@@ -73,6 +91,7 @@ const NavBarContainer = styled.ul`
 
     &.selected {
       fill: ${({ theme }) => theme.text};
+      stroke-width: 5px;
       stroke: ${({ theme }) => theme.text};
     }
   }

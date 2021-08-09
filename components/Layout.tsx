@@ -34,7 +34,9 @@ const Layout: React.FC<Props> = ({ title = "Lift Club", children }) => {
     if (token) {
       const loginSuccess = await loginWithToken(dispatch, token);
 
-      if (!loginSuccess) {
+      if (loginSuccess) {
+        router.pathname === "/" && router.push("/log");
+      } else {
         router.push("/");
         localStorage.removeItem("authToken");
       }
