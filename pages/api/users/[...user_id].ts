@@ -19,34 +19,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
        *
        */
 
-      if (req.query.field === "savedWorkouts") {
-        // GET aggregated savedWorkouts with interpolated workout data
-        // ACCESSED WITH: /users/user_id?field=savedWorkouts
-
-        const data = await db
-          .collection("users")
-          .aggregate([
-            { $match: { _id: new ObjectId(user_id) } },
-            {
-              $lookup: {
-                from: "workouts",
-                localField: "savedWorkouts",
-                foreignField: "_id",
-                as: "data",
-              },
-            },
-          ])
-          .toArray();
-
-        res.json(data[0].data);
-      } else if (req.query.username) {
+      if (req.query.username) {
         // Get a specific user from username
 
         userData = await db.collection("users").findOne({ username: req.query.username });
 
         delete userData.password;
 
-        res.json(userData);
+        res.status(200).json(userData);
       } else {
         res.status(400).end();
       }
@@ -246,6 +226,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       }
 
       break;
+
     case "DELETE":
       if (req.query.fieldToUpdate === "DELETE_WORKOUT_FROM_WORKOUT_LOG") {
         const key = req.query.workoutLogKey;
