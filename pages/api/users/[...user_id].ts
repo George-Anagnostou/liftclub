@@ -9,7 +9,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { db } = await connectToDatabase();
 
   const user_id: string = req.query.user_id[0];
-  let userData: User;
+  let userData: { value: User; password?: string };
 
   switch (httpMethod) {
     case "GET":
@@ -23,6 +23,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         // Get a specific user from username
 
         userData = await db.collection("users").findOne({ username: req.query.username });
+
+        console.log(userData);
 
         delete userData.password;
 
@@ -218,6 +220,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
               { $set: { [`workoutLog.${key}`]: workoutData } }
             );
 
+          if (!userData.value.workoutLog[key]) {
+            // User saved a new workout, so increment workout numLogged
+            db.collection("workouts").findOneAndUpdate(
+              { _id: workoutData.workout_id },
+              { $inc: { numLogged: 1 } }
+            );
+          }
+
           userData ? res.status(201).json({}) : res.status(400).end();
           break;
 
@@ -229,17 +239,23 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     case "DELETE":
       if (req.query.fieldToUpdate === "DELETE_WORKOUT_FROM_WORKOUT_LOG") {
-        const key = req.query.workoutLogKey;
+        let key = req.query.workoutLogKey;
+        if (typeof key !== "string") key = req.query.workoutLogKey[0];
 
-        const deleted = await db
+        userData = await db
           .collection("users")
           .findOneAndUpdate(
             { _id: new ObjectId(user_id) },
-            { $unset: { [`workoutLog.${key}`]: 1 } },
-            { returnNewDocument: true }
+            { $unset: { [`workoutLog.${key}`]: 1 } }
           );
 
-        deleted.value.workoutLog ? res.status(204).end() : res.status(404).end();
+        // User deleted a new workout, so decrement workout numLogged
+        db.collection("workouts").findOneAndUpdate(
+          { _id: new ObjectId(userData.value.workoutLog[key].workout_id) },
+          { $inc: { numLogged: -1 } }
+        );
+
+        userData.value.workoutLog ? res.status(204).end() : res.status(404).end();
         break;
       }
       res.status(404).end();
