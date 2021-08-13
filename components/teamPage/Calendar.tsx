@@ -139,15 +139,15 @@ const DaysCtrl = styled.div`
   }
 
   .hasWorkout {
-    background: ${({ theme }) => theme.accentSoft};
+    background: ${({ theme }) => theme.accent};
     color: ${({ theme }) => theme.accentText};
   }
   .selected {
-    background: ${({ theme }) => theme.background};
+    background: ${({ theme }) => theme.border};
     color: ${({ theme }) => theme.text};
   }
   .selectedAndHasWorkout {
-    background: ${({ theme }) => theme.accent};
+    background: ${({ theme }) => theme.accentSoft};
     color: ${({ theme }) => theme.accentText};
   }
 `;
