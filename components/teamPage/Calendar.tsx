@@ -15,11 +15,11 @@ interface Props {
 }
 
 const Calendar: React.FC<Props> = ({ data, setSelectedDate, selectedDate }) => {
-  const [{ year, month, day }, setYearMonthDay] = useState(getCurrYearMonthDay());
+  const [{ year, month }, setYearMonthDay] = useState(getCurrYearMonthDay());
   const [daysInMonth, setDaysInMonth] = useState(0);
 
   const isDayInData = (isoString: string) =>
-    data?.findIndex((item) => item.isoDate === isoString) > -1;
+    data?.findIndex((item) => item.isoDate.substring(0, 10) === isoString.substring(0, 10)) > -1;
 
   const handleDayClick = (date: string) =>
     stripTimeAndCompareDates(date, selectedDate) ? setSelectedDate("") : setSelectedDate(date);
@@ -66,7 +66,9 @@ const Calendar: React.FC<Props> = ({ data, setSelectedDate, selectedDate }) => {
         {[...Array(daysInMonth)].map((x, i) => (
           <div
             key={i}
-            onClick={() => handleDayClick(new Date(year, month, i + 1).toISOString())}
+            onClick={() =>
+              handleDayClick(new Date(year, month, i + 1).toISOString().substring(0, 10))
+            }
             className={`day ${
               stripTimeAndCompareDates(selectedDate, new Date(year, month, i + 1).toISOString()) &&
               "selected"
@@ -92,15 +94,13 @@ const Calendar: React.FC<Props> = ({ data, setSelectedDate, selectedDate }) => {
 export default Calendar;
 
 const Container = styled.div`
-  margin: 0.5rem 0;
   border-radius: 5px;
-  background: ${({ theme }) => theme.buttonMed};
+  background: ${({ theme }) => theme.background};
 `;
 
 const MonthCtrl = styled.div`
   width: 100%;
   display: flex;
-  border-bottom: 1px solid ${({ theme }) => theme.border};
 
   div {
     flex: 1;

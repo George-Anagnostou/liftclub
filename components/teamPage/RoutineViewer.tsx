@@ -119,10 +119,7 @@ const RoutineContainer: React.FC<Props> = ({ routine_id, setTeam }) => {
       <div className="dateData">
         {selectedDate ? (
           foundWorkout ? (
-            <div>
-              <p>{foundWorkout.name}</p>
-              <p>{foundWorkout.exercises.length} exercises</p>
-            </div>
+            <p>{foundWorkout.name}</p>
           ) : isEditing ? (
             <p className="textLight">Select a workout from below</p>
           ) : (
@@ -133,7 +130,7 @@ const RoutineContainer: React.FC<Props> = ({ routine_id, setTeam }) => {
         )}
 
         {isEditing && (
-          <EditingWorkoutOptions>
+          <WorkoutOptions>
             <h3 className="title">Created</h3>
             <ul>
               {userMadeWorkouts.map((workout) => (
@@ -173,7 +170,7 @@ const RoutineContainer: React.FC<Props> = ({ routine_id, setTeam }) => {
                 </li>
               ))}
             </ul>
-          </EditingWorkoutOptions>
+          </WorkoutOptions>
         )}
       </div>
     );
@@ -182,7 +179,7 @@ const RoutineContainer: React.FC<Props> = ({ routine_id, setTeam }) => {
   return (
     <>
       {routine && (
-        <Editor>
+        <CalendarContainer>
           <h3 className="title">Schedule</h3>
 
           {displaySelectedDateData()}
@@ -209,23 +206,23 @@ const RoutineContainer: React.FC<Props> = ({ routine_id, setTeam }) => {
               </button>
             </div>
           )}
-        </Editor>
+        </CalendarContainer>
       )}
     </>
   );
 };
 export default RoutineContainer;
 
-const Editor = styled.div`
+const CalendarContainer = styled.div`
   background: ${({ theme }) => theme.background};
   position: relative;
   overflow: hidden;
   margin-bottom: 0.5rem;
 
   .dateData {
-    background: ${({ theme }) => theme.buttonMed};
+    background: ${({ theme }) => theme.background};
+    border-bottom: 2px solid ${({ theme }) => theme.border};
     padding: 0.5rem;
-    border-radius: 5px;
 
     p {
       flex: 1;
@@ -234,10 +231,6 @@ const Editor = styled.div`
       &.textLight {
         color: ${({ theme }) => theme.textLight};
       }
-    }
-
-    div {
-      display: flex;
     }
   }
 
@@ -262,7 +255,7 @@ const Editor = styled.div`
   }
 `;
 
-const EditingWorkoutOptions = styled.div`
+const WorkoutOptions = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0.5rem 0;
