@@ -241,6 +241,19 @@ export const getWorkoutsFromIdArray = async (idArr: string[]): Promise<Workout[]
  *
  */
 
+export const getRoutinesFromCreatorId = async (creator_id: string): Promise<Routine[] | false> => {
+  try {
+    const res = await fetch(`/api/routines/?creator_id=${creator_id}`);
+
+    const routines = await res.json();
+
+    return routines;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
 export const getRoutineFromId = async (routine_id: string): Promise<Routine | false> => {
   try {
     const res = await fetch(`/api/routines/${routine_id}`);
@@ -255,7 +268,7 @@ export const getRoutineFromId = async (routine_id: string): Promise<Routine | fa
 };
 export const postNewRoutine = async (newRoutine: Routine) => {
   try {
-    const res = await fetch(`/api/routines}`, {
+    const res = await fetch(`/api/routines`, {
       method: "POST",
       body: JSON.stringify({ newRoutine }),
     });
