@@ -2,36 +2,41 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 // Utils
 import { getUserMadeWorkouts, getWorkoutsFromIdArray } from "../../../utils/api";
-import { addExerciseDataToWorkout } from "../../../utils";
 // Context
 import { useStoreState } from "../../../store";
-import DeleteWorkoutModal from "./DeleteWorkoutModal";
-// Utils
 // Interfaces
-import { Workout } from "../../../utils/interfaces";
+import { Workout, Routine } from "../../../utils/interfaces";
 
 interface Props {
-  setCustomWorkout: React.Dispatch<React.SetStateAction<Workout>>;
-  customWorkout: Workout;
-  workoutSavedSuccessfully: boolean | null;
-  clearCustomWorkout: () => void;
+  routine: Routine;
+  setRoutine: React.Dispatch<React.SetStateAction<Routine>>;
+  selectedDate: string;
+  selectedWorkout: Workout | null;
 }
 
-const UserWorkouts: React.FC<Props> = ({
-  setCustomWorkout,
-  customWorkout,
-  workoutSavedSuccessfully,
-  clearCustomWorkout,
-}) => {
+const UserWorkouts: React.FC<Props> = ({ routine, setRoutine, selectedDate, selectedWorkout }) => {
   const { user } = useStoreState();
 
   const [userMadeWorkouts, setUserMadeWorkouts] = useState<Workout[]>([]);
   const [userSavedWorkouts, setUserSavedWorkouts] = useState<Workout[]>([]);
-  const [workoutToDelete, setWorkoutToDelete] = useState<Workout | null>(null);
 
-  const displaySavedWorkout = async (workout: Workout) => {
-    const mergedData = await addExerciseDataToWorkout(workout);
-    setCustomWorkout(mergedData);
+  const addWorkoutToRoutine = (workout: Workout) => {
+    setRoutine((prev) => ({
+      ...prev,
+      workoutPlan: [
+        ...prev.workoutPlan.filter((each) => each.isoDate !== selectedDate),
+        { isoDate: selectedDate, workout_id: workout._id, workout },
+      ].sort((a, b) => a.isoDate.localeCompare(b.isoDate)),
+    }));
+  };
+
+  const removeWorkoutFromRoutine = () => {
+    setRoutine((prev) => ({
+      ...prev,
+      workoutPlan: [
+        ...prev.workoutPlan.filter((each) => each.isoDate.substring(0, 10) !== selectedDate),
+      ],
+    }));
   };
 
   const loadUserMadeWorkouts = async () => {
@@ -53,35 +58,34 @@ const UserWorkouts: React.FC<Props> = ({
       // Get all workotus saved by the user
       loadUserSavedWorkouts();
     }
-  }, [user, workoutSavedSuccessfully, workoutToDelete]);
+  }, [user]);
+
+  const renderWorkoutItem = (workout: Workout, index: number) => {
+    return (
+      <li
+        key={index}
+        onClick={() => {
+          if (selectedDate) {
+            selectedWorkout?._id === workout._id
+              ? removeWorkoutFromRoutine()
+              : addWorkoutToRoutine(workout);
+          }
+        }}
+        className={selectedWorkout?._id === workout._id ? "highlight" : ""}
+      >
+        {workout.name}
+      </li>
+    );
+  };
 
   return (
     <Container>
-      {workoutToDelete && (
-        <DeleteWorkoutModal
-          workout={workoutToDelete}
-          setWorkoutToDelete={setWorkoutToDelete}
-          clearCustomWorkout={clearCustomWorkout}
-        />
-      )}
-
       <WorkoutsList>
         <h3>Created</h3>
 
         <ul>
           {Boolean(userMadeWorkouts.length) ? (
-            userMadeWorkouts.map((workout, i) => (
-              <li
-                key={i}
-                onClick={() => displaySavedWorkout(workout)}
-                className={customWorkout._id === workout._id ? "highlight" : ""}
-                style={{ paddingRight: "1.75rem" }}
-              >
-                {workout.name}
-
-                <button onClick={() => setWorkoutToDelete(workout)}>x</button>
-              </li>
-            ))
+            userMadeWorkouts.map((workout, i) => renderWorkoutItem(workout, i))
           ) : (
             <p className="fallbackText">None</p>
           )}
@@ -92,15 +96,7 @@ const UserWorkouts: React.FC<Props> = ({
         <h3>Saved</h3>
         <ul>
           {Boolean(userSavedWorkouts.length) ? (
-            userSavedWorkouts.map((workout, i) => (
-              <li
-                key={i}
-                onClick={() => displaySavedWorkout(workout)}
-                className={customWorkout._id === workout._id ? "highlight" : ""}
-              >
-                {workout.name}
-              </li>
-            ))
+            userSavedWorkouts.map((workout, i) => renderWorkoutItem(workout, i))
           ) : (
             <p className="fallbackText">None</p>
           )}
@@ -114,11 +110,6 @@ export default UserWorkouts;
 const Container = styled.div`
   width: calc(100vw - 1rem);
   margin-bottom: 0.5rem;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 `;
 
 const WorkoutsList = styled.div`
@@ -149,28 +140,9 @@ const WorkoutsList = styled.div`
       word-wrap: break-word;
       text-align: left;
 
-      button {
-        font-size: 0.9rem;
-        font-weight: 600;
-
-        background: ${({ theme }) => theme.buttonLight};
-        color: ${({ theme }) => theme.textLight};
-        border: none;
-        border-radius: 3px;
-        position: absolute;
-        top: 3px;
-        right: 3px;
-        padding: 0px 5px 1px;
-      }
-
       &.highlight {
         background: ${({ theme }) => theme.accentSoft};
         color: ${({ theme }) => theme.accentText};
-
-        button {
-          background: ${({ theme }) => theme.accent};
-          color: ${({ theme }) => theme.accentText};
-        }
       }
     }
   }

@@ -40,7 +40,7 @@ const Bar = styled.div`
       flex: 1;
       padding: 0.5rem 0;
       color: ${({ theme }) => theme.textLight};
-      border-bottom: 3px solid ${({ theme }) => theme.buttonMed};
+      border-bottom: 3px solid ${({ theme }) => theme.border};
 
       &.selected {
         color: ${({ theme }) => theme.text};

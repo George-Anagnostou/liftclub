@@ -25,7 +25,6 @@ const CustomWorkoutInit = {
 const WorkoutBuilder: React.FC = () => {
   const { user } = useStoreState();
 
-  const [showUserWorkouts, setShowUserWorkouts] = useState(false);
   const [showExerciseList, setShowExerciseList] = useState(false);
   const [workoutSavedSuccessfully, setWorkoutSavedSuccessfully] = useState<boolean | null>(null);
   const [customWorkout, setCustomWorkout] = useState<Workout>(CustomWorkoutInit);
@@ -97,7 +96,6 @@ const WorkoutBuilder: React.FC = () => {
         customWorkout={customWorkout}
         clearCustomWorkout={clearCustomWorkout}
         setCustomWorkout={setCustomWorkout}
-        showUserWorkouts={showUserWorkouts}
       />
 
       {showExerciseList && (

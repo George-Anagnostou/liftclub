@@ -6,7 +6,7 @@ import { postNewWorkout, updateExistingWorkout } from "../../../utils/api";
 import { Exercise, User, Workout } from "../../../utils/interfaces";
 // Components
 import CustomWorkoutExercise from "./CustomWorkoutExercise";
-import CustomWorkoutControls from "./CustomWorkoutControls";
+import CustomWorkoutControls from "./WorkoutControls";
 
 interface Props {
   customWorkout: Workout;
@@ -175,7 +175,7 @@ const ExerciseList = styled.ul`
 const AddExerciseBtn = styled.button`
   background: ${({ theme }) => theme.accentSoft};
   color: ${({ theme }) => theme.accentText};
-  box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
+  box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
   border: none;
   width: fit-content;
   margin: 1rem auto;
