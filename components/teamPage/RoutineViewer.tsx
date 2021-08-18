@@ -31,7 +31,7 @@ const RoutineContainer: React.FC<Props> = ({ routine_id, setTeam }) => {
   const [userMadeWorkouts, setUserMadeWorkouts] = useState<Workout[]>([]);
   const [userSavedWorkouts, setUserSavedWorkouts] = useState<Workout[]>([]);
 
-  const addWorkoutToRoutine = (workout) => {
+  const addWorkoutToRoutine = (workout: Workout) => {
     setRoutine(
       (prev) =>
         prev && {
