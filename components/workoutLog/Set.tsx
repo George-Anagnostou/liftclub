@@ -83,25 +83,27 @@ const SetContainer = styled.li`
       width: 5rem;
       font-size: 1.5rem;
       font-weight: 300;
-      transition: all 0.1s ease-in-out;
       background: inherit;
       color: inherit;
-
       &:focus {
-        box-shadow: 0 0 6px ${({ theme }) => theme.boxShadow};
-        outline: 1px solid ${({ theme }) => theme.accentSoft};
-        -moz-outline-radius: 5px;
+        border: 2px solid ${({ theme }) => theme.accentSoft};
+        border-radius: 3px;
+        outline: none;
       }
     }
-    &::after {
-      content: " lbs";
+
+    /* &::after {
+      content: "lbs";
       width: 0;
+      margin-left: 2px;
       color: ${({ theme }) => theme.textLight};
-    }
+    } */
   }
 
   .prev {
-    p {
+    p,
+    span {
+      color: ${({ theme }) => theme.textLight};
     }
   }
 `;

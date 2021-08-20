@@ -108,9 +108,7 @@ const WorkoutContainerClone: React.FC<Props> = ({
   return (
     <>
       <WorkoutName>
-        <h3 className="date">
-          {new Date(selectedDate + "T08:00:00.000Z").toDateString().substring(3, 10)}
-        </h3>
+        {/* <h3 className="date">{new Date(selectedDate).toDateString().substring(3, 10)}</h3> */}
         <h3 className="workout-name">{currentDayData.workout?.name}</h3>
       </WorkoutName>
 
@@ -144,12 +142,12 @@ const WorkoutContainerClone: React.FC<Props> = ({
         </WorkoutList>
 
         <WorkoutNote>
-          <h3>Notes:</h3>
+          <h3>Notes</h3>
           <textarea
             key={"workoutNote"}
             name="workoutNote"
             cols={30}
-            rows={5}
+            rows={3}
             value={currentDayData.workoutNote}
             onChange={(e) => handleUserInput(() => handleWorkoutNoteChange(e))}
           ></textarea>
@@ -176,21 +174,15 @@ const WorkoutName = styled.div`
   padding: 0.5rem;
 
   display: flex;
-  justify-content: space-evenly;
+  flex-direction: column;
+  background: ${({ theme }) => theme.background};
+  border-radius: 10px;
+  margin-bottom: 0.5rem;
 
   h3 {
-    font-size: 1.4rem;
+    font-size: 1.3em;
     font-weight: 300;
     text-transform: capitalize;
-    color: ${({ theme }) => theme.textLight};
-  }
-
-  .date {
-    min-width: max-content;
-  }
-
-  .workout-name {
-    text-align: right;
   }
 `;
 
@@ -216,6 +208,10 @@ const WorkoutList = styled.ul`
       font-weight: 400;
       font-size: 1.3rem;
       letter-spacing: 1px;
+      background: ${({ theme }) => theme.body};
+      margin: 0 0.5rem;
+      border-radius: 8px;
+      padding: 0.25rem 0;
     }
 
     ul {
@@ -245,8 +241,19 @@ const WorkoutNote = styled.div`
   margin: 1rem auto;
   border-radius: 10px;
   padding: 1rem;
-  text-align: left;
+  text-align: center;
   background: ${({ theme }) => theme.background};
+
+  h3 {
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    font-weight: 400;
+    font-size: 1.3rem;
+    letter-spacing: 1px;
+    background: ${({ theme }) => theme.body};
+    border-radius: 8px;
+    padding: 0.25rem 0;
+  }
 
   textarea {
     padding: 0.5rem;
@@ -264,7 +271,8 @@ const WorkoutNote = styled.div`
     color: inherit;
 
     &:focus {
-      box-shadow: 0 5px 8px #757575;
+      box-shadow: 0 0 1px 2px ${({ theme }) => theme.accentSoft};
+      outline: none;
     }
   }
 `;

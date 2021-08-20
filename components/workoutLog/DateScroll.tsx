@@ -133,7 +133,7 @@ const DateScrollContainer = styled.ul`
         text-transform: uppercase;
       }
       .dow {
-        font-weight: 600;
+        font-weight: 400;
       }
       .day {
       }
@@ -147,7 +147,7 @@ const DateScrollContainer = styled.ul`
         background: ${({ theme }) => theme.background};
       }
       &.hasDayData {
-        background: ${({ theme }) => theme.accentSoft};
+        background: ${({ theme }) => theme.accent};
         color: ${({ theme }) => theme.shades[1]};
       }
       &.noDayData {
