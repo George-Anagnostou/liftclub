@@ -4,7 +4,7 @@ import styled from "styled-components";
 interface Props {
   children: React.ReactNode;
   removeModal: () => void;
-  isOpen: boolean;
+  isOpen: any;
 }
 
 const Modal: React.FC<Props> = ({ children, removeModal, isOpen }) => {
