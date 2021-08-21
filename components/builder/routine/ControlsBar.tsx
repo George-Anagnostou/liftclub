@@ -12,13 +12,19 @@ import Checkmark from "../../Checkmark";
 interface Props {
   setRoutine: React.Dispatch<React.SetStateAction<Routine>>;
   routine: Routine;
-  initialRoutineState: Routine;
+  clearRoutine: () => void;
+  routineSaved: boolean | null;
+  setRoutineSaved: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
-const ControlsBar: React.FC<Props> = ({ setRoutine, routine, initialRoutineState }) => {
+const ControlsBar: React.FC<Props> = ({
+  setRoutine,
+  routine,
+  clearRoutine,
+  routineSaved,
+  setRoutineSaved,
+}) => {
   const { user } = useStoreState();
-
-  const [routineSaved, setRoutineSaved] = useState<null | boolean>(null);
 
   const saveRoutine = async () => {
     const routineForDB: any = {
@@ -37,15 +43,13 @@ const ControlsBar: React.FC<Props> = ({ setRoutine, routine, initialRoutineState
       // Saving a new routine
       routineForDB.creator_id = user!._id;
       routineForDB.creatorName = user!.username;
+      routineForDB.name = routineForDB.name || "New Routine";
       delete routineForDB._id;
 
       const saved = await postNewRoutine(routineForDB);
       setRoutineSaved(saved);
+      if (saved) clearRoutine();
     }
-  };
-
-  const clearRoutine = () => {
-    setRoutine(initialRoutineState);
   };
 
   const handleRoutineNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {

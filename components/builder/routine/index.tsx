@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-// Context
-import { stripTimeAndCompareDates } from "../../../utils";
+// Utils
+import { areTheSameDate } from "../../../utils";
+import { formatRoutineWorkoutPlanForCalendar } from "../../../utils/dataMutators";
 // Interfaces
 import { Routine, Workout } from "../../../utils/interfaces";
 // Components
 import Calendar from "../../teamPage/Calendar";
 import ControlsBar from "./ControlsBar";
-import DateData from "./DateData";
 import UserRoutines from "./UserRoutines";
 import UserWorkouts from "./UserWorkouts";
 
@@ -17,30 +16,43 @@ const RoutineBuilder: React.FC = () => {
   const [routine, setRoutine] = useState<Routine>(initialRoutineState);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().substring(0, 10));
   const [selectedWorkout, setSelectedWorkout] = useState<Workout | null>(null);
+  const [routineSaved, setRoutineSaved] = useState<null | boolean>(null);
 
+  // Set selected workout when selectedDate or routine changes
   useEffect(() => {
     const foundWorkout = routine.workoutPlan.filter((workout) =>
-      stripTimeAndCompareDates(workout.isoDate, selectedDate)
+      areTheSameDate(workout.isoDate, selectedDate)
     )[0]?.workout;
 
     setSelectedWorkout(foundWorkout || null);
   }, [selectedDate, routine]);
 
+  const clearRoutine = () => {
+    setRoutine(initialRoutineState);
+  };
+
   return (
     <>
       <ControlsBar
-        initialRoutineState={initialRoutineState}
+        clearRoutine={clearRoutine}
         setRoutine={setRoutine}
         routine={routine}
+        routineSaved={routineSaved}
+        setRoutineSaved={setRoutineSaved}
       />
 
-      <UserRoutines setRoutine={setRoutine} routine={routine} />
+      <UserRoutines
+        clearRoutine={clearRoutine}
+        setRoutine={setRoutine}
+        routine={routine}
+        routineSaved={routineSaved}
+      />
 
-      <DateData selectedDate={selectedDate} selectedWorkout={selectedWorkout} />
       <Calendar
-        data={routine.workoutPlan}
+        data={formatRoutineWorkoutPlanForCalendar(routine.workoutPlan)}
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
+        selectedWorkout={selectedWorkout}
       />
 
       <UserWorkouts

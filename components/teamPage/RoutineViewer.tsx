@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useStoreState } from "../../store";
 // Utils
-import { stripTimeAndCompareDates } from "../../utils";
+import { areTheSameDate } from "../../utils";
 // API
 import {
   getRoutineFromId,
@@ -14,6 +14,7 @@ import {
 import Calendar from "./Calendar";
 // Interface
 import { Routine, Team, Workout } from "../../utils/interfaces";
+import { formatRoutineWorkoutPlanForCalendar } from "../../utils/dataMutators";
 
 interface Props {
   routine_id: string;
@@ -27,6 +28,7 @@ const RoutineContainer: React.FC<Props> = ({ routine_id, setTeam }) => {
   const [routine, setRoutine] = useState<Routine | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString());
+  const [selectedWorkout, setSelectedWorkout] = useState<Workout | null>(null);
   const [isRoutineOwner, setIsRoutineOwner] = useState(false);
   const [userMadeWorkouts, setUserMadeWorkouts] = useState<Workout[]>([]);
   const [userSavedWorkouts, setUserSavedWorkouts] = useState<Workout[]>([]);
@@ -108,71 +110,58 @@ const RoutineContainer: React.FC<Props> = ({ routine_id, setTeam }) => {
     if (isRoutineOwner && isSignedIn) getUserWorkouts();
   }, [isRoutineOwner, isSignedIn]);
 
-  // Displays the data for the selected date & editor if in editing mode
-  // If there is a workout, displays the
-  const displaySelectedDateData = () => {
-    const foundWorkout = routine!.workoutPlan.filter((item) =>
-      stripTimeAndCompareDates(item.isoDate, selectedDate)
+  // Set selected workout when selectedDate or routine changes
+  useEffect(() => {
+    const foundWorkout = routine?.workoutPlan.filter((workout) =>
+      areTheSameDate(workout.isoDate, selectedDate)
     )[0]?.workout;
 
+    setSelectedWorkout(foundWorkout || null);
+  }, [selectedDate, routine]);
+
+  const renderWorkoutOptions = () => {
     return (
-      <div className="dateData">
-        {selectedDate ? (
-          foundWorkout ? (
-            <p>{foundWorkout.name}</p>
-          ) : isEditing ? (
-            <p className="textLight">Select a workout from below</p>
-          ) : (
-            <p className="textLight">No workout today</p>
-          )
-        ) : (
-          <p className="textLight">Tap a date to view its workout</p>
-        )}
-
-        {isEditing && (
-          <WorkoutOptions>
-            <h3 className="title">Created</h3>
-            <ul>
-              {userMadeWorkouts.map((workout) => (
-                <li
-                  onClick={() => {
-                    if (selectedDate) {
-                      foundWorkout?._id === workout._id
-                        ? removeWorkoutFromRoutine()
-                        : addWorkoutToRoutine(workout);
-                    }
-                  }}
-                  key={workout._id}
-                  className={`${foundWorkout?._id === workout._id ? "highlight" : ""}
+      <WorkoutOptions>
+        <h3 className="title">Created</h3>
+        <ul>
+          {userMadeWorkouts.map((workout) => (
+            <li
+              onClick={() => {
+                if (selectedDate) {
+                  selectedWorkout?._id === workout._id
+                    ? removeWorkoutFromRoutine()
+                    : addWorkoutToRoutine(workout);
+                }
+              }}
+              key={workout._id}
+              className={`${selectedWorkout?._id === workout._id ? "highlight" : ""}
                   ${selectedDate ? "" : "disable"}`}
-                >
-                  {workout.name}
-                </li>
-              ))}
-            </ul>
+            >
+              {workout.name}
+            </li>
+          ))}
+        </ul>
 
-            <h3 className="title">Saved</h3>
-            <ul>
-              {userSavedWorkouts.map((workout) => (
-                <li
-                  onClick={() => {
-                    if (selectedDate) {
-                      foundWorkout?._id === workout._id
-                        ? removeWorkoutFromRoutine()
-                        : addWorkoutToRoutine(workout);
-                    }
-                  }}
-                  key={workout._id}
-                  className={`${foundWorkout?._id === workout._id ? "highlight" : ""}
+        <h3 className="title">Saved</h3>
+        <ul>
+          {userSavedWorkouts.map((workout) => (
+            <li
+              onClick={() => {
+                if (selectedDate) {
+                  selectedWorkout?._id === workout._id
+                    ? removeWorkoutFromRoutine()
+                    : addWorkoutToRoutine(workout);
+                }
+              }}
+              key={workout._id}
+              className={`${selectedWorkout?._id === workout._id ? "highlight" : ""}
                   ${selectedDate ? "" : "disable"}`}
-                >
-                  {workout.name}
-                </li>
-              ))}
-            </ul>
-          </WorkoutOptions>
-        )}
-      </div>
+            >
+              {workout.name}
+            </li>
+          ))}
+        </ul>
+      </WorkoutOptions>
     );
   };
 
@@ -182,12 +171,16 @@ const RoutineContainer: React.FC<Props> = ({ routine_id, setTeam }) => {
         <CalendarContainer>
           <h3 className="title">Schedule</h3>
 
-          {displaySelectedDateData()}
+          {isEditing && renderWorkoutOptions()}
 
           <Calendar
-            data={routine.workoutPlan}
+            data={formatRoutineWorkoutPlanForCalendar(routine.workoutPlan)}
             setSelectedDate={setSelectedDate}
             selectedDate={selectedDate}
+            selectedWorkout={
+              routine!.workoutPlan.filter((item) => areTheSameDate(item.isoDate, selectedDate))[0]
+                ?.workout!
+            }
           />
 
           {isRoutineOwner && !isEditing && (
