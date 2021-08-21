@@ -63,7 +63,7 @@ export const formatIsoDate = (isoDate: string) => {
  * @param date2 iso date string
  * @returns boolean signifying whether the two iso dates are the same day
  */
-export const stripTimeAndCompareDates = (date1: string, date2: string): boolean => {
+export const areTheSameDate = (date1: string, date2: string): boolean => {
   if (!date1 || !date2) return false;
   return date1.substring(0, 10) === date2.substring(0, 10);
 };

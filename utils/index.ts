@@ -9,7 +9,7 @@ import {
   timeSince,
   daysBetween,
   formatIsoDate,
-  stripTimeAndCompareDates,
+  areTheSameDate,
   dateToISOWithLocal,
 } from "./dateAndTime";
 import { round } from "./math";
@@ -22,7 +22,7 @@ export {
   formatIsoDate,
   daysBetween,
   timeSince,
-  stripTimeAndCompareDates,
+  areTheSameDate,
   dateToISOWithLocal,
   round,
 };
