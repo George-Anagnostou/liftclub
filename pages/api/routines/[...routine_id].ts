@@ -58,6 +58,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
       break;
     case "DELETE":
+      const deleted = await db
+        .collection("routines")
+        .deleteOne({ _id: new ObjectId(routine_id.toString()) });
+
+      deleted.deletedCount ? res.status(204).end() : res.status(400).end();
       break;
   }
 };

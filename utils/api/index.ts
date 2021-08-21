@@ -294,6 +294,19 @@ export const updateRoutine = async (updatedRoutine: Routine) => {
   }
 };
 
+export const deleteRoutine = async (routine_id: string) => {
+  try {
+    const res = await fetch(`/api/routines/${routine_id}`, {
+      method: "DELETE",
+    });
+
+    return res.status === 204;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
 /*
  *
  *
