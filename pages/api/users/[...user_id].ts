@@ -24,8 +24,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
         userData = await db.collection("users").findOne({ username: req.query.username });
 
-        console.log(userData);
-
         delete userData.password;
 
         res.status(200).json(userData);
