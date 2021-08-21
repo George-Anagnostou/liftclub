@@ -52,6 +52,10 @@ export interface Routine {
   workoutPlan: { isoDate: string; workout_id: string; workout?: Workout }[];
 }
 
+export interface RoutineWorkoutPlanForCalendar {
+  [isoDate: string]: { workout_id: string; workout: Workout };
+}
+
 export interface Workout {
   readonly _id: string;
   creator_id: string;
