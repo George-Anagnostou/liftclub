@@ -77,7 +77,7 @@ const SetContainer = styled.li`
     input {
       text-align: center;
       box-shadow: none;
-      border: none;
+      border: 2px solid transparent;
       border-bottom: 2px solid ${({ theme }) => theme.accentSoft};
       border-radius: 0;
       width: 5rem;
@@ -85,6 +85,7 @@ const SetContainer = styled.li`
       font-weight: 300;
       background: inherit;
       color: inherit;
+      transition: all 0.25s ease;
       &:focus {
         border: 2px solid ${({ theme }) => theme.accentSoft};
         border-radius: 3px;

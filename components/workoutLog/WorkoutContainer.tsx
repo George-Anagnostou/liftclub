@@ -4,7 +4,8 @@ import styled from "styled-components";
 import { useStoreDispatch, useStoreState } from "../../store";
 import { addDayToWorkoutLog } from "../../store/actions/userActions";
 // Interfaces
-import { WorkoutLogItem } from "../../utils/interfaces";
+import { Exercise, WorkoutLogItem } from "../../utils/interfaces";
+import ExerciseInfoModal from "./ExerciseInfoModal";
 // Components
 import { SaveNotification } from "./SaveNotification";
 import Set from "./Set";
@@ -33,6 +34,7 @@ const WorkoutContainerClone: React.FC<Props> = ({
   const { user } = useStoreState();
   const dispatch = useStoreDispatch();
 
+  const [exerciseInfo, setExerciseInfo] = useState<Exercise | null>(null);
   const [saveSuccess, setSaveSuccess] = useState<boolean | null>(null);
   const [saveLoading, setSaveLoading] = useState(false);
   const [isTyping, setIsTyping] = useState<boolean>(false);
@@ -116,7 +118,10 @@ const WorkoutContainerClone: React.FC<Props> = ({
         <WorkoutList>
           {currentDayData.exerciseData.map(({ exercise, exercise_id, sets }, i) => (
             <li className="exercise" key={exercise_id}>
-              <h3 className="exercise-name">{exercise?.name}</h3>
+              <h3 className="exercise-name">
+                {exercise?.name} <span onClick={() => setExerciseInfo(exercise!)}>i</span>
+              </h3>
+
               <ul>
                 <li className="set-title">
                   <p>Reps</p>
@@ -158,6 +163,10 @@ const WorkoutContainerClone: React.FC<Props> = ({
 
       {currentDayData && (saveSuccess || saveLoading) && (
         <SaveNotification saveLoading={saveLoading} />
+      )}
+
+      {exerciseInfo && (
+        <ExerciseInfoModal exerciseInfo={exerciseInfo} setExerciseInfo={setExerciseInfo} />
       )}
     </>
   );
@@ -211,7 +220,23 @@ const WorkoutList = styled.ul`
       background: ${({ theme }) => theme.body};
       margin: 0 0.5rem;
       border-radius: 8px;
-      padding: 0.25rem 0;
+      padding: 0.25rem 2rem;
+      position: relative;
+
+      span {
+        text-transform: lowercase;
+        position: absolute;
+        right: 0.5rem;
+        top: 0.6rem;
+        padding: 0;
+        font-size: 0.75rem;
+        font-weight: 600;
+        height: 1.25rem;
+        width: 1.25rem;
+        color: ${({ theme }) => theme.buttonLight};
+        border: 2px solid ${({ theme }) => theme.buttonLight};
+        border-radius: 50%;
+      }
     }
 
     ul {
