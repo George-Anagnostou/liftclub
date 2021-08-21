@@ -89,7 +89,7 @@ const Container = styled.div`
     border-radius: 3px;
 
     position: absolute;
-    top: -20px;
+    top: -10px;
     left: 50%;
     transform: translateX(-50%);
 
