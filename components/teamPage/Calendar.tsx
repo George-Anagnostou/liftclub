@@ -64,6 +64,16 @@ const Calendar: React.FC<Props> = ({ data, setSelectedDate, selectedDate, select
         </div>
       </MonthCtrl>
 
+      <DaysOfTheWeek>
+        <li>Sun</li>
+        <li>Mon</li>
+        <li>Tue</li>
+        <li>Wed</li>
+        <li>Thu</li>
+        <li>Fri</li>
+        <li>Sat</li>
+      </DaysOfTheWeek>
+
       <DaysCtrl>
         {new Date(year, month, 0).getDay() > -1 &&
           [...Array(new Date(year, month, 0).getDay() + 1)].map((x, i) => (
@@ -96,22 +106,30 @@ const Container = styled.div`
 const MonthCtrl = styled.div`
   width: 100%;
   display: flex;
+  justify-content: space-evenly;
+  align-items: center;
 
   div {
-    flex: 1;
     align-items: center;
-    padding: 0.5rem;
+    padding-bottom: 0.5rem;
     .month {
-      font-size: 1.1rem;
+      font-size: 1.3rem;
+      width: 150px;
     }
     .year {
-      font-size: 0.8rem;
+      font-size: 0.7rem;
       color: ${({ theme }) => theme.textLight};
     }
   }
   .arrow {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
+    font-weight: 300;
     color: ${({ theme }) => theme.textLight};
+    background: ${({ theme }) => theme.body};
+    height: 35px;
+    width: 35px;
+    border-radius: 8px;
+    display: grid;
   }
 `;
 
@@ -119,4 +137,13 @@ const DaysCtrl = styled.div`
   padding: 0.25rem;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+`;
+
+const DaysOfTheWeek = styled.ul`
+  display: flex;
+  li {
+    flex: 1;
+    font-weight: 200;
+    color: ${({ theme }) => theme.textLight};
+  }
 `;

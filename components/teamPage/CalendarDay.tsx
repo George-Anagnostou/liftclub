@@ -48,7 +48,6 @@ const CalendarDay: React.FC<Props> = ({
       )}
 
       <div className="date">
-        <p>{DAYS[new Date(year, month, day).getDay()]}</p>
         <p>{day}</p>
       </div>
     </Container>
@@ -57,21 +56,23 @@ const CalendarDay: React.FC<Props> = ({
 export default CalendarDay;
 
 const Container = styled.div`
-  border-radius: 3px;
-  padding: 3px 0;
-  margin: 1px;
+  border-radius: 5px;
+  padding-top: 5px;
+  margin: 1.5px;
   background: ${({ theme }) => theme.buttonLight};
   color: ${({ theme }) => theme.textLight};
   position: relative;
   user-select: none;
+  transition: border-radius 0.25s ease-out;
 
   .date {
-    font-size: 0.8rem;
-    font-weight: 500;
+    display: grid;
+    place-items: center;
+    height: 40px;
+
     p {
-      padding: 0;
-      margin: 0;
-      height: 25px;
+      font-weight: 500;
+      padding-bottom: 4px;
     }
   }
 
@@ -89,12 +90,28 @@ const Container = styled.div`
     border-radius: 3px;
 
     position: absolute;
-    top: -10px;
+    top: -25px;
     left: 50%;
     transform: translateX(-50%);
 
-    background: ${({ theme }) => theme.body};
+    background: ${({ theme }) => theme.border};
     color: ${({ theme }) => theme.text};
+
+    animation-duration: 0.3s;
+    animation-fill-mode: both;
+    opacity: 0;
+    animation-name: fadeInUp;
+
+    @keyframes fadeInUp {
+      from {
+        transform: translate3d(-50%, 5px, 0);
+      }
+
+      to {
+        transform: translate3d(-50%, 0, 0);
+        opacity: 1;
+      }
+    }
 
     p {
       overflow-x: hidden;
@@ -118,7 +135,7 @@ const Container = styled.div`
         width: 0;
         height: 0;
         border: 15px solid transparent;
-        border-top-color: ${({ theme }) => theme.body};
+        border-top-color: ${({ theme }) => theme.border};
         border-bottom: 0;
         margin-left: -15px;
         margin-bottom: -15px;
@@ -129,6 +146,7 @@ const Container = styled.div`
   &.selected {
     background: ${({ theme }) => theme.border};
     color: ${({ theme }) => theme.text};
+    border-radius: 15px;
   }
   &.hasWorkout {
     background: ${({ theme }) => theme.accentSoft};
@@ -137,5 +155,6 @@ const Container = styled.div`
   &.selectedAndHasWorkout {
     background: ${({ theme }) => theme.accent};
     color: ${({ theme }) => theme.accentText};
+    border-radius: 15px;
   }
 `;
