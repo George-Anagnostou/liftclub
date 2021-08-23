@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
 // Components
@@ -23,9 +23,13 @@ const PublicWorkoutTile: React.FC<Props> = ({
 }) => {
   const { user } = useStoreState();
 
+  const tile = useRef<any>();
+
   const [workoutExercises, setWorkoutExercises] = useState<Workout["exercises"]>([]);
   const [showWorkoutInfo, setShowWorkoutInfo] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [closedHeight, setClosedHeight] = useState<number>();
+  const [openHeight, setOpenHeight] = useState<number>();
 
   const toggleWorkoutInfo = () => setShowWorkoutInfo((prev) => !prev);
 
@@ -51,8 +55,20 @@ const PublicWorkoutTile: React.FC<Props> = ({
     }
   }, [showWorkoutInfo]);
 
+  useEffect(() => {
+    if (!closedHeight) {
+      setClosedHeight(tile.current.clientHeight);
+    }
+    if (!openHeight && showWorkoutInfo && !loading && tile.current.scrollHeight !== closedHeight) {
+      setOpenHeight(tile.current.scrollHeight + workoutExercises.length * 10);
+    }
+  }, [tile, showWorkoutInfo, loading]);
+
   return (
-    <WorkoutTile>
+    <WorkoutTile
+      ref={tile}
+      style={showWorkoutInfo && openHeight ? { height: openHeight } : { height: closedHeight }}
+    >
       <div className="tile-bar">
         <div className="name">
           <h3 onClick={toggleWorkoutInfo}>{workout.name}</h3>
@@ -80,19 +96,19 @@ const PublicWorkoutTile: React.FC<Props> = ({
         </div>
       </div>
 
-      {showWorkoutInfo && (
-        <div className="workoutInfo">
+      {showWorkoutInfo && !loading && (
+        <ul className="workoutInfo">
           {workoutExercises.map(({ sets, exercise_id, exercise }) => (
-            <div key={`public${exercise_id}`} className="exercise">
+            <li key={`public${exercise_id}`} className="exercise">
               {exercise && (
                 <>
                   <p>{exercise.name}</p>
                   <p className="sets">{sets.length} sets</p>
                 </>
               )}
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
     </WorkoutTile>
   );
@@ -105,7 +121,9 @@ const WorkoutTile = styled.li`
   background: ${({ theme }) => theme.background};
 
   padding: 0.5rem;
-  margin: 0.75em 0.5rem;
+  margin: 0.5em;
+
+  transition: height 0.25s ease;
 
   .tile-bar {
     display: flex;
@@ -140,6 +158,8 @@ const WorkoutTile = styled.li`
     }
     .loadingSpinner {
       margin-right: 0;
+      height: 20px;
+      width: 20px;
     }
     .buttons {
       width: min-content;
@@ -181,10 +201,9 @@ const WorkoutTile = styled.li`
   }
 
   .workoutInfo {
-    margin-top: 0.5rem;
     text-align: left;
     transform-origin: top;
-    -webkit-animation: open 0.5s ease forwards; /* Safari */
+    -webkit-animation: open 0.5s ease forwards;
     animation: open 0.5s ease forwards;
 
     .exercise {
@@ -198,7 +217,6 @@ const WorkoutTile = styled.li`
       }
     }
 
-    /* Safari */
     @-webkit-keyframes open {
       0% {
         opacity: 0;

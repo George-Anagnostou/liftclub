@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
 // Components
 import LoadingSpinner from "../LoadingSpinner";
 // Utils
 import { addExerciseDataToWorkout, timeSince } from "../../utils";
+// Interfaces
 import { Workout } from "../../utils/interfaces";
 
 interface Props {
@@ -13,9 +14,13 @@ interface Props {
 }
 
 const SavedWorkoutTile: React.FC<Props> = ({ workout, removeFromSavedWorkouts }) => {
+  const tile = useRef<any>();
+
   const [workoutExercises, setWorkoutExercises] = useState<Workout["exercises"]>([]);
   const [showWorkoutInfo, setShowWorkoutInfo] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [closedHeight, setClosedHeight] = useState<number>();
+  const [openHeight, setOpenHeight] = useState<number>();
 
   const toggleWorkoutView = () => setShowWorkoutInfo((prev) => !prev);
 
@@ -34,8 +39,20 @@ const SavedWorkoutTile: React.FC<Props> = ({ workout, removeFromSavedWorkouts })
     }
   }, [showWorkoutInfo]);
 
+  useEffect(() => {
+    if (!closedHeight) {
+      setClosedHeight(tile.current.clientHeight);
+    }
+    if (!openHeight && showWorkoutInfo && !loading && tile.current.scrollHeight !== closedHeight) {
+      setOpenHeight(tile.current.scrollHeight + workoutExercises.length * 10);
+    }
+  }, [tile, showWorkoutInfo, loading]);
+
   return (
-    <WorkoutTile>
+    <WorkoutTile
+      ref={tile}
+      style={showWorkoutInfo && openHeight ? { height: openHeight } : { height: closedHeight }}
+    >
       <div className="tile-bar">
         <div className="name">
           <h3 onClick={toggleWorkoutView}>{workout.name}</h3>
@@ -57,19 +74,19 @@ const SavedWorkoutTile: React.FC<Props> = ({ workout, removeFromSavedWorkouts })
         </div>
       </div>
 
-      {showWorkoutInfo && (
-        <div className="workoutInfo">
+      {showWorkoutInfo && !loading && (
+        <ul className="workoutInfo">
           {workoutExercises.map(({ sets, exercise_id, exercise }) => (
-            <div key={`saved${exercise_id}`} className="exercise">
+            <li key={`saved${exercise_id}`} className="exercise">
               {exercise && (
                 <>
                   <p>{exercise.name}</p>
                   <p className="sets">{sets.length} sets</p>
                 </>
               )}
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
     </WorkoutTile>
   );
@@ -82,7 +99,9 @@ const WorkoutTile = styled.li`
   background: ${({ theme }) => theme.background};
 
   padding: 0.5rem;
-  margin: 0.75em 0.5rem;
+  margin: 0.5em;
+
+  transition: height 0.25s ease-out;
 
   .tile-bar {
     display: flex;
@@ -174,10 +193,12 @@ const WorkoutTile = styled.li`
     /* Safari */
     @-webkit-keyframes open {
       0% {
+        margin-top: 0.5rem;
         opacity: 0;
         transform: rotate3d(1, 0, 0, 45deg);
       }
       100% {
+        margin-top: 0.5rem;
         opacity: 1;
         transform: rotate3d(0);
       }
@@ -185,10 +206,12 @@ const WorkoutTile = styled.li`
 
     @keyframes open {
       0% {
+        margin-top: 0.5rem;
         opacity: 0;
         transform: rotate3d(1, 0, 0, 45deg);
       }
       100% {
+        margin-top: 0.5rem;
         opacity: 1;
         transform: rotate3d(0);
       }
