@@ -92,6 +92,7 @@ const ExerciseInfo = styled.div`
     height: 100px;
     width: 100px;
     margin: auto;
+    border: 2px solid ${({ theme }) => theme.border};
   }
 `;
 

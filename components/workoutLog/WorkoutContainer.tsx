@@ -110,7 +110,6 @@ const WorkoutContainerClone: React.FC<Props> = ({
   return (
     <>
       <WorkoutName>
-        {/* <h3 className="date">{new Date(selectedDate).toDateString().substring(3, 10)}</h3> */}
         <h3 className="workout-name">{currentDayData.workout?.name}</h3>
       </WorkoutName>
 
@@ -229,10 +228,10 @@ const WorkoutList = styled.ul`
         right: 0.5rem;
         top: 0.6rem;
         padding: 0;
-        font-size: 0.75rem;
+        font-size: 0.7rem;
         font-weight: 600;
-        height: 1.25rem;
-        width: 1.25rem;
+        height: 1.3rem;
+        width: 1.3rem;
         color: ${({ theme }) => theme.buttonLight};
         border: 2px solid ${({ theme }) => theme.buttonLight};
         border-radius: 50%;
