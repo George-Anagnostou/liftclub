@@ -123,7 +123,7 @@ const WorkoutTile = styled.li`
   padding: 0.5rem;
   margin: 0.5em;
 
-  transition: height 0.25s ease;
+  transition: height 0.25s ease-out;
 
   .tile-bar {
     display: flex;

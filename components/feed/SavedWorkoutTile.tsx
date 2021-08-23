@@ -173,10 +173,9 @@ const WorkoutTile = styled.li`
   }
 
   .workoutInfo {
-    margin-top: 0.5rem;
     text-align: left;
     transform-origin: top;
-    -webkit-animation: open 0.5s ease forwards; /* Safari */
+    -webkit-animation: open 0.5s ease forwards;
     animation: open 0.5s ease forwards;
 
     .exercise {
@@ -190,15 +189,12 @@ const WorkoutTile = styled.li`
       }
     }
 
-    /* Safari */
     @-webkit-keyframes open {
       0% {
-        margin-top: 0.5rem;
         opacity: 0;
         transform: rotate3d(1, 0, 0, 45deg);
       }
       100% {
-        margin-top: 0.5rem;
         opacity: 1;
         transform: rotate3d(0);
       }
@@ -206,12 +202,10 @@ const WorkoutTile = styled.li`
 
     @keyframes open {
       0% {
-        margin-top: 0.5rem;
         opacity: 0;
         transform: rotate3d(1, 0, 0, 45deg);
       }
       100% {
-        margin-top: 0.5rem;
         opacity: 1;
         transform: rotate3d(0);
       }
