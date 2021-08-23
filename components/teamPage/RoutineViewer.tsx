@@ -11,7 +11,7 @@ import {
   updateRoutine,
 } from "../../utils/api";
 // Components
-import Calendar from "./Calendar";
+import Calendar from "../builder/routine/Calendar";
 // Interface
 import { Routine, Team, Workout } from "../../utils/interfaces";
 import { formatRoutineWorkoutPlanForCalendar } from "../../utils/dataMutators";

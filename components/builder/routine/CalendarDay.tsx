@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { areTheSameDate } from "../../utils";
-import { Workout } from "../../utils/interfaces";
+import { areTheSameDate } from "../../../utils";
+import { Workout } from "../../../utils/interfaces";
 
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu ", "Fri", "Sat"];
 

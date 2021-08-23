@@ -5,7 +5,7 @@ import { formatRoutineWorkoutPlanForCalendar } from "../../../utils/dataMutators
 // Interfaces
 import { Routine, Workout } from "../../../utils/interfaces";
 // Components
-import Calendar from "../../teamPage/Calendar";
+import Calendar from "./Calendar";
 import ControlsBar from "./ControlsBar";
 import UserRoutines from "./UserRoutines";
 import UserWorkouts from "./UserWorkouts";

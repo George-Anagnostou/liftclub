@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 // Utils
-import { getCurrYearMonthDay, areTheSameDate } from "../../utils";
+import { getCurrYearMonthDay, areTheSameDate } from "../../../utils";
 // Interfaces
-import { RoutineWorkoutPlanForCalendar, Workout } from "../../utils/interfaces";
+import { RoutineWorkoutPlanForCalendar, Workout } from "../../../utils/interfaces";
 import CalendarDay from "./CalendarDay";
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
