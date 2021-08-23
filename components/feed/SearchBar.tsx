@@ -34,7 +34,13 @@ const SearchBar: React.FC<Props> = ({ workouts, setFilteredWorkouts, setLoading 
     <SearchContainer>
       <div className="searchBar">
         <SearchIcon />
-        <input type="text" name="filter" onChange={handleFilterChange} value={filter} />
+        <input
+          type="text"
+          name="filter"
+          onChange={handleFilterChange}
+          value={filter}
+          placeholder="Search"
+        />
       </div>
       <button onClick={() => setFilter("")}>Cancel</button>
     </SearchContainer>
@@ -51,17 +57,17 @@ const SearchContainer = styled.div`
   width: 100%;
   padding: 0.5rem;
   color: ${({ theme }) => theme.text};
-  fill: ${({ theme }) => theme.text};
+  fill: ${({ theme }) => theme.textLight};
 
   .searchBar {
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: ${({ theme }) => theme.buttonMed};
+    background: ${({ theme }) => theme.background};
 
     width: fit-content;
-    margin-right: 0.5rem;
+    margin-right: 0.25rem;
     padding: 0 1rem;
     border-radius: 10px;
 
@@ -70,7 +76,7 @@ const SearchContainer = styled.div`
       width: 100%;
       border: none;
       outline: none;
-      padding: 0.5rem 0 0.5rem 0.5rem;
+      padding: 0.25rem 0 0.25rem 0.5rem;
       font-size: inherit;
       background: inherit;
       color: inherit;
@@ -79,10 +85,12 @@ const SearchContainer = styled.div`
 
   button {
     border: none;
-    padding: 0.5rem;
+    padding: 0 0.5rem;
     font-size: inherit;
     color: ${({ theme }) => theme.textLight};
     background: ${({ theme }) => theme.background};
     border-radius: 10px;
+    font-size: 0.75rem;
+    height: 33px;
   }
 `;

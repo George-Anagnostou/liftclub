@@ -29,11 +29,11 @@ const PublicWorkouts: React.FC<Props> = ({
         setLoading={setLoading}
       />
 
-      <h3 className="listTitle">Public Workouts</h3>
+      <h3 className="list-title">Public Workouts</h3>
 
       {loading ? (
         <LoadingSpinner />
-      ) : (
+      ) : Boolean(filteredWorkouts.length) ? (
         filteredWorkouts.map((workout) => (
           <PublicWorkoutTile
             key={`public${workout._id}`}
@@ -42,6 +42,8 @@ const PublicWorkouts: React.FC<Props> = ({
             addToSavedWorkouts={addToSavedWorkouts}
           />
         ))
+      ) : (
+        <h3 className="fallback-text">Nothing here</h3>
       )}
     </WorkoutList>
   );
@@ -52,9 +54,15 @@ const WorkoutList = styled.ul`
   width: 100%;
   flex: 1;
 
-  .listTitle {
+  .list-title {
     margin-left: 1.5rem;
     text-align: left;
+    color: ${({ theme }) => theme.textLight};
+    font-weight: 400;
+  }
+
+  .fallback-text {
+    text-align: center;
     color: ${({ theme }) => theme.textLight};
     font-weight: 400;
   }
