@@ -6,9 +6,10 @@ import { useRouter } from "next/router";
 import Notebook from "../public/navIcons/Notebook";
 import Search from "../public/navIcons/Magnifying";
 import Profile from "../public/navIcons/Profile";
-import Create from "../public/navIcons/Create";
+// import Create from "../public/navIcons/Create";
 // Context
 import { useStoreState } from "../store";
+import Builder from "../public/navIcons/Builder";
 
 const NavBar: React.FC = () => {
   const router = useRouter();
@@ -34,8 +35,8 @@ const NavBar: React.FC = () => {
 
   const [routes, setRoutes] = useState([
     { pathname: "/log", icon: <Notebook />, slug: "log" },
+    { pathname: "/builder", icon: <Builder />, slug: "builder" },
     { pathname: "/feed", icon: <Search />, slug: "feed" },
-    { pathname: "/builder", icon: <Create />, slug: "builder" },
     { pathname: `/users/${user!.username}`, icon: <Profile />, slug: "profile" },
   ]);
   const [currSlug, setCurrSlug] = useState(() => getSlugFromUrl());
