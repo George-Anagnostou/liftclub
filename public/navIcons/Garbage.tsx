@@ -6,8 +6,8 @@ export default function Create() {
       xmlns="http://www.w3.org/2000/svg"
       x="0px"
       y="0px"
-      width="17px"
-      height="17px"
+      width="15px"
+      height="15px"
       viewBox="0 0 489.7 489.7"
     >
       <g>

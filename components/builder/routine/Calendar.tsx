@@ -8,6 +8,9 @@ import { RoutineWorkoutPlanForCalendar } from "../../../utils/interfaces";
 // Components
 import CalendarDay from "./CalendarDay";
 import Garbage from "../../../public/navIcons/Garbage";
+import Stack from "../../../public/navIcons/Stack";
+import Copy from "../../../public/navIcons/Copy";
+import Bubble from "../../../public/navIcons/Bubble";
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -59,19 +62,25 @@ const Calendar: React.FC<Props> = ({
         <Tools>
           <div onClick={deleteSelectedDates ? () => deleteSelectedDates() : () => {}}>
             <Garbage />
+            <p>delete</p>
           </div>
           <div
             onClick={() => setMultiSelectMode(!multiSelectMode)}
             className={multiSelectMode ? "highlight" : ""}
           >
-            Multi
+            <Stack />
+            <p>multi</p>
           </div>
-          <div>Copy</div>
+          <div>
+            <Copy />
+            <p>copy</p>
+          </div>
           <div
             onClick={() => setShowWorkoutTags(!showWorkoutTags)}
             className={showWorkoutTags ? "highlight" : ""}
           >
-            Toggle Tags
+            <Bubble />
+            <p>tags</p>
           </div>
         </Tools>
       )}
@@ -128,20 +137,24 @@ const Container = styled.div`
 const Tools = styled.div`
   display: flex;
   justify-content: space-around;
-  padding: 1rem 0;
+  padding: 0.5rem 0;
   border-bottom: 2px solid ${({ theme }) => theme.buttonMed};
 
   div {
     color: ${({ theme }) => theme.textLight};
     fill: ${({ theme }) => theme.textLight};
     background: ${({ theme }) => theme.buttonMed};
-    padding: 0.25rem 0.5rem;
+    padding: 0.25rem 0.5rem 0.1rem;
     border-radius: 5px;
     transition: all 0.25s ease;
     display: grid;
     place-items: center;
     box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
-    font-size: 0.8rem;
+    font-size: 0.6rem;
+
+    p {
+      margin-top: 0.15rem;
+    }
 
     &.highlight {
       background: ${({ theme }) => theme.border};
