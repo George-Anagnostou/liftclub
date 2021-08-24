@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 // Utils
-import { areTheSameDate } from "../../../utils";
 import { formatRoutineWorkoutPlanForCalendar } from "../../../utils/dataMutators";
 // Interfaces
-import { Routine, Workout } from "../../../utils/interfaces";
+import { Routine } from "../../../utils/interfaces";
 // Components
 import Calendar from "./Calendar";
 import ControlsBar from "./ControlsBar";
@@ -14,18 +13,17 @@ const initialRoutineState = { _id: "", creator_id: "", creatorName: "", name: ""
 
 const RoutineBuilder: React.FC = () => {
   const [routine, setRoutine] = useState<Routine>(initialRoutineState);
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().substring(0, 10));
-  const [selectedWorkout, setSelectedWorkout] = useState<Workout | null>(null);
+  const [selectedDaysFromPlan, setSelectedDaysFromPlan] = useState<Routine["workoutPlan"]>([]);
   const [routineSaved, setRoutineSaved] = useState<null | boolean>(null);
+  const [datesSelected, setDatesSelected] = useState<{ [date: string]: boolean }>({});
 
-  // Set selected workout when selectedDate or routine changes
   useEffect(() => {
-    const foundWorkout = routine.workoutPlan.filter((workout) =>
-      areTheSameDate(workout.isoDate, selectedDate)
-    )[0]?.workout;
+    const workoutsSelected = routine.workoutPlan.filter(
+      (workout) => datesSelected[workout.isoDate.substring(0, 10)]
+    );
 
-    setSelectedWorkout(foundWorkout || null);
-  }, [selectedDate, routine]);
+    setSelectedDaysFromPlan(workoutsSelected);
+  }, [datesSelected, routine]);
 
   const clearRoutine = () => {
     setRoutine(initialRoutineState);
@@ -34,9 +32,9 @@ const RoutineBuilder: React.FC = () => {
   return (
     <>
       <ControlsBar
-        clearRoutine={clearRoutine}
-        setRoutine={setRoutine}
         routine={routine}
+        setRoutine={setRoutine}
+        clearRoutine={clearRoutine}
         routineSaved={routineSaved}
         setRoutineSaved={setRoutineSaved}
       />
@@ -50,16 +48,14 @@ const RoutineBuilder: React.FC = () => {
 
       <Calendar
         data={formatRoutineWorkoutPlanForCalendar(routine.workoutPlan)}
-        selectedDate={selectedDate}
-        setSelectedDate={setSelectedDate}
-        selectedWorkout={selectedWorkout}
+        setDatesSelected={setDatesSelected}
+        datesSelected={datesSelected}
       />
 
       <UserWorkouts
-        routine={routine}
         setRoutine={setRoutine}
-        selectedDate={selectedDate}
-        selectedWorkout={selectedWorkout}
+        selectedDaysFromPlan={selectedDaysFromPlan}
+        datesSelected={datesSelected}
       />
     </>
   );

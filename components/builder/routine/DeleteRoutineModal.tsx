@@ -11,13 +11,20 @@ interface Props {
   routine: Routine;
   setRoutineToDelete: React.Dispatch<React.SetStateAction<Routine | null>>;
   clearRoutine: () => void;
+  setUserRoutines: React.Dispatch<React.SetStateAction<Routine[] | null>>;
 }
 
-const DeleteRoutineModal: React.FC<Props> = ({ routine, setRoutineToDelete, clearRoutine }) => {
+const DeleteRoutineModal: React.FC<Props> = ({
+  routine,
+  setRoutineToDelete,
+  clearRoutine,
+  setUserRoutines,
+}) => {
   const handleDeleteRoutine = async () => {
     const deleted = await deleteRoutine(routine._id);
 
     if (deleted) {
+      setUserRoutines((prev) => prev && prev.filter((each) => each._id !== routine._id));
       setRoutineToDelete(null);
       clearRoutine();
     }

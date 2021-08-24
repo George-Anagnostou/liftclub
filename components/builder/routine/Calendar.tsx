@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import styled from "styled-components";
 // Utils
-import { getCurrYearMonthDay, areTheSameDate } from "../../../utils";
+import { getCurrYearMonthDay } from "../../../utils";
 // Interfaces
-import { RoutineWorkoutPlanForCalendar, Workout } from "../../../utils/interfaces";
+import { RoutineWorkoutPlanForCalendar } from "../../../utils/interfaces";
+// Components
 import CalendarDay from "./CalendarDay";
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 interface Props {
   data: RoutineWorkoutPlanForCalendar;
-  setSelectedDate: React.Dispatch<React.SetStateAction<string>>;
-  selectedDate: string;
-  selectedWorkout: Workout | null;
+  datesSelected: { [date: string]: boolean };
+  setDatesSelected: React.Dispatch<React.SetStateAction<{ [date: string]: boolean }>>;
 }
 
-const Calendar: React.FC<Props> = ({ data, setSelectedDate, selectedDate, selectedWorkout }) => {
+const Calendar: React.FC<Props> = ({ data, datesSelected, setDatesSelected }) => {
+  const router = useRouter();
+
   const [{ year, month }, setYearMonthDay] = useState(getCurrYearMonthDay());
   const [daysInMonth, setDaysInMonth] = useState(0);
 
@@ -23,17 +26,11 @@ const Calendar: React.FC<Props> = ({ data, setSelectedDate, selectedDate, select
     return data[isoString.substring(0, 10)];
   };
 
-  const handleDayClick = (date: string) => {
-    return areTheSameDate(date, selectedDate) ? setSelectedDate("") : setSelectedDate(date);
-  };
-
   const incrementMonth = () => {
     const newMonth = (month + 1) % 12;
     newMonth === 0
       ? setYearMonthDay((prev) => ({ ...prev, month: newMonth, year: year + 1 }))
       : setYearMonthDay((prev) => ({ ...prev, month: newMonth }));
-
-    setSelectedDate("");
   };
 
   const decrementMonth = () => {
@@ -41,8 +38,6 @@ const Calendar: React.FC<Props> = ({ data, setSelectedDate, selectedDate, select
     newMonth === 11
       ? setYearMonthDay((prev) => ({ ...prev, month: newMonth, year: year - 1 }))
       : setYearMonthDay((prev) => ({ ...prev, month: newMonth }));
-
-    setSelectedDate("");
   };
 
   useEffect(() => {
@@ -51,6 +46,15 @@ const Calendar: React.FC<Props> = ({ data, setSelectedDate, selectedDate, select
 
   return (
     <Container>
+      {router.pathname === "/builder" && (
+        <Tools>
+          <div>Delete</div>
+          <div>Multi</div>
+          <div>Copy</div>
+          <div>Toggle Tags</div>
+        </Tools>
+      )}
+
       <MonthCtrl>
         <div className="arrow" onClick={decrementMonth}>
           {"<"}
@@ -65,13 +69,9 @@ const Calendar: React.FC<Props> = ({ data, setSelectedDate, selectedDate, select
       </MonthCtrl>
 
       <DaysOfTheWeek>
-        <li>Sun</li>
-        <li>Mon</li>
-        <li>Tue</li>
-        <li>Wed</li>
-        <li>Thu</li>
-        <li>Fri</li>
-        <li>Sat</li>
+        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+          <li>{day}</li>
+        ))}
       </DaysOfTheWeek>
 
       <DaysCtrl>
@@ -84,12 +84,11 @@ const Calendar: React.FC<Props> = ({ data, setSelectedDate, selectedDate, select
           <CalendarDay
             key={i}
             dayData={getDayData(new Date(year, month, i + 1).toISOString())}
-            handleDayClick={handleDayClick}
             year={year}
-            month={month}
+            month={month + 1}
             day={i + 1}
-            selectedDate={selectedDate}
-            selectedWorkout={selectedWorkout}
+            datesSelected={datesSelected}
+            setDatesSelected={setDatesSelected}
           />
         ))}
       </DaysCtrl>
@@ -101,6 +100,13 @@ export default Calendar;
 const Container = styled.div`
   border-radius: 5px;
   background: ${({ theme }) => theme.background};
+`;
+
+const Tools = styled.div`
+  display: flex;
+  justify-content: space-around;
+  div {
+  }
 `;
 
 const MonthCtrl = styled.div`
@@ -133,17 +139,19 @@ const MonthCtrl = styled.div`
   }
 `;
 
-const DaysCtrl = styled.div`
-  padding: 0.25rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-`;
-
 const DaysOfTheWeek = styled.ul`
   display: flex;
+  margin: 0 calc(0.25rem + 1.5px);
+
   li {
     flex: 1;
     font-weight: 200;
     color: ${({ theme }) => theme.textLight};
   }
+`;
+
+const DaysCtrl = styled.div`
+  padding: 0.25rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
 `;

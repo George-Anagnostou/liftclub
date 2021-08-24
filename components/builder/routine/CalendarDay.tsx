@@ -1,55 +1,76 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
-import { areTheSameDate } from "../../../utils";
 import { Workout } from "../../../utils/interfaces";
-
-const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu ", "Fri", "Sat"];
 
 interface Props {
   dayData: { workout_id: string; workout: Workout };
-  handleDayClick: (date: string) => void;
   year: number;
   month: number;
   day: number;
-  selectedDate: string;
-  selectedWorkout: Workout | null;
+  datesSelected: { [date: string]: boolean };
+  setDatesSelected: React.Dispatch<React.SetStateAction<{ [date: string]: boolean }>>;
 }
 
 const CalendarDay: React.FC<Props> = ({
   dayData,
-  handleDayClick,
   year,
   month,
   day,
-  selectedDate,
-  selectedWorkout,
+  datesSelected,
+  setDatesSelected,
 }) => {
-  const [dayIsSelected, setDayIsSelected] = useState<boolean>(false);
+  const formatDate = (y: string | number, m: string | number, d: string | number) => {
+    y = y.toString();
+    m = m.toString();
+    d = d.toString();
+    return `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`;
+  };
 
-  useEffect(() => {
-    setDayIsSelected(areTheSameDate(selectedDate, new Date(year, month, day).toISOString()));
-  }, [selectedDate]);
+  const handleTouchStart = () => {
+    setDatesSelected({});
+  };
+
+  const handleTouchMove = (e) => {
+    var touch = e.touches[0] || e.changedTouches[0];
+
+    var realTarget: any | null = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (!realTarget) return;
+
+    if (
+      realTarget.classList.contains("date") &&
+      !datesSelected[formatDate(year, month, realTarget.innerText)]
+    ) {
+      setDatesSelected((prev) => ({
+        ...prev,
+        [formatDate(year, month, realTarget.innerText)]: true,
+      }));
+    }
+  };
+
+  const handleClick = () => {
+    setDatesSelected({ [formatDate(year, month, day)]: true });
+  };
 
   return (
     <Container
-      onClick={() => handleDayClick(new Date(year, month, day).toISOString().substring(0, 10))}
       className={`day 
-      ${dayIsSelected && "selected"}
-      ${dayData && "hasWorkout"}
-      ${dayIsSelected && dayData && "selectedAndHasWorkout"}
-      `}
+    ${datesSelected[formatDate(year, month, day)] && "selected"}
+    ${dayData && "hasWorkout"}
+    ${datesSelected[formatDate(year, month, day)] && dayData && "selectedAndHasWorkout"}
+    `}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onClick={handleClick}
     >
-      {dayIsSelected && dayData && (
+      {datesSelected[formatDate(year, month, day)] && dayData && (
         <div className="workoutName">
-          <p>{selectedWorkout?.name}</p>
+          <p>{dayData.workout.name}</p>
           <span />
         </div>
       )}
 
-      <div className="date">
-        <p>{day}</p>
-      </div>
+      <div className="date">{day}</div>
     </Container>
   );
 };
@@ -64,16 +85,14 @@ const Container = styled.div`
   position: relative;
   user-select: none;
   transition: border-radius 0.25s ease-out;
+  touch-action: none;
 
   .date {
     display: grid;
     place-items: center;
     height: 40px;
-
-    p {
-      font-weight: 500;
-      padding-bottom: 4px;
-    }
+    padding-bottom: 4px;
+    font-weight: 500;
   }
 
   .workoutName {
@@ -99,16 +118,16 @@ const Container = styled.div`
 
     animation-duration: 0.3s;
     animation-fill-mode: both;
-    opacity: 0;
     animation-name: fadeInUp;
 
     @keyframes fadeInUp {
       from {
-        transform: translate3d(-50%, 5px, 0);
+        top: -20px;
+        opacity: 0;
       }
 
       to {
-        transform: translate3d(-50%, 0, 0);
+        top: -25px;
         opacity: 1;
       }
     }

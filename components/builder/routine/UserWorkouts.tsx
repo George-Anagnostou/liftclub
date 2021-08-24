@@ -8,34 +8,28 @@ import { useStoreState } from "../../../store";
 import { Workout, Routine } from "../../../utils/interfaces";
 
 interface Props {
-  routine: Routine;
   setRoutine: React.Dispatch<React.SetStateAction<Routine>>;
-  selectedDate: string;
-  selectedWorkout: Workout | null;
+  selectedDaysFromPlan: Routine["workoutPlan"];
+  datesSelected: { [date: string]: boolean };
 }
 
-const UserWorkouts: React.FC<Props> = ({ routine, setRoutine, selectedDate, selectedWorkout }) => {
+const UserWorkouts: React.FC<Props> = ({ setRoutine, selectedDaysFromPlan, datesSelected }) => {
   const { user } = useStoreState();
 
   const [userMadeWorkouts, setUserMadeWorkouts] = useState<Workout[]>([]);
   const [userSavedWorkouts, setUserSavedWorkouts] = useState<Workout[]>([]);
 
-  const addWorkoutToRoutine = (workout: Workout) => {
-    setRoutine((prev) => ({
-      ...prev,
-      workoutPlan: [
-        ...prev.workoutPlan.filter((each) => each.isoDate !== selectedDate),
-        { isoDate: selectedDate, workout_id: workout._id, workout },
-      ].sort((a, b) => a.isoDate.localeCompare(b.isoDate)),
-    }));
-  };
+  const addWorkoutToDatesSelected = (workout: Workout) => {
+    const plan = Object.keys(datesSelected).map((date) => {
+      return { isoDate: date, workout_id: workout._id, workout };
+    });
 
-  const removeWorkoutFromRoutine = () => {
     setRoutine((prev) => ({
       ...prev,
       workoutPlan: [
-        ...prev.workoutPlan.filter((each) => each.isoDate.substring(0, 10) !== selectedDate),
-      ],
+        ...prev.workoutPlan.filter((each) => !datesSelected[each.isoDate.substring(0, 10)]),
+        ...plan,
+      ].sort((a, b) => a.isoDate.localeCompare(b.isoDate)),
     }));
   };
 
@@ -60,18 +54,16 @@ const UserWorkouts: React.FC<Props> = ({ routine, setRoutine, selectedDate, sele
     }
   }, [user]);
 
-  const renderWorkoutItem = (workout: Workout, index: number) => {
+  const renderWorkoutItem = (workout: Workout) => {
+    const isWorkoutInSelected = selectedDaysFromPlan.filter(
+      (day) => day.workout_id === workout._id
+    ).length;
+
     return (
       <li
-        key={index}
-        onClick={() => {
-          if (selectedDate) {
-            selectedWorkout?._id === workout._id
-              ? removeWorkoutFromRoutine()
-              : addWorkoutToRoutine(workout);
-          }
-        }}
-        className={selectedWorkout?._id === workout._id ? "highlight" : ""}
+        key={workout._id}
+        onClick={() => addWorkoutToDatesSelected(workout)}
+        className={isWorkoutInSelected ? "highlight" : ""}
       >
         {workout.name}
       </li>
@@ -85,7 +77,7 @@ const UserWorkouts: React.FC<Props> = ({ routine, setRoutine, selectedDate, sele
 
         <ul>
           {Boolean(userMadeWorkouts.length) ? (
-            userMadeWorkouts.map((workout, i) => renderWorkoutItem(workout, i))
+            userMadeWorkouts.map((workout, i) => renderWorkoutItem(workout))
           ) : (
             <p className="fallbackText">None</p>
           )}
@@ -96,7 +88,7 @@ const UserWorkouts: React.FC<Props> = ({ routine, setRoutine, selectedDate, sele
         <h3>Saved</h3>
         <ul>
           {Boolean(userSavedWorkouts.length) ? (
-            userSavedWorkouts.map((workout, i) => renderWorkoutItem(workout, i))
+            userSavedWorkouts.map((workout, i) => renderWorkoutItem(workout))
           ) : (
             <p className="fallbackText">None</p>
           )}

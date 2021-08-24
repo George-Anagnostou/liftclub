@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { useRouter } from "next/router";
 // Context
 import { useStoreState } from "../../../store";
 // API
@@ -18,25 +19,39 @@ interface Props {
 
 const UserRoutines: React.FC<Props> = ({ routine, setRoutine, clearRoutine, routineSaved }) => {
   const { user } = useStoreState();
+  const router = useRouter();
 
   const [routineToDelete, setRoutineToDelete] = useState<Routine | null>(null);
   const [userRoutines, setUserRoutines] = useState<Routine[] | null>(null);
+  const [hasCheckedForQuery, setHasCheckedForQuery] = useState(false);
 
   const handleRoutineClick = async (rout: Routine) => {
     setRoutine(rout);
   };
 
+  const getUserRoutines = async () => {
+    if (!user) return;
+    const routines = await getRoutinesFromCreatorId(user._id);
+    if (routines) setUserRoutines(routines);
+  };
+
   // Set userRoutines on mount
   useEffect(() => {
-    if (user && !routineSaved) {
-      const getUserRoutines = async () => {
-        const routines = await getRoutinesFromCreatorId(user._id);
-        if (routines) setUserRoutines(routines);
-      };
+    if (user && !userRoutines) getUserRoutines();
+  }, [user]);
 
-      getUserRoutines();
+  // Get the routines after user saves a routine
+  useEffect(() => {
+    if (routineSaved) getUserRoutines();
+  }, [routineSaved]);
+
+  useEffect(() => {
+    if (userRoutines && !hasCheckedForQuery) {
+      const queried = userRoutines.find((each) => each._id === router.query.routine);
+      if (queried) setRoutine(queried);
+      setHasCheckedForQuery(true);
     }
-  }, [user, routineToDelete, routineSaved]);
+  }, [userRoutines]);
 
   return (
     <>
@@ -45,6 +60,7 @@ const UserRoutines: React.FC<Props> = ({ routine, setRoutine, clearRoutine, rout
           routine={routineToDelete}
           setRoutineToDelete={setRoutineToDelete}
           clearRoutine={clearRoutine}
+          setUserRoutines={setUserRoutines}
         />
       )}
       <Container>
@@ -53,8 +69,8 @@ const UserRoutines: React.FC<Props> = ({ routine, setRoutine, clearRoutine, rout
           {userRoutines ? (
             userRoutines.map((rout) => (
               <li
-                onClick={() => handleRoutineClick(rout)}
                 key={rout._id}
+                onClick={() => handleRoutineClick(rout)}
                 className={routine._id === rout._id ? "highlight" : ""}
               >
                 {rout.name}
