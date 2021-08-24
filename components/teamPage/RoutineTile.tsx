@@ -13,10 +13,9 @@ import RoutineViewer from "./RoutineViewer";
 
 interface Props {
   team: Team;
-  setTeam: React.Dispatch<React.SetStateAction<Team>>;
 }
 
-const RoutineTile: React.FC<Props> = ({ team, setTeam }) => {
+const RoutineTile: React.FC<Props> = ({ team }) => {
   const { user } = useStoreState();
   const dispatch = useStoreDispatch();
 
@@ -68,7 +67,7 @@ const RoutineTile: React.FC<Props> = ({ team, setTeam }) => {
         <>
           {renderRoutineInfo(team.routine)}
 
-          <RoutineViewer routine_id={team.routine._id} setTeam={setTeam} />
+          <RoutineViewer routine_id={team.routine._id} />
         </>
       )}
 

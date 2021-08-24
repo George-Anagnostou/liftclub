@@ -1,169 +1,36 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import Link from "next/link";
+// Context
 import { useStoreState } from "../../store";
 // Utils
-import { areTheSameDate } from "../../utils";
-// API
-import {
-  getRoutineFromId,
-  getUserMadeWorkouts,
-  getWorkoutsFromIdArray,
-  updateRoutine,
-} from "../../utils/api";
+import { getRoutineFromId } from "../../utils/api";
+import { formatRoutineWorkoutPlanForCalendar } from "../../utils/dataMutators";
 // Components
 import Calendar from "../builder/routine/Calendar";
 // Interface
-import { Routine, Team, Workout } from "../../utils/interfaces";
-import { formatRoutineWorkoutPlanForCalendar } from "../../utils/dataMutators";
+import { Routine } from "../../utils/interfaces";
 
 interface Props {
   routine_id: string;
-  setTeam: React.Dispatch<React.SetStateAction<Team>>;
 }
 
-const RoutineContainer: React.FC<Props> = ({ routine_id, setTeam }) => {
-  const { user, isSignedIn } = useStoreState();
+const RoutineContainer: React.FC<Props> = ({ routine_id }) => {
+  const { user } = useStoreState();
 
-  const [initialRoutineData, setInitialRoutineData] = useState<Routine | null>(null);
   const [routine, setRoutine] = useState<Routine | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString());
-  const [selectedWorkout, setSelectedWorkout] = useState<Workout | null>(null);
-  const [isRoutineOwner, setIsRoutineOwner] = useState(false);
-  const [userMadeWorkouts, setUserMadeWorkouts] = useState<Workout[]>([]);
-  const [userSavedWorkouts, setUserSavedWorkouts] = useState<Workout[]>([]);
-
-  const addWorkoutToRoutine = (workout: Workout) => {
-    setRoutine(
-      (prev) =>
-        prev && {
-          ...prev,
-          workoutPlan: [
-            ...prev.workoutPlan.filter((each) => each.isoDate !== selectedDate),
-            { isoDate: selectedDate, workout_id: workout._id, workout },
-          ].sort((a, b) => a.isoDate.localeCompare(b.isoDate)),
-        }
-    );
-  };
-
-  const removeWorkoutFromRoutine = () => {
-    setRoutine(
-      (prev) =>
-        prev && {
-          ...prev,
-          workoutPlan: [...prev.workoutPlan.filter((each) => each.isoDate !== selectedDate)],
-        }
-    );
-  };
-
-  const handleSaveRoutine = async () => {
-    if (!routine) return;
-
-    const routineForDB = {
-      ...routine,
-      workoutPlan: routine!.workoutPlan.map(({ isoDate, workout_id }) => ({
-        isoDate,
-        workout_id,
-      })),
-    };
-
-    const saved = await updateRoutine(routineForDB);
-
-    if (saved) {
-      setTeam((prev) => ({ ...prev, routine: routineForDB }));
-      setIsEditing(false);
-    }
-  };
-
-  const handleCancelEdit = () => {
-    setIsEditing(false);
-    setRoutine(initialRoutineData);
-  };
+  const [datesSelected, setDatesSelected] = useState({});
 
   // Get the routine data from DB
   useEffect(() => {
     const getRoutineData = async () => {
       const routineData = await getRoutineFromId(routine_id);
 
-      if (routineData) {
-        setRoutine(routineData);
-
-        setInitialRoutineData(routineData);
-
-        setIsRoutineOwner(user!._id === routineData.creator_id);
-      }
+      if (routineData) setRoutine(routineData);
     };
 
     if (!routine) getRoutineData();
   }, [routine]);
-
-  // If the user is the owner of the routine, get their saved and created workouts to use in the editor
-  useEffect(() => {
-    const getUserWorkouts = async () => {
-      const workoutsMade = await getUserMadeWorkouts(user!._id);
-      setUserMadeWorkouts(workoutsMade);
-
-      const workoutsSaved = await getWorkoutsFromIdArray(user!.savedWorkouts || []);
-      setUserSavedWorkouts(workoutsSaved.reverse());
-    };
-
-    if (isRoutineOwner && isSignedIn) getUserWorkouts();
-  }, [isRoutineOwner, isSignedIn]);
-
-  // Set selected workout when selectedDate or routine changes
-  useEffect(() => {
-    const foundWorkout = routine?.workoutPlan.filter((workout) =>
-      areTheSameDate(workout.isoDate, selectedDate)
-    )[0]?.workout;
-
-    setSelectedWorkout(foundWorkout || null);
-  }, [selectedDate, routine]);
-
-  const renderWorkoutOptions = () => {
-    return (
-      <WorkoutOptions>
-        <h3 className="title">Created</h3>
-        <ul>
-          {userMadeWorkouts.map((workout) => (
-            <li
-              onClick={() => {
-                if (selectedDate) {
-                  selectedWorkout?._id === workout._id
-                    ? removeWorkoutFromRoutine()
-                    : addWorkoutToRoutine(workout);
-                }
-              }}
-              key={workout._id}
-              className={`${selectedWorkout?._id === workout._id ? "highlight" : ""}
-                  ${selectedDate ? "" : "disable"}`}
-            >
-              {workout.name}
-            </li>
-          ))}
-        </ul>
-
-        <h3 className="title">Saved</h3>
-        <ul>
-          {userSavedWorkouts.map((workout) => (
-            <li
-              onClick={() => {
-                if (selectedDate) {
-                  selectedWorkout?._id === workout._id
-                    ? removeWorkoutFromRoutine()
-                    : addWorkoutToRoutine(workout);
-                }
-              }}
-              key={workout._id}
-              className={`${selectedWorkout?._id === workout._id ? "highlight" : ""}
-                  ${selectedDate ? "" : "disable"}`}
-            >
-              {workout.name}
-            </li>
-          ))}
-        </ul>
-      </WorkoutOptions>
-    );
-  };
 
   return (
     <>
@@ -171,34 +38,17 @@ const RoutineContainer: React.FC<Props> = ({ routine_id, setTeam }) => {
         <CalendarContainer>
           <h3 className="title">Schedule</h3>
 
-          {isEditing && renderWorkoutOptions()}
+          {user?._id === routine.creator_id && (
+            <Link href={`/builder?builder=routine&routine=${routine_id}`}>
+              <button className="editBtn">Edit</button>
+            </Link>
+          )}
 
           <Calendar
             data={formatRoutineWorkoutPlanForCalendar(routine.workoutPlan)}
-            setSelectedDate={setSelectedDate}
-            selectedDate={selectedDate}
-            selectedWorkout={
-              routine!.workoutPlan.filter((item) => areTheSameDate(item.isoDate, selectedDate))[0]
-                ?.workout!
-            }
+            datesSelected={datesSelected}
+            setDatesSelected={setDatesSelected}
           />
-
-          {isRoutineOwner && !isEditing && (
-            <button className="editBtn" onClick={() => setIsEditing(true)}>
-              Edit
-            </button>
-          )}
-
-          {isEditing && (
-            <div>
-              <button className="bottomBtn" onClick={handleSaveRoutine}>
-                Save
-              </button>
-              <button className="bottomBtn" onClick={handleCancelEdit}>
-                Cancel
-              </button>
-            </div>
-          )}
         </CalendarContainer>
       )}
     </>

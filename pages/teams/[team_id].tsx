@@ -49,7 +49,7 @@ const Team_id: React.FC = () => {
             setTeamMembers={setTeamMembers}
           />
 
-          <RoutineTile team={team} setTeam={setTeam} />
+          <RoutineTile team={team} />
         </>
       ) : (
         <div className="loadingContainer">
@@ -80,7 +80,7 @@ const Container = styled.section`
   }
 
   .loadingContainer {
-    height: 100vh;
+    height: 80vh;
     display: grid;
     place-items: center;
   }
