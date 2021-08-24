@@ -29,6 +29,15 @@ const RoutineBuilder: React.FC = () => {
     setRoutine(initialRoutineState);
   };
 
+  const deleteSelectedDates = () => {
+    setRoutine((prev) => ({
+      ...prev,
+      workoutPlan: [
+        ...prev.workoutPlan.filter((each) => !datesSelected[each.isoDate.substring(0, 10)]),
+      ],
+    }));
+  };
+
   return (
     <>
       <ControlsBar
@@ -50,6 +59,7 @@ const RoutineBuilder: React.FC = () => {
         data={formatRoutineWorkoutPlanForCalendar(routine.workoutPlan)}
         setDatesSelected={setDatesSelected}
         datesSelected={datesSelected}
+        deleteSelectedDates={deleteSelectedDates}
       />
 
       <UserWorkouts

@@ -11,6 +11,7 @@ interface Props {
   datesSelected: { [date: string]: boolean };
   setDatesSelected: React.Dispatch<React.SetStateAction<{ [date: string]: boolean }>>;
   showWorkoutTags: boolean;
+  multiSelectMode: boolean;
 }
 
 const CalendarDay: React.FC<Props> = ({
@@ -21,6 +22,7 @@ const CalendarDay: React.FC<Props> = ({
   datesSelected,
   setDatesSelected,
   showWorkoutTags,
+  multiSelectMode,
 }) => {
   const formatDate = (y: string | number, m: string | number, d: string | number) => {
     y = y.toString();
@@ -30,7 +32,7 @@ const CalendarDay: React.FC<Props> = ({
   };
 
   const handleTouchStart = () => {
-    setDatesSelected({});
+    if (!multiSelectMode) setDatesSelected({});
   };
 
   const handleTouchMove = (e) => {
@@ -51,7 +53,24 @@ const CalendarDay: React.FC<Props> = ({
   };
 
   const handleClick = () => {
-    setDatesSelected({ [formatDate(year, month, day)]: true });
+    if (multiSelectMode) {
+      // If day is already selected, remove it
+      datesSelected[formatDate(year, month, day)]
+        ? setDatesSelected((prev) => {
+            var copy = Object.assign({}, prev);
+            delete copy[formatDate(year, month, day)];
+            return copy;
+          })
+        : setDatesSelected((prev) => ({ ...prev, [formatDate(year, month, day)]: true }));
+    } else {
+      datesSelected[formatDate(year, month, day)] && Object.keys(datesSelected).length === 1
+        ? setDatesSelected((prev) => {
+            var copy = Object.assign({}, prev);
+            delete copy[formatDate(year, month, day)];
+            return copy;
+          })
+        : setDatesSelected({ [formatDate(year, month, day)]: true });
+    }
   };
 
   return (

@@ -7,6 +7,7 @@ import { getCurrYearMonthDay } from "../../../utils";
 import { RoutineWorkoutPlanForCalendar } from "../../../utils/interfaces";
 // Components
 import CalendarDay from "./CalendarDay";
+import Garbage from "../../../public/navIcons/Garbage";
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -14,14 +15,21 @@ interface Props {
   data: RoutineWorkoutPlanForCalendar;
   datesSelected: { [date: string]: boolean };
   setDatesSelected: React.Dispatch<React.SetStateAction<{ [date: string]: boolean }>>;
+  deleteSelectedDates?: () => void;
 }
 
-const Calendar: React.FC<Props> = ({ data, datesSelected, setDatesSelected }) => {
+const Calendar: React.FC<Props> = ({
+  data,
+  datesSelected,
+  setDatesSelected,
+  deleteSelectedDates,
+}) => {
   const router = useRouter();
 
   const [{ year, month }, setYearMonthDay] = useState(getCurrYearMonthDay());
   const [daysInMonth, setDaysInMonth] = useState(0);
   const [showWorkoutTags, setShowWorkoutTags] = useState(true);
+  const [multiSelectMode, setMultiSelectMode] = useState(false);
 
   const getDayData = (isoString: string) => {
     return data[isoString.substring(0, 10)];
@@ -49,8 +57,15 @@ const Calendar: React.FC<Props> = ({ data, datesSelected, setDatesSelected }) =>
     <Container>
       {router.pathname === "/builder" && (
         <Tools>
-          <div>Delete</div>
-          <div>Multi</div>
+          <div onClick={deleteSelectedDates ? () => deleteSelectedDates() : () => {}}>
+            <Garbage />
+          </div>
+          <div
+            onClick={() => setMultiSelectMode(!multiSelectMode)}
+            className={multiSelectMode ? "highlight" : ""}
+          >
+            Multi
+          </div>
           <div>Copy</div>
           <div
             onClick={() => setShowWorkoutTags(!showWorkoutTags)}
@@ -96,6 +111,7 @@ const Calendar: React.FC<Props> = ({ data, datesSelected, setDatesSelected }) =>
             datesSelected={datesSelected}
             setDatesSelected={setDatesSelected}
             showWorkoutTags={showWorkoutTags}
+            multiSelectMode={multiSelectMode}
           />
         ))}
       </DaysCtrl>
@@ -113,18 +129,24 @@ const Tools = styled.div`
   display: flex;
   justify-content: space-around;
   padding: 1rem 0;
-  border-bottom: 2px solid ${({ theme }) => theme.border};
+  border-bottom: 2px solid ${({ theme }) => theme.buttonMed};
 
   div {
     color: ${({ theme }) => theme.textLight};
+    fill: ${({ theme }) => theme.textLight};
     background: ${({ theme }) => theme.buttonMed};
     padding: 0.25rem 0.5rem;
     border-radius: 5px;
     transition: all 0.25s ease;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
+    font-size: 0.8rem;
 
     &.highlight {
-      background: ${({ theme }) => theme.buttonLight};
+      background: ${({ theme }) => theme.border};
       color: ${({ theme }) => theme.text};
+      fill: ${({ theme }) => theme.text};
     }
   }
 `;
