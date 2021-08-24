@@ -10,6 +10,7 @@ interface Props {
   day: number;
   datesSelected: { [date: string]: boolean };
   setDatesSelected: React.Dispatch<React.SetStateAction<{ [date: string]: boolean }>>;
+  showWorkoutTags: boolean;
 }
 
 const CalendarDay: React.FC<Props> = ({
@@ -19,6 +20,7 @@ const CalendarDay: React.FC<Props> = ({
   day,
   datesSelected,
   setDatesSelected,
+  showWorkoutTags,
 }) => {
   const formatDate = (y: string | number, m: string | number, d: string | number) => {
     y = y.toString();
@@ -63,7 +65,7 @@ const CalendarDay: React.FC<Props> = ({
       onTouchMove={handleTouchMove}
       onClick={handleClick}
     >
-      {datesSelected[formatDate(year, month, day)] && dayData && (
+      {showWorkoutTags && datesSelected[formatDate(year, month, day)] && dayData && (
         <div className="workoutName">
           <p>{dayData.workout.name}</p>
           <span />

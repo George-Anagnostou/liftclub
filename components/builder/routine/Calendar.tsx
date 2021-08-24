@@ -21,6 +21,7 @@ const Calendar: React.FC<Props> = ({ data, datesSelected, setDatesSelected }) =>
 
   const [{ year, month }, setYearMonthDay] = useState(getCurrYearMonthDay());
   const [daysInMonth, setDaysInMonth] = useState(0);
+  const [showWorkoutTags, setShowWorkoutTags] = useState(true);
 
   const getDayData = (isoString: string) => {
     return data[isoString.substring(0, 10)];
@@ -51,7 +52,12 @@ const Calendar: React.FC<Props> = ({ data, datesSelected, setDatesSelected }) =>
           <div>Delete</div>
           <div>Multi</div>
           <div>Copy</div>
-          <div>Toggle Tags</div>
+          <div
+            onClick={() => setShowWorkoutTags(!showWorkoutTags)}
+            className={showWorkoutTags ? "highlight" : ""}
+          >
+            Toggle Tags
+          </div>
         </Tools>
       )}
 
@@ -89,6 +95,7 @@ const Calendar: React.FC<Props> = ({ data, datesSelected, setDatesSelected }) =>
             day={i + 1}
             datesSelected={datesSelected}
             setDatesSelected={setDatesSelected}
+            showWorkoutTags={showWorkoutTags}
           />
         ))}
       </DaysCtrl>
@@ -105,7 +112,20 @@ const Container = styled.div`
 const Tools = styled.div`
   display: flex;
   justify-content: space-around;
+  padding: 1rem 0;
+  border-bottom: 2px solid ${({ theme }) => theme.border};
+
   div {
+    color: ${({ theme }) => theme.textLight};
+    background: ${({ theme }) => theme.buttonMed};
+    padding: 0.25rem 0.5rem;
+    border-radius: 5px;
+    transition: all 0.25s ease;
+
+    &.highlight {
+      background: ${({ theme }) => theme.buttonLight};
+      color: ${({ theme }) => theme.text};
+    }
   }
 `;
 
