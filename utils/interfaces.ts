@@ -49,7 +49,7 @@ export interface Routine {
   creator_id: string;
   creatorName: string;
   name: string;
-  workoutPlan: { isoDate: string; workout_id: string; workout?: Workout }[];
+  workoutPlan: { isoDate: string; workout_id: string; workout: Workout }[];
 }
 
 export interface RoutineWorkoutPlanForCalendar {

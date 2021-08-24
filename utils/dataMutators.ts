@@ -1,5 +1,5 @@
 import { getExercisesFromIdArray } from "./api";
-import { Routine, Workout, WorkoutLogItem } from "./interfaces";
+import { Routine, RoutineWorkoutPlanForCalendar, Workout, WorkoutLogItem } from "./interfaces";
 
 export const addExerciseDataToLoggedWorkout = async (workout: WorkoutLogItem) => {
   // Grab all exercise_ids from the workout
@@ -43,7 +43,7 @@ export const moveItemInArray = (arr: any | undefined[], startIndex: number, endI
 };
 
 export const formatRoutineWorkoutPlanForCalendar = (plan: Routine["workoutPlan"]) => {
-  const res = {};
+  const res: RoutineWorkoutPlanForCalendar = {};
 
   plan.map((day) => {
     res[day.isoDate.substring(0, 10)] = {
