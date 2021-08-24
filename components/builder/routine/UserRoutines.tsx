@@ -116,6 +116,7 @@ const Container = styled.div`
       margin: 0 0.25rem 0.5rem;
       word-wrap: break-word;
       text-align: left;
+      transition: all 0.25s ease;
 
       button {
         font-size: 0.9rem;
@@ -129,6 +130,7 @@ const Container = styled.div`
         top: 3px;
         right: 3px;
         padding: 0px 5px 1px;
+        transition: all 0.25s ease;
       }
 
       &.highlight {

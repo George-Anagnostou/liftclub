@@ -131,6 +131,7 @@ const WorkoutsList = styled.div`
       margin: 0 0.25rem 0.5rem;
       word-wrap: break-word;
       text-align: left;
+      transition: all 0.25s ease;
 
       &.highlight {
         background: ${({ theme }) => theme.accentSoft};
