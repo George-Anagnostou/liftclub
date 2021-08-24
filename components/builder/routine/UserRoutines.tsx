@@ -129,7 +129,7 @@ const Container = styled.div`
         margin-left: 0.3rem;
         height: 20px;
         width: 20px;
-        padding: 0;
+        padding: 2px 0 0 0;
         transition: all 0.25s ease;
       }
 
