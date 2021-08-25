@@ -1,14 +1,42 @@
+import { useState, useEffect } from "react";
 import styled from "styled-components";
+// Context
+import { useStoreState } from "../../store";
+// API
+import { getUserMadeWorkouts, getWorkoutsFromIdArray } from "../../utils/api";
 // Interfaces
 import { Workout } from "../../utils/interfaces";
 
 interface Props {
   displayWorkout: (clicked: Workout) => Promise<void>;
-  userMadeWorkouts: Workout[];
-  userSavedWorkouts: Workout[];
 }
 
-const UserWorkouts: React.FC<Props> = ({ displayWorkout, userMadeWorkouts, userSavedWorkouts }) => {
+const UserWorkouts: React.FC<Props> = ({ displayWorkout }) => {
+  const { user, isSignedIn } = useStoreState();
+
+  const [userMadeWorkouts, setUserMadeWorkouts] = useState<Workout[]>([]);
+  const [userSavedWorkouts, setUserSavedWorkouts] = useState<Workout[]>([]);
+
+  useEffect(() => {
+    const loadUserMadeWorkouts = async () => {
+      const madeWorkouts = await getUserMadeWorkouts(user!._id);
+      setUserMadeWorkouts(madeWorkouts || []);
+    };
+
+    const loadUserSavedWorkouts = async () => {
+      const savedWorkouts = await getWorkoutsFromIdArray(user!.savedWorkouts || []);
+      setUserSavedWorkouts(savedWorkouts.reverse() || []);
+    };
+
+    // workoutLog is used to update DateScroll UI when saving or removing a workout
+    if (isSignedIn && user) {
+      // Get all workouts made by the user
+      loadUserMadeWorkouts();
+      // Get all workotus saved by the user
+      loadUserSavedWorkouts();
+    }
+  }, [isSignedIn]);
+
   return (
     <Container>
       <WorkoutsList>

@@ -16,9 +16,10 @@ import {
 import { useStoreDispatch, useStoreState } from "../store";
 import { deleteDayFromWorkoutLog } from "../store/actions/userActions";
 // API
-import { getWorkoutsFromIdArray, getUserMadeWorkouts, getWorkoutFromId } from "../utils/api";
+import { getWorkoutFromId } from "../utils/api";
 // Interfaces
 import { Workout, WorkoutLogItem } from "../utils/interfaces";
+import TeamWorkouts from "../components/workoutLog/TeamWorkouts";
 
 export default function log() {
   const { user, isSignedIn } = useStoreState();
@@ -30,8 +31,6 @@ export default function log() {
   const [selectedDate, setSelectedDate] = useState(() =>
     dateToISOWithLocal(new Date()).substring(0, 10)
   );
-  const [userMadeWorkouts, setUserMadeWorkouts] = useState<Workout[]>([]);
-  const [userSavedWorkouts, setUserSavedWorkouts] = useState<Workout[]>([]);
 
   // Accepts a workout from user's workoutLog and sets page state
   const setPageState = (dayData: WorkoutLogItem | null) => {
@@ -120,26 +119,6 @@ export default function log() {
   }, [selectedDate, currentDayData]);
 
   useEffect(() => {
-    const loadUserMadeWorkouts = async () => {
-      const madeWorkouts = await getUserMadeWorkouts(user!._id);
-      setUserMadeWorkouts(madeWorkouts || []);
-    };
-
-    const loadUserSavedWorkouts = async () => {
-      const savedWorkouts = await getWorkoutsFromIdArray(user!.savedWorkouts || []);
-      setUserSavedWorkouts(savedWorkouts.reverse() || []);
-    };
-
-    // workoutLog is used to update DateScroll UI when saving or removing a workout
-    if (isSignedIn) {
-      // Get all workouts made by the user
-      loadUserMadeWorkouts();
-      // Get all workotus saved by the user
-      loadUserSavedWorkouts();
-    }
-  }, [isSignedIn]);
-
-  useEffect(() => {
     const insertWorkoutData = async (logItem: WorkoutLogItem | undefined) => {
       if (logItem) {
         const workoutData = await getWorkoutFromId(logItem.workout_id);
@@ -183,11 +162,11 @@ export default function log() {
                 No workout logged. To start a workout, select a workout from one of the tabs below.
               </FallbackText>
 
-              <UserWorkouts
-                displayWorkout={displayWorkout}
-                userMadeWorkouts={userMadeWorkouts}
-                userSavedWorkouts={userSavedWorkouts}
-              />
+              {user?.teamsJoined && (
+                <TeamWorkouts selectedDate={selectedDate} displayWorkout={displayWorkout} />
+              )}
+
+              <UserWorkouts displayWorkout={displayWorkout} />
             </>
           )}
         </>

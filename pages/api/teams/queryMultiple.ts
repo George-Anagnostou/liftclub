@@ -14,9 +14,18 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
       const foundTeams = await db
         .collection("teams")
-        .find({
-          _id: { $in: idArr.map((_id) => new ObjectId(_id)) },
-        })
+        .aggregate([
+          { $match: { _id: { $in: idArr.map((_id) => new ObjectId(_id)) } } },
+          {
+            $lookup: {
+              from: "routines",
+              localField: "routine_id",
+              foreignField: "_id",
+              as: "routine",
+            },
+          },
+          { $unwind: "$routine" },
+        ])
         .toArray();
 
       res.json(foundTeams);
