@@ -3,13 +3,13 @@ import { useState, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 // Components
-import Notebook from "../public/navIcons/Notebook";
-import Search from "../public/navIcons/Magnifying";
-import Profile from "../public/navIcons/Profile";
+import Notebook from "./svg/Notebook";
+import Search from "./svg/Magnifying";
+import Profile from "./svg/Profile";
 // import Create from "../public/navIcons/Create";
 // Context
 import { useStoreState } from "../store";
-import Builder from "../public/navIcons/Builder";
+import Builder from "./svg/Builder";
 
 const NavBar: React.FC = () => {
   const router = useRouter();

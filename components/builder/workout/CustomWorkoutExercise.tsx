@@ -3,7 +3,7 @@ import { Draggable } from "react-beautiful-dnd";
 // Interfaces
 import { Exercise } from "../../../utils/interfaces";
 // Icons
-import Garbage from "../../../public/navIcons/Garbage";
+import Garbage from "../../svg/Garbage";
 
 interface Props {
   exerciseIndex: number;

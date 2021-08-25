@@ -7,10 +7,10 @@ import { getCurrYearMonthDay } from "../../../utils";
 import { RoutineWorkoutPlanForCalendar } from "../../../utils/interfaces";
 // Components
 import CalendarDay from "./CalendarDay";
-import Garbage from "../../../public/navIcons/Garbage";
-import Stack from "../../../public/navIcons/Stack";
-import Copy from "../../../public/navIcons/Copy";
-import Bubble from "../../../public/navIcons/Bubble";
+import Garbage from "../../svg/Garbage";
+import Stack from "../../svg/Stack";
+import Copy from "../../svg/Copy";
+import Bubble from "../../svg/Bubble";
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 

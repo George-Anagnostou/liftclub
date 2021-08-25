@@ -6,7 +6,7 @@ import { useStoreDispatch, useStoreState } from "../../store";
 import { addUserFollow, removeUserFollow } from "../../store/actions/userActions";
 // Components
 import ProfileImg from "./ProfileImg";
-import Settings from "../../public/navIcons/Settings";
+import Settings from "../svg/Settings";
 import FollowsModal from "./FollowsModal";
 // Interfaces
 import { User } from "../../utils/interfaces";
