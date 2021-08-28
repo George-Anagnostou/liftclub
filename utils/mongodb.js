@@ -19,10 +19,7 @@ export async function connectToDatabase() {
   const client = await global.connectionPromise;
   const db = await client.db(dbName);
 
-  global.connection = {
-    client,
-    db,
-  };
+  global.connection = { client, db };
 
   return global.connection;
 }
