@@ -32,7 +32,7 @@ const CalendarDay: React.FC<Props> = ({
   };
 
   const handleTouchStart = () => {
-    // if (!multiSelectMode) setDatesSelected({});
+    if (!multiSelectMode) setDatesSelected({});
   };
 
   const handleTouchMove = (e) => {
