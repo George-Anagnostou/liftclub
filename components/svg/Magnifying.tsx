@@ -1,4 +1,4 @@
-export default function Feed() {
+export default function Magnifying() {
   return (
     <svg
       version="1.1"

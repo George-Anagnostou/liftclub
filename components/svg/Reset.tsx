@@ -1,4 +1,4 @@
-export default function Notebook() {
+export default function Reset() {
   return (
     <svg
       x="0px"

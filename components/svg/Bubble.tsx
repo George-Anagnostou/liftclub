@@ -1,4 +1,4 @@
-export default function Notebook() {
+export default function Bubble() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" height="17" width="20" viewBox="0 0 49 31">
       <g>
