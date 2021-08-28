@@ -82,7 +82,7 @@ const Calendar: React.FC<Props> = ({
 
       <DaysOfTheWeek>
         {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-          <li>{day}</li>
+          <li key={day}>{day}</li>
         ))}
       </DaysOfTheWeek>
 
