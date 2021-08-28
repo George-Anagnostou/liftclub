@@ -32,7 +32,7 @@ const CalendarDay: React.FC<Props> = ({
   };
 
   const handleTouchStart = () => {
-    if (!multiSelectMode) setDatesSelected({});
+    // if (!multiSelectMode) setDatesSelected({});
   };
 
   const handleTouchMove = (e) => {
@@ -63,6 +63,7 @@ const CalendarDay: React.FC<Props> = ({
           })
         : setDatesSelected((prev) => ({ ...prev, [formatDate(year, month, day)]: true }));
     } else {
+      // 
       datesSelected[formatDate(year, month, day)] && Object.keys(datesSelected).length === 1
         ? setDatesSelected((prev) => {
             var copy = Object.assign({}, prev);

@@ -7,10 +7,7 @@ import { getCurrYearMonthDay } from "../../../utils";
 import { RoutineWorkoutPlanForCalendar } from "../../../utils/interfaces";
 // Components
 import CalendarDay from "./CalendarDay";
-import Garbage from "../../svg/Garbage";
-import Stack from "../../svg/Stack";
-import Copy from "../../svg/Copy";
-import Bubble from "../../svg/Bubble";
+import CalendarTools from "./CalendarTools";
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -29,10 +26,10 @@ const Calendar: React.FC<Props> = ({
 }) => {
   const router = useRouter();
 
-  const [{ year, month }, setYearMonthDay] = useState(getCurrYearMonthDay());
-  const [daysInMonth, setDaysInMonth] = useState(0);
   const [showWorkoutTags, setShowWorkoutTags] = useState(true);
   const [multiSelectMode, setMultiSelectMode] = useState(false);
+  const [{ year, month }, setYearMonthDay] = useState(getCurrYearMonthDay());
+  const [daysInMonth, setDaysInMonth] = useState(0);
 
   const getDayData = (isoString: string) => {
     return data[isoString.substring(0, 10)];
@@ -59,30 +56,15 @@ const Calendar: React.FC<Props> = ({
   return (
     <Container>
       {router.pathname === "/builder" && (
-        <Tools>
-          <div onClick={deleteSelectedDates ? () => deleteSelectedDates() : () => {}}>
-            <Garbage />
-            <p>delete</p>
-          </div>
-          <div
-            onClick={() => setMultiSelectMode(!multiSelectMode)}
-            className={multiSelectMode ? "highlight" : ""}
-          >
-            <Stack />
-            <p>multi</p>
-          </div>
-          <div>
-            <Copy />
-            <p>copy</p>
-          </div>
-          <div
-            onClick={() => setShowWorkoutTags(!showWorkoutTags)}
-            className={showWorkoutTags ? "highlight" : ""}
-          >
-            <Bubble />
-            <p>tags</p>
-          </div>
-        </Tools>
+        <CalendarTools
+          datesSelected={datesSelected}
+          deleteSelectedDates={deleteSelectedDates}
+          setDatesSelected={setDatesSelected}
+          multiSelectMode={multiSelectMode}
+          setMultiSelectMode={setMultiSelectMode}
+          showWorkoutTags={showWorkoutTags}
+          setShowWorkoutTags={setShowWorkoutTags}
+        />
       )}
 
       <MonthCtrl>
@@ -132,36 +114,6 @@ export default Calendar;
 const Container = styled.div`
   border-radius: 5px;
   background: ${({ theme }) => theme.background};
-`;
-
-const Tools = styled.div`
-  display: flex;
-  justify-content: space-around;
-  padding: 0.5rem 0;
-  border-bottom: 2px solid ${({ theme }) => theme.buttonMed};
-
-  div {
-    color: ${({ theme }) => theme.textLight};
-    fill: ${({ theme }) => theme.textLight};
-    background: ${({ theme }) => theme.buttonMed};
-    padding: 0.25rem 0.5rem 0.1rem;
-    border-radius: 5px;
-    transition: all 0.25s ease;
-    display: grid;
-    place-items: center;
-    box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
-    font-size: 0.6rem;
-
-    p {
-      margin-top: 0.15rem;
-    }
-
-    &.highlight {
-      background: ${({ theme }) => theme.border};
-      color: ${({ theme }) => theme.text};
-      fill: ${({ theme }) => theme.text};
-    }
-  }
 `;
 
 const MonthCtrl = styled.div`
