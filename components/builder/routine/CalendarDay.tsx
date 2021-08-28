@@ -63,7 +63,8 @@ const CalendarDay: React.FC<Props> = ({
           })
         : setDatesSelected((prev) => ({ ...prev, [formatDate(year, month, day)]: true }));
     } else {
-      // 
+      // TODO This is supposed to remove the day if it is currently selected, otherwise make it the only day selected
+      // The onTouchStart function is preventing this from working properly
       datesSelected[formatDate(year, month, day)] && Object.keys(datesSelected).length === 1
         ? setDatesSelected((prev) => {
             var copy = Object.assign({}, prev);

@@ -8,30 +8,15 @@ import { useStoreState } from "../../../store";
 import { Workout, Routine } from "../../../utils/interfaces";
 
 interface Props {
-  setRoutine: React.Dispatch<React.SetStateAction<Routine>>;
   selectedDaysFromPlan: Routine["workoutPlan"];
-  datesSelected: { [date: string]: boolean };
+  addWorkoutToDatesSelected: (workout: Workout) => void;
 }
 
-const UserWorkouts: React.FC<Props> = ({ setRoutine, selectedDaysFromPlan, datesSelected }) => {
+const UserWorkouts: React.FC<Props> = ({ selectedDaysFromPlan, addWorkoutToDatesSelected }) => {
   const { user } = useStoreState();
 
   const [userMadeWorkouts, setUserMadeWorkouts] = useState<Workout[]>([]);
   const [userSavedWorkouts, setUserSavedWorkouts] = useState<Workout[]>([]);
-
-  const addWorkoutToDatesSelected = (workout: Workout) => {
-    const plan = Object.keys(datesSelected).map((date) => {
-      return { isoDate: date, workout_id: workout._id, workout };
-    });
-
-    setRoutine((prev) => ({
-      ...prev,
-      workoutPlan: [
-        ...prev.workoutPlan.filter((each) => !datesSelected[each.isoDate.substring(0, 10)]),
-        ...plan,
-      ].sort((a, b) => a.isoDate.localeCompare(b.isoDate)),
-    }));
-  };
 
   const loadUserMadeWorkouts = async () => {
     const madeWorkouts = await getUserMadeWorkouts(user!._id);

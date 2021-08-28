@@ -4,7 +4,7 @@ import styled from "styled-components";
 // Utils
 import { getCurrYearMonthDay } from "../../../utils";
 // Interfaces
-import { RoutineWorkoutPlanForCalendar } from "../../../utils/interfaces";
+import { RoutineWorkoutPlanForCalendar, Routine } from "../../../utils/interfaces";
 // Components
 import CalendarDay from "./CalendarDay";
 import CalendarTools from "./CalendarTools";
@@ -15,14 +15,18 @@ interface Props {
   data: RoutineWorkoutPlanForCalendar;
   datesSelected: { [date: string]: boolean };
   setDatesSelected: React.Dispatch<React.SetStateAction<{ [date: string]: boolean }>>;
-  deleteSelectedDates?: () => void;
+  deleteWorkoutsOnSelectedDates?: () => void;
+  undoRoutineStack?: Routine[];
+  undoRoutine?: () => void;
 }
 
 const Calendar: React.FC<Props> = ({
   data,
   datesSelected,
   setDatesSelected,
-  deleteSelectedDates,
+  deleteWorkoutsOnSelectedDates,
+  undoRoutineStack,
+  undoRoutine,
 }) => {
   const router = useRouter();
 
@@ -58,12 +62,14 @@ const Calendar: React.FC<Props> = ({
       {router.pathname === "/builder" && (
         <CalendarTools
           datesSelected={datesSelected}
-          deleteSelectedDates={deleteSelectedDates}
+          deleteWorkoutsOnSelectedDates={deleteWorkoutsOnSelectedDates}
           setDatesSelected={setDatesSelected}
           multiSelectMode={multiSelectMode}
           setMultiSelectMode={setMultiSelectMode}
           showWorkoutTags={showWorkoutTags}
           setShowWorkoutTags={setShowWorkoutTags}
+          undoRoutineStack={undoRoutineStack}
+          undoRoutine={undoRoutine}
         />
       )}
 
