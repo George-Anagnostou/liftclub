@@ -18,10 +18,8 @@ const TopTile: React.FC = () => {
         </div>
 
         <div className="row nightMode">
-          <p>Night Mode</p>
-          <span>
-            <ThemeToggle />
-          </span>
+          <p>Theme</p>
+          <ThemeToggle />
         </div>
       </div>
 
@@ -76,14 +74,6 @@ const Tile = styled.div`
 
       &:last-of-type {
         border-bottom: none;
-      }
-
-      &.nightMode {
-        span {
-          display: grid;
-          place-items: center;
-          margin-left: 1rem;
-        }
       }
     }
   }

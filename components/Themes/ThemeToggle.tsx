@@ -8,9 +8,9 @@ const ThemeToggle: React.FC = () => {
   const [checked, setChecked] = useState(localStorage.getItem("theme") === "dark");
 
   return (
-    <Switch>
-      <input type="checkbox" defaultChecked={checked} />
-      <div onClick={themeToggler}>
+    <Switch onClick={themeToggler}>
+      <div className="toggle-btn">
+        <input type="checkbox" defaultChecked={checked} />
         <span></span>
       </div>
     </Switch>
@@ -18,86 +18,83 @@ const ThemeToggle: React.FC = () => {
 };
 export default ThemeToggle;
 
-const Switch = styled.label`
-  --line: #000000;
-  --dot: #c2c2c2;
-  --circle: #3d3d3d;
-  --duration: 0.25s;
-  cursor: pointer;
+const Switch = styled.div`
+  border-radius: 40px;
+  overflow: hidden;
 
-  display: block;
-  width: 45px;
+  .toggle-btn {
+    position: relative;
+    width: 56px;
+    height: 27px;
+    margin: 0 auto;
+    border-radius: 40px;
+    overflow: hidden;
+    border: 1px solid ${({ theme }) => theme.border};
+  }
 
-  input {
-    display: none;
+  input[type="checkbox"] {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    margin: 0px;
+    cursor: pointer;
+    opacity: 0;
+    z-index: 2;
+  }
 
-    & + div {
-      position: relative;
-      height: 1.1rem;
+  span {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    overflow: hidden;
+    opacity: 1;
+    background-color: #fff;
+    border-radius: 40px;
+    transition: 0.2s ease background-color, 0.2s ease opacity;
+  }
 
-      &:before,
-      &:after {
-        --s: 1;
-        content: "";
-        position: absolute;
-        height: 4px;
-        top: 7px;
-        width: 25px;
+  span:before,
+  span:after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    width: 21px;
+    height: 21px;
+    border-radius: 50%;
+    transition: 0.5s ease transform, 0.2s ease background-color;
+  }
 
-        background: var(--line);
-        transform: scaleX(var(--s));
-        transition: transform var(--duration) ease;
-      }
-      &:before {
-        --s: 0;
-        left: 0;
-        transform-origin: 0 50%;
-        border-radius: 5px 0 0 5px;
-      }
-      &:after {
-        left: 18px;
-        transform-origin: 100% 50%;
-        border-radius: 0 5px 5px 0;
-      }
-      span {
-        padding-left: 56px;
-        line-height: 24px;
-        &:before {
-          --x: 0;
-          --b: var(--circle);
-          --s: 4px;
-          content: "";
-          position: absolute;
-          left: 0;
-          top: 0;
-          width: 18px;
-          height: 18px;
-          border-radius: 50%;
-          box-shadow: inset 0 0 0 var(--s) var(--b);
-          transform: translateX(var(--x));
-          transition: all var(--duration) ease;
-        }
-        &:not(:empty) {
-          padding-left: 64px;
-        }
-      }
-    }
-    &:checked {
-      & + div {
-        &:before {
-          --s: 1;
-        }
-        &:after {
-          --s: 0;
-        }
-        span {
-          &:before {
-            --x: 25px;
-            --s: 12px;
-            --b: var(--dot);
-          }
-        }
-      }
-    }
+  span:before {
+    background-color: #fff;
+    transform: translate(-60px, 0px);
+    opacity: 0;
+    z-index: 1;
+  }
+
+  input[type="checkbox"]:checked + span:before {
+    background-color: #202020;
+    transform: translate(23px, -7px);
+    opacity: 1;
+  }
+
+  span:after {
+    background-color: #202020;
+    transform: translate(2px, 0px);
+    z-index: 0;
+  }
+
+  input[type="checkbox"]:checked + span {
+    background-color: #202020;
+  }
+
+  input[type="checkbox"]:checked + span:after {
+    background-color: #ddd;
+    transform: translate(30px, 0px);
   }
 `;
