@@ -25,7 +25,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       username: username,
       password: hash,
       savedWorkouts: [],
-      workoutLog: [],
+      workoutLog: {},
     });
 
     delete userData.ops[0].password;
