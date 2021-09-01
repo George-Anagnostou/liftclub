@@ -59,6 +59,7 @@ const TeamWorkouts: React.FC<Props> = ({ selectedDate, displayWorkout }) => {
       {todaysWorkouts?.map(({ teamName, workout }) => (
         <ul key={teamName} onClick={workout ? () => displayWorkout(workout) : () => {}}>
           <p className="teamName">{teamName}</p>
+
           {workout ? <li>{workout.name}</li> : <li className="fallbackText">No workout today</li>}
         </ul>
       ))}
