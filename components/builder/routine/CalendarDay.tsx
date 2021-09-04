@@ -154,6 +154,10 @@ const Container = styled.div`
         top: -20px;
         opacity: 0;
       }
+      to {
+        top: -25px;
+        opacity: 1;
+      }
     }
 
     p {
