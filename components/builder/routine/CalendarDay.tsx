@@ -154,11 +154,6 @@ const Container = styled.div`
         top: -20px;
         opacity: 0;
       }
-
-      to {
-        top: -25px;
-        opacity: 1;
-      }
     }
 
     p {
@@ -191,8 +186,8 @@ const Container = styled.div`
     }
 
     &.shadow {
-      top: -22.5px !important;
-      left: calc(50% - 1.5px);
+      top: -23px !important;
+      left: calc(50% - 2px);
       background: ${({ theme }) => theme.shades[5]};
 
       p {
