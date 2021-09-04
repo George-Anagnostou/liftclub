@@ -138,7 +138,6 @@ const Container = styled.div`
     border-radius: 3px;
 
     position: absolute;
-    top: -25px;
     left: 50%;
     transform: translateX(-50%);
 
@@ -190,9 +189,22 @@ const Container = styled.div`
     }
 
     &.shadow {
-      top: -23px !important;
       left: calc(50% - 2px);
       background: ${({ theme }) => theme.shades[5]};
+      animation-duration: 0.3s;
+      animation-fill-mode: both;
+      animation-name: fadeInUpShadow;
+
+      @keyframes fadeInUpShadow {
+        from {
+          top: -20px;
+          opacity: 0;
+        }
+        to {
+          top: -23px;
+          opacity: 1;
+        }
+      }
 
       p {
         opacity: 0;
