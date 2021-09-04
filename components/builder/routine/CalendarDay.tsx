@@ -87,10 +87,16 @@ const CalendarDay: React.FC<Props> = ({
       onClick={handleClick}
     >
       {showWorkoutTags && datesSelected[formatDate(year, month, day)] && dayData && (
-        <div className="workoutName">
-          <p>{dayData.workout.name}</p>
-          <span />
-        </div>
+        <>
+          <div className="workoutName shadow">
+            <p>{dayData.workout.name}</p>
+            <span />
+          </div>
+          <div className="workoutName">
+            <p>{dayData.workout.name}</p>
+            <span />
+          </div>
+        </>
       )}
 
       <div className="date">{day}</div>
@@ -181,6 +187,19 @@ const Container = styled.div`
         border-bottom: 0;
         margin-left: -15px;
         margin-bottom: -15px;
+      }
+    }
+
+    &.shadow {
+      top: -22.5px !important;
+      left: calc(50% - 1.5px);
+      background: ${({ theme }) => theme.shades[5]};
+
+      p {
+        opacity: 0;
+      }
+      span:after {
+        border-top-color: ${({ theme }) => theme.shades[5]};
       }
     }
   }
