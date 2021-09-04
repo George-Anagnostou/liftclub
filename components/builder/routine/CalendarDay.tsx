@@ -189,7 +189,7 @@ const Container = styled.div`
     }
 
     &.shadow {
-      left: calc(50% - 2px);
+      left: calc(50% - 1.5px);
       background: ${({ theme }) => theme.shades[5]};
       animation-duration: 0.3s;
       animation-fill-mode: both;
@@ -201,7 +201,7 @@ const Container = styled.div`
           opacity: 0;
         }
         to {
-          top: -23px;
+          top: -23.5px;
           opacity: 1;
         }
       }
