@@ -84,7 +84,7 @@ const Switch = styled.div`
   }
 
   span:after {
-    background-color: #202020;
+    background-color: ${({ theme }) => theme.textLight};
     transform: translate(2px, 0px);
     z-index: 0;
   }
