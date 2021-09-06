@@ -41,7 +41,14 @@ export default function log() {
   const deleteWorkout = async () => {
     if (!currentDayData || !user) return;
 
-    const deleted = await deleteDayFromWorkoutLog(dispatch, user!._id, selectedDate);
+    // If user never saved the workout
+    if (!user.workoutLog[selectedDate]) {
+      setPageState(null);
+      setPrevBestData(null);
+      return;
+    }
+
+    const deleted = await deleteDayFromWorkoutLog(dispatch, user._id, selectedDate);
 
     if (deleted) {
       setPageState(null);
