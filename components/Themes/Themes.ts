@@ -3,7 +3,7 @@ export const lightTheme = {
   text: "#282829",
   textLight: "#6e6e6e",
   border: "#b5bed6",
-  boxShadow: "#bbbbbb",
+  boxShadow: "#999999",
   background: "linear-gradient(to bottom, #eeeeee 20%, #e9e8f1 100%)",
   buttonLight: "#ffffff",
   buttonMed: "#dcdee9",
