@@ -88,10 +88,6 @@ const CalendarDay: React.FC<Props> = ({
     >
       {showWorkoutTags && datesSelected[formatDate(year, month, day)] && dayData && (
         <>
-          <div className="workoutName shadow">
-            <p>{dayData.workout.name}</p>
-            <span />
-          </div>
           <div className="workoutName">
             <p>{dayData.workout.name}</p>
             <span />
@@ -148,6 +144,8 @@ const Container = styled.div`
     animation-fill-mode: both;
     animation-name: fadeInUp;
 
+    filter: drop-shadow(0px 0px 1px ${({ theme }) => theme.boxShadow});
+
     @keyframes fadeInUp {
       from {
         top: -20px;
@@ -185,32 +183,6 @@ const Container = styled.div`
         border-bottom: 0;
         margin-left: -15px;
         margin-bottom: -15px;
-      }
-    }
-
-    &.shadow {
-      left: calc(50% - 1.5px);
-      background: ${({ theme }) => theme.shades[5]};
-      animation-duration: 0.3s;
-      animation-fill-mode: both;
-      animation-name: fadeInUpShadow;
-
-      @keyframes fadeInUpShadow {
-        from {
-          top: -20px;
-          opacity: 0;
-        }
-        to {
-          top: -23.5px;
-          opacity: 1;
-        }
-      }
-
-      p {
-        opacity: 0;
-      }
-      span:after {
-        border-top-color: ${({ theme }) => theme.shades[5]};
       }
     }
   }
