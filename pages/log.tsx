@@ -86,17 +86,7 @@ export default function log() {
     if (currentDayData?.exerciseData) {
       setCurrentDayData((prev) =>
         update(prev, {
-          exerciseData: {
-            [exerciseIndex]: {
-              sets: {
-                [setIndex]: {
-                  weight: {
-                    $set: value,
-                  },
-                },
-              },
-            },
-          },
+          exerciseData: { [exerciseIndex]: { sets: { [setIndex]: { weight: { $set: value } } } } },
         })
       );
     }
