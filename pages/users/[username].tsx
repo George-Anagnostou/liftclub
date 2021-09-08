@@ -18,7 +18,7 @@ import { User, Workout, Team } from "../../utils/interfaces";
 
 const User_id: React.FC = () => {
   const router = useRouter();
-  const { username } = router.query;
+  const username: string = router.query.username as string;
   const { user, isSignedIn } = useStoreState();
 
   const [profileData, setProfileData] = useState<User | null>(null);
@@ -29,8 +29,6 @@ const User_id: React.FC = () => {
 
   useEffect(() => {
     const getProfileData = async () => {
-      if (typeof username !== "string") return;
-
       const profile = await getUserFromUsername(username);
 
       if (profile) {
