@@ -41,10 +41,14 @@ const Bar = styled.div`
       padding: 0.5rem 0;
       color: ${({ theme }) => theme.textLight};
       border-bottom: 3px solid ${({ theme }) => theme.border};
-
+      background: ${({ theme }) => theme.background};
+      
+      transition: all 0.5s ease;
+      
       &.selected {
         color: ${({ theme }) => theme.text};
         border-bottom: 3px solid ${({ theme }) => theme.accentSoft};
+        background: ${({ theme }) => theme.buttonLight};
       }
     }
   }
