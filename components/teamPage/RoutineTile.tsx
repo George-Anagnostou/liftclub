@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import Link from "next/link";
 // Context
 import { useStoreDispatch, useStoreState } from "../../store";
 import { addSavedWorkout, removeSavedWorkout } from "../../store/actions/userActions";
 // Utils
-import { daysBetween } from "../../utils";
 import { getWorkoutsFromIdArray } from "../../utils/api";
 import { Routine, Team, Workout } from "../../utils/interfaces";
 // Components
 import LoadingSpinner from "../LoadingSpinner";
-import RoutineViewer from "./RoutineViewer";
+import CalendarContainer from "./CalendarContainer";
 
 interface Props {
   team: Team;
@@ -42,34 +42,23 @@ const RoutineTile: React.FC<Props> = ({ team }) => {
     if (team?.routine) getUniqueWorkouts(team.routine.workoutPlan);
   }, [team.routine]);
 
-  const renderRoutineInfo = (routine: Routine) => {
-    const plan = routine.workoutPlan;
-    const days = daysBetween(plan[0].isoDate, plan[plan.length - 1].isoDate);
-
-    return (
-      <RoutineInfo>
-        <p className="routineName">{routine.name}</p>
-
-        <p className="routineStats">
-          {plan.length} workouts • {days}
-        </p>
-      </RoutineInfo>
-    );
-  };
-
   return (
     <Container>
-      <div className="heading">
-        <h3 className="title">Routine</h3>
-      </div>
+      <h3 className="title">Routine</h3>
 
-      {team.routine && (
-        <>
-          {renderRoutineInfo(team.routine)}
-
-          <RoutineViewer routine_id={team.routine._id} />
-        </>
+      {user?._id === team.routine.creator_id && (
+        <Link href={`/builder?builder=routine&routine=${team.routine._id}`}>
+          <button className="editBtn">Edit</button>
+        </Link>
       )}
+
+      <RoutineInfo>
+        <p className="routineName">{team.routine.name}</p>
+
+        <p className="routineStats">{team.routine.workoutPlan.length} workouts</p>
+      </RoutineInfo>
+
+      <CalendarContainer routine={team.routine} />
 
       {uniqueWorkoutsInRoutine ? (
         <>
@@ -104,20 +93,17 @@ const Container = styled.div`
   background: ${({ theme }) => theme.background};
   padding: 1rem 0.5rem;
   border-radius: 10px;
+  position: relative;
 
-  .heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-
-    button {
-      border-radius: 5px;
-      padding: 0.25rem 0.5rem;
-      font-size: 0.8rem;
-      border: ${({ theme }) => theme.border};
-      color: ${({ theme }) => theme.textLight};
-      background: ${({ theme }) => theme.buttonMed};
-    }
+  .editBtn {
+    position: absolute;
+    top: .75rem;
+    right: 0.75rem;
+    border-radius: 5px;
+    padding: 0.25rem 0.5rem;
+    border: none;
+    background: ${({ theme }) => theme.buttonMed};
+    color: ${({ theme }) => theme.text};
   }
 `;
 

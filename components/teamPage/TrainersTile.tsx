@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
 // Components
 import Checkmark from "../Checkmark";
-import LoadingSpinner from "../LoadingSpinner";
-import Modal from "../Wrappers/Modal";
 // Utils
 import { addTrainerToTeam, getUsersFromIdArr, removeTrainerFromTeam } from "../../utils/api";
 // Context
@@ -57,6 +54,16 @@ const TrainersTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMemb
       <h3 className="title">Trainers</h3>
 
       <TrainerList>
+        {user!._id === team.creator_id && (
+          <li onClick={() => setShowTrainerModal(true)} key={"addTrainer"}>
+            <div className="icon">
+              <span></span>
+              <span></span>
+            </div>
+            <p>Add</p>
+          </li>
+        )}
+
         {team.trainers.map((trainer) => (
           <Link href={`/users/${trainer.username}`} key={trainer._id}>
             <li>
@@ -74,16 +81,6 @@ const TrainersTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMemb
             </li>
           </Link>
         ))}
-
-        {user!._id === team.creator_id && (
-          <li onClick={() => setShowTrainerModal(true)} key={"addTrainer"}>
-            <div className="icon">
-              <span></span>
-              <span></span>
-            </div>
-            <p>Add</p>
-          </li>
-        )}
       </TrainerList>
 
       {showTrainerModal && (
