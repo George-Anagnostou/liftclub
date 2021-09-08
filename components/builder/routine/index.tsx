@@ -36,7 +36,6 @@ const RoutineBuilder: React.FC = () => {
   // Take off the top of undo stack and set it to current routine
   const undoRoutine = () => {
     const [undo, ...rest] = undoRoutineStack;
-
     if (!undo) return;
 
     setRoutine(undo);
