@@ -1,9 +1,11 @@
 import { useEffect } from "react";
+import { GetServerSideProps } from "next";
 import styled from "styled-components";
-import { Droppable } from "react-beautiful-dnd";
+import { Droppable, resetServerContext } from "react-beautiful-dnd";
+import update from "immutability-helper";
 //Utils
 import { postNewWorkout, updateExistingWorkout } from "../../../utils/api";
-import { Exercise, User, Workout } from "../../../utils/interfaces";
+import { User, Workout } from "../../../utils/interfaces";
 // Components
 import CustomWorkoutExercise from "./CustomWorkoutExercise";
 import CustomWorkoutControls from "./WorkoutControls";
@@ -29,7 +31,7 @@ const CustomWorkout: React.FC<Props> = ({
   user,
   setShowExerciseList,
 }) => {
-  // Handles changes for customWorkoutName
+  // Handles changes for custom workout name
   const handleWorkoutNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCustomWorkout((prev) => {
       return { ...prev, name: e.target.value };
@@ -50,29 +52,40 @@ const CustomWorkout: React.FC<Props> = ({
   ) => {
     const num = Number(e.target.value || 0);
 
-    setCustomWorkout((prev) => {
-      prev.exercises[exerciseIndex].sets[setIndex].reps = num;
-      return { ...prev };
-    });
+    setCustomWorkout(
+      update(customWorkout, {
+        exercises: { [exerciseIndex]: { sets: { [setIndex]: { reps: { $set: num } } } } },
+      })
+    );
   };
 
   const handleSetChange = (method: "add" | "remove", exerciseIndex: number) => {
-    setCustomWorkout((prev) => {
-      switch (method) {
-        case "add":
-          // Add empty set to spedified exercise
-          if (prev.exercises[exerciseIndex].sets.length >= 100) break;
+    switch (method) {
+      case "add":
+        if (customWorkout.exercises[exerciseIndex].sets.length >= 100) break;
 
-          prev.exercises[exerciseIndex].sets.push({ reps: 0, weight: -1 });
-          break;
-        case "remove":
-          // Remove last set from spedified exercise
-          prev.exercises[exerciseIndex].sets.pop();
-          break;
-      }
-
-      return { ...prev };
-    });
+        // Add empty set to spedified exercise
+        setCustomWorkout(
+          update(customWorkout, {
+            exercises: { [exerciseIndex]: { sets: { $push: [{ reps: 0, weight: -1 }] } } },
+          })
+        );
+        break;
+      case "remove":
+        // Remove last set from spedified exercise
+        setCustomWorkout(
+          update(customWorkout, {
+            exercises: {
+              [exerciseIndex]: {
+                sets: { $splice: [[customWorkout.exercises[exerciseIndex].sets.length - 1, 1]] },
+              },
+            },
+          })
+        );
+        break;
+      default:
+        break;
+    }
   };
 
   const saveCustomWorkout = async () => {
@@ -159,6 +172,11 @@ const CustomWorkout: React.FC<Props> = ({
   );
 };
 export default CustomWorkout;
+
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  resetServerContext();
+  return { props: { data: [] } };
+};
 
 const ExerciseList = styled.ul`
   width: 100%;
