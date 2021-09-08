@@ -34,14 +34,13 @@ export interface WorkoutLogItem {
 export interface Team {
   readonly _id: string;
   teamName: string;
-  members: Array<string>;
+  members: string[];
   dateCreated: string;
   creatorName: string;
   creator_id: string;
-  trainers: Array<User>;
+  trainers: User[];
   routine_id: string;
-  routineName?: string;
-  routine?: Routine;
+  routine: Routine;
 }
 
 export interface Routine {
