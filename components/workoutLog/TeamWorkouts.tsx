@@ -88,7 +88,7 @@ const WorkoutsList = styled.div`
     width: fit-content;
     display: flex;
     align-items: center;
-    background: ${({ theme }) => theme.buttonLight};
+    background: ${({ theme }) => theme.buttonMed};
     margin: 0 0.25rem 0.5rem;
     padding: 0.25rem 0.5rem;
     border-radius: 5px;
@@ -99,9 +99,9 @@ const WorkoutsList = styled.div`
     }
 
     li {
-      background: ${({ theme }) => theme.buttonMed};
+      background: ${({ theme }) => theme.buttonLight};
       border-radius: 5px;
-      padding: 0.5rem 1rem;
+      padding: 0.25rem 1rem;
       margin: 0 0 0 0.75rem;
       word-wrap: break-word;
       text-align: left;
