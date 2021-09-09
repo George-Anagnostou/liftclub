@@ -23,7 +23,7 @@ const UserRoutines: React.FC<Props> = ({ routine, setRoutine, clearRoutine, rout
 
   const [routineToDelete, setRoutineToDelete] = useState<Routine | null>(null);
   const [userRoutines, setUserRoutines] = useState<Routine[] | null>(null);
-  const [hasCheckedForQuery, setHasCheckedForQuery] = useState(false);
+  const [hasQueriedOnMount, setHasQueriedOnMount] = useState(false);
 
   const handleRoutineClick = async (rout: Routine) => {
     setRoutine(rout);
@@ -46,10 +46,13 @@ const UserRoutines: React.FC<Props> = ({ routine, setRoutine, clearRoutine, rout
   }, [routineSaved]);
 
   useEffect(() => {
-    if (userRoutines && !hasCheckedForQuery) {
-      const queried = userRoutines.find((each) => each._id === router.query.routine);
+    const queriedRoutine_id = router.query.routine as string;
+
+    if (queriedRoutine_id && userRoutines && !hasQueriedOnMount) {
+      const queried = userRoutines.find((each) => each._id === queriedRoutine_id);
+      
       if (queried) setRoutine(queried);
-      setHasCheckedForQuery(true);
+      setHasQueriedOnMount(true);
     }
   }, [userRoutines]);
 

@@ -73,7 +73,9 @@ const ExerciseList: React.FC<Props> = ({
           placeholder="Search"
         />
 
-        {user?.isTrainer && <button onClick={() => setShowCreateExerciseModal(true)}>Add</button>}
+        {user?.isTrainer && (
+          <button onClick={() => setShowCreateExerciseModal(true)}>Create</button>
+        )}
 
         <button onClick={() => setShowExerciseList(false)}>Close</button>
       </header>
@@ -98,7 +100,9 @@ const ExerciseList: React.FC<Props> = ({
           ))}
         </ul>
       ) : (
-        <LoadingSpinner />
+        <div className="loadingContainer">
+          <LoadingSpinner />
+        </div>
       )}
     </ExercisesContainer>
   );
@@ -158,5 +162,9 @@ const ExercisesContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+  }
+
+  .loadingContainer {
+    margin-top: 2rem;
   }
 `;

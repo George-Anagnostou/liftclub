@@ -1,7 +1,6 @@
 import { useEffect } from "react";
-import { GetServerSideProps } from "next";
 import styled from "styled-components";
-import { Droppable, resetServerContext } from "react-beautiful-dnd";
+import { Droppable } from "react-beautiful-dnd";
 import update from "immutability-helper";
 //Utils
 import { postNewWorkout, updateExistingWorkout } from "../../../utils/api";
@@ -173,11 +172,6 @@ const CustomWorkout: React.FC<Props> = ({
 };
 export default CustomWorkout;
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  resetServerContext();
-  return { props: { data: [] } };
-};
-
 const ExerciseList = styled.ul`
   width: 100%;
 
@@ -200,5 +194,5 @@ const AddExerciseBtn = styled.button`
   padding: 0.5rem 1rem;
 
   border-radius: 5px;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 `;

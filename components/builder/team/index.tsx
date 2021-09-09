@@ -1,9 +1,19 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useStoreState, useStoreDispatch } from "../../../store";
+import update from "immutability-helper";
 // Interfaces
-import { Team, Routine } from "../../../utils/interfaces";
+import { Team, User } from "../../../utils/interfaces";
+// Components
+import UserTeams from "./UserTeams";
+import TrainersTile from "./TrainersTile";
+import ControlsBar from "./ControlsBar";
 
-const initialTeam = {
+type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
+
+export type EditableTeam = Optional<Team, "_id" | "routine">;
+
+const initialTeam: EditableTeam = {
   _id: "",
   teamName: "",
   members: [],
@@ -12,130 +22,49 @@ const initialTeam = {
   creator_id: "",
   trainers: [],
   routine_id: "",
-  routine: {},
+  routine: undefined,
 };
 
 const TeamBuilder: React.FC = () => {
-  const [team, setTeam] = useState(initialTeam);
+  const { user } = useStoreState();
+  const dispatch = useStoreDispatch();
 
-  const handleTeamNameChange = (e) => {
-    setTeam((prev) => ({ ...prev, teamName: e.target.value }));
-  };
-
-  const saveTeam = () => {
-    console.log(team);
-  };
+  const [team, setTeam] = useState<EditableTeam>(initialTeam);
 
   const clearTeam = () => {
     setTeam(initialTeam);
   };
 
   return (
-    <div>
-      <Container>
-        <div className="input-wrapper">
-          <input
-            type="text"
-            name="teamName"
-            value={team.teamName}
-            onChange={handleTeamNameChange}
-            placeholder="Name your team"
-          />
+    <TeamBuilderContainer>
+      <ControlsBar team={team} setTeam={setTeam} clearTeam={clearTeam} />
 
-          {/* {routineSaved && <Checkmark styles={{ position: "absolute", right: "1.4rem" }} />} */}
-        </div>
-        <div className="controls">
-          <button onClick={saveTeam} disabled={!Boolean(team.teamName)}>
-            Save
-          </button>
+      <TrainersTile team={team} setTeam={setTeam} />
 
-          <button onClick={clearTeam} disabled={!Boolean(team.teamName.length)}>
-            Clear
-          </button>
-        </div>
-      </Container>
-    </div>
+      <UserTeams team={team} setTeam={setTeam} />
+    </TeamBuilderContainer>
   );
 };
 export default TeamBuilder;
 
-const Container = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-
-  background: ${({ theme }) => theme.background};
-  border-radius: 5px;
-  width: 100%;
-  padding: 0.5rem;
-
-  .input-wrapper {
-    border-radius: 5px;
+const TeamBuilderContainer = styled.section`
+  .tile {
     width: 100%;
-    background: ${({ theme }) => theme.buttonMed};
-
-    display: flex;
-    align-items: center;
-
-    input[type="text"] {
-      width: 100%;
-      padding: 0.5rem 1rem;
-      font-size: 1.1rem;
-      border: none;
-      border-radius: 5px;
-      color: ${({ theme }) => theme.text};
-      background: inherit;
-    }
+    border-radius: 5px;
+    background: ${({ theme }) => theme.background};
+    margin-bottom: 0.5rem;
   }
 
-  .controls {
-    display: flex;
-    align-items: stretch;
-    justify-content: space-between;
-    width: 100%;
-    margin-top: 0.5rem;
+  h3 {
+    color: ${({ theme }) => theme.textLight};
+    text-align: left;
+    font-weight: 300;
+    margin: 0.5rem;
+  }
 
-    button {
-      flex: 1;
-      border: none;
-      border-radius: 5px;
-      background: ${({ theme }) => theme.buttonLight};
-      color: ${({ theme }) => theme.text};
-      box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
-      display: inline-block;
-      padding: 0.25rem 1rem;
-      font-size: 1rem;
-      margin-right: 0.5rem;
-
-      &:disabled {
-        color: ${({ theme }) => theme.border};
-        background: ${({ theme }) => theme.buttonMed};
-      }
-    }
-
-    .checkbox {
-      flex: 1;
-      border: none;
-      border-radius: 5px;
-      background: ${({ theme }) => theme.buttonLight};
-      box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
-      color: ${({ theme }) => theme.text};
-      display: inline-block;
-      min-width: max-content;
-      padding: 0.25rem 1rem;
-      font-size: 1rem;
-
-      &.disabled {
-        color: ${({ theme }) => theme.border};
-        background: ${({ theme }) => theme.buttonMed};
-      }
-
-      input[type="checkbox"] {
-        margin-left: 0.5rem;
-        transform: scale(1.1);
-        border: none;
-      }
-    }
+  .fallbackText {
+    width: fit-content;
+    padding: 0 0.75rem 0.5rem;
+    color: ${({ theme }) => theme.textLight};
   }
 `;
