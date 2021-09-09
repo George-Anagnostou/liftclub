@@ -48,6 +48,7 @@ const NavBar: React.FC = () => {
           <Link href={pathname} key={slug}>
             <li className={currSlug === slug ? "selected" : ""} onClick={() => setCurrSlug(slug)}>
               <a>{icon}</a>
+              <p>{slug}</p>
             </li>
           </Link>
         ))}
@@ -77,7 +78,7 @@ const NavBarContainer = styled.ul`
   align-items: flex-start;
   box-shadow: 0 -1px 4px ${({ theme }) => theme.boxShadow};
   background: ${({ theme }) => theme.background};
-  padding: 0.5rem 0;
+  padding: 0.5rem 0 0;
 
   li {
     flex: 1;
@@ -87,13 +88,25 @@ const NavBarContainer = styled.ul`
     stroke: ${({ theme }) => theme.textLight};
 
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    p {
+      font-size: 0.5rem;
+      color: ${({ theme }) => theme.textLight};
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: -0.25rem;
+    }
 
     &.selected {
       fill: ${({ theme }) => theme.text};
       stroke-width: 5px;
       stroke: ${({ theme }) => theme.text};
+      p {
+        color: ${({ theme }) => theme.text};
+      }
     }
   }
 `;
