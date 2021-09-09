@@ -106,15 +106,22 @@ const Container = styled.div`
         }
       }
       &.loading {
-        background: linear-gradient(0.25turn, transparent, ${({ theme }) => theme.border});
+        background: linear-gradient(
+          0.25turn,
+          ${({ theme }) => theme.buttonMed},
+          ${({ theme }) => theme.border}
+        );
+        color: ${({ theme }) => theme.text};
         background-repeat: no-repeat;
-        background-size: 3rem;
-        background-position: -3rem;
+        background-size: 200% 100%;
+        background-position: -100%;
+
         animation: loading 1s infinite;
 
         @keyframes loading {
           to {
             background-position: 100%;
+            background-size: 100% 100%;
           }
         }
       }
