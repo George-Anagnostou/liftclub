@@ -97,13 +97,13 @@ const Container = styled.div`
 
   .editBtn {
     position: absolute;
-    top: .75rem;
-    right: 0.75rem;
+    top: 0.5rem;
+    right: 0.5rem;
     border-radius: 5px;
     padding: 0.25rem 0.5rem;
     border: none;
     background: ${({ theme }) => theme.buttonMed};
-    color: ${({ theme }) => theme.text};
+    color: ${({ theme }) => theme.textLight};
   }
 `;
 

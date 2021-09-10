@@ -72,6 +72,12 @@ const TopTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMembers }
     <Tile>
       <h1>{team.teamName}</h1>
 
+      {user?._id === team.creator_id && (
+        <Link href={`/builder?builder=team&team=${team._id}`}>
+          <button className="editBtn">Edit</button>
+        </Link>
+      )}
+
       <div className="info">
         <div>
           <p>
@@ -118,9 +124,21 @@ const Tile = styled.div`
   background: ${({ theme }) => theme.background};
   padding: 1rem 0.5rem;
   border-radius: 10px;
+  position: relative;
+
+  .editBtn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    border-radius: 5px;
+    padding: 0.1rem 0.5rem;
+    border: none;
+    background: ${({ theme }) => theme.buttonMed};
+    color: ${({ theme }) => theme.textLight};
+  }
 
   h1 {
-    margin-bottom: 0.5rem;
+    margin: 0.5rem;
     font-weight: 300;
     font-size: 2rem;
   }
