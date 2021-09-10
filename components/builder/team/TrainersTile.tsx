@@ -7,7 +7,10 @@ import { EditableTeam } from "./index";
 import { User } from "../../../utils/interfaces";
 // Components
 import Magnifying from "../../svg/Magnifying";
+// API
 import { queryByUsername } from "../../../utils/api";
+// Hooks
+import { useDebouncedState } from "../../hooks/useDebouncedState";
 
 interface Props {
   team: EditableTeam;
@@ -17,6 +20,7 @@ interface Props {
 const TrainersTile: React.FC<Props> = ({ team, setTeam }) => {
   const [searchInput, setSearchInput] = useState<string>("");
   const [searchResults, setSearchResults] = useState<User[] | null>(null);
+  const debouncedInput = useDebouncedState(searchInput, 300);
 
   const addTrainer = (trainer: User) => {
     setTeam(update(team, { trainers: { $push: [trainer] } }));
@@ -28,12 +32,12 @@ const TrainersTile: React.FC<Props> = ({ team, setTeam }) => {
 
   useEffect(() => {
     const search = async () => {
-      const users = await queryByUsername(searchInput);
-      if (users && searchInput) setSearchResults(users);
+      const users = await queryByUsername(debouncedInput);
+      if (users && debouncedInput) setSearchResults(users);
     };
 
-    searchInput ? search() : setSearchResults(null);
-  }, [searchInput]);
+    debouncedInput ? search() : setSearchResults(null);
+  }, [debouncedInput]);
 
   return (
     <Container className="tile">
