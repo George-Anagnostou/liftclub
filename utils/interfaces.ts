@@ -38,7 +38,7 @@ export interface Team {
   dateCreated: string;
   creatorName: string;
   creator_id: string;
-  trainers: User[];
+  trainers: { _id: string; username: string; profileImgUrl: string | undefined }[];
   routine_id: string;
   routine: Routine;
 }

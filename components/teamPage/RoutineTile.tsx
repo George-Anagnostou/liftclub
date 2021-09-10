@@ -128,7 +128,6 @@ const RoutineInfo = styled.div`
 const UniqueWorkoutList = styled.ul`
   display: flex;
   flex-wrap: wrap;
-  border-radius: 5px;
 
   li {
     background: ${({ theme }) => theme.buttonMed};
@@ -157,17 +156,8 @@ const UniqueWorkoutList = styled.ul`
       &.saved {
         background: ${({ theme }) => theme.buttonLight};
         color: ${({ theme }) => theme.textLight};
+        box-shadow: none;
       }
-    }
-  }
-
-  @media (max-width: 425px) {
-    /* Remove scroll bar on mobile */
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-
-    &::-webkit-scrollbar {
-      display: none;
     }
   }
 `;

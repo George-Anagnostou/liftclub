@@ -79,7 +79,7 @@ export const getUsersFromIdArr = async (idArr: string[]): Promise<User[] | false
 };
 
 // Queries
-export const queryByUsername = async (query: string): Promise<User[] | false> => {
+export const queryUsersByUsername = async (query: string): Promise<Team['trainers'] | false> => {
   try {
     const res = await fetch(`/api/users/searchUsername?query=${query}`, {
       method: "GET",

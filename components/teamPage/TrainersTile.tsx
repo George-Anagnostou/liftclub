@@ -35,9 +35,13 @@ const TrainersTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMemb
       );
   };
 
-  const handleAddTrainer = async (trainer: User) => {
-    const added = await addTrainerToTeam(team._id, trainer._id);
-    if (added) setTeam((prev) => prev && { ...prev, trainers: [...prev.trainers, trainer] });
+  const handleAddTrainer = async ({ _id, username, profileImgUrl }: User) => {
+    const added = await addTrainerToTeam(team._id, _id);
+    if (added)
+      setTeam(
+        (prev) =>
+          prev && { ...prev, trainers: [...prev.trainers, { _id, username, profileImgUrl }] }
+      );
   };
 
   useEffect(() => {
@@ -108,25 +112,22 @@ const Tile = styled.div`
 const TrainerList = styled.ul`
   width: 100%;
   display: flex;
-  overflow-x: scroll;
-  overflow-y: hidden;
-  padding: 4px 0;
+  flex-wrap: wrap;
 
   li {
     display: flex;
     align-items: center;
     justify-content: center;
 
-    margin: 0 0.5rem;
+    margin: 0.25rem;
     background: ${({ theme }) => theme.buttonMed};
 
     padding: 0.5rem;
     border-radius: 10px;
-    box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
+    box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
 
     .icon {
       background: ${({ theme }) => theme.buttonLight};
-      box-shadow: 0 0 3px ${({ theme }) => theme.boxShadow};
       height: 25px;
       width: 25px;
       border-radius: 50%;
@@ -160,16 +161,6 @@ const TrainerList = styled.ul`
 
     p {
       margin-left: 0.25rem;
-    }
-  }
-
-  @media (max-width: 425px) {
-    /* Remove scroll bar on mobile */
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-
-    &::-webkit-scrollbar {
-      display: none;
     }
   }
 `;

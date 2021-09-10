@@ -34,6 +34,21 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
               as: "trainers",
             },
           },
+          {
+            $project: {
+              _id: 1,
+              teamName: 1,
+              members: 1,
+              dateCreated: 1,
+              creatorName: 1,
+              creator_id: 1,
+              routine_id: 1,
+              routine: 1,
+              "trainers._id": 1,
+              "trainers.username": 1,
+              "trainers.profileImgUrl": 1,
+            },
+          },
         ])
         .toArray();
 
