@@ -29,7 +29,7 @@ const TrainersTile: React.FC<Props> = ({ team, setTeam }) => {
   useEffect(() => {
     const search = async () => {
       const users = await queryByUsername(searchInput);
-      if (users) setSearchResults(users);
+      if (users && searchInput) setSearchResults(users);
     };
 
     searchInput ? search() : setSearchResults(null);
