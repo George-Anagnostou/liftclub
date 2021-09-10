@@ -64,11 +64,7 @@ const Bio: React.FC<Props> = ({ profileData, isProfileOwner, setProfileData, use
         <p>{profileData.bio || "None"}</p>
       )}
 
-      {editing && (
-        <SaveBtn onClick={handleSaveClick} disabled={editing && bioEdits === profileData.bio}>
-          Save
-        </SaveBtn>
-      )}
+      {editing && <SaveBtn onClick={handleSaveClick}>Save</SaveBtn>}
     </BioContainer>
   );
 };
@@ -89,11 +85,11 @@ const BioContainer = styled.section`
 
     button {
       border-radius: 5px;
-      padding: 0.25rem 0.5rem;
-      font-size: 0.8rem;
-      border: ${({ theme }) => theme.border};
-      color: ${({ theme }) => theme.textLight};
+      padding: 0.1rem 0.5rem;
+      border: none;
       background: ${({ theme }) => theme.buttonMed};
+      color: ${({ theme }) => theme.textLight};
+      font-size: 0.8rem;
     }
   }
 
@@ -112,13 +108,19 @@ const BioContainer = styled.section`
     color: ${({ theme }) => theme.text};
     background: ${({ theme }) => theme.body};
     margin: 0;
+    border: 2px solid ${({ theme }) => theme.body};
+
+    &:focus {
+      outline: none;
+      border: 2px solid ${({ theme }) => theme.accentSoft};
+    }
   }
 
   p {
     line-height: 1.2rem;
     font-size: 1rem;
     letter-spacing: 0.25px;
-    padding: 0.25rem;
+    padding: calc(0.25rem + 2px);
     margin: 0;
     font-weight: 300;
   }
@@ -132,8 +134,4 @@ const SaveBtn = styled.button`
   border: ${({ theme }) => theme.border};
   color: ${({ theme }) => theme.accentText};
   background: ${({ theme }) => theme.accentSoft};
-
-  &:disabled {
-    background: ${({ theme }) => theme.buttonMed};
-  }
 `;

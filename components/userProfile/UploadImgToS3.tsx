@@ -50,10 +50,6 @@ const UploadImgToS3: React.FC<Props> = ({ setProfileData }) => {
     const file: File | null = e.target.files[0];
     if (!file) return;
 
-    // Check if the file is an image.
-    if (file.type && !file.type.startsWith("image/"))
-      return console.log("File is not an image.", file.type, file);
-
     if (file.size > 3000000)
       return console.log(`File too large. This was ${file.size} Max file size is 3mb`);
 
@@ -69,11 +65,13 @@ const UploadImgToS3: React.FC<Props> = ({ setProfileData }) => {
 
     console.log(file);
 
+    const fileType = file.type.split("/")[1];
+
     const params = {
       ACL: "public-read",
       Body: file,
       Bucket: "lift-club-profile-imgs",
-      Key: user!.username,
+      Key: user!.username + "." + fileType,
     };
 
     setSavingImg(true);
@@ -103,7 +101,7 @@ const UploadImgToS3: React.FC<Props> = ({ setProfileData }) => {
 
           const profileImgUrl = `https://lift-club-profile-imgs.s3.us-west-1.amazonaws.com/${
             user!.username
-          }`;
+          }.${fileType}`;
 
           const saved = await saveProfileImgUrl(user!._id, profileImgUrl);
           if (saved) {
@@ -135,10 +133,10 @@ const UploadImgToS3: React.FC<Props> = ({ setProfileData }) => {
           </SavingIndicator>
         )}
 
-        <input type="file" onChange={handleFileInput} />
+        <FileInput type="file" accept="image/*" onChange={handleFileInput} />
 
         {previewUrl ? (
-          <img src={previewUrl} alt="Uploaded Profile Image" />
+          <PreviewImg src={previewUrl} alt="Uploaded Profile Image" />
         ) : (
           <PlusIcon>
             <span></span>
@@ -163,44 +161,6 @@ const UploadImgToS3: React.FC<Props> = ({ setProfileData }) => {
 
 export default UploadImgToS3;
 
-const Container = styled.div`
-  padding: 0.5rem 0.5rem 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  .info {
-    width: fit-content;
-    font-size: 75%;
-    color: ${({ theme }) => theme.textLight};
-    margin: 0.5rem;
-  }
-
-  .btn-container {
-    display: flex;
-
-    button {
-      background: ${({ theme }) => theme.buttonMed};
-      box-shadow: 0 1px 2px ${({ theme }) => theme.boxShadow};
-      color: inherit;
-      border: none;
-      border-radius: 5px;
-      padding: 0.25rem 0.5rem;
-      margin: 0 0.5rem;
-      border: 1px solid ${({ theme }) => theme.border};
-      font-size: 1rem;
-      transition: all 0.3s ease;
-
-      &:disabled {
-        color: ${({ theme }) => theme.border};
-        background: ${({ theme }) => theme.background};
-        border: 1px solid ${({ theme }) => theme.buttonLight};
-      }
-    }
-  }
-`;
-
 const Icon = styled.div`
   position: relative;
   background: ${({ theme }) => theme.buttonMed};
@@ -214,21 +174,21 @@ const Icon = styled.div`
   justify-content: center;
   align-items: center;
   transition: all 0.2s ease;
+`;
 
-  img {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-  }
+const PreviewImg = styled.img`
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+`;
 
-  input {
-    height: 100%;
-    width: 100%;
-    opacity: 0;
-    position: absolute;
-    z-index: 9;
-  }
+const FileInput = styled.input`
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  position: absolute;
+  z-index: 9;
 `;
 
 const SavingIndicator = styled.svg`
@@ -264,6 +224,44 @@ const PlusIcon = styled.div`
 
     &:first-of-type {
       transform: rotate(90deg);
+    }
+  }
+`;
+
+const Container = styled.div`
+  padding: 0.5rem 0.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .info {
+    width: fit-content;
+    font-size: 75%;
+    color: ${({ theme }) => theme.textLight};
+    margin: 0.5rem;
+  }
+
+  .btn-container {
+    display: flex;
+
+    button {
+      background: ${({ theme }) => theme.buttonMed};
+      box-shadow: 0 1px 2px ${({ theme }) => theme.boxShadow};
+      color: inherit;
+      border: none;
+      border-radius: 5px;
+      padding: 0.25rem 0.5rem;
+      margin: 0 0.5rem;
+      border: 1px solid ${({ theme }) => theme.border};
+      font-size: 1rem;
+      transition: all 0.3s ease;
+
+      &:disabled {
+        color: ${({ theme }) => theme.border};
+        background: ${({ theme }) => theme.background};
+        border: 1px solid ${({ theme }) => theme.buttonLight};
+      }
     }
   }
 `;
