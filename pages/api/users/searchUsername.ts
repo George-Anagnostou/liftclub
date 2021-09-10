@@ -12,10 +12,24 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   const foundUsers: User[] = await db
     .collection("users")
-    .find(
-      { username: { $regex: query, $options: "i" } },
-      { projection: { _id: 1, username: 1, profileImgUrl: 1 } }
-    )
+    .aggregate([
+      { $match: { username: { $regex: query, $options: "i" } } },
+      {
+        $project: {
+          _id: 1,
+          username: 1,
+          profileImgUrl: 1,
+          w: {
+            $cond: [
+              { $eq: [{ $substr: [{ $toLower: "$username" }, 0, query.length] }, query] },
+              1,
+              0,
+            ],
+          },
+        },
+      },
+      { $sort: { w: -1 } },
+    ])
     .toArray();
 
   res.json(foundUsers);
