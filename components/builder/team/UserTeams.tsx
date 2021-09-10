@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useRouter } from "next/router";
 // Context
 import { useStoreState } from "../../../store";
 // Api
@@ -15,41 +16,54 @@ interface Props {
 
 const UserTeams: React.FC<Props> = ({ team, setTeam }) => {
   const { user } = useStoreState();
+  const router = useRouter();
 
-  const [userTeams, setUserTeams] = useState<Team[]>([]);
-  const [loading, setLoading] = useState<{ _id: string }>({ _id: "" });
+  const [userTeams, setUserTeams] = useState<Team[] | null>(null);
+  const [loading, setLoading] = useState<string>("");
+  const [hasQueriedUrl, setHasQueriedUrl] = useState(false);
 
   const handleTeamClick = async (team: Team) => {
-    setLoading({ _id: team._id });
+    setLoading(team._id);
 
     const teamData = await getTeamById(team._id);
     console.log(teamData);
     if (teamData) setTeam(teamData);
 
-    setLoading({ _id: "" });
+    setLoading("");
   };
 
   useEffect(() => {
     const getUserTeams = async () => {
       const teams = await getUserMadeTeams(user!._id);
-      console.log(teams);
       if (teams) setUserTeams(teams);
     };
     if (user) getUserTeams();
   }, [user]);
 
+  // If url has query for specific team, set that team
+  useEffect(() => {
+    const queriedTeam_id = router.query.team as string;
+
+    if (queriedTeam_id && userTeams && !hasQueriedUrl) {
+      const queried = userTeams.find((each) => each._id === queriedTeam_id);
+
+      if (queried) handleTeamClick(queried);
+      setHasQueriedUrl(true);
+    }
+  }, [userTeams]);
+
   return (
     <Container className="tile">
       <h3>Your Teams</h3>
 
-      {Boolean(userTeams.length) ? (
+      {userTeams ? (
         <ul>
           {userTeams.map((userTeam) => (
             <li
               key={userTeam._id}
               onClick={() => handleTeamClick(userTeam)}
               className={`${team._id === userTeam._id && "highlight"} ${
-                loading._id === userTeam._id && "loading"
+                loading === userTeam._id && "loading"
               }`}
             >
               {userTeam.teamName}
@@ -107,16 +121,15 @@ const Container = styled.div`
       }
       &.loading {
         background: linear-gradient(
-          0.25turn,
+          to left,
           ${({ theme }) => theme.buttonMed},
           ${({ theme }) => theme.border}
         );
         color: ${({ theme }) => theme.text};
-        background-repeat: no-repeat;
-        background-size: 200% 100%;
         background-position: -100%;
+        background-size: 200% 100%;
 
-        animation: loading 1s infinite;
+        animation: ease-in loading 1s infinite;
 
         @keyframes loading {
           to {

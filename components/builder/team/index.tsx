@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useStoreState, useStoreDispatch } from "../../../store";
-import update from "immutability-helper";
 // Interfaces
-import { Team, User } from "../../../utils/interfaces";
+import { Team } from "../../../utils/interfaces";
 // Components
 import UserTeams from "./UserTeams";
 import TrainersTile from "./TrainersTile";

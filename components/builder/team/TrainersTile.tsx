@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import styled from "styled-components";
 import update from "immutability-helper";
 // Interfaces
 import { EditableTeam } from "./index";
 import { User } from "../../../utils/interfaces";
+// Components
+import Magnifying from "../../svg/Magnifying";
+import { queryByUsername } from "../../../utils/api";
 
 interface Props {
   team: EditableTeam;
@@ -12,17 +15,88 @@ interface Props {
 }
 
 const TrainersTile: React.FC<Props> = ({ team, setTeam }) => {
+  const [searchInput, setSearchInput] = useState<string>("");
+  const [searchResults, setSearchResults] = useState<User[] | null>(null);
+
   const addTrainer = (trainer: User) => {
     setTeam(update(team, { trainers: { $push: [trainer] } }));
   };
+
+  const removeTrainer = (index: number) => {
+    setTeam(update(team, { trainers: { $splice: [[index, 1]] } }));
+  };
+
+  useEffect(() => {
+    const search = async () => {
+      const users = await queryByUsername(searchInput);
+      console.log(users);
+      if (users) setSearchResults(users);
+    };
+
+    searchInput ? search() : setSearchResults(null);
+  }, [searchInput]);
 
   return (
     <Container className="tile">
       <h3>Trainers</h3>
 
-      <ul>
-        {team.trainers.map((trainer) => (
-          <li key={trainer._id}>
+      <SearchContainer>
+        <div className="search-bar">
+          <span className="icon">
+            <Magnifying />
+          </span>
+
+          <div className="input">
+            <input
+              type="text"
+              name="add-trainer"
+              placeholder="Add trainer"
+              value={searchInput}
+              autoComplete="off"
+              onChange={(e) =>
+                setSearchInput(
+                  e.target.value.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, "")
+                )
+              }
+            />
+
+            <span className="clear" onClick={() => setSearchInput("")}>
+              <span></span>
+              <span></span>
+            </span>
+          </div>
+        </div>
+
+        {searchResults && (
+          <ul className="search-results">
+            {Boolean(searchResults.length) ? (
+              searchResults.map((trainer) => (
+                <li className="result" key={trainer._id}>
+                  <p>{trainer.username}</p>
+
+                  {(() => {
+                    const indexOfTrainer = team.trainers.findIndex((t) => t._id === trainer._id);
+
+                    return indexOfTrainer === -1 ? (
+                      <button onClick={() => addTrainer(trainer)}>+</button>
+                    ) : (
+                      <button onClick={() => removeTrainer(indexOfTrainer)}>-</button>
+                    );
+                  })()}
+                </li>
+              ))
+            ) : (
+              <li className="result">
+                <p>No matches</p>
+              </li>
+            )}
+          </ul>
+        )}
+      </SearchContainer>
+
+      <Trainers>
+        {team.trainers.map((trainer, i) => (
+          <li key={trainer._id} className="trainer">
             {trainer.profileImgUrl ? (
               <img src={trainer.profileImgUrl} alt={trainer.username} />
             ) : (
@@ -30,45 +104,174 @@ const TrainersTile: React.FC<Props> = ({ team, setTeam }) => {
             )}
 
             <p className="username">{trainer.username}</p>
+
+            <button onClick={() => removeTrainer(i)}>X</button>
           </li>
         ))}
-      </ul>
-
-      <button className="add">Add Trainer</button>
+      </Trainers>
     </Container>
   );
 };
 
 export default TrainersTile;
 
-const Container = styled.div`
-  ul {
-    li {
-      padding: 0.5rem;
+const Container = styled.div``;
+
+const SearchContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  margin: 0.25rem;
+  background: ${({ theme }) => theme.buttonMed};
+  padding: 0.25rem 0.25rem;
+  border-radius: 5px;
+  box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
+  position: relative;
+  height: 2.75rem;
+
+  .search-bar {
+    display: flex;
+    align-items: center;
+
+    .icon {
+      display: grid;
+      place-items: center;
+      margin: 0 0.5rem 0 0.25rem;
+      svg {
+        fill: ${({ theme }) => theme.textLight};
+        height: 20px;
+        width: 20px;
+      }
+    }
+
+    .input {
+      flex: 1;
+      border-radius: 5px;
       display: flex;
       align-items: center;
+      height: 2.25rem;
 
-      img {
-        height: 45px;
-        width: 45px;
-        border-radius: 50%;
+      input {
+        appearance: none;
+        background: ${({ theme }) => theme.buttonLight};
+        color: ${({ theme }) => theme.text};
+        border: 1px solid ${({ theme }) => theme.buttonLight};
+        padding: 0.25rem 0.5rem;
+        width: 100%;
+        margin: 0;
+        font-size: 1rem;
+        border-radius: 5px;
+
+        &:focus {
+          outline: none;
+          border: 1px solid ${({ theme }) => theme.accentSoft};
+        }
       }
 
-      .username {
-        margin-left: 0.5rem;
-        font-size: 1.15rem;
-        font-weight: 300;
+      .clear {
+        width: 2rem;
+        height: 2.25rem;
+        position: relative;
+
+        span {
+          position: absolute;
+          display: block;
+          height: 2px;
+          width: 15px;
+          background: ${({ theme }) => theme.textLight};
+          margin: auto;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          border-radius: 3px;
+
+          &:first-child {
+            transform: rotate(45deg);
+          }
+          &:last-child {
+            transform: rotate(-45deg);
+          }
+        }
       }
     }
   }
-
-  .add {
-    background: ${({ theme }) => theme.buttonLight};
-    color: ${({ theme }) => theme.textLight};
-    padding: 0.5rem 1rem;
-    margin-bottom: .5rem;
+  .search-results {
+    background: ${({ theme }) => theme.buttonMed};
+    border: 1px solid ${({ theme }) => theme.border};
+    box-shadow: 0 5px 10px ${({ theme }) => theme.boxShadow};
+    z-index: 99;
     border-radius: 5px;
-    border: none;
+    margin: 0.25rem 1.75rem 0 2rem;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    max-height: calc(2.25rem * 8);
+    overflow-y: scroll;
+
+    .result {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem;
+      font-size: 1rem;
+
+      button {
+        font-size: 0.7rem;
+        font-weight: 600;
+        background: ${({ theme }) => theme.buttonLight};
+        color: ${({ theme }) => theme.textLight};
+        border: none;
+        border-radius: 3px;
+        margin-left: 0.3rem;
+        height: 20px;
+        width: 20px;
+        padding: 0;
+        transition: all 0.25s ease;
+      }
+    }
+  }
+`;
+
+const Trainers = styled.div`
+  padding-bottom: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+
+  .trainer {
+    margin: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    display: flex;
+    align-items: center;
+    background: ${({ theme }) => theme.buttonMed};
+    border-radius: 5px;
+    width: fit-content;
     box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
+
+    img {
+      height: 30px;
+      width: 30px;
+      border-radius: 50%;
+    }
+
+    .username {
+      margin: 0 0.5rem;
+      font-weight: 300;
+    }
+
+    button {
+      font-size: 0.7rem;
+      font-weight: 600;
+      background: ${({ theme }) => theme.buttonLight};
+      color: ${({ theme }) => theme.textLight};
+      border: none;
+      border-radius: 3px;
+      margin-left: 0.3rem;
+      height: 20px;
+      width: 20px;
+      padding: 0;
+      transition: all 0.25s ease;
+    }
   }
 `;
