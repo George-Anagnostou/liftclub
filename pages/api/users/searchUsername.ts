@@ -21,7 +21,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           profileImgUrl: 1,
           w: {
             $cond: [
-              { $eq: [{ $substr: [{ $toLower: "$username" }, 0, query.length] }, query] },
+              {
+                $eq: [
+                  { $substr: [{ $toLower: "$username" }, 0, query.length] },
+                  query.toLocaleLowerCase(),
+                ],
+              },
               1,
               0,
             ],
