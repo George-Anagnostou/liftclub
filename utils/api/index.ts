@@ -78,6 +78,21 @@ export const getUsersFromIdArr = async (idArr: string[]): Promise<User[] | false
   }
 };
 
+// Queries
+export const queryByUsername = async (query: string): Promise<User[] | false> => {
+  try {
+    const res = await fetch(`/api/users/searchUsername?query=${query}`, {
+      method: "GET",
+    });
+
+    const users = await res.json();
+    return users;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
 /*
  *
  *
