@@ -34,9 +34,7 @@ const TrainerModal: React.FC<Props> = ({
                 <p>{member.username}</p>
 
                 {team.trainers.findIndex((trainer) => trainer._id === member._id) >= 0 ? (
-                  <button className="remove" onClick={() => handleRemoveTrainer(member)}>
-                    remove
-                  </button>
+                  <button onClick={() => handleRemoveTrainer(member)}>remove</button>
                 ) : (
                   <button className="add" onClick={() => handleAddTrainer(member)}>
                     add
@@ -64,32 +62,33 @@ const TrainerManager = styled.div`
   position: relative;
 
   ul {
+    max-height: 70vh;
+    overflow-y: scroll;
+
     li {
       display: flex;
       justify-content: space-between;
       align-items: center;
 
-      padding: 0.5rem;
-      margin-bottom: 0.5rem;
+      padding: 0.25rem 0.5rem;
+      margin-bottom: 0.25rem;
       border-radius: 5px;
       background: ${({ theme }) => theme.buttonMed};
 
       button {
-        min-width: max-content;
-        cursor: pointer;
-        border-radius: 5px;
+        font-size: 0.6rem;
+        font-weight: 300;
+        background: ${({ theme }) => theme.buttonLight};
+        color: ${({ theme }) => theme.textLight};
         border: none;
-        padding: 0.25rem;
-        box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
+        border-radius: 3px;
+        margin-left: 0.3rem;
+        padding: 0.1rem 0.25rem;
+        transition: all 0.25s ease;
 
         &.add {
           background: ${({ theme }) => theme.accentSoft};
           color: ${({ theme }) => theme.accentText};
-        }
-
-        &.remove {
-          background: ${({ theme }) => theme.buttonLight};
-          color: ${({ theme }) => theme.textLight};
         }
       }
     }

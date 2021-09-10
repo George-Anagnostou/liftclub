@@ -31,6 +31,7 @@ const TeamBuilder: React.FC = () => {
   const [team, setTeam] = useState<EditableTeam>(initialTeam);
 
   const clearTeam = () => {
+    console.log(team);
     setTeam(initialTeam);
   };
 

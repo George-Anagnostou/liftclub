@@ -29,7 +29,6 @@ const TrainersTile: React.FC<Props> = ({ team, setTeam }) => {
   useEffect(() => {
     const search = async () => {
       const users = await queryByUsername(searchInput);
-      console.log(users);
       if (users) setSearchResults(users);
     };
 
@@ -72,15 +71,23 @@ const TrainersTile: React.FC<Props> = ({ team, setTeam }) => {
             {Boolean(searchResults.length) ? (
               searchResults.map((trainer) => (
                 <li className="result" key={trainer._id}>
+                  {trainer.profileImgUrl ? (
+                    <img src={trainer.profileImgUrl} alt={trainer.username} />
+                  ) : (
+                    <Image src="/favicon.png" height="30" width="30"></Image>
+                  )}
+
                   <p>{trainer.username}</p>
 
                   {(() => {
                     const indexOfTrainer = team.trainers.findIndex((t) => t._id === trainer._id);
 
                     return indexOfTrainer === -1 ? (
-                      <button onClick={() => addTrainer(trainer)}>+</button>
+                      <button onClick={() => addTrainer(trainer)} className="add">
+                        add
+                      </button>
                     ) : (
-                      <button onClick={() => removeTrainer(indexOfTrainer)}>-</button>
+                      <button onClick={() => removeTrainer(indexOfTrainer)}>remove</button>
                     );
                   })()}
                 </li>
@@ -100,7 +107,7 @@ const TrainersTile: React.FC<Props> = ({ team, setTeam }) => {
             {trainer.profileImgUrl ? (
               <img src={trainer.profileImgUrl} alt={trainer.username} />
             ) : (
-              <Image src="/favicon.png" height="45" width="45"></Image>
+              <Image src="/favicon.png" height="30" width="30"></Image>
             )}
 
             <p className="username">{trainer.username}</p>
@@ -216,18 +223,32 @@ const SearchContainer = styled.div`
       padding: 0.5rem;
       font-size: 1rem;
 
+      img {
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+      }
+
+      p {
+        margin-left: 0.5rem;
+        text-align: left;
+        flex: 1;
+      }
+
       button {
-        font-size: 0.7rem;
-        font-weight: 600;
+        font-size: 0.6rem;
+        font-weight: 300;
         background: ${({ theme }) => theme.buttonLight};
         color: ${({ theme }) => theme.textLight};
         border: none;
         border-radius: 3px;
         margin-left: 0.3rem;
-        height: 20px;
-        width: 20px;
-        padding: 0;
-        transition: all 0.25s ease;
+        padding: 0.1rem 0.25rem;
+
+        &.add {
+          background: ${({ theme }) => theme.accentSoft};
+          color: ${({ theme }) => theme.accentText};
+        }
       }
     }
   }
