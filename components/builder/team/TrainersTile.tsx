@@ -75,7 +75,7 @@ const TrainersTile: React.FC<Props> = ({ team, setTeam }) => {
           </div>
         </SearchBar>
 
-        {searchResults && (
+        {searchResults && searchInput && (
           <SearchResults>
             {Boolean(searchResults.length) ? (
               searchResults.map((trainer) => (
