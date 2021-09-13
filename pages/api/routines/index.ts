@@ -52,9 +52,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       newRoutine.creator_id = new ObjectId(newRoutine.creator_id);
       newRoutine._id = new ObjectId(newRoutine._id);
 
-      const added = await db.collection("routines").insertOne(newRoutine);
+      const { insertedId } = await db.collection("routines").insertOne(newRoutine);
 
-      added.insertedId ? res.status(201).end() : res.status(404).end();
+      insertedId ? res.status(201).json(insertedId) : res.status(404).end();
 
       break;
     case "PUT":

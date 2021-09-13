@@ -282,14 +282,15 @@ export const getRoutineFromId = async (routine_id: string): Promise<Routine | fa
     return false;
   }
 };
-export const postNewRoutine = async (newRoutine: Routine) => {
+export const postNewRoutine = async (newRoutine: Routine): Promise<string | false> => {
   try {
     const res = await fetch(`/api/routines`, {
       method: "POST",
       body: JSON.stringify({ newRoutine }),
     });
 
-    return res.status === 201;
+    const routine_id = await res.json();
+    return routine_id;
   } catch (e) {
     console.log(e);
     return false;
@@ -402,7 +403,7 @@ export const getTeamsFromIdArray = async (idArr: string[]): Promise<Team[]> => {
   }
 };
 
-export const postNewTeam = async (team: EditableTeam) => {
+export const postNewTeam = async (team: EditableTeam): Promise<Team["_id"] | false> => {
   try {
     const dbTeam = {
       teamName: team.teamName,
@@ -419,7 +420,8 @@ export const postNewTeam = async (team: EditableTeam) => {
       body: JSON.stringify(dbTeam),
     });
 
-    return res.status === 201;
+    const team_id = await res.json();
+    return team_id;
   } catch (e) {
     console.log(e);
     return false;

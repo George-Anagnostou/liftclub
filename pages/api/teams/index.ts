@@ -34,7 +34,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         { $push: { teamsJoined: insertedId } }
       );
 
-      insertedId ? res.status(201).end() : res.status(404).end();
+      insertedId ? res.status(201).json(insertedId) : res.status(404).end();
 
       break;
     case "PUT":

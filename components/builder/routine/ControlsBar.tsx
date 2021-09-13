@@ -46,9 +46,17 @@ const ControlsBar: React.FC<Props> = ({
       routineForDB.name = routineForDB.name || "New Routine";
       delete routineForDB._id;
 
-      const saved = await postNewRoutine(routineForDB);
-      setRoutineSaved(saved);
-      if (saved) clearRoutine();
+      const routine_id = await postNewRoutine(routineForDB);
+
+      if (routine_id) {
+        setRoutineSaved(true);
+        setRoutine({
+          ...routine,
+          _id: routine_id,
+          creator_id: user!._id,
+          name: routineForDB.name || "New Routine",
+        });
+      }
     }
   };
 

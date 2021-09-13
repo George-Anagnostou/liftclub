@@ -35,9 +35,16 @@ const TeamBuilder: React.FC = () => {
   const [teamSaved, setTeamSaved] = useState<boolean | null>(null);
 
   const saveTeam = async () => {
-    let saved = false;
-    saved = team._id ? await updateTeam(team) : await postNewTeam(team);
-    setTeamSaved(saved);
+    if (team._id) {
+      const saved = await updateTeam(team);
+      setTeamSaved(saved);
+    } else {
+      const team_id = await postNewTeam(team);
+      if (team_id) {
+        setTeamSaved(true);
+        setTeam({ ...team, _id: team_id });
+      }
+    }
   };
 
   const clearTeam = () => {
