@@ -1,3 +1,4 @@
+import { EditableTeam } from "../../components/builder/team";
 import { Exercise, NewExercise, NewWorkout, Routine, Team, User, Workout } from "../interfaces";
 
 /*
@@ -79,7 +80,7 @@ export const getUsersFromIdArr = async (idArr: string[]): Promise<User[] | false
 };
 
 // Queries
-export const queryUsersByUsername = async (query: string): Promise<Team['trainers'] | false> => {
+export const queryUsersByUsername = async (query: string): Promise<Team["trainers"] | false> => {
   try {
     const res = await fetch(`/api/users/searchUsername?query=${query}`, {
       method: "GET",
@@ -398,5 +399,67 @@ export const getTeamsFromIdArray = async (idArr: string[]): Promise<Team[]> => {
   } catch (e) {
     console.log(e);
     return [];
+  }
+};
+
+export const postNewTeam = async (team: EditableTeam) => {
+  try {
+    const dbTeam = {
+      teamName: team.teamName,
+      members: [...team.members],
+      dateCreated: new Date().toISOString(),
+      creatorName: team.creatorName,
+      creator_id: team.creator_id,
+      trainers: team.trainers.map((trainer) => trainer._id),
+      routine_id: team.routine_id,
+    };
+
+    const res = await fetch("/api/teams", {
+      method: "POST",
+      body: JSON.stringify(dbTeam),
+    });
+
+    return res.status === 201;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
+export const updateTeam = async (team: EditableTeam) => {
+  try {
+    const dbTeam = {
+      _id: team._id,
+      teamName: team.teamName,
+      members: [...team.members],
+      dateCreated: team.dateCreated,
+      creatorName: team.creatorName,
+      creator_id: team.creator_id,
+      trainers: team.trainers.map((trainer) => trainer._id),
+      routine_id: team.routine_id,
+    };
+
+    const res = await fetch(`/api/teams/${dbTeam._id}?updateTeam=true`, {
+      method: "PUT",
+      body: JSON.stringify(dbTeam),
+    });
+
+    return res.status === 204;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
+export const deleteTeam = async (team_id: string) => {
+  try {
+    const res = await fetch(`/api/teams/${team_id}`, {
+      method: "DELETE",
+    });
+
+    return res.status === 204;
+  } catch (e) {
+    console.log(e);
+    return false;
   }
 };

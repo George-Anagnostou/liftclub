@@ -9,6 +9,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { db } = await connectToDatabase();
 
   const team_id = req.query.team_id[0];
+
   let teamData: Team;
 
   switch (httpMethod) {
@@ -65,6 +66,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       const { removeTrainer } = req.query;
       if (removeTrainer) fieldToUpdate = "REMOVE_TRAINER";
 
+      const { updateTeam } = req.query;
+      if (updateTeam) fieldToUpdate = "UPDATE_TEAM";
+
       switch (fieldToUpdate) {
         case "ADD_TRAINER":
           teamData = await db
@@ -88,9 +92,31 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
           res.json({});
           break;
+
+        case "UPDATE_TEAM":
+          const team = JSON.parse(req.body);
+
+          team._id = new ObjectId(team._id);
+          team.members = team.members.map((mem: string) => new ObjectId(mem));
+          team.dateCreated = new Date(team.dateCreated);
+          team.creator_id = new ObjectId(team.creator_id);
+          team.trainers = team.trainers.map((_id: string) => new ObjectId(_id));
+          team.routine_id = new ObjectId(team.routine_id);
+
+          const updated = await db
+            .collection("teams")
+            .replaceOne({ _id: new ObjectId(team_id) }, team);
+
+          updated ? res.status(204).end() : res.status(404).end();
+          break;
+        default:
+          break;
       }
       break;
     case "DELETE":
+      const deleted = await db.collection("teams").deleteOne({ _id: new ObjectId(team_id) });
+
+      deleted.deletedCount ? res.status(204).end() : res.status(400).end();
       break;
   }
 };
