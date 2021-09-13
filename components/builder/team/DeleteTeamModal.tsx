@@ -1,58 +1,53 @@
 import React from "react";
 import styled from "styled-components";
 // API
-import { deleteRoutine } from "../../../utils/api";
-// Interfaces
-import { Routine } from "../../../utils/interfaces";
+import { deleteTeam } from "../../../utils/api";
+// Interface
+import { Team } from "../../../utils/interfaces";
 // Components
 import Modal from "../../Wrappers/Modal";
 
 interface Props {
-  routine: Routine;
-  setRoutineToDelete: React.Dispatch<React.SetStateAction<Routine | null>>;
-  clearRoutine: () => void;
-  setUserRoutines: React.Dispatch<React.SetStateAction<Routine[] | null>>;
+  team: Team;
+  setTeamToDelete: React.Dispatch<React.SetStateAction<Team | null>>;
+  clearTeam: () => void;
+  setUserTeams: React.Dispatch<React.SetStateAction<Team[] | null>>;
 }
 
-const DeleteRoutineModal: React.FC<Props> = ({
-  routine,
-  setRoutineToDelete,
-  clearRoutine,
-  setUserRoutines,
-}) => {
+const DeleteTeamModal: React.FC<Props> = ({ team, setTeamToDelete, clearTeam, setUserTeams }) => {
   const handleDeleteRoutine = async () => {
-    const deleted = await deleteRoutine(routine._id);
+    const deleted = await deleteTeam(team._id);
 
     if (deleted) {
-      setUserRoutines((prev) =>
-        prev && prev.length > 1 ? prev.filter((each) => each._id !== routine._id) : null
+      setUserTeams((prev) =>
+        prev && prev.length > 1 ? prev.filter((each) => each._id !== team._id) : null
       );
-      setRoutineToDelete(null);
-      clearRoutine();
+      setTeamToDelete(null);
+      clearTeam();
     }
   };
 
   return (
-    <Modal isOpen={Boolean(routine)} removeModal={() => setRoutineToDelete(null)}>
+    <Modal isOpen={Boolean(team)} removeModal={() => setTeamToDelete(null)}>
       <Container>
-        <button className="close-btn" onClick={() => setRoutineToDelete(null)}>
+        <button className="close-btn" onClick={() => setTeamToDelete(null)}>
           X
         </button>
 
         <h3>
-          Are you sure you want to delete <span>{routine.name}</span>?
+          Are you sure you want to delete <span>{team.teamName}</span>?
         </h3>
 
         <div>
           <button onClick={handleDeleteRoutine}>Yes</button>
-          <button onClick={() => setRoutineToDelete(null)}>Cancel</button>
+          <button onClick={() => setTeamToDelete(null)}>Cancel</button>
         </div>
       </Container>
     </Modal>
   );
 };
 
-export default DeleteRoutineModal;
+export default DeleteTeamModal;
 
 const Container = styled.div`
   position: relative;

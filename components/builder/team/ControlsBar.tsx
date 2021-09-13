@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+// Components
+import Checkmark from "../../Checkmark";
 // Interfaces
 import { EditableTeam } from "./index";
 
@@ -7,13 +9,11 @@ interface Props {
   team: EditableTeam;
   setTeam: React.Dispatch<React.SetStateAction<EditableTeam>>;
   clearTeam: () => void;
+  saveTeam: () => void;
+  teamSaved: boolean | null;
 }
 
-const ControlsBar: React.FC<Props> = ({ team, setTeam, clearTeam }) => {
-  const saveTeam = () => {
-    console.log(team);
-  };
-
+const ControlsBar: React.FC<Props> = ({ team, setTeam, clearTeam, saveTeam, teamSaved }) => {
   const handleTeamNameChange = (e) => {
     setTeam((prev) => ({ ...prev, teamName: e.target.value }));
   };
@@ -29,14 +29,17 @@ const ControlsBar: React.FC<Props> = ({ team, setTeam, clearTeam }) => {
           placeholder="Name your team"
         />
 
-        {/* {routineSaved && <Checkmark styles={{ position: "absolute", right: "1.4rem" }} />} */}
+        {teamSaved && <Checkmark styles={{ position: "absolute", right: "1.4rem" }} />}
       </div>
       <div className="controls">
-        <button onClick={saveTeam} disabled={!Boolean(team.teamName)}>
+        <button onClick={saveTeam} disabled={!Boolean(team.teamName && team.routine_id)}>
           Save
         </button>
 
-        <button onClick={clearTeam} disabled={!Boolean(team.teamName.length)}>
+        <button
+          onClick={clearTeam}
+          disabled={!Boolean(team.teamName.length || team.routine_id.length | team.trainers.length)}
+        >
           Clear
         </button>
       </div>

@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useStoreState, useStoreDispatch } from "../../../store";
+// Context
+import { useStoreState } from "../../../store";
+// API
+import { postNewTeam, updateTeam } from "../../../utils/api";
 // Interfaces
 import { Team } from "../../../utils/interfaces";
 // Components
+import ControlsBar from "./ControlsBar";
 import UserTeams from "./UserTeams";
 import TrainersTile from "./TrainersTile";
-import ControlsBar from "./ControlsBar";
+import RoutinesTile from "./RoutinesTile";
+import { userJoiningTeam } from "../../../store/actions/userActions";
 
 type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
 
@@ -26,22 +31,50 @@ const initialTeam: EditableTeam = {
 
 const TeamBuilder: React.FC = () => {
   const { user } = useStoreState();
-  const dispatch = useStoreDispatch();
-
   const [team, setTeam] = useState<EditableTeam>(initialTeam);
+  const [teamSaved, setTeamSaved] = useState<boolean | null>(null);
+
+  const saveTeam = async () => {
+    let saved = false;
+    saved = team._id ? await updateTeam(team) : await postNewTeam(team);
+    setTeamSaved(saved);
+  };
 
   const clearTeam = () => {
-    console.log(team);
-    setTeam(initialTeam);
+    setTeam({
+      ...initialTeam,
+      creator_id: user!._id,
+      creatorName: user!.username,
+      members: [user!._id],
+    });
   };
+
+  useEffect(() => {
+    let resetTimeout: NodeJS.Timeout;
+    if (teamSaved) resetTimeout = setTimeout(() => setTeamSaved(null), 3000);
+    return () => clearTimeout(resetTimeout);
+  }, [teamSaved]);
+
+  useEffect(() => {
+    if (user)
+      setTeam({ ...team, creatorName: user.username, creator_id: user._id, members: [user!._id] });
+  }, [user]);
 
   return (
     <TeamBuilderContainer>
-      <ControlsBar team={team} setTeam={setTeam} clearTeam={clearTeam} />
+      <ControlsBar
+        team={team}
+        setTeam={setTeam}
+        clearTeam={clearTeam}
+        saveTeam={saveTeam}
+        teamSaved={teamSaved}
+      />
+
+      <UserTeams team={team} setTeam={setTeam} teamSaved={teamSaved} clearTeam={clearTeam} />
+
+      <RoutinesTile team={team} setTeam={setTeam} />
 
       <TrainersTile team={team} setTeam={setTeam} />
-
-      <UserTeams team={team} setTeam={setTeam} />
     </TeamBuilderContainer>
   );
 };

@@ -140,7 +140,6 @@ const SearchContainer = styled.div`
   background: ${({ theme }) => theme.buttonMed};
   padding: 0.25rem 0.25rem;
   border-radius: 5px;
-  box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
   position: relative;
   height: 2.75rem;
 `;

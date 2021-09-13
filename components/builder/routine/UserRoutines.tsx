@@ -25,10 +25,6 @@ const UserRoutines: React.FC<Props> = ({ routine, setRoutine, clearRoutine, rout
   const [userRoutines, setUserRoutines] = useState<Routine[] | null>(null);
   const [hasQueriedUrl, setHasQueriedUrl] = useState(false);
 
-  const handleRoutineClick = async (rout: Routine) => {
-    setRoutine(rout);
-  };
-
   const getUserRoutines = async () => {
     if (!user) return;
     const routines = await getRoutinesFromCreatorId(user._id);
@@ -74,7 +70,7 @@ const UserRoutines: React.FC<Props> = ({ routine, setRoutine, clearRoutine, rout
             userRoutines.map((rout) => (
               <li
                 key={rout._id}
-                onClick={() => handleRoutineClick(rout)}
+                onClick={() => setRoutine(rout)}
                 className={routine._id === rout._id ? "highlight" : ""}
               >
                 {rout.name}

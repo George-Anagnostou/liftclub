@@ -3,21 +3,26 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 // Context
 import { useStoreState } from "../../../store";
-// Api
+// API
 import { getTeamById, getUserMadeTeams } from "../../../utils/api";
 // Interfaces
 import { Team } from "../../../utils/interfaces";
 import { EditableTeam } from "./index";
+// Components
+import DeleteTeamModal from "./DeleteTeamModal";
 
 interface Props {
   team: EditableTeam;
   setTeam: React.Dispatch<React.SetStateAction<EditableTeam>>;
+  teamSaved: boolean | null;
+  clearTeam: () => void;
 }
 
-const UserTeams: React.FC<Props> = ({ team, setTeam }) => {
+const UserTeams: React.FC<Props> = ({ team, setTeam, teamSaved, clearTeam }) => {
   const { user } = useStoreState();
   const router = useRouter();
 
+  const [teamToDelete, setTeamToDelete] = useState<Team | null>(null);
   const [userTeams, setUserTeams] = useState<Team[] | null>(null);
   const [loading, setLoading] = useState<string>("");
   const [hasQueriedUrl, setHasQueriedUrl] = useState(false);
@@ -35,10 +40,10 @@ const UserTeams: React.FC<Props> = ({ team, setTeam }) => {
   useEffect(() => {
     const getUserTeams = async () => {
       const teams = await getUserMadeTeams(user!._id);
-      if (teams) setUserTeams(teams);
+      if (teams && teams.length) setUserTeams(teams);
     };
-    if (user) getUserTeams();
-  }, [user]);
+    if (user || teamSaved) getUserTeams();
+  }, [user, teamSaved]);
 
   // If url has query for specific team, set that team
   useEffect(() => {
@@ -67,11 +72,22 @@ const UserTeams: React.FC<Props> = ({ team, setTeam }) => {
               }`}
             >
               {userTeam.teamName}
+
+              <button onClick={() => setTeamToDelete(userTeam)}>X</button>
             </li>
           ))}
         </ul>
       ) : (
         <p className="fallbackText">None</p>
+      )}
+
+      {teamToDelete && (
+        <DeleteTeamModal
+          team={teamToDelete}
+          setTeamToDelete={setTeamToDelete}
+          clearTeam={clearTeam}
+          setUserTeams={setUserTeams}
+        />
       )}
     </Container>
   );
@@ -119,6 +135,7 @@ const Container = styled.div`
           color: ${({ theme }) => theme.accentText};
         }
       }
+
       &.loading {
         background: linear-gradient(
           to left,
