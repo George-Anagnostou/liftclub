@@ -141,7 +141,12 @@ const Tile = styled.div`
     margin: 0.5rem;
     font-weight: 300;
     font-size: 2rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: pre-wrap;
+    text-overflow: ellipsis;
   }
+
   .info {
     color: ${({ theme }) => theme.textLight};
     text-align: left;

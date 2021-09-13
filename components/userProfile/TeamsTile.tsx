@@ -70,6 +70,7 @@ const Container = styled.section`
 
 const TeamsList = styled.ul`
   display: flex;
+  overflow-x: scroll;
 
   .noTeams {
     margin-left: 0.5rem;
@@ -80,8 +81,10 @@ const TeamItem = styled.li`
   background: ${({ theme }) => theme.buttonMed};
   box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
   padding: 0.25rem 0.5rem;
+  margin-right: 0.5rem;
   border-radius: 10px;
   text-align: center;
+  min-width: max-content;
 
   .teamInfo {
     p {

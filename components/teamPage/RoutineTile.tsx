@@ -130,17 +130,18 @@ const UniqueWorkoutList = styled.ul`
   flex-wrap: wrap;
 
   li {
+    text-align: left;
     background: ${({ theme }) => theme.buttonMed};
     padding: 0.5rem 0.5rem;
     margin: 0 0.25rem 0.5rem;
     border-radius: 5px;
     display: flex;
     align-items: center;
-    min-width: max-content;
 
     button {
       font-size: 0.7rem;
       width: 45px;
+      min-width: 45px;
       margin-left: 0.5rem;
       cursor: pointer;
       border-radius: 5px;
