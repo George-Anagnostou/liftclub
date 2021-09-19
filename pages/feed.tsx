@@ -3,61 +3,46 @@ import styled from "styled-components";
 // Components
 import SavedWorkouts from "../components/feed/SavedWorkouts";
 import PublicWorkouts from "../components/feed/PublicWorkouts";
+import SearchBar from "../components/feed/SearchBar";
 // Utils
-import { getPublicWorkouts, getWorkoutsFromIdArray } from "../utils/api";
-// Context
-import { useStoreDispatch, useStoreState } from "../store";
-import { addSavedWorkout, removeSavedWorkout } from "../store/actions/userActions";
+import { getPublicWorkouts } from "../utils/api";
 // Interfaces
 import { Workout } from "../utils/interfaces";
 
 export default function feed() {
-  const { user, isSignedIn } = useStoreState();
-  const dispatch = useStoreDispatch();
-
-  const [savedWorkouts, setSavedWorkouts] = useState<Workout[]>([]);
   const [publicWorkouts, setPublicWorkouts] = useState<Workout[]>([]);
-
-  const addToSavedWorkouts = async (workout: Workout) => {
-    setSavedWorkouts((prev) => [...prev, workout]);
-    const added = await addSavedWorkout(dispatch, user!._id, workout._id);
-    if (!added) setSavedWorkouts((prev) => prev.filter((saved) => saved._id !== workout._id));
-  };
-
-  const removeFromSavedWorkouts = async (workout: Workout) => {
-    setSavedWorkouts((prev) => prev.filter((saved) => saved._id !== workout._id));
-    const removed = await removeSavedWorkout(dispatch, user!._id, workout._id);
-    if (!removed) setSavedWorkouts((prev) => [...prev, workout]);
-  };
+  const [searchCategory, setSearchCategory] = useState("workouts");
 
   useEffect(() => {
-    const getSavedWorkouts = async () => {
-      const workouts = await getWorkoutsFromIdArray(user!.savedWorkouts!);
-      setSavedWorkouts(workouts.reverse());
-    };
-
     const getAllPublicWorkouts = async () => {
       const workouts = await getPublicWorkouts();
       setPublicWorkouts(workouts);
     };
 
-    if (isSignedIn) {
-      // Get all public workouts
-      getAllPublicWorkouts();
-      // Get all workotus saved by the user
-      getSavedWorkouts();
-    }
-  }, [isSignedIn]);
+    getAllPublicWorkouts();
+  }, []);
 
   return (
     <WorkoutFeedContainer>
-      <PublicWorkouts
-        workouts={publicWorkouts}
-        removeFromSavedWorkouts={removeFromSavedWorkouts}
-        addToSavedWorkouts={addToSavedWorkouts}
-      />
+      <SearchBar />
 
-      <SavedWorkouts workouts={savedWorkouts} removeFromSavedWorkouts={removeFromSavedWorkouts} />
+      <SearchCategories>
+        <ul>
+          {["workouts", "exercises", "users", "teams"].map((slug) => (
+            <li
+              key={slug}
+              className={slug === searchCategory ? "highlight" : ""}
+              onClick={() => setSearchCategory(slug)}
+            >
+              {slug}
+            </li>
+          ))}
+        </ul>
+      </SearchCategories>
+
+      {searchCategory === "workouts" && <PublicWorkouts workouts={publicWorkouts} />}
+
+      {/* <SavedWorkouts workouts={savedWorkouts} removeFromSavedWorkouts={removeFromSavedWorkouts} /> */}
     </WorkoutFeedContainer>
   );
 }
@@ -66,6 +51,45 @@ const WorkoutFeedContainer = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
+`;
 
-  margin-top: 55px;
+const SearchCategories = styled.div`
+  background: ${({ theme }) => theme.background};
+  box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
+  position: sticky;
+  top: 0.5rem;
+  z-index: 99;
+  padding: 0 0 0.5rem;
+
+  ul {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: scroll;
+
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
+    &::-webkit-scrollbar {
+      display: none; /* Safari and Chrome */
+    }
+
+    li {
+      font-size: 0.75rem;
+      background: ${({ theme }) => theme.background};
+      padding: 0.25rem 1.5rem;
+      margin: 0 0.25rem;
+      font-weight: 300;
+      color: ${({ theme }) => theme.textLight};
+      border-radius: 20px;
+      text-transform: capitalize;
+      border: 1px solid ${({ theme }) => theme.buttonMed};
+      transition: all 0.25s ease;
+
+      &.highlight {
+        border: 1px solid ${({ theme }) => theme.accentSoft};
+        color: ${({ theme }) => theme.text};
+      }
+    }
+  }
 `;

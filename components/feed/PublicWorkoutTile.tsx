@@ -35,9 +35,7 @@ const PublicWorkoutTile: React.FC<Props> = ({
 
   // Returns boolean for if a workout is in savedWorkouts
   const workoutIsSaved = (workout: Workout) => {
-    if (user?.savedWorkouts && user?.savedWorkouts?.indexOf(workout._id) > -1) {
-      return true;
-    } else return false;
+    return user?.savedWorkouts && user?.savedWorkouts?.indexOf(workout._id) > -1;
   };
 
   // Get all exercises for a workout
@@ -60,7 +58,7 @@ const PublicWorkoutTile: React.FC<Props> = ({
       setClosedHeight(tile.current.clientHeight);
     }
     if (!openHeight && showWorkoutInfo && !loading && tile.current.scrollHeight !== closedHeight) {
-      setOpenHeight(tile.current.scrollHeight + workoutExercises.length * 10);
+      setOpenHeight(tile.current.scrollHeight + workoutExercises.length * 8);
     }
   }, [tile, showWorkoutInfo, loading]);
 
@@ -74,7 +72,7 @@ const PublicWorkoutTile: React.FC<Props> = ({
           <h3 onClick={toggleWorkoutInfo}>{workout.name}</h3>
 
           <p>
-            Posted <span>{timeSince(new Date(workout.date_created))}</span> by{" "}
+            <span>{timeSince(new Date(workout.date_created))}</span> {"- "}
             <Link href={`users/${workout.creatorName}`}>
               <a className="creator">{workout.creatorName}</a>
             </Link>
@@ -103,7 +101,9 @@ const PublicWorkoutTile: React.FC<Props> = ({
               {exercise && (
                 <>
                   <p>{exercise.name}</p>
-                  <p className="sets">{sets.length} sets</p>
+                  <p className="sets">
+                    {sets.length} <span>sets</span>
+                  </p>
                 </>
               )}
             </li>
@@ -117,10 +117,10 @@ export default PublicWorkoutTile;
 
 const WorkoutTile = styled.li`
   border-radius: 10px;
-  box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
+  box-shadow: 0 0.5px 2px ${({ theme }) => theme.boxShadow};
   background: ${({ theme }) => theme.background};
 
-  padding: 0.5rem;
+  padding: 0.25rem 0.5rem;
   margin: 0.5em;
 
   transition: height 0.25s ease-out;
@@ -136,13 +136,14 @@ const WorkoutTile = styled.li`
 
       h3 {
         font-weight: 300;
+        font-size: 1rem;
         text-transform: capitalize;
       }
 
       p {
         font-size: 0.65rem;
         color: ${({ theme }) => theme.textLight};
-
+        font-weight: 200;
         .creator {
           color: ${({ theme }) => theme.text};
           font-size: 1.05em;
@@ -172,7 +173,7 @@ const WorkoutTile = styled.li`
         cursor: pointer;
         border-radius: 5px;
         border: none;
-        padding: 0.5rem;
+        padding: 0.35rem 0.5rem;
         margin-left: 0.5rem;
         min-width: 40px;
         background: ${({ theme }) => theme.buttonLight};
@@ -207,6 +208,8 @@ const WorkoutTile = styled.li`
     animation: open 0.5s ease forwards;
 
     .exercise {
+      font-weight: 200;
+      font-size: 0.9rem;
       margin: 0.25rem 0.5rem;
       text-transform: capitalize;
       display: flex;
@@ -214,17 +217,11 @@ const WorkoutTile = styled.li`
 
       .sets {
         min-width: max-content;
-      }
-    }
 
-    @-webkit-keyframes open {
-      0% {
-        opacity: 0;
-        transform: rotate3d(1, 0, 0, 45deg);
-      }
-      100% {
-        opacity: 1;
-        transform: rotate3d(0);
+        span {
+          text-transform: lowercase;
+          font-size: 0.75rem;
+        }
       }
     }
 

@@ -1,40 +1,33 @@
-import { useState } from "react";
 import styled from "styled-components";
 // Components
 import PublicWorkoutTile from "./PublicWorkoutTile";
-import SearchBar from "./SearchBar";
-import LoadingSpinner from "../LoadingSpinner";
 // Interfaces
 import { Workout } from "../../utils/interfaces";
+import LoadingSpinner from "../LoadingSpinner";
+// API
+import { addSavedWorkout, removeSavedWorkout } from "../../store/actions/userActions";
+import { useStoreDispatch, useStoreState } from "../../store";
 
 interface Props {
   workouts: Workout[];
-  removeFromSavedWorkouts: (workout: Workout) => void;
-  addToSavedWorkouts: (workout: Workout) => void;
 }
 
-const PublicWorkouts: React.FC<Props> = ({
-  workouts,
-  removeFromSavedWorkouts,
-  addToSavedWorkouts,
-}) => {
-  const [filteredWorkouts, setFilteredWorkouts] = useState<Workout[]>([]);
-  const [loading, setLoading] = useState(true);
+const PublicWorkouts: React.FC<Props> = ({ workouts }) => {
+  const { user } = useStoreState();
+  const dispatch = useStoreDispatch();
+
+  const addToSavedWorkouts = (workout: Workout) => {
+    addSavedWorkout(dispatch, user!._id, workout._id);
+  };
+
+  const removeFromSavedWorkouts = (workout: Workout) => {
+    removeSavedWorkout(dispatch, user!._id, workout._id);
+  };
 
   return (
     <WorkoutList>
-      <SearchBar
-        workouts={workouts}
-        setFilteredWorkouts={setFilteredWorkouts}
-        setLoading={setLoading}
-      />
-
-      <h3 className="list-title">Public Workouts</h3>
-
-      {loading ? (
-        <LoadingSpinner />
-      ) : Boolean(filteredWorkouts.length) ? (
-        filteredWorkouts.map((workout) => (
+      {Boolean(workouts.length) ? (
+        workouts.map((workout) => (
           <PublicWorkoutTile
             key={`public${workout._id}`}
             workout={workout}
@@ -43,7 +36,9 @@ const PublicWorkouts: React.FC<Props> = ({
           />
         ))
       ) : (
-        <h3 className="fallback-text">Nothing here</h3>
+        <div className="loading-container">
+          <LoadingSpinner />
+        </div>
       )}
     </WorkoutList>
   );
@@ -54,16 +49,9 @@ const WorkoutList = styled.ul`
   width: 100%;
   flex: 1;
 
-  .list-title {
-    margin-left: 1.5rem;
-    text-align: left;
-    color: ${({ theme }) => theme.textLight};
-    font-weight: 400;
-  }
-
-  .fallback-text {
-    text-align: center;
-    color: ${({ theme }) => theme.textLight};
-    font-weight: 400;
+  .loading-container {
+    display: grid;
+    place-items: center;
+    height: 70vh;
   }
 `;
