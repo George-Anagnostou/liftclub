@@ -71,6 +71,8 @@ const Container = styled.section`
 const TeamsList = styled.ul`
   display: flex;
   overflow-x: scroll;
+  overflow-y: show;
+  padding-bottom: 0.25rem;
 
   .noTeams {
     margin-left: 0.5rem;
