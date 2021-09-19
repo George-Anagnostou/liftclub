@@ -1,7 +1,7 @@
 import { useState, createContext, useEffect } from "react";
 
 export const useThemeState = () => {
-  const [themeMode, setThemeMode] = useState("light");
+  const [themeMode, setThemeMode] = useState("dark");
 
   const setMode = (mode: string) => {
     window.localStorage.setItem("theme", mode);
@@ -13,8 +13,20 @@ export const useThemeState = () => {
   };
 
   useEffect(() => {
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+      const newTheme = e.matches ? "dark" : "light";
+      setMode(newTheme);
+    });
+
     const localTheme = window.localStorage.getItem("theme");
-    localTheme ? setMode(localTheme) : setMode("light");
+
+    if (localTheme) {
+      setMode(localTheme);
+    } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      setMode("dark");
+    } else {
+      setMode("light");
+    }
   }, []);
 
   return { themeMode, themeToggler };
