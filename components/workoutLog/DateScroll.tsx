@@ -139,16 +139,15 @@ const DateScrollContainer = styled.ul`
       }
 
       &.selected {
-        background: ${({ theme }) => theme.buttonMed};
+        background: ${({ theme }) => theme.background};
       }
       &.notSelected {
-        transform: scale(0.85);
-        transform-origin: bottom;
+        transform: scale(0.8);
         background: ${({ theme }) => theme.background};
       }
       &.hasDayData {
         background: ${({ theme }) => theme.accent};
-        color: ${({ theme }) => theme.shades[1]};
+        color: ${({ theme }) => theme.accentText};
       }
       &.noDayData {
       }

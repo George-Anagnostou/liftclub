@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import update from "immutability-helper";
 // Components
+import TeamWorkouts from "../components/workoutLog/TeamWorkouts";
 import UserWorkouts from "../components/workoutLog/UserWorkouts";
 import LoadingSpinner from "../components/LoadingSpinner";
 import WorkoutContainer from "../components/workoutLog/WorkoutContainer";
@@ -19,7 +20,6 @@ import { deleteDayFromWorkoutLog } from "../store/actions/userActions";
 import { getWorkoutFromId } from "../utils/api";
 // Interfaces
 import { Workout, WorkoutLogItem } from "../utils/interfaces";
-import TeamWorkouts from "../components/workoutLog/TeamWorkouts";
 
 export default function log() {
   const { user, isSignedIn } = useStoreState();
@@ -184,7 +184,8 @@ const MainContainer = styled.section`
 const FallbackText = styled.h3`
   font-weight: 300;
   max-width: 100%;
-  padding: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
   background: ${({ theme }) => theme.background};
   color: ${({ theme }) => theme.textLight};
   border-radius: 10px;
