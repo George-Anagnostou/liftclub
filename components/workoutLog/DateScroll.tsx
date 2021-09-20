@@ -144,6 +144,7 @@ const DateScrollContainer = styled.ul`
       &.notSelected {
         transform: scale(0.8);
         background: ${({ theme }) => theme.background};
+        color: ${({ theme }) => theme.textLight};
       }
       &.hasDayData {
         background: ${({ theme }) => theme.accent};

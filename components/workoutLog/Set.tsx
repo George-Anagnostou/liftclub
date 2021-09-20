@@ -59,7 +59,7 @@ const SetContainer = styled.li`
   align-items: flex-end;
 
   width: 100%;
-  margin: 0.5rem 0;
+  margin: 0.25rem 0;
 
   div {
     flex: 1;
@@ -71,7 +71,7 @@ const SetContainer = styled.li`
   p {
     color: ${({ theme }) => theme.textLight};
     font-weight: 300;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
   }
 
   .weight {

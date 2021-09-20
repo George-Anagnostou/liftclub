@@ -56,13 +56,19 @@ const TeamWorkouts: React.FC<Props> = ({ selectedDate, displayWorkout }) => {
     <WorkoutsList>
       <h3>Joined Teams</h3>
 
-      {todaysWorkouts?.map(({ teamName, workout }) => (
-        <ul key={teamName} onClick={workout ? () => displayWorkout(workout) : () => {}}>
-          <p className="teamName">{teamName}</p>
+      <ul>
+        {todaysWorkouts?.map(({ teamName, workout }) => (
+          <li key={teamName} onClick={workout ? () => displayWorkout(workout) : () => {}}>
+            <p className="team-name">{teamName}</p>
 
-          {workout ? <li>{workout.name}</li> : <li className="fallbackText">No workout today</li>}
-        </ul>
-      ))}
+            {workout ? (
+              <p className="workout">{workout.name}</p>
+            ) : (
+              <li className="fallback-text">No workout today</li>
+            )}
+          </li>
+        ))}
+      </ul>
     </WorkoutsList>
   );
 };
@@ -79,36 +85,40 @@ const WorkoutsList = styled.div`
     text-align: left;
     padding-left: 0.75rem;
     margin: 0.25rem 0;
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: ${({ theme }) => theme.textLight};
     font-weight: 300;
   }
 
   ul {
-    width: fit-content;
-    display: flex;
-    align-items: center;
-    background: ${({ theme }) => theme.buttonMed};
-    margin: 0 0.25rem 0.5rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 5px;
-    box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
-    cursor: pointer;
-
-    p {
+    li {
+      width: fit-content;
+      display: flex;
+      align-items: center;
+      background: ${({ theme }) => theme.buttonMed};
+      margin: 0 0.25rem 0.5rem;
+      padding: 0.2rem 0.2rem 0.2rem 0.5rem;
+      border-radius: 5px;
+      box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
+      cursor: pointer;
+      font-weight: 300;
     }
 
-    li {
+    .team-name {
+    }
+
+    .workout {
+      font-weight: 300;
       background: ${({ theme }) => theme.buttonLight};
       border-radius: 5px;
-      padding: 0.25rem 1rem;
+      padding: 0.15rem 1rem;
       margin: 0 0 0 0.75rem;
       word-wrap: break-word;
       text-align: left;
     }
   }
 
-  .fallbackText {
+  .fallback-text {
     color: ${({ theme }) => theme.textLight};
   }
 `;

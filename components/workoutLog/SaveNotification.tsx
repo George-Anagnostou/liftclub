@@ -22,7 +22,7 @@ export const SaveNotification: React.FC<Props> = ({ saveLoading }) => {
 
 const Circle = styled.div`
   width: 65px;
-  height: 40px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -36,6 +36,7 @@ const Circle = styled.div`
 
   &.saved {
     right: calc(1rem + 10px);
+    bottom: calc(5rem - 5px);
     border-radius: 50%;
     width: 40px;
     height: 40px;
@@ -63,8 +64,8 @@ const LoadingDots = styled.div`
   border-radius: 5px;
   background-color: ${({ theme }) => theme.accentSoft};
   color: ${({ theme }) => theme.accentSoft};
-  animation: dotFlashing 0.5s infinite linear alternate;
-  animation-delay: 0.2s;
+  animation: dotFlashing 0.65s infinite linear alternate;
+  animation-delay: 0.3s;
 
   &::before,
   &::after {
@@ -81,8 +82,8 @@ const LoadingDots = styled.div`
     border-radius: 5px;
     background-color: ${({ theme }) => theme.accentSoft};
     color: ${({ theme }) => theme.accentSoft};
-    animation: dotFlashing 0.5s infinite alternate;
-    animation-delay: 0s;
+    animation: dotFlashing 0.65s infinite alternate;
+    animation-delay: 0.1s;
   }
 
   &::after {
@@ -92,8 +93,8 @@ const LoadingDots = styled.div`
     border-radius: 5px;
     background-color: ${({ theme }) => theme.accentSoft};
     color: ${({ theme }) => theme.accentSoft};
-    animation: dotFlashing 0.5s infinite alternate;
-    animation-delay: 0.4s;
+    animation: dotFlashing 0.65s infinite alternate;
+    animation-delay: 0.45s;
   }
 
   @keyframes dotFlashing {

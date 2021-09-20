@@ -93,7 +93,7 @@ const WorkoutsList = styled.div`
     text-align: left;
     padding-left: 0.75rem;
     margin: 0.25rem 0;
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: ${({ theme }) => theme.textLight};
     font-weight: 300;
   }
@@ -103,12 +103,13 @@ const WorkoutsList = styled.div`
     flex-wrap: wrap;
 
     li {
+      font-weight: 300;
       position: relative;
       background: ${({ theme }) => theme.buttonMed};
       box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
       border-radius: 5px;
       cursor: pointer;
-      padding: 0.5rem 1rem;
+      padding: 0.25rem 1rem;
       margin: 0 0.25rem 0.5rem;
       word-wrap: break-word;
       text-align: left;

@@ -179,12 +179,8 @@ const Form = styled.form`
 
 const WorkoutName = styled.div`
   width: 100%;
-  padding: 0.5rem;
-
   display: flex;
   flex-direction: column;
-  background: ${({ theme }) => theme.background};
-  border-radius: 10px;
   margin-bottom: 0.5rem;
 
   h3 {
@@ -213,8 +209,8 @@ const WorkoutList = styled.ul`
     h3 {
       text-transform: uppercase;
       margin-bottom: 0.5rem;
-      font-weight: 400;
-      font-size: 1.3rem;
+      font-weight: 300;
+      font-size: 1.1rem;
       letter-spacing: 1px;
       background: ${({ theme }) => theme.body};
       margin: 0 0.5rem;
@@ -226,7 +222,7 @@ const WorkoutList = styled.ul`
         text-transform: lowercase;
         position: absolute;
         right: 0.5rem;
-        top: 0.6rem;
+        top: 0.4rem;
         padding: 0;
         font-size: 0.7rem;
         font-weight: 600;
@@ -246,6 +242,7 @@ const WorkoutList = styled.ul`
 
       .set-title {
         color: ${({ theme }) => theme.textLight};
+        font-size: 0.6rem;
         display: flex;
         justify-content: space-evenly;
         align-items: flex-end;
@@ -271,8 +268,8 @@ const WorkoutNote = styled.div`
   h3 {
     text-transform: uppercase;
     margin-bottom: 0.5rem;
-    font-weight: 400;
-    font-size: 1.3rem;
+    font-weight: 300;
+    font-size: 1.1rem;
     letter-spacing: 1px;
     background: ${({ theme }) => theme.body};
     border-radius: 8px;
@@ -302,13 +299,12 @@ const WorkoutNote = styled.div`
 `;
 
 const DeleteBtn = styled.button`
-  margin: 0 auto 0.5rem o;
-  font-size: 1.2rem;
-  padding: 0.5rem;
+  margin: 0 auto 0.75rem;
+  font-size: 1rem;
+  padding: 0.25rem 1rem;
   border-radius: 5px;
 
   border: none;
   color: ${({ theme }) => theme.border};
   background: ${({ theme }) => theme.background};
-  box-shadow: 0 2px 5px ${({ theme }) => theme.boxShadow};
 `;
