@@ -31,6 +31,12 @@ const UserWorkouts: React.FC<Props> = ({
 
   const displaySavedWorkout = async (workout: Workout) => {
     const mergedData = await addExerciseDataToWorkout(workout);
+
+    if (mergedData.creator_id !== user!._id) {
+      mergedData.numLogged = 0;
+      mergedData.isPublic = false;
+    }
+
     setCustomWorkout(mergedData);
   };
 

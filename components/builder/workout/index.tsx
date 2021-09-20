@@ -20,6 +20,7 @@ const CustomWorkoutInit = {
   exercises: [],
   isPublic: false,
   date_created: "",
+  numLogged: 0,
 };
 
 const WorkoutBuilder: React.FC = () => {
