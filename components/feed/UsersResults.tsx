@@ -21,8 +21,8 @@ const UsersResults: React.FC<Props> = ({ searchInput }) => {
   const dispatch = useStoreDispatch();
 
   const [recentlyViewedUsers, setRecentlyViewedUsers] = useState<ShortUser[]>([]);
-  const [searchResults, setSearchResults] = useState<Team["trainers"] | null>(null);
-  const debouncedInput = useDebouncedState(searchInput, 500);
+  const [searchResults, setSearchResults] = useState<ShortUser[] | null>(null);
+  const debouncedInput = useDebouncedState(searchInput, 100);
 
   useEffect(() => {
     const search = async () => {
