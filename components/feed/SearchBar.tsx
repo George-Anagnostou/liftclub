@@ -1,17 +1,13 @@
-import { useState, useEffect } from "react";
 import styled from "styled-components";
-import Image from "next/image";
-// Components
+// Icons
 import Magnifying from "../svg/Magnifying";
-// Interfaces
-import { Team } from "../../utils/interfaces";
 
-interface Props {}
+interface Props {
+  searchInput: string;
+  setSearchInput: React.Dispatch<React.SetStateAction<string>>;
+}
 
-const SearchBar: React.FC<Props> = ({}) => {
-  const [searchInput, setSearchInput] = useState("");
-  const [searchResults, setSearchResults] = useState<Team["trainers"] | null>(null);
-
+const SearchBar: React.FC<Props> = ({ searchInput, setSearchInput }) => {
   return (
     <SearchContainer>
       <SearchInput>
@@ -39,28 +35,6 @@ const SearchBar: React.FC<Props> = ({}) => {
           </span>
         </div>
       </SearchInput>
-
-      {/* {searchResults && searchInput && (
-        <SearchResults>
-          {Boolean(searchResults.length) ? (
-            searchResults.map((trainer) => (
-              <li className="result" key={trainer._id}>
-                {trainer.profileImgUrl ? (
-                  <img src={trainer.profileImgUrl} alt={trainer.username} />
-                ) : (
-                  <Image src="/favicon.png" height="30" width="30"></Image>
-                )}
-
-                <p>{trainer.username}</p>
-              </li>
-            ))
-          ) : (
-            <li className="result">
-              <p>No matches</p>
-            </li>
-          )}
-        </SearchResults>
-      )} */}
     </SearchContainer>
   );
 };
@@ -70,61 +44,11 @@ const SearchContainer = styled.div`
   display: flex;
   flex-direction: column;
   background: ${({ theme }) => theme.background};
-  /* border-bottom: 1px solid ${({ theme }) => theme.buttonMed}; */
   padding: 0.5rem 0.25rem;
   height: 3.25rem;
   position: sticky;
   top: -2.75rem;
-`;
-
-const SearchResults = styled.ul`
-  background: ${({ theme }) => theme.buttonMed};
-  border: 1px solid ${({ theme }) => theme.border};
-  box-shadow: 0 5px 10px ${({ theme }) => theme.boxShadow};
   z-index: 99;
-  border-radius: 5px;
-  margin: 0.25rem 1.75rem 0 2rem;
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  max-height: calc(2.25rem * 8);
-  overflow-y: scroll;
-
-  .result {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.5rem;
-    font-size: 1rem;
-
-    img {
-      height: 20px;
-      width: 20px;
-      border-radius: 50%;
-    }
-
-    p {
-      margin-left: 0.5rem;
-      text-align: left;
-      flex: 1;
-    }
-
-    button {
-      font-size: 0.6rem;
-      font-weight: 300;
-      background: ${({ theme }) => theme.buttonLight};
-      color: ${({ theme }) => theme.textLight};
-      border: none;
-      border-radius: 3px;
-      margin-left: 0.3rem;
-      padding: 0.1rem 0.25rem;
-
-      &.add {
-        background: ${({ theme }) => theme.accentSoft};
-        color: ${({ theme }) => theme.accentText};
-      }
-    }
-  }
 `;
 
 const SearchInput = styled.div`

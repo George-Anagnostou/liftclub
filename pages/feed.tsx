@@ -1,34 +1,31 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 // Components
-import SavedWorkouts from "../components/feed/SavedWorkouts";
-import PublicWorkouts from "../components/feed/PublicWorkouts";
 import SearchBar from "../components/feed/SearchBar";
-// Utils
-import { getPublicWorkouts } from "../utils/api";
-// Interfaces
-import { Workout } from "../utils/interfaces";
+import PublicWorkouts from "../components/feed/PublicWorkouts";
+import UsersResults from "../components/feed/UsersResults";
+
+/**
+ *
+ * The display for a feed is comprised of:
+ *  - curated categories of workouts to pick from
+ *  - top 5 reccomended workouts
+ *  - users with the most workouts created
+ *  - teams available to join
+ *
+ */
 
 export default function feed() {
-  const [publicWorkouts, setPublicWorkouts] = useState<Workout[]>([]);
   const [searchCategory, setSearchCategory] = useState("workouts");
-
-  useEffect(() => {
-    const getAllPublicWorkouts = async () => {
-      const workouts = await getPublicWorkouts();
-      setPublicWorkouts(workouts);
-    };
-
-    getAllPublicWorkouts();
-  }, []);
+  const [searchInput, setSearchInput] = useState("");
 
   return (
     <WorkoutFeedContainer>
-      <SearchBar />
+      <SearchBar searchInput={searchInput} setSearchInput={setSearchInput} />
 
       <SearchCategories>
         <ul>
-          {["workouts", "exercises", "users", "teams"].map((slug) => (
+          {["workouts", "users", "exercises", "teams"].map((slug) => (
             <li
               key={slug}
               className={slug === searchCategory ? "highlight" : ""}
@@ -40,7 +37,9 @@ export default function feed() {
         </ul>
       </SearchCategories>
 
-      {searchCategory === "workouts" && <PublicWorkouts workouts={publicWorkouts} />}
+      {searchCategory === "workouts" && <PublicWorkouts searchInput={searchInput} />}
+
+      {searchCategory === "users" && <UsersResults searchInput={searchInput} />}
 
       {/* <SavedWorkouts workouts={savedWorkouts} removeFromSavedWorkouts={removeFromSavedWorkouts} /> */}
     </WorkoutFeedContainer>
@@ -83,7 +82,7 @@ const SearchCategories = styled.div`
       color: ${({ theme }) => theme.textLight};
       border-radius: 20px;
       text-transform: capitalize;
-      border: 1px solid ${({ theme }) => theme.buttonMed};
+      border: 1px solid ${({ theme }) => theme.border};
       transition: all 0.25s ease;
 
       &.highlight {

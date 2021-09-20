@@ -67,6 +67,7 @@ export interface Workout {
   }[];
   isPublic: boolean;
   date_created: string;
+  numLogged: number;
 }
 
 export interface NewWorkout {

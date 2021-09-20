@@ -11,12 +11,14 @@ import { Workout } from "../../utils/interfaces";
 import { useStoreState } from "../../store";
 
 interface Props {
+  isLoading: boolean;
   workout: Workout;
   removeFromSavedWorkouts: (workout: Workout) => void;
   addToSavedWorkouts: (workout: Workout) => void;
 }
 
 const PublicWorkoutTile: React.FC<Props> = ({
+  isLoading,
   workout,
   removeFromSavedWorkouts,
   addToSavedWorkouts,
@@ -68,30 +70,42 @@ const PublicWorkoutTile: React.FC<Props> = ({
       style={showWorkoutInfo && openHeight ? { height: openHeight } : { height: closedHeight }}
     >
       <div className="tile-bar">
-        <div className="name">
-          <h3 onClick={toggleWorkoutInfo}>{workout.name}</h3>
+        {isLoading ? (
+          <div className="name">
+            <span className="skeleton-box" style={{ width: "55%" }}></span>
 
-          <p>
-            <span>{timeSince(new Date(workout.date_created))}</span> {"- "}
-            <Link href={`users/${workout.creatorName}`}>
-              <a className="creator">{workout.creatorName}</a>
-            </Link>
-          </p>
-        </div>
+            <p>
+              <span className="skeleton-box" style={{ width: "40%" }}></span>
+            </p>
+          </div>
+        ) : (
+          <>
+            <div className="name">
+              <h3 onClick={toggleWorkoutInfo}>{workout.name}</h3>
 
-        <div className="buttons">
-          {loading && <LoadingSpinner />}
+              <p>
+                <span>{timeSince(new Date(workout.date_created))}</span> {"- "}
+                <Link href={`users/${workout.creatorName}`}>
+                  <a className="creator">{workout.creatorName}</a>
+                </Link>
+              </p>
+            </div>
 
-          {workoutIsSaved(workout) ? (
-            <button className="remove" onClick={() => removeFromSavedWorkouts(workout)}>
-              saved
-            </button>
-          ) : (
-            <button className="add" onClick={() => addToSavedWorkouts(workout)}>
-              save
-            </button>
-          )}
-        </div>
+            <div className="buttons">
+              {loading && <LoadingSpinner />}
+
+              {workoutIsSaved(workout) ? (
+                <button className="remove" onClick={() => removeFromSavedWorkouts(workout)}>
+                  saved
+                </button>
+              ) : (
+                <button className="add" onClick={() => addToSavedWorkouts(workout)}>
+                  save
+                </button>
+              )}
+            </div>
+          </>
+        )}
       </div>
 
       {showWorkoutInfo && !loading && (
@@ -116,7 +130,7 @@ const PublicWorkoutTile: React.FC<Props> = ({
 export default PublicWorkoutTile;
 
 const WorkoutTile = styled.li`
-  border-radius: 10px;
+  border-radius: 8px;
   box-shadow: 0 0.5px 2px ${({ theme }) => theme.boxShadow};
   background: ${({ theme }) => theme.background};
 
@@ -188,14 +202,37 @@ const WorkoutTile = styled.li`
         color: ${({ theme }) => theme.accentText};
         background: ${({ theme }) => theme.accent};
       }
+    }
 
-      @media (max-width: 350px) {
-        flex-direction: column;
-        align-items: flex-end;
-        justify-content: center;
+    .skeleton-box {
+      display: inline-block;
+      height: 1em;
+      border-radius: 3px;
+      position: relative;
+      overflow: hidden;
+      background-color: ${({ theme }) => theme.body};
 
-        button {
-          margin: 0.25rem 0;
+      &::after {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        transform: translateX(-100%);
+        background-position: center;
+        background-image: linear-gradient(
+          90deg,
+          ${({ theme }) => theme.body} 0,
+          ${({ theme }) => theme.buttonMed} 20%,
+          ${({ theme }) => theme.buttonMed} 60%,
+          ${({ theme }) => theme.body}
+        );
+        animation: shimmer 2s infinite;
+        content: "";
+      }
+      @keyframes shimmer {
+        100% {
+          transform: translateX(100%);
         }
       }
     }
