@@ -66,6 +66,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       const { profileImgUrl } = JSON.parse(req.body);
       if (profileImgUrl) fieldToUpdate = "PROFILE_IMG_URL";
 
+      const { addToRecentlyViewedUsers } = JSON.parse(req.body);
+      if (addToRecentlyViewedUsers) fieldToUpdate = "ADD_ID_TO_RECENTLY_VIEWED_USERS";
+
       if (req.query.fieldToUpdate === "ADD_WORKOUT_TO_WORKOUT_LOG")
         fieldToUpdate = "ADD_WORKOUT_TO_WORKOUT_LOG";
 
@@ -196,6 +199,22 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             );
 
           userData ? res.status(201).json({}) : res.status(400).end();
+          break;
+
+        case "ADD_ID_TO_RECENTLY_VIEWED_USERS":
+          userData = await db.collection("users").findOneAndUpdate(
+            { _id: new ObjectId(user_id) },
+            {
+              $push: {
+                recentlyViewedUsers: {
+                  $each: [new ObjectId(addToRecentlyViewedUsers)],
+                  $position: 0,
+                },
+              },
+            }
+          );
+
+          res.status(201).json({});
           break;
 
         case "ADD_WORKOUT_TO_WORKOUT_LOG":

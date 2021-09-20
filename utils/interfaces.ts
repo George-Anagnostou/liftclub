@@ -12,7 +12,14 @@ export type User = {
   settings?: { showBio: boolean };
   profileImgUrl?: string;
   password?: string;
+  recentlyViewedUsers?: string[];
 };
+
+export interface ShortUser {
+  readonly _id: string;
+  readonly username: string;
+  profileImgUrl: string | undefined;
+}
 
 export interface WorkoutLog {
   [isoDate: string]: WorkoutLogItem;
@@ -38,7 +45,7 @@ export interface Team {
   dateCreated: string;
   creatorName: string;
   creator_id: string;
-  trainers: { _id: string; username: string; profileImgUrl: string | undefined }[];
+  trainers: ShortUser[];
   routine_id: string;
   routine: Routine;
 }

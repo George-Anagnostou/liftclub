@@ -6,7 +6,7 @@ import { useStoreDispatch, useStoreState } from "../../store";
 import { addUserFollow, removeUserFollow } from "../../store/actions/userActions";
 import { getUsersFromIdArr } from "../../utils/api";
 // Interfaces
-import { User } from "../../utils/interfaces";
+import { ShortUser } from "../../utils/interfaces";
 // Components
 import LoadingSpinner from "../LoadingSpinner";
 import Modal from "../Wrappers/Modal";
@@ -21,7 +21,7 @@ const FollowsModal: React.FC<Props> = ({ member_ids, setShowFollowsModal, showFo
   const { user } = useStoreState();
   const dispatch = useStoreDispatch();
 
-  const [members, setMembers] = useState<User[] | null>(null);
+  const [members, setMembers] = useState<ShortUser[] | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handleFollowClick = (mem_id: string) => {

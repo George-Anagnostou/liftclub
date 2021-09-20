@@ -1,5 +1,14 @@
 import { EditableTeam } from "../../components/builder/team";
-import { Exercise, NewExercise, NewWorkout, Routine, Team, User, Workout } from "../interfaces";
+import {
+  Exercise,
+  NewExercise,
+  NewWorkout,
+  Routine,
+  Team,
+  User,
+  ShortUser,
+  Workout,
+} from "../interfaces";
 
 /*
  *
@@ -64,7 +73,7 @@ export const saveUserBio = async (user_id: string, bio: string) => {
 };
 
 // Multiple
-export const getUsersFromIdArr = async (idArr: string[]): Promise<User[] | false> => {
+export const getUsersFromIdArr = async (idArr: string[]): Promise<ShortUser[] | false> => {
   try {
     const res = await fetch(`/api/users/queryMultiple`, {
       method: "POST",

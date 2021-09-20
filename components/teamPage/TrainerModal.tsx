@@ -1,17 +1,17 @@
-import React, { ReactElement } from "react";
+import React from "react";
 import styled from "styled-components";
 // Components
 import Modal from "../Wrappers/Modal";
 import LoadingSpinner from "../LoadingSpinner";
-import { Team, User } from "../../utils/interfaces";
+import { Team, User, ShortUser } from "../../utils/interfaces";
 
 interface Props {
   setShowTrainerModal: React.Dispatch<React.SetStateAction<boolean>>;
   showTrainerModal: boolean;
-  teamMembers: User[] | null;
+  teamMembers: ShortUser[] | null;
   team: Team;
-  handleRemoveTrainer: (trainer: User) => Promise<void>;
-  handleAddTrainer: (trainer: User) => Promise<void>;
+  handleRemoveTrainer: (trainer: ShortUser) => Promise<void>;
+  handleAddTrainer: (trainer: ShortUser) => Promise<void>;
 }
 
 const TrainerModal: React.FC<Props> = ({

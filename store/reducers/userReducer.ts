@@ -79,7 +79,14 @@ export default function userReducer(state: AppState, action) {
           savedWorkouts: state.user?.savedWorkouts?.filter((_id) => _id !== payload.id) || [],
         },
       };
-
+    case "ADD_ID_TO_RECENTLY_VIEWED_USERS":
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          recentlyViewedUsers: [payload.id, ...(state.user?.recentlyViewedUsers || [])],
+        },
+      };
     default:
       throw new Error();
   }

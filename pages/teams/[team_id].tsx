@@ -11,7 +11,7 @@ import RoutineTile from "../../components/teamPage/RoutineTile";
 // Context
 import { useStoreState } from "../../store";
 // Interfaces
-import { User, Team } from "../../utils/interfaces";
+import { ShortUser, Team } from "../../utils/interfaces";
 
 const Team_id: React.FC = () => {
   const router = useRouter();
@@ -20,7 +20,7 @@ const Team_id: React.FC = () => {
   const { isSignedIn } = useStoreState();
 
   const [team, setTeam] = useState<Team | null>(null);
-  const [teamMembers, setTeamMembers] = useState<User[] | null>(null);
+  const [teamMembers, setTeamMembers] = useState<ShortUser[] | null>(null);
 
   useEffect(() => {
     const getTeamData = async () => {

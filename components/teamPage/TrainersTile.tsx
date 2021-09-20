@@ -8,14 +8,14 @@ import { addTrainerToTeam, getUsersFromIdArr, removeTrainerFromTeam } from "../.
 // Context
 import { useStoreState } from "../../store";
 // Interfaces
-import { Team, User } from "../../utils/interfaces";
+import { Team, ShortUser } from "../../utils/interfaces";
 import TrainerModal from "./TrainerModal";
 
 interface Props {
   team: Team;
   setTeam: React.Dispatch<React.SetStateAction<Team | null>>;
-  teamMembers: User[] | null;
-  setTeamMembers: React.Dispatch<React.SetStateAction<User[] | null>>;
+  teamMembers: ShortUser[] | null;
+  setTeamMembers: React.Dispatch<React.SetStateAction<ShortUser[] | null>>;
 }
 
 const TrainersTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMembers }) => {
@@ -23,7 +23,7 @@ const TrainersTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMemb
 
   const [showTrainerModal, setShowTrainerModal] = useState(false);
 
-  const handleRemoveTrainer = async (trainer: User) => {
+  const handleRemoveTrainer = async (trainer: ShortUser) => {
     const removed = await removeTrainerFromTeam(team._id, trainer._id);
     if (removed)
       setTeam(
@@ -35,7 +35,7 @@ const TrainersTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMemb
       );
   };
 
-  const handleAddTrainer = async ({ _id, username, profileImgUrl }: User) => {
+  const handleAddTrainer = async ({ _id, username, profileImgUrl }: ShortUser) => {
     const added = await addTrainerToTeam(team._id, _id);
     if (added)
       setTeam(

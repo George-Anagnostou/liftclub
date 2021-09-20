@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { getUsersFromIdArr } from "../../utils/api";
 // Context
 import { useStoreDispatch, useStoreState } from "../../store";
-import { Team, User } from "../../utils/interfaces";
+import { Team, ShortUser } from "../../utils/interfaces";
 // Components
 import MembersModal from "./MembersModal";
 import {
@@ -18,8 +18,8 @@ import {
 interface Props {
   team: Team;
   setTeam: React.Dispatch<React.SetStateAction<Team | null>>;
-  teamMembers: User[] | null;
-  setTeamMembers: React.Dispatch<React.SetStateAction<User[] | null>>;
+  teamMembers: ShortUser[] | null;
+  setTeamMembers: React.Dispatch<React.SetStateAction<ShortUser[] | null>>;
 }
 
 const TopTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMembers }) => {
@@ -32,7 +32,13 @@ const TopTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMembers }
     const joined = await userJoiningTeam(dispatch, user!._id, team_id);
     if (joined) {
       setTeam((prev) => prev && { ...prev, members: [...prev.members, user!._id] });
-      setTeamMembers((prev) => prev && [...prev, user!]);
+      setTeamMembers(
+        (prev) =>
+          prev && [
+            ...prev,
+            { _id: user!._id, username: user!.username, profileImgUrl: user!.profileImgUrl },
+          ]
+      );
     }
   };
 

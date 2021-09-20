@@ -58,7 +58,7 @@ const PublicWorkouts: React.FC<Props> = ({ searchInput }) => {
         )
       );
     }
-  }, [searchInput]);
+  }, [searchInput, initialWorkouts]);
 
   useEffect(() => {
     const getAllPublicWorkouts = async () => {

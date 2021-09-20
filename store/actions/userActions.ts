@@ -340,3 +340,19 @@ export const removeSavedWorkout = async (dispatch, user_id: string, workout_id: 
     return false;
   }
 };
+
+export const addToRecentlyViewedUsers = async (dispatch, user_id: string, viewed_id: string) => {
+  try {
+    dispatch({ type: "ADD_ID_TO_RECENTLY_VIEWED_USERS", payload: { id: viewed_id } });
+
+    const res = await fetch(`/api/users/${user_id}`, {
+      method: "PUT",
+      body: JSON.stringify({ addToRecentlyViewedUsers: viewed_id }),
+    });
+
+    return res.status === 201;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};

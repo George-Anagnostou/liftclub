@@ -4,7 +4,7 @@ import styled from "styled-components";
 // Context
 import { useStoreState } from "../../store";
 // Interfaces
-import { User } from "../../utils/interfaces";
+import { ShortUser } from "../../utils/interfaces";
 // Components
 import LoadingSpinner from "../LoadingSpinner";
 import Modal from "../Wrappers/Modal";
@@ -12,7 +12,7 @@ import Modal from "../Wrappers/Modal";
 interface Props {
   setShowMembers: React.Dispatch<React.SetStateAction<boolean>>;
   showMembers: boolean;
-  teamMembers: User[] | null;
+  teamMembers: ShortUser[] | null;
   handleUnfollowClick: (member_id: string) => void;
   handleFollowClick: (member_id: string) => void;
 }
