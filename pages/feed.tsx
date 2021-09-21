@@ -6,10 +6,11 @@ import PublicWorkouts from "../components/feed/PublicWorkouts";
 import UsersResults from "../components/feed/UsersResults";
 
 /**
- *
+ * TODO:
+ * 
  * The display for a feed is comprised of:
  *  - curated categories of workouts to pick from
- *  - top 5 reccomended workouts
+ *  - top 10 reccomended workouts
  *  - users with the most workouts created
  *  - teams available to join
  *
@@ -41,12 +42,9 @@ export default function feed() {
 
       {(searchCategory == "workouts" || searchCategory === "") && (
         <>
-          <h3
-            className="title"
-            style={searchCategory === "" ? { height: "1.5rem" } : { height: 0, opacity: 0 }}
-          >
+          <Title style={searchCategory === "" ? { height: "1.5rem" } : { height: 0, opacity: 0 }}>
             Workouts
-          </h3>
+          </Title>
 
           <PublicWorkouts searchInput={searchInput} limit={searchCategory === "" ? 10 : 0} />
         </>
@@ -54,12 +52,9 @@ export default function feed() {
 
       {(searchCategory == "users" || searchCategory === "") && (
         <>
-          <h3
-            className="title"
-            style={searchCategory === "" ? { height: "1.5rem" } : { height: 0, opacity: 0 }}
-          >
+          <Title style={searchCategory === "" ? { height: "1.5rem" } : { height: 0, opacity: 0 }}>
             Users
-          </h3>
+          </Title>
           <UsersResults searchInput={searchInput} limit={searchCategory === "" ? 5 : 0} />
         </>
       )}
@@ -71,15 +66,15 @@ const WorkoutFeedContainer = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
+`;
 
-  .title {
-    color: ${({ theme }) => theme.textLight};
-    text-align: left;
-    margin: 0.25rem 0.5rem 0;
-    font-weight: 300;
-    font-size: 1rem;
-    transition: height 0.2s ease-out, opacity 0.1s ease;
-  }
+const Title = styled.h3`
+  color: ${({ theme }) => theme.textLight};
+  text-align: left;
+  margin: 0.25rem 0.5rem 0;
+  font-weight: 300;
+  font-size: 1rem;
+  transition: height 0.2s ease-out, opacity 0.1s ease;
 `;
 
 const SearchCategories = styled.div`

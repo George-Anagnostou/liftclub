@@ -71,19 +71,13 @@ const PublicWorkoutTile: React.FC<Props> = ({
       ref={tile}
       style={showWorkoutInfo && openHeight ? { height: openHeight } : { height: closedHeight }}
     >
-      <div className="tile-bar">
+      <TitleBar>
         {isLoading ? (
           <div className="name">
-            <span
-              className="skeleton-box"
-              style={{ width: "55%", animationDelay: (i + 1) / 20 + "s" }}
-            />
+            <SkeletonBox style={{ width: "55%", animationDelay: (i + 1) / 20 + "s" }} />
 
             <p>
-              <span
-                className="skeleton-box"
-                style={{ width: "40%", animationDelay: (i + 1) / 20 + "s" }}
-              />
+              <SkeletonBox style={{ width: "40%", animationDelay: (i + 1) / 20 + "s" }} />
             </p>
           </div>
         ) : (
@@ -114,10 +108,10 @@ const PublicWorkoutTile: React.FC<Props> = ({
             </div>
           </>
         )}
-      </div>
+      </TitleBar>
 
       {showWorkoutInfo && !loading && (
-        <ul className="workoutInfo">
+        <WorkoutInfo>
           {workoutExercises.map(({ sets, exercise_id, exercise }) => (
             <li key={`public${exercise_id}`} className="exercise">
               {exercise && (
@@ -130,7 +124,7 @@ const PublicWorkoutTile: React.FC<Props> = ({
               )}
             </li>
           ))}
-        </ul>
+        </WorkoutInfo>
       )}
     </WorkoutTile>
   );
@@ -141,146 +135,145 @@ const WorkoutTile = styled.li`
   border-radius: 8px;
   box-shadow: 0 0.5px 2px ${({ theme }) => theme.boxShadow};
   background: ${({ theme }) => theme.background};
-
   padding: 0.25rem 0.5rem;
   margin: 0.5em;
 
   transition: height 0.25s ease-out;
+`;
 
-  .tile-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+const TitleBar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-    .name {
-      text-align: left;
-      flex: 3;
+  .name {
+    text-align: left;
+    flex: 3;
 
-      h3 {
-        font-weight: 300;
-        font-size: 1rem;
-        text-transform: capitalize;
-      }
-
-      p {
-        font-size: 0.65rem;
-        color: ${({ theme }) => theme.textLight};
-        font-weight: 200;
-        .creator {
-          color: ${({ theme }) => theme.text};
-          font-size: 1.05em;
-
-          &:hover {
-            text-decoration: underline;
-            cursor: pointer;
-
-            color: ${({ theme }) => theme.textLight};
-          }
-        }
-      }
+    h3 {
+      font-weight: 300;
+      font-size: 1rem;
+      text-transform: capitalize;
     }
-    .loadingSpinner {
-      margin-right: 0;
-      height: 20px;
-      width: 20px;
-    }
-    .buttons {
-      width: min-content;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
 
-      button {
-        font-size: 0.6rem;
-        cursor: pointer;
-        border-radius: 5px;
-        border: none;
-        padding: 0.2rem 0.5rem;
-        margin-left: 0.5rem;
-        min-width: 40px;
-        background: ${({ theme }) => theme.buttonLight};
+    p {
+      font-size: 0.65rem;
+      color: ${({ theme }) => theme.textLight};
+      font-weight: 200;
+      .creator {
         color: ${({ theme }) => theme.text};
-        transition: all 0.25s ease;
-      }
+        font-size: 1.05em;
 
-      .remove {
-        color: ${({ theme }) => theme.textLight};
-        background: ${({ theme }) => theme.buttonMed};
-      }
-      .add {
-        color: ${({ theme }) => theme.accentText};
-        background: ${({ theme }) => theme.accentSoft};
-      }
-    }
+        &:hover {
+          text-decoration: underline;
+          cursor: pointer;
 
-    .skeleton-box {
-      display: inline-block;
-      height: 1em;
-      border-radius: 3px;
-      position: relative;
-      overflow: hidden;
-      background-color: ${({ theme }) => theme.body};
-
-      &::after {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        transform: translateX(-100%);
-        background-position: center;
-        background-image: linear-gradient(
-          90deg,
-          ${({ theme }) => theme.body} 0,
-          ${({ theme }) => theme.buttonMed} 20%,
-          ${({ theme }) => theme.buttonMed} 60%,
-          ${({ theme }) => theme.body}
-        );
-        animation: 2s shimmer infinite;
-        animation-delay: inherit;
-        content: "";
-      }
-      @keyframes shimmer {
-        100% {
-          transform: translateX(100%);
+          color: ${({ theme }) => theme.textLight};
         }
       }
     }
   }
+  .loadingSpinner {
+    margin-right: 0;
+    height: 20px;
+    width: 20px;
+  }
+  .buttons {
+    width: min-content;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 
-  .workoutInfo {
-    text-align: left;
-    transform-origin: top;
-    -webkit-animation: open 0.5s ease forwards;
-    animation: open 0.5s ease forwards;
-
-    .exercise {
-      font-weight: 200;
-      font-size: 0.9rem;
-      margin: 0.25rem 0.5rem;
-      text-transform: capitalize;
-      display: flex;
-      justify-content: space-between;
-
-      .sets {
-        min-width: max-content;
-
-        span {
-          text-transform: lowercase;
-          font-size: 0.75rem;
-        }
-      }
+    button {
+      font-size: 0.6rem;
+      cursor: pointer;
+      border-radius: 5px;
+      border: none;
+      padding: 0.2rem 0.5rem;
+      margin-left: 0.5rem;
+      min-width: 40px;
+      background: ${({ theme }) => theme.buttonLight};
+      color: ${({ theme }) => theme.text};
+      transition: all 0.25s ease;
     }
 
-    @keyframes open {
-      0% {
-        opacity: 0;
-        transform: rotate3d(1, 0, 0, 45deg);
+    .remove {
+      color: ${({ theme }) => theme.textLight};
+      background: ${({ theme }) => theme.buttonMed};
+    }
+    .add {
+      color: ${({ theme }) => theme.accentText};
+      background: ${({ theme }) => theme.accentSoft};
+    }
+  }
+`;
+
+const SkeletonBox = styled.span`
+  display: inline-block;
+  height: 1em;
+  border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+  background-color: ${({ theme }) => theme.body};
+
+  &::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    background-position: center;
+    background-image: linear-gradient(
+      90deg,
+      ${({ theme }) => theme.body} 0,
+      ${({ theme }) => theme.buttonMed} 20%,
+      ${({ theme }) => theme.buttonMed} 60%,
+      ${({ theme }) => theme.body}
+    );
+    animation: 2s shimmer infinite;
+    animation-delay: inherit;
+    content: "";
+  }
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+`;
+
+const WorkoutInfo = styled.ul`
+  text-align: left;
+  transform-origin: top;
+  -webkit-animation: open 0.5s ease forwards;
+  animation: open 0.5s ease forwards;
+
+  .exercise {
+    font-weight: 200;
+    font-size: 0.9rem;
+    margin: 0.25rem 0.5rem;
+    text-transform: capitalize;
+    display: flex;
+    justify-content: space-between;
+
+    .sets {
+      min-width: max-content;
+
+      span {
+        text-transform: lowercase;
+        font-size: 0.75rem;
       }
-      100% {
-        opacity: 1;
-        transform: rotate3d(0);
-      }
+    }
+  }
+
+  @keyframes open {
+    0% {
+      opacity: 0;
+      transform: rotate3d(1, 0, 0, 45deg);
+    }
+    100% {
+      opacity: 1;
+      transform: rotate3d(0);
     }
   }
 `;
