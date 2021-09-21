@@ -187,7 +187,7 @@ const WorkoutTile = styled.li`
         cursor: pointer;
         border-radius: 5px;
         border: none;
-        padding: 0.35rem 0.5rem;
+        padding: 0.25rem 0.5rem;
         margin-left: 0.5rem;
         min-width: 40px;
         background: ${({ theme }) => theme.buttonLight};
@@ -200,7 +200,7 @@ const WorkoutTile = styled.li`
       }
       .add {
         color: ${({ theme }) => theme.accentText};
-        background: ${({ theme }) => theme.accent};
+        background: ${({ theme }) => theme.accentSoft};
       }
     }
 

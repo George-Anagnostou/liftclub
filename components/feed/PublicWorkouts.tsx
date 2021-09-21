@@ -11,9 +11,10 @@ import { useStoreDispatch, useStoreState } from "../../store";
 
 interface Props {
   searchInput: string;
+  limit: number;
 }
 
-const PublicWorkouts: React.FC<Props> = ({ searchInput }) => {
+const PublicWorkouts: React.FC<Props> = ({ searchInput, limit }) => {
   const { user } = useStoreState();
   const dispatch = useStoreDispatch();
 
@@ -40,8 +41,6 @@ const PublicWorkouts: React.FC<Props> = ({ searchInput }) => {
         break;
       case "name":
         setSearchResults([...searchResults].sort((a, b) => a.name.localeCompare(b.name)));
-        break;
-      default:
         break;
     }
   };
@@ -80,15 +79,17 @@ const PublicWorkouts: React.FC<Props> = ({ searchInput }) => {
 
       <ul>
         {Boolean(searchResults.length)
-          ? searchResults.map((workout, i) => (
-              <PublicWorkoutTile
-                isLoading={!Boolean(initialWorkouts.length)}
-                key={`public${workout._id}${i}`}
-                workout={workout}
-                removeFromSavedWorkouts={removeFromSavedWorkouts}
-                addToSavedWorkouts={addToSavedWorkouts}
-              />
-            ))
+          ? searchResults
+              .slice(0, limit || searchResults.length)
+              .map((workout, i) => (
+                <PublicWorkoutTile
+                  isLoading={!Boolean(initialWorkouts.length)}
+                  key={`public${workout._id}${i}`}
+                  workout={workout}
+                  removeFromSavedWorkouts={removeFromSavedWorkouts}
+                  addToSavedWorkouts={addToSavedWorkouts}
+                />
+              ))
           : searchInput && <li>No results</li>}
       </ul>
     </Container>

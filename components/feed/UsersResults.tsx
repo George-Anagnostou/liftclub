@@ -10,13 +10,14 @@ import { addToRecentlyViewedUsers } from "../../store/actions/userActions";
 // Hooks
 import { useDebouncedState } from "../hooks/useDebouncedState";
 // Interfaces
-import { Team, ShortUser } from "../../utils/interfaces";
+import { ShortUser } from "../../utils/interfaces";
 
 interface Props {
   searchInput: string;
+  limit: number;
 }
 
-const UsersResults: React.FC<Props> = ({ searchInput }) => {
+const UsersResults: React.FC<Props> = ({ searchInput, limit }) => {
   const { user } = useStoreState();
   const dispatch = useStoreDispatch();
 
@@ -51,22 +52,24 @@ const UsersResults: React.FC<Props> = ({ searchInput }) => {
         // User has something typed in to the search input
         <SearchResults>
           {Boolean(searchResults.length) ? (
-            searchResults.map(({ _id, username, profileImgUrl }) => (
-              <Link href={`users/${username}`} key={_id}>
-                <li
-                  className="result"
-                  onClick={() => addToRecentlyViewedUsers(dispatch, user!._id, _id)}
-                >
-                  {profileImgUrl ? (
-                    <img src={profileImgUrl} alt={username} />
-                  ) : (
-                    <Image src="/favicon.png" height="30" width="30"></Image>
-                  )}
+            searchResults
+              .slice(0, limit || searchResults.length)
+              .map(({ _id, username, profileImgUrl }) => (
+                <Link href={`users/${username}`} key={_id}>
+                  <li
+                    className="result"
+                    onClick={() => addToRecentlyViewedUsers(dispatch, user!._id, _id)}
+                  >
+                    {profileImgUrl ? (
+                      <img src={profileImgUrl} alt={username} />
+                    ) : (
+                      <Image src="/favicon.png" height="30" width="30"></Image>
+                    )}
 
-                  <p>{username}</p>
-                </li>
-              </Link>
-            ))
+                    <p>{username}</p>
+                  </li>
+                </Link>
+              ))
           ) : (
             <li className="result no-matches">
               <p>No matches</p>

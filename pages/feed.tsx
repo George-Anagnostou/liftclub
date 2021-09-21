@@ -16,7 +16,7 @@ import UsersResults from "../components/feed/UsersResults";
  */
 
 export default function feed() {
-  const [searchCategory, setSearchCategory] = useState("workouts");
+  const [searchCategory, setSearchCategory] = useState("");
   const [searchInput, setSearchInput] = useState("");
 
   return (
@@ -29,7 +29,9 @@ export default function feed() {
             <li
               key={slug}
               className={slug === searchCategory ? "highlight" : ""}
-              onClick={() => setSearchCategory(slug)}
+              onClick={() =>
+                searchCategory === slug ? setSearchCategory("") : setSearchCategory(slug)
+              }
             >
               {slug}
             </li>
@@ -37,11 +39,30 @@ export default function feed() {
         </ul>
       </SearchCategories>
 
-      {searchCategory === "workouts" && <PublicWorkouts searchInput={searchInput} />}
+      {(searchCategory == "workouts" || searchCategory === "") && (
+        <>
+          <h3
+            className="title"
+            style={searchCategory === "" ? { height: "1.5rem" } : { height: 0, opacity: 0 }}
+          >
+            Workouts
+          </h3>
 
-      {searchCategory === "users" && <UsersResults searchInput={searchInput} />}
+          <PublicWorkouts searchInput={searchInput} limit={searchCategory === "" ? 10 : 0} />
+        </>
+      )}
 
-      {/* <SavedWorkouts workouts={savedWorkouts} removeFromSavedWorkouts={removeFromSavedWorkouts} /> */}
+      {(searchCategory == "users" || searchCategory === "") && (
+        <>
+          <h3
+            className="title"
+            style={searchCategory === "" ? { height: "1.5rem" } : { height: 0, opacity: 0 }}
+          >
+            Users
+          </h3>
+          <UsersResults searchInput={searchInput} limit={searchCategory === "" ? 5 : 0} />
+        </>
+      )}
     </WorkoutFeedContainer>
   );
 }
@@ -50,6 +71,15 @@ const WorkoutFeedContainer = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
+
+  .title {
+    color: ${({ theme }) => theme.textLight};
+    text-align: left;
+    margin: 0.25rem 0.5rem 0;
+    font-weight: 300;
+    font-size: 1rem;
+    transition: height 0.2s ease-out, opacity 0.1s ease;
+  }
 `;
 
 const SearchCategories = styled.div`
