@@ -60,7 +60,7 @@ const UsersResults: React.FC<Props> = ({ searchInput }) => {
                   {profileImgUrl ? (
                     <img src={profileImgUrl} alt={username} />
                   ) : (
-                    <Image src="/favicon.png" height="40" width="40"></Image>
+                    <Image src="/favicon.png" height="30" width="30"></Image>
                   )}
 
                   <p>{username}</p>
@@ -87,7 +87,7 @@ const UsersResults: React.FC<Props> = ({ searchInput }) => {
                   {profileImgUrl ? (
                     <img src={profileImgUrl} alt={username} />
                   ) : (
-                    <Image src="/favicon.png" height="40" width="40"></Image>
+                    <Image src="/favicon.png" height="30" width="30"></Image>
                   )}
 
                   <p>{username}</p>
@@ -124,16 +124,16 @@ const SearchResults = styled.ul`
     background: ${({ theme }) => theme.background};
     box-shadow: 0 0.5px 2px ${({ theme }) => theme.boxShadow};
     margin: 0.25rem 0.5rem;
-    padding: 0.5rem 1rem;
+    padding: 0.25rem 1rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 1.1rem;
+    font-size: 1rem;
     border-radius: 8px;
 
     img {
-      height: 40px;
-      width: 40px;
+      height: 30px;
+      width: 30px;
       border-radius: 50%;
     }
 
