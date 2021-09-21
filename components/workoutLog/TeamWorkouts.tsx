@@ -64,7 +64,7 @@ const TeamWorkouts: React.FC<Props> = ({ selectedDate, displayWorkout }) => {
             {workout ? (
               <p className="workout">{workout.name}</p>
             ) : (
-              <li className="fallback-text">No workout today</li>
+              <p className="fallback-text">No workout today</p>
             )}
           </li>
         ))}
