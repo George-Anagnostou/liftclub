@@ -11,6 +11,7 @@ import { Workout } from "../../utils/interfaces";
 import { useStoreState } from "../../store";
 
 interface Props {
+  i: number;
   isLoading: boolean;
   workout: Workout;
   removeFromSavedWorkouts: (workout: Workout) => void;
@@ -18,6 +19,7 @@ interface Props {
 }
 
 const PublicWorkoutTile: React.FC<Props> = ({
+  i,
   isLoading,
   workout,
   removeFromSavedWorkouts,
@@ -72,10 +74,16 @@ const PublicWorkoutTile: React.FC<Props> = ({
       <div className="tile-bar">
         {isLoading ? (
           <div className="name">
-            <span className="skeleton-box" style={{ width: "55%" }}></span>
+            <span
+              className="skeleton-box"
+              style={{ width: "55%", animationDelay: (i + 1) / 20 + "s" }}
+            />
 
             <p>
-              <span className="skeleton-box" style={{ width: "40%" }}></span>
+              <span
+                className="skeleton-box"
+                style={{ width: "40%", animationDelay: (i + 1) / 20 + "s" }}
+              />
             </p>
           </div>
         ) : (
@@ -187,11 +195,12 @@ const WorkoutTile = styled.li`
         cursor: pointer;
         border-radius: 5px;
         border: none;
-        padding: 0.25rem 0.5rem;
+        padding: 0.2rem 0.5rem;
         margin-left: 0.5rem;
         min-width: 40px;
         background: ${({ theme }) => theme.buttonLight};
         color: ${({ theme }) => theme.text};
+        transition: all 0.25s ease;
       }
 
       .remove {
@@ -227,7 +236,8 @@ const WorkoutTile = styled.li`
           ${({ theme }) => theme.buttonMed} 60%,
           ${({ theme }) => theme.body}
         );
-        animation: shimmer 2s infinite;
+        animation: 2s shimmer infinite;
+        animation-delay: inherit;
         content: "";
       }
       @keyframes shimmer {

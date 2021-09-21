@@ -20,6 +20,7 @@ const PublicWorkouts: React.FC<Props> = ({ searchInput, limit }) => {
 
   const [initialWorkouts, setInitialWorkouts] = useState<Workout[]>([]);
   const [searchResults, setSearchResults] = useState<Workout[]>([]);
+  const [sortingMethod, setSortingMethod] = useState("recent");
 
   const addToSavedWorkouts = (workout: Workout) => {
     addSavedWorkout(dispatch, user!._id, workout._id);
@@ -30,6 +31,8 @@ const PublicWorkouts: React.FC<Props> = ({ searchInput, limit }) => {
   };
 
   const sortWorkoutsBy = (keyword: "popular" | "recent" | "name") => {
+    setSortingMethod(keyword);
+
     switch (keyword) {
       case "popular":
         setSearchResults([...searchResults].sort((a, b) => b.numLogged - a.numLogged));
@@ -72,9 +75,24 @@ const PublicWorkouts: React.FC<Props> = ({ searchInput, limit }) => {
   return (
     <Container>
       <SortOptions>
-        <li onClick={() => sortWorkoutsBy("recent")}>Recent</li>
-        <li onClick={() => sortWorkoutsBy("popular")}>Popular</li>
-        <li onClick={() => sortWorkoutsBy("name")}>A — Z</li>
+        <li
+          onClick={() => sortWorkoutsBy("recent")}
+          className={sortingMethod === "recent" ? "highlight" : ""}
+        >
+          Recent
+        </li>
+        <li
+          onClick={() => sortWorkoutsBy("popular")}
+          className={sortingMethod === "popular" ? "highlight" : ""}
+        >
+          Popular
+        </li>
+        <li
+          onClick={() => sortWorkoutsBy("name")}
+          className={sortingMethod === "name" ? "highlight" : ""}
+        >
+          A — Z
+        </li>
       </SortOptions>
 
       <ul>
@@ -83,6 +101,7 @@ const PublicWorkouts: React.FC<Props> = ({ searchInput, limit }) => {
               .slice(0, limit || searchResults.length)
               .map((workout, i) => (
                 <PublicWorkoutTile
+                  i={i}
                   isLoading={!Boolean(initialWorkouts.length)}
                   key={`public${workout._id}${i}`}
                   workout={workout}
@@ -90,7 +109,7 @@ const PublicWorkouts: React.FC<Props> = ({ searchInput, limit }) => {
                   addToSavedWorkouts={addToSavedWorkouts}
                 />
               ))
-          : searchInput && <li>No results</li>}
+          : searchInput && <p style={{ margin: "1rem 0", fontWeight: 300 }}>No results</p>}
       </ul>
     </Container>
   );
@@ -115,6 +134,7 @@ const SortOptions = styled.ul`
     border-radius: 5px;
 
     &.highlight {
+      border: 1px solid ${({ theme }) => theme.accentSoft};
     }
   }
 `;

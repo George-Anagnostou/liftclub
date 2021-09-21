@@ -51,30 +51,26 @@ const UsersResults: React.FC<Props> = ({ searchInput, limit }) => {
       {searchResults && searchInput ? (
         // User has something typed in to the search input
         <SearchResults>
-          {Boolean(searchResults.length) ? (
-            searchResults
-              .slice(0, limit || searchResults.length)
-              .map(({ _id, username, profileImgUrl }) => (
-                <Link href={`users/${username}`} key={_id}>
-                  <li
-                    className="result"
-                    onClick={() => addToRecentlyViewedUsers(dispatch, user!._id, _id)}
-                  >
-                    {profileImgUrl ? (
-                      <img src={profileImgUrl} alt={username} />
-                    ) : (
-                      <Image src="/favicon.png" height="30" width="30"></Image>
-                    )}
+          {Boolean(searchResults.length)
+            ? searchResults
+                .slice(0, limit || searchResults.length)
+                .map(({ _id, username, profileImgUrl }) => (
+                  <Link href={`users/${username}`} key={_id}>
+                    <li
+                      className="result"
+                      onClick={() => addToRecentlyViewedUsers(dispatch, user!._id, _id)}
+                    >
+                      {profileImgUrl ? (
+                        <img src={profileImgUrl} alt={username} />
+                      ) : (
+                        <Image src="/favicon.png" height="30" width="30"></Image>
+                      )}
 
-                    <p>{username}</p>
-                  </li>
-                </Link>
-              ))
-          ) : (
-            <li className="result no-matches">
-              <p>No matches</p>
-            </li>
-          )}
+                      <p>{username}</p>
+                    </li>
+                  </Link>
+                ))
+            : searchInput && <p style={{ margin: "1rem 0", fontWeight: 300 }}>No results</p>}
         </SearchResults>
       ) : (
         Boolean(recentlyViewedUsers.length) && (
