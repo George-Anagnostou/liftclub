@@ -61,11 +61,7 @@ const TeamWorkouts: React.FC<Props> = ({ selectedDate, displayWorkout }) => {
           <li key={teamName} onClick={workout ? () => displayWorkout(workout) : () => {}}>
             <p className="team-name">{teamName}</p>
 
-            {workout ? (
-              <p className="workout">{workout.name}</p>
-            ) : (
-              <p className="fallback-text">No workout today</p>
-            )}
+            <p className="workout">{workout?.name || "No workout today"}</p>
           </li>
         ))}
       </ul>
@@ -116,9 +112,5 @@ const WorkoutsList = styled.div`
       word-wrap: break-word;
       text-align: left;
     }
-  }
-
-  .fallback-text {
-    color: ${({ theme }) => theme.textLight};
   }
 `;
