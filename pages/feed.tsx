@@ -7,10 +7,10 @@ import UsersResults from "../components/feed/UsersResults";
 
 /**
  * TODO:
- * 
+ *
  * The display for a feed is comprised of:
  *  - curated categories of workouts to pick from
- *  - top 10 reccomended workouts
+ *  - top 6 reccomended workouts
  *  - users with the most workouts created
  *  - teams available to join
  *
@@ -46,7 +46,7 @@ export default function feed() {
             Workouts
           </Title>
 
-          <PublicWorkouts searchInput={searchInput} limit={searchCategory === "" ? 10 : 0} />
+          <PublicWorkouts searchInput={searchInput} limit={searchCategory === "" ? 6 : 0} />
         </>
       )}
 
@@ -66,6 +66,7 @@ const WorkoutFeedContainer = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
+  margin-bottom: 1rem;
 `;
 
 const Title = styled.h3`

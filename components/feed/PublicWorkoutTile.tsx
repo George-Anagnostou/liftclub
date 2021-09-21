@@ -79,17 +79,24 @@ const PublicWorkoutTile: React.FC<Props> = ({
             <p>
               <SkeletonBox style={{ width: "40%", animationDelay: (i + 1) / 20 + "s" }} />
             </p>
+            <p>
+              <SkeletonBox style={{ width: "30%", animationDelay: (i + 1) / 20 + "s" }} />
+            </p>
           </div>
         ) : (
           <>
-            <div className="name">
-              <h3 onClick={toggleWorkoutInfo}>{workout.name}</h3>
+            <div className="name" onClick={toggleWorkoutInfo}>
+              <h3>{workout.name}</h3>
 
               <p>
                 <span>{timeSince(new Date(workout.date_created))}</span> {"- "}
                 <Link href={`users/${workout.creatorName}`}>
                   <a className="creator">{workout.creatorName}</a>
                 </Link>
+              </p>
+
+              <p>
+                Logged {workout.numLogged} {workout.numLogged === 1 ? "time" : "times"}
               </p>
             </div>
 
