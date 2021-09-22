@@ -77,22 +77,24 @@ const UsersResults: React.FC<Props> = ({ searchInput, limit }) => {
           // User has nothing in search input, so show recently viewed users
           <SearchResults>
             <h3 className="recent-title">Recent</h3>
-            {recentlyViewedUsers.map(({ _id, username, profileImgUrl }) => (
-              <Link href={`users/${username}`} key={_id}>
-                <li
-                  className="result"
-                  onClick={() => addToRecentlyViewedUsers(dispatch, user!._id, _id)}
-                >
-                  {profileImgUrl ? (
-                    <img src={profileImgUrl} alt={username} />
-                  ) : (
-                    <Image src="/favicon.png" height="30" width="30"></Image>
-                  )}
+            {recentlyViewedUsers
+              .slice(0, limit || recentlyViewedUsers.length)
+              .map(({ _id, username, profileImgUrl }) => (
+                <Link href={`users/${username}`} key={_id}>
+                  <li
+                    className="result"
+                    onClick={() => addToRecentlyViewedUsers(dispatch, user!._id, _id)}
+                  >
+                    {profileImgUrl ? (
+                      <img src={profileImgUrl} alt={username} />
+                    ) : (
+                      <Image src="/favicon.png" height="30" width="30"></Image>
+                    )}
 
-                  <p>{username}</p>
-                </li>
-              </Link>
-            ))}
+                    <p>{username}</p>
+                  </li>
+                </Link>
+              ))}
           </SearchResults>
         )
       )}
