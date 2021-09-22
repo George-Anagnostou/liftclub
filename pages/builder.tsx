@@ -7,7 +7,11 @@ import RoutineBuilder from "../components/builder/routine";
 import TeamBuilder from "../components/builder/team";
 import BuilderSelectBar from "../components/builder/BuilderSelectBar";
 
-const Builders = [<WorkoutBuilder />, <RoutineBuilder />, <TeamBuilder />];
+const Builders = [
+  { slug: "workout", component: <WorkoutBuilder /> },
+  { slug: "routine", component: <RoutineBuilder /> },
+  { slug: "team", component: <TeamBuilder /> },
+];
 
 export default function builder() {
   const router = useRouter();
@@ -36,9 +40,9 @@ export default function builder() {
       <BuilderSelectBar builderType={builderType} setBuilderType={setBuilderType} />
 
       <BuilderSlideContainer style={{ marginLeft: `${margin}vw` }}>
-        {Builders.map((Builder, i) => (
-          <div className="builder" key={i}>
-            {Builder}
+        {Builders.map(({ slug, component }, i) => (
+          <div className="builder" key={i} style={builderType !== slug ? { height: 0 } : {}}>
+            {component}
           </div>
         ))}
       </BuilderSlideContainer>

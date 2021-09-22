@@ -21,23 +21,19 @@ const ExerciseListItem: React.FC<Props> = ({
   return (
     <Item key={exercise._id} className={isExerciseInCustomWorkout(exercise._id) ? "highlight" : ""}>
       <div className="heading">
-        <h3>{exercise.name}</h3>
+        <h3
+          onClick={
+            isExerciseInCustomWorkout(exercise._id)
+              ? () => removeExercise(exercise._id)
+              : () => addExercise(exercise)
+          }
+        >
+          {exercise.name}
+        </h3>
 
-        <div>
-          {isExerciseInCustomWorkout(exercise._id) ? (
-            <button className="ctrlBtn" onClick={() => removeExercise(exercise._id)}>
-              Remove
-            </button>
-          ) : (
-            <button className="ctrlBtn" onClick={() => addExercise(exercise)}>
-              Add
-            </button>
-          )}
-
-          <button className="infoBtn" onClick={() => setShowInfo(!showInfo)}>
-            <p>i</p>
-          </button>
-        </div>
+        <button className="infoBtn" onClick={() => setShowInfo(!showInfo)}>
+          <p>i</p>
+        </button>
       </div>
 
       {showInfo && (
@@ -79,37 +75,29 @@ const Item = styled.li`
     padding: 0.25rem 0;
 
     h3 {
+      flex: 1;
       text-align: left;
-      padding: 0.5rem;
-      font-size: 1.1rem;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
       font-weight: 300;
-      letter-spacing: 1px;
     }
-    div {
-      display: flex;
-      justify-content: center;
-      align-items: center;
 
-      .infoBtn {
-        padding: 0.5rem;
-        border-radius: 5px;
-        background: ${({ theme }) => theme.buttonLight};
-        border: none;
-        margin: 0 0.5rem;
-        p {
-          border: 1px solid ${({ theme }) => theme.textLight};
-          color: ${({ theme }) => theme.text};
-          height: 1.2rem;
-          width: 1.2rem;
-          border-radius: 50%;
-        }
-      }
-      .ctrlBtn {
-        background: ${({ theme }) => theme.accentSoft};
-        border: none;
-        color: ${({ theme }) => theme.accentText};
-        padding: 0.5rem;
-        border-radius: 5px;
+    .infoBtn {
+      background: ${({ theme }) => theme.buttonLight};
+      padding: 0.25rem;
+      border-radius: 5px;
+      border: none;
+      margin: 0 0.5rem;
+      display: grid;
+      place-items: center;
+
+      p {
+        border: 1px solid ${({ theme }) => theme.textLight};
+        color: ${({ theme }) => theme.text};
+        height: 1rem;
+        width: 1rem;
+        font-size: 0.6rem;
+        border-radius: 50%;
       }
     }
   }
@@ -141,8 +129,8 @@ const Item = styled.li`
   &.highlight {
     background: ${({ theme }) => theme.accentSoft};
     color: ${({ theme }) => theme.accentText} !important;
+
     button {
-      border: 1px solid ${({ theme }) => theme.accentSoft} !important;
       background: ${({ theme }) => theme.accent} !important;
       color: ${({ theme }) => theme.accentText} !important;
 
@@ -151,6 +139,7 @@ const Item = styled.li`
         border-color: ${({ theme }) => theme.accentText} !important;
       }
     }
+
     .info p {
       background: ${({ theme }) => theme.accent} !important;
       span {

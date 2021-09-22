@@ -6,7 +6,6 @@ import { useStoreState } from "../../../store";
 // Interfaces
 import { Exercise } from "../../../utils/interfaces";
 // Components
-import LoadingSpinner from "../../LoadingSpinner";
 import CreateExerciseModal from "./CreateExerciseModal";
 import ExerciseListItem from "./ExerciseListItem";
 
@@ -14,7 +13,8 @@ interface Props {
   isExerciseInCustomWorkout: (exercise_id: string) => boolean;
   addExercise: (exercise: Exercise) => void;
   removeExercise: (exercise_id: string) => void;
-  setShowExerciseList: React.Dispatch<React.SetStateAction<boolean>>;
+  setExerciseListBottom: React.Dispatch<React.SetStateAction<number>>;
+  exerciseListBottom: number;
 }
 
 // SWR fetcher
@@ -24,15 +24,27 @@ const ExerciseList: React.FC<Props> = ({
   isExerciseInCustomWorkout,
   addExercise,
   removeExercise,
-  setShowExerciseList,
+  setExerciseListBottom,
+  exerciseListBottom,
 }) => {
-  const { data, error } = useSWR("/api/exercises", fetcher);
-
   const { user } = useStoreState();
+
+  const { data, error } = useSWR("/api/exercises", fetcher);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [displayedExercises, setDisplayedExercises] = useState<Exercise[]>([]);
   const [showCreateExerciseModal, setShowCreateExerciseModal] = useState(false);
+
+  const handleTouchMove = (e) => {
+    const screenHeight = e.view.innerHeight;
+    const thumbY = e.touches[0].clientY;
+    const thumbVH = ((screenHeight - thumbY) / screenHeight) * 100 - 80;
+    if (thumbVH <= 0) setExerciseListBottom(thumbVH);
+  };
+
+  const handleTouchEnd = () => {
+    exerciseListBottom <= -20 ? setExerciseListBottom(-80) : setExerciseListBottom(0);
+  };
 
   const handleSearchTermChange = (e) => setSearchTerm(e.target.value);
 
@@ -45,11 +57,9 @@ const ExerciseList: React.FC<Props> = ({
 
       setDisplayedExercises(filtered);
     } else {
-      const alphabetical = data.sort((a: Exercise, b: Exercise) => {
-        if (a.name.toLowerCase().charAt(0) < b.name.toLowerCase().charAt(0)) return -1;
-        if (a.name.toLowerCase().charAt(0) > b.name.toLowerCase().charAt(0)) return 1;
-        return 0;
-      });
+      const alphabetical = data.sort((a: Exercise, b: Exercise) =>
+        a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+      );
 
       setDisplayedExercises(alphabetical);
     }
@@ -59,26 +69,52 @@ const ExerciseList: React.FC<Props> = ({
     if (data) filterExercisesBy(searchTerm);
   }, [searchTerm, data]);
 
+  useEffect(() => {
+    if (exerciseListBottom === -80) document.body.style.overflow = "auto";
+    else document.body.style.overflow = "hidden";
+  }, [exerciseListBottom]);
+
   // Error catch for SWR
   if (error) return <h1>failed to load</h1>;
 
   return (
-    <ExercisesContainer>
+    <ExercisesContainer
+      style={{ bottom: exerciseListBottom + "vh" }}
+      className={exerciseListBottom === 0 || exerciseListBottom === -80 ? "transition" : ""}
+    >
       <header>
-        <input
-          type="text"
-          name="searchTerm"
-          value={searchTerm}
-          onChange={handleSearchTermChange}
-          placeholder="Search"
-        />
+        <div className="thumb-line" onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
+          <span />
+        </div>
 
-        {user?.isTrainer && (
-          <button onClick={() => setShowCreateExerciseModal(true)}>Create</button>
-        )}
+        <SearchInput>
+          <input
+            type="text"
+            name="searchTerm"
+            value={searchTerm}
+            onChange={handleSearchTermChange}
+            placeholder="Search"
+          />
 
-        <button onClick={() => setShowExerciseList(false)}>Close</button>
+          {user?.isTrainer && (
+            <button onClick={() => setShowCreateExerciseModal(true)}>Create</button>
+          )}
+
+          <button onClick={() => setExerciseListBottom(-80)}>Close</button>
+        </SearchInput>
       </header>
+
+      <ul>
+        {displayedExercises.map((exercise) => (
+          <ExerciseListItem
+            key={exercise._id}
+            exercise={exercise}
+            isExerciseInCustomWorkout={isExerciseInCustomWorkout}
+            removeExercise={removeExercise}
+            addExercise={addExercise}
+          />
+        ))}
+      </ul>
 
       {showCreateExerciseModal && (
         <CreateExerciseModal
@@ -86,78 +122,63 @@ const ExerciseList: React.FC<Props> = ({
           showModal={showCreateExerciseModal}
         />
       )}
-
-      {data ? (
-        <ul>
-          {displayedExercises.map((exercise) => (
-            <ExerciseListItem
-              key={exercise._id}
-              exercise={exercise}
-              isExerciseInCustomWorkout={isExerciseInCustomWorkout}
-              removeExercise={removeExercise}
-              addExercise={addExercise}
-            />
-          ))}
-        </ul>
-      ) : (
-        <div className="loadingContainer">
-          <LoadingSpinner />
-        </div>
-      )}
     </ExercisesContainer>
   );
 };
 export default ExerciseList;
 
 const ExercisesContainer = styled.div`
-  border: none;
-  max-height: 100%;
-  width: 95%;
-  margin: auto;
+  height: 75vh;
+  width: 100vw;
+  margin-left: -0.5rem;
   overflow-y: scroll;
   overflow-x: hidden;
+  border-radius: 20px 20px 0 0;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+
+  z-index: 999;
+  transition: bottom 0.05s ease-out;
+
+  &.transition {
+    transition: bottom 0.2s ease-out;
+  }
 
   header {
+    box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
     position: sticky;
-    top: 0.5rem;
+    top: 0;
 
-    background: ${({ theme }) => theme.buttonLight};
+    border: 2px solid ${({ theme }) => theme.border};
+    background: ${({ theme }) => theme.background};
+    border-radius: 20px 20px 0 0;
     width: 100%;
-    margin-bottom: 0.5rem;
-    border-radius: 5px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    input {
-      flex: 3;
-      width: 100%;
-      font-size: 1rem;
-      margin: 0.25rem 0.1rem 0.25rem 0.25rem;
-      padding: 0.5rem;
-      border: none;
-      border-radius: 5px;
-      color: ${({ theme }) => theme.text};
-      background: ${({ theme }) => theme.background};
-    }
-
-    button {
-      flex: 1;
-      font-size: 1rem;
-      color: ${({ theme }) => theme.textLight};
-      background: ${({ theme }) => theme.background};
-      border: none;
-      margin: 0.25rem 0.1rem;
-      border-radius: 5px;
-      padding: 0.5rem;
-    }
     padding-right: 0.15rem;
+
+    .thumb-line {
+      width: 100%;
+      padding: 0.5rem 0 1rem;
+      touch-action: none;
+
+      span {
+        width: 40%;
+        height: 7px;
+        border-radius: 5px;
+        background: ${({ theme }) => theme.buttonLight};
+        display: block;
+        margin: auto;
+        touch-action: none;
+      }
+    }
   }
 
   ul {
-    margin: 1rem 0.5rem;
-
+    background: ${({ theme }) => theme.buttonMed};
+    border: 2px solid ${({ theme }) => theme.border};
+    flex: 1;
+    padding: 1rem 0.5rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -166,5 +187,40 @@ const ExercisesContainer = styled.div`
 
   .loadingContainer {
     margin-top: 2rem;
+  }
+`;
+
+const SearchInput = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  input {
+    flex: 4;
+    width: 100%;
+    font-size: 1rem;
+    margin: 0.25rem 0.1rem 0.5rem 0.25rem;
+    padding: 0.25rem 0.5rem;
+    border: none;
+    border-radius: 5px;
+    color: ${({ theme }) => theme.text};
+    background: ${({ theme }) => theme.buttonMed};
+    border: 1px solid ${({ theme }) => theme.buttonMed};
+    appearance: none;
+    &:focus {
+      outline: none;
+      border: 1px solid ${({ theme }) => theme.accentSoft};
+    }
+  }
+
+  button {
+    flex: 1;
+    font-size: 0.7rem;
+    color: ${({ theme }) => theme.textLight};
+    background: ${({ theme }) => theme.buttonMed};
+    border: none;
+    margin: 0.25rem 0.1rem 0.5rem 0.25rem;
+    border-radius: 5px;
+    padding: 0.5rem;
   }
 `;

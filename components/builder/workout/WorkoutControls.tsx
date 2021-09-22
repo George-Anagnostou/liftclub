@@ -93,19 +93,24 @@ const ControlsBar = styled.div`
 
     input[type="text"] {
       width: 100%;
-      padding: 0.5rem 1rem;
-      font-size: 1.1rem;
-      border: none;
+      padding: 0.25rem 1rem;
+      font-size: 1rem;
       border-radius: 5px;
       color: ${({ theme }) => theme.text};
       background: inherit;
+      border: 1px solid ${({ theme }) => theme.buttonMed};
+      appearance: none;
+      &:focus {
+        outline: none;
+        border: 1px solid ${({ theme }) => theme.accentSoft};
+      }
     }
   }
 
   .controls {
     display: flex;
     align-items: stretch;
-    justify-content: space-between;
+    justify-content: center;
     width: 100%;
     margin-top: 0.5rem;
 
@@ -118,7 +123,7 @@ const ControlsBar = styled.div`
       box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
       display: inline-block;
       padding: 0.25rem 1rem;
-      font-size: 1rem;
+      font-size: 0.8rem;
       margin-right: 0.5rem;
 
       &:disabled {
@@ -137,7 +142,7 @@ const ControlsBar = styled.div`
       display: inline-block;
       min-width: max-content;
       padding: 0.25rem 1rem;
-      font-size: 1rem;
+      font-size: 0.8rem;
 
       &.disabled {
         color: ${({ theme }) => theme.border};

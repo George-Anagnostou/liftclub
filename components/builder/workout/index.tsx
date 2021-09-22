@@ -9,7 +9,6 @@ import CustomWorkout from "./CustomWorkout";
 import { useStoreState } from "../../../store";
 // Interfaces
 import { Exercise, Workout } from "../../../utils/interfaces";
-import Modal from "../../Wrappers/Modal";
 import { moveItemInArray } from "../../../utils/";
 
 const CustomWorkoutInit = {
@@ -26,7 +25,7 @@ const CustomWorkoutInit = {
 const WorkoutBuilder: React.FC = () => {
   const { user } = useStoreState();
 
-  const [showExerciseList, setShowExerciseList] = useState(false);
+  const [exerciseListBottom, setExerciseListBottom] = useState(-80);
   const [workoutSavedSuccessfully, setWorkoutSavedSuccessfully] = useState<boolean | null>(null);
   const [customWorkout, setCustomWorkout] = useState<Workout>(CustomWorkoutInit);
 
@@ -88,7 +87,7 @@ const WorkoutBuilder: React.FC = () => {
           clearCustomWorkout={clearCustomWorkout}
           removeExercise={removeExercise}
           setWorkoutSavedSuccessfully={setWorkoutSavedSuccessfully}
-          setShowExerciseList={setShowExerciseList}
+          setExerciseListBottom={setExerciseListBottom}
         />
       </DragDropContext>
 
@@ -99,16 +98,13 @@ const WorkoutBuilder: React.FC = () => {
         setCustomWorkout={setCustomWorkout}
       />
 
-      {showExerciseList && (
-        <Modal removeModal={() => setShowExerciseList(false)} isOpen={showExerciseList}>
-          <ExerciseList
-            isExerciseInCustomWorkout={isExerciseInCustomWorkout}
-            addExercise={addExercise}
-            removeExercise={removeExercise}
-            setShowExerciseList={setShowExerciseList}
-          />
-        </Modal>
-      )}
+      <ExerciseList
+        isExerciseInCustomWorkout={isExerciseInCustomWorkout}
+        addExercise={addExercise}
+        removeExercise={removeExercise}
+        setExerciseListBottom={setExerciseListBottom}
+        exerciseListBottom={exerciseListBottom}
+      />
     </Container>
   );
 };

@@ -91,10 +91,10 @@ export default CustomWorkoutExercise;
 
 const ExerciseItem = styled.li`
   border-radius: 5px;
-  box-shadow: 0 0 5px ${({ theme }) => theme.boxShadow};
+  box-shadow: 0 2px 3px ${({ theme }) => theme.boxShadow};
   background: ${({ theme }) => theme.background};
   width: 100%;
-  margin: 0.5rem 0;
+  margin-top: 0.5rem;
   text-align: center;
   position: relative;
 
@@ -127,14 +127,14 @@ const ExerciseItem = styled.li`
         span {
           height: 2px;
           width: 20px;
-          margin: 0.1rem;
+          margin: 0.15rem;
           display: block;
           background: ${({ theme }) => theme.accentSoft};
         }
       }
       .name {
         flex: 1;
-        font-size: 1.2rem;
+        font-size: 1rem;
         text-transform: capitalize;
       }
     }
@@ -188,6 +188,10 @@ const ExerciseItem = styled.li`
 
     li {
       background: ${({ theme }) => theme.buttonLight};
+      input {
+        border: 2px solid ${({ theme }) => theme.buttonLight};
+        border-bottom: 2px solid ${({ theme }) => theme.accentSoft};
+      }
     }
   }
 `;
@@ -202,30 +206,36 @@ const RepsList = styled.ul`
 const RepListItem = styled.li`
   margin: 0.2rem;
   flex: 1;
-  min-width: 150px;
+  min-width: 125px;
   width: fit-content;
   background: ${({ theme }) => theme.buttonMed};
-  padding: 0.5rem;
+  padding: 0.25rem;
   border-radius: 5px;
 
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-evenly;
 
   input {
+    appearance: none;
     width: 3rem;
     font-size: 1.25rem;
-    padding: 0.25rem 0;
-    margin: 0 0.25rem;
+    margin: 0 0.25rem 0.25rem;
     background: inherit;
-    color: inherit;
+    color: ${({ theme }) => theme.text};
     text-align: center;
     border-radius: 0;
-    border: none;
+    border: 2px solid ${({ theme }) => theme.buttonMed};
     border-bottom: 2px solid ${({ theme }) => theme.accentSoft};
+    &:focus {
+      outline: none;
+      border-radius: 3px;
+      border: 2px solid ${({ theme }) => theme.accentSoft};
+    }
   }
   span {
+    color: ${({ theme }) => theme.textLight};
     font-weight: 300;
-    font-size: 0.9rem;
+    font-size: 0.75rem;
   }
 `;

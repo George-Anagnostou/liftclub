@@ -17,7 +17,7 @@ interface Props {
   clearCustomWorkout: () => void;
   removeExercise: (exercise_id: string) => void;
   user: User | undefined;
-  setShowExerciseList: React.Dispatch<React.SetStateAction<boolean>>;
+  setExerciseListBottom: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const CustomWorkout: React.FC<Props> = ({
@@ -28,7 +28,7 @@ const CustomWorkout: React.FC<Props> = ({
   clearCustomWorkout,
   removeExercise,
   user,
-  setShowExerciseList,
+  setExerciseListBottom,
 }) => {
   // Handles changes for custom workout name
   const handleWorkoutNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -164,7 +164,7 @@ const CustomWorkout: React.FC<Props> = ({
         )}
       </Droppable>
 
-      <AddExerciseBtn onClick={() => setShowExerciseList(true)}>
+      <AddExerciseBtn onClick={() => setExerciseListBottom(0)}>
         <p>Add Exercise</p>
       </AddExerciseBtn>
     </>
@@ -191,7 +191,8 @@ const AddExerciseBtn = styled.button`
   border: none;
   width: fit-content;
   margin: 1rem auto;
-  padding: 0.5rem 1rem;
+  padding: 0.25rem 1rem;
+  font-weight: 300;
 
   border-radius: 5px;
   font-size: 1.1rem;

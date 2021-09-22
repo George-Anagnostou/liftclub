@@ -38,17 +38,17 @@ const Bar = styled.div`
     li {
       text-transform: capitalize;
       flex: 1;
-      padding: 0.5rem 0;
+      padding: 0.25rem 0;
       color: ${({ theme }) => theme.textLight};
-      border-bottom: 3px solid ${({ theme }) => theme.border};
+      border-bottom: 2px solid ${({ theme }) => theme.border};
       background: ${({ theme }) => theme.background};
-      
+
       transition: all 0.5s ease;
-      
+
       &.selected {
         color: ${({ theme }) => theme.text};
-        border-bottom: 3px solid ${({ theme }) => theme.accentSoft};
-        background: ${({ theme }) => theme.buttonLight};
+        border-bottom: 2px solid ${({ theme }) => theme.accentSoft};
+        background: ${({ theme }) => theme.buttonMed};
       }
     }
   }

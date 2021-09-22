@@ -115,7 +115,7 @@ export default function CreateExerciseModal({ setShowModal, showModal }) {
 
 const Container = styled.div`
   width: 95%;
-  margin: 10vh auto 0;
+  margin: 20vh auto 0;
   max-width: 350px;
   border-radius: 10px;
   background: ${({ theme }) => theme.buttonLight};
