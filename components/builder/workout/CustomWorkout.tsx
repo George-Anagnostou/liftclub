@@ -185,13 +185,13 @@ const ExerciseList = styled.ul`
 `;
 
 const AddExerciseBtn = styled.button`
-  background: ${({ theme }) => theme.accentSoft};
+  background: ${({ theme }) => theme.accent};
   color: ${({ theme }) => theme.accentText};
-  box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
+  box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
   border: none;
   width: fit-content;
   margin: 1rem auto;
-  padding: 0.25rem 1rem;
+  padding: 0.25rem 2rem;
   font-weight: 300;
 
   border-radius: 5px;

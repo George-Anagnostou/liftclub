@@ -181,7 +181,7 @@ const ExercisesContainer = styled.div`
     padding: 1rem 0.5rem;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
   }
 

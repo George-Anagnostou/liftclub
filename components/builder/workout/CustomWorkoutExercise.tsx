@@ -206,7 +206,7 @@ const RepsList = styled.ul`
 const RepListItem = styled.li`
   margin: 0.2rem;
   flex: 1;
-  min-width: 125px;
+  min-width: 100px;
   width: fit-content;
   background: ${({ theme }) => theme.buttonMed};
   padding: 0.25rem;

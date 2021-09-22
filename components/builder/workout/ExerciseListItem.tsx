@@ -58,7 +58,7 @@ export default ExerciseListItem;
 
 const Item = styled.li`
   border-radius: 5px;
-  box-shadow: 0 0 5px ${({ theme }) => theme.boxShadow};
+  box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
   background: ${({ theme }) => theme.background};
   width: 100%;
   margin: 0 1rem 0.5rem;
@@ -77,7 +77,7 @@ const Item = styled.li`
     h3 {
       flex: 1;
       text-align: left;
-      padding: 0.5rem 1rem;
+      padding: 0.25rem 1rem;
       font-size: 1rem;
       font-weight: 300;
     }
@@ -127,6 +127,7 @@ const Item = styled.li`
   }
 
   &.highlight {
+    box-shadow: none;
     background: ${({ theme }) => theme.accentSoft};
     color: ${({ theme }) => theme.accentText} !important;
 

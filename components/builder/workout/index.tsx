@@ -25,7 +25,7 @@ const CustomWorkoutInit = {
 const WorkoutBuilder: React.FC = () => {
   const { user } = useStoreState();
 
-  const [exerciseListBottom, setExerciseListBottom] = useState(-80);
+  const [exerciseListBottom, setExerciseListBottom] = useState(-80); // number ranging from -80 to 0
   const [workoutSavedSuccessfully, setWorkoutSavedSuccessfully] = useState<boolean | null>(null);
   const [customWorkout, setCustomWorkout] = useState<Workout>(CustomWorkoutInit);
 
