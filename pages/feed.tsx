@@ -40,24 +40,31 @@ export default function feed() {
         </ul>
       </SearchCategories>
 
-      {(searchCategory == "workouts" || searchCategory === "") && (
-        <>
-          <Title style={searchCategory === "" ? { height: "1.5rem" } : { height: 0, opacity: 0 }}>
-            Workouts
-          </Title>
+      <section
+        style={
+          searchCategory === "workouts" || searchCategory === ""
+            ? { height: "auto" }
+            : { height: 0, opacity: 0 }
+        }
+      >
+        <Title style={searchCategory === "" ? { height: "1.5rem" } : { height: 0, opacity: 0 }}>
+          Workouts
+        </Title>
+        <PublicWorkouts searchInput={searchInput} limit={searchCategory === "" ? 6 : 0} />
+      </section>
 
-          <PublicWorkouts searchInput={searchInput} limit={searchCategory === "" ? 6 : 0} />
-        </>
-      )}
-
-      {(searchCategory == "users" || searchCategory === "") && (
-        <>
-          <Title style={searchCategory === "" ? { height: "1.5rem" } : { height: 0, opacity: 0 }}>
-            Users
-          </Title>
-          <UsersResults searchInput={searchInput} limit={searchCategory === "" ? 5 : 0} />
-        </>
-      )}
+      <section
+        style={
+          searchCategory === "users" || searchCategory === ""
+            ? { height: "auto" }
+            : { height: 0, opacity: 0 }
+        }
+      >
+        <Title style={searchCategory === "" ? { height: "1.5rem" } : { height: 0, opacity: 0 }}>
+          Users
+        </Title>
+        <UsersResults searchInput={searchInput} limit={searchCategory === "" ? 5 : 0} />
+      </section>
     </WorkoutFeedContainer>
   );
 }
@@ -67,6 +74,10 @@ const WorkoutFeedContainer = styled.div`
   justify-content: center;
   flex-direction: column;
   margin-bottom: 1rem;
+`;
+
+const Section = styled.section`
+  transition: height 0.35s ease;
 `;
 
 const Title = styled.h3`
