@@ -41,7 +41,7 @@ export default function builder() {
 
       <BuilderSlideContainer style={{ marginLeft: `${margin}vw` }}>
         {Builders.map(({ slug, component }, i) => (
-          <div className="builder" key={i} style={builderType !== slug ? { height: 0 } : {}}>
+          <div className="builder" key={i} style={builderType !== slug ? { height: "85vh" } : {}}>
             {component}
           </div>
         ))}
@@ -54,6 +54,7 @@ const Container = styled.section`
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  position: relative;
 `;
 
 const BuilderSlideContainer = styled.div`
@@ -66,7 +67,7 @@ const BuilderSlideContainer = styled.div`
 
   .builder {
     width: 100vw;
-    padding: 0 0.5rem;
+    padding: 0 0.5rem 1rem;
     box-sizing: content-box;
   }
 `;
