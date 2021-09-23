@@ -43,8 +43,8 @@ export default function feed() {
       <section
         style={
           searchCategory === "workouts" || searchCategory === ""
-            ? { height: "auto" }
-            : { height: 0, opacity: 0 }
+            ? { display: "block" }
+            : { display: "none" }
         }
       >
         <Title style={searchCategory === "" ? { height: "1.5rem" } : { height: 0, opacity: 0 }}>
@@ -56,8 +56,8 @@ export default function feed() {
       <section
         style={
           searchCategory === "users" || searchCategory === ""
-            ? { height: "auto" }
-            : { height: 0, opacity: 0 }
+            ? { display: "block" }
+            : { display: "none" }
         }
       >
         <Title style={searchCategory === "" ? { height: "1.5rem" } : { height: 0, opacity: 0 }}>
