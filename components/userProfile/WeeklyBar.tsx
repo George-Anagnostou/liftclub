@@ -26,7 +26,7 @@ const WeeklyBar: React.FC<Props> = ({ profileData }) => {
 
   return (
     <DateScrollContainer>
-      {[...Array(7).keys()].map((numDays) => (
+      {[...Array(90).keys()].map((numDays) => (
         <li className="date" key={-numDays}>
           {renderDate(-numDays)}
         </li>
@@ -41,13 +41,15 @@ const DateScrollContainer = styled.ul`
   align-items: flex-end;
   flex-direction: row-reverse;
   width: 100%;
+  overflow: auto;
 
   .date {
     flex: 1;
+    min-width: 45px;
     height: fit-content;
     text-align: center;
     margin: 0 0.15rem;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
 
     &:last-child {
       margin: 0 0.15rem 0 0;

@@ -82,16 +82,21 @@ const NameTile: React.FC<Props> = ({ profileData, setProfileData, isProfileOwner
 
       <div className="right">
         <h1>{profileData.username}</h1>
-        <p>{Object.keys(profileData.workoutLog).length} days logged</p>
 
-        <p onClick={() => handleProfileFollowsClick("followers")}>
-          {profileData.followers?.length || 0}{" "}
-          {profileData.followers?.length === 1 ? "follower" : "followers"}
+        <p>
+          {Object.keys(profileData.workoutLog).length} <span>days logged</span>
         </p>
 
-        <p onClick={() => handleProfileFollowsClick("following")}>
-          {profileData.following?.length || 0} following{" "}
-        </p>
+        <div className="follows">
+          <p onClick={() => handleProfileFollowsClick("followers")}>
+            {profileData.followers?.length || 0}{" "}
+            <span>{profileData.followers?.length === 1 ? "follower" : "followers"}</span>
+          </p>
+
+          <p onClick={() => handleProfileFollowsClick("following")}>
+            {profileData.following?.length || 0} <span>following</span>
+          </p>
+        </div>
       </div>
 
       {showFollowsModal && (
@@ -115,23 +120,20 @@ const TileContainer = styled.header`
   border-radius: 10px;
 
   .left {
-    .followBtn {
+    button {
       margin-top: 0.5rem;
-      padding: 0.25rem 1rem;
-      font-size: 0.8rem;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.75rem;
       border-radius: 5px;
+      border: none;
+    }
+    .followBtn {
       color: ${({ theme }) => theme.accentText};
       background: ${({ theme }) => theme.accent};
-      border: 1px solid ${({ theme }) => theme.accentSoft};
     }
     .unfollowBtn {
-      margin-top: 0.5rem;
-      padding: 0.25rem 0.5rem;
-      font-size: 0.8rem;
-      border-radius: 5px;
       color: ${({ theme }) => theme.textLight};
       background: ${({ theme }) => theme.buttonMed};
-      border: 1px solid ${({ theme }) => theme.buttonMed};
     }
   }
 
@@ -142,16 +144,28 @@ const TileContainer = styled.header`
     flex-direction: column;
     align-items: flex-start;
     text-align: left;
+    overflow: hidden;
 
     h1 {
-      letter-spacing: 1px;
       font-weight: 300;
       min-width: max-content;
     }
+
     p {
-      margin: 0.1rem;
+      margin: 0.1rem 0;
       font-size: 0.9rem;
       color: ${({ theme }) => theme.textLight};
+      span {
+        font-size: 0.7rem;
+      }
+    }
+
+    .follows {
+      display: flex;
+
+      p:last-child {
+        margin-left: 0.5rem;
+      }
     }
   }
 `;

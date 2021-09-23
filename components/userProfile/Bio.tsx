@@ -95,10 +95,10 @@ const BioContainer = styled.section`
 
   textarea {
     line-height: 1.2rem;
-    letter-spacing: 0.25px;
+    letter-spacing: 0.5px;
     font-family: inherit;
-    font-size: 1rem;
-    font-weight: 300;
+    font-size: 0.9rem;
+    font-weight: 200;
     width: 100%;
     min-height: 75px;
     resize: vertical;
@@ -118,11 +118,11 @@ const BioContainer = styled.section`
 
   p {
     line-height: 1.2rem;
-    font-size: 1rem;
-    letter-spacing: 0.25px;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
     padding: calc(0.25rem + 2px);
     margin: 0;
-    font-weight: 300;
+    font-weight: 200;
   }
 `;
 

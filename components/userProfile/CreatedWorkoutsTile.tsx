@@ -70,14 +70,14 @@ const WorkoutsList = styled.ul`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: ${({ theme }) => theme.buttonMed};
+    border-bottom: 1px solid ${({ theme }) => theme.buttonMed};
     margin: 0.25rem 0;
-    border-radius: 5px;
     padding: 0.25rem 0.5rem;
 
     p {
       text-transform: capitalize;
       font-size: 0.8rem;
+      font-weight: 200;
     }
 
     span {
