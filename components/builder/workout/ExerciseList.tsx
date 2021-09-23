@@ -131,28 +131,27 @@ const ExercisesContainer = styled.div`
   height: 75vh;
   width: 100vw;
   margin-left: -0.5rem;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  overflow-y: auto;
   border-radius: 20px 20px 0 0;
   position: fixed;
   display: flex;
   flex-direction: column;
-
-  z-index: 999;
+  z-index: 990;
   transition: bottom 0.05s ease-out;
 
   &.transition {
-    transition: bottom 0.2s ease-out;
+    transition: bottom 0.25s ease-out;
   }
 
   header {
     box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
     position: sticky;
     top: 0;
-
-    border: 2px solid ${({ theme }) => theme.border};
+    border-top: 2px solid ${({ theme }) => theme.border};
+    border-left: 2px solid ${({ theme }) => theme.border};
+    border-right: 2px solid ${({ theme }) => theme.border};
     background: ${({ theme }) => theme.background};
-    border-radius: 20px 20px 0 0;
+    border-radius: 25px 25px 2px 2px;
     width: 100%;
 
     padding-right: 0.15rem;
@@ -176,7 +175,8 @@ const ExercisesContainer = styled.div`
 
   ul {
     background: ${({ theme }) => theme.buttonMed};
-    border: 2px solid ${({ theme }) => theme.border};
+    border-left: 2px solid ${({ theme }) => theme.boxShadow};
+    border-right: 2px solid ${({ theme }) => theme.boxShadow};
     flex: 1;
     padding: 1rem 0.5rem;
     display: flex;
