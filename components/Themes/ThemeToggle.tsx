@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import { ThemeToggleContext } from "./useThemeState";
 
@@ -7,10 +7,14 @@ const ThemeToggle: React.FC = () => {
 
   const [checked, setChecked] = useState(localStorage.getItem("theme") === "dark");
 
+  useEffect(() => {
+    setChecked(localStorage.getItem("theme") === "dark");
+  }, [themeToggler]);
+
   return (
     <Switch onClick={themeToggler}>
       <div className="toggle-btn">
-        <input type="checkbox" defaultChecked={checked} />
+        <input type="checkbox" checked={checked} readOnly={true} />
         <span></span>
       </div>
     </Switch>
