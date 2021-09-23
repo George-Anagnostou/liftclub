@@ -107,7 +107,7 @@ const DateScrollContainer = styled.ul`
 
   width: calc(100% + 1rem);
   padding: 0.25rem 0 0.5rem;
-  overflow-x: scroll;
+  overflow-x: auto;
 
   .date {
     min-width: 55px;

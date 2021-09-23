@@ -27,7 +27,7 @@ const Circle = styled.div`
   align-items: center;
   justify-content: center;
   position: fixed;
-  bottom: 5rem;
+  bottom: 6rem;
   right: 1rem;
   border-radius: 10px;
   background: ${({ theme }) => theme.buttonMed};
@@ -35,11 +35,11 @@ const Circle = styled.div`
   transition: all 0.3s ease;
 
   &.saved {
-    right: calc(1rem + 10px);
-    bottom: calc(5rem - 5px);
+    right: calc(1rem + 12.5px);
+    bottom: calc(6rem - 2.5px);
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
   }
 
   .checkmarkContainer {
