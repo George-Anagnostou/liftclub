@@ -43,8 +43,8 @@ export default function feed() {
       <section
         style={
           searchCategory === "workouts" || searchCategory === ""
-            ? { display: "block" }
-            : { display: "none" }
+            ? { height: "auto" }
+            : { height: "0px", overflow: "hidden" }
         }
       >
         <Title style={searchCategory === "" ? { height: "1.5rem" } : { height: 0, opacity: 0 }}>
@@ -56,8 +56,8 @@ export default function feed() {
       <section
         style={
           searchCategory === "users" || searchCategory === ""
-            ? { display: "block" }
-            : { display: "none" }
+            ? { height: "auto" }
+            : { height: "0px", overflow: "hidden" }
         }
       >
         <Title style={searchCategory === "" ? { height: "1.5rem" } : { height: 0, opacity: 0 }}>
@@ -74,10 +74,6 @@ const WorkoutFeedContainer = styled.div`
   justify-content: center;
   flex-direction: column;
   margin-bottom: 1rem;
-`;
-
-const Section = styled.section`
-  transition: height 0.35s ease;
 `;
 
 const Title = styled.h3`
