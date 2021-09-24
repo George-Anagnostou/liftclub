@@ -78,43 +78,45 @@ const ExerciseList: React.FC<Props> = ({
   if (error) return <h1>failed to load</h1>;
 
   return (
-    <ExercisesContainer
-      style={{ bottom: exerciseListBottom + "vh" }}
-      className={exerciseListBottom === 0 || exerciseListBottom === -80 ? "transition" : ""}
-    >
-      <header>
-        <div className="thumb-line" onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
-          <span />
-        </div>
+    <>
+      <ExercisesContainer
+        style={{ bottom: exerciseListBottom + "vh" }}
+        className={exerciseListBottom === 0 || exerciseListBottom === -80 ? "transition" : ""}
+      >
+        <header>
+          <div className="thumb-line" onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
+            <span />
+          </div>
 
-        <SearchInput>
-          <input
-            type="text"
-            name="searchTerm"
-            value={searchTerm}
-            onChange={handleSearchTermChange}
-            placeholder="Search"
-          />
+          <SearchInput>
+            <input
+              type="text"
+              name="searchTerm"
+              value={searchTerm}
+              onChange={handleSearchTermChange}
+              placeholder="Search"
+            />
 
-          {user?.isTrainer && (
-            <button onClick={() => setShowCreateExerciseModal(true)}>Create</button>
-          )}
+            {user?.isTrainer && (
+              <button onClick={() => setShowCreateExerciseModal(true)}>Create</button>
+            )}
 
-          <button onClick={() => setExerciseListBottom(-80)}>Close</button>
-        </SearchInput>
-      </header>
+            <button onClick={() => setExerciseListBottom(-80)}>Close</button>
+          </SearchInput>
+        </header>
 
-      <ul>
-        {displayedExercises.map((exercise) => (
-          <ExerciseListItem
-            key={exercise._id}
-            exercise={exercise}
-            isExerciseInCustomWorkout={isExerciseInCustomWorkout}
-            removeExercise={removeExercise}
-            addExercise={addExercise}
-          />
-        ))}
-      </ul>
+        <ul>
+          {displayedExercises.map((exercise) => (
+            <ExerciseListItem
+              key={exercise._id}
+              exercise={exercise}
+              isExerciseInCustomWorkout={isExerciseInCustomWorkout}
+              removeExercise={removeExercise}
+              addExercise={addExercise}
+            />
+          ))}
+        </ul>
+      </ExercisesContainer>
 
       {showCreateExerciseModal && (
         <CreateExerciseModal
@@ -122,7 +124,7 @@ const ExerciseList: React.FC<Props> = ({
           showModal={showCreateExerciseModal}
         />
       )}
-    </ExercisesContainer>
+    </>
   );
 };
 export default ExerciseList;
