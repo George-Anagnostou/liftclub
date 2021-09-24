@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 // Context
-import { useStoreState } from "../../../store";
+import { useStoreDispatch, useStoreState } from "../../../store";
 // API
 import { postNewTeam, updateTeam } from "../../../utils/api";
 // Interfaces
@@ -31,6 +31,8 @@ const initialTeam: EditableTeam = {
 
 const TeamBuilder: React.FC = () => {
   const { user } = useStoreState();
+  const dispatch = useStoreDispatch();
+
   const [team, setTeam] = useState<EditableTeam>(initialTeam);
   const [teamSaved, setTeamSaved] = useState<boolean | null>(null);
 
@@ -43,6 +45,7 @@ const TeamBuilder: React.FC = () => {
       if (team_id) {
         setTeamSaved(true);
         setTeam({ ...team, _id: team_id });
+        userJoiningTeam(dispatch, user!._id, team_id);
       }
     }
   };
@@ -52,7 +55,6 @@ const TeamBuilder: React.FC = () => {
       ...initialTeam,
       creator_id: user!._id,
       creatorName: user!.username,
-      members: [user!._id],
     });
   };
 

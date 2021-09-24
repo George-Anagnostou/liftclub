@@ -24,15 +24,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       team.dateCreated = new Date(team.dateCreated);
       team.creator_id = new ObjectId(team.creator_id);
       team.trainers = team.trainers.map((_id: string) => new ObjectId(_id));
-      team.members = team.members.map((_id: string) => new ObjectId(_id));
       team.routine_id = new ObjectId(team.routine_id);
 
       const { insertedId } = await db.collection("teams").insertOne(team);
-
-      db.collection("users").findOneAndUpdate(
-        { _id: new ObjectId(team.creator_id) },
-        { $push: { teamsJoined: insertedId } }
-      );
 
       insertedId ? res.status(201).json(insertedId) : res.status(404).end();
 

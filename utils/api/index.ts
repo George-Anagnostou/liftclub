@@ -416,7 +416,7 @@ export const postNewTeam = async (team: EditableTeam): Promise<Team["_id"] | fal
   try {
     const dbTeam = {
       teamName: team.teamName,
-      members: [...team.members],
+      members: [],
       dateCreated: new Date().toISOString(),
       creatorName: team.creatorName,
       creator_id: team.creator_id,
@@ -469,6 +469,21 @@ export const deleteTeam = async (team_id: string) => {
     });
 
     return res.status === 204;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
+export const getAllTeamsByMemberCount = async () => {
+  try {
+    const res = await fetch(`/api/teams/queryMultiple?sort=members`, {
+      method: "GET",
+    });
+
+    const teams: Team[] = await res.json();
+
+    return teams;
   } catch (e) {
     console.log(e);
     return false;
