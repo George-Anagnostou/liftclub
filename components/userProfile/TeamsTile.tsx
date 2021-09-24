@@ -84,7 +84,7 @@ const TeamItem = styled.li`
   box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
   padding: 0.25rem 0.5rem;
   margin-right: 0.5rem;
-  border-radius: 10px;
+  border-radius: 5px;
   text-align: center;
   min-width: max-content;
 
@@ -94,12 +94,12 @@ const TeamItem = styled.li`
     }
 
     .name {
-      font-size: 1rem;
+      font-size: 0.8rem;
     }
 
     .members {
       color: ${({ theme }) => theme.textLight};
-      font-size: 0.8rem;
+      font-size: 0.6rem;
     }
   }
 `;

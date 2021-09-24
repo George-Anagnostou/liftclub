@@ -73,6 +73,7 @@ const SearchResults = styled.ul`
     border-radius: 8px;
 
     p {
+      font-weight: 300;
       span {
         font-size: 0.65rem;
       }

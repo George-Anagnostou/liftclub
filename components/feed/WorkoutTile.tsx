@@ -142,7 +142,7 @@ const Container = styled.li`
   border-radius: 8px;
   box-shadow: 0 0.5px 2px ${({ theme }) => theme.boxShadow};
   background: ${({ theme }) => theme.background};
-  padding: 0.25rem 0.5rem;
+  padding: 0.25rem 1rem;
   margin: 0.5em;
 
   transition: height 0.25s ease-out;

@@ -142,6 +142,7 @@ const SearchResults = styled.ul`
       margin-left: 1rem;
       text-align: left;
       flex: 1;
+      font-weight: 300;
     }
   }
   .no-matches p {

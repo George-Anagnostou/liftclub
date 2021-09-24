@@ -172,25 +172,19 @@ const Tile = styled.div`
 
     button {
       border-radius: 5px;
-      padding: 0.5rem 0.75rem;
       border: none;
       margin-left: auto;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.75rem;
+      border-radius: 5px;
 
       &.join {
-        padding: 0.25rem 1rem;
-        font-size: 0.9rem;
-        border-radius: 5px;
         color: ${({ theme }) => theme.accentText};
         background: ${({ theme }) => theme.accent};
-        border: 1px solid ${({ theme }) => theme.accentSoft};
       }
       &.joined {
-        padding: 0.25rem 0.5rem;
-        font-size: 0.9rem;
-        border-radius: 5px;
         color: ${({ theme }) => theme.textLight};
         background: ${({ theme }) => theme.buttonMed};
-        border: 1px solid ${({ theme }) => theme.buttonMed};
       }
     }
   }
