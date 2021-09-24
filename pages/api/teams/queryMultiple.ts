@@ -8,6 +8,21 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   switch (httpMethod) {
     case "GET":
+      const sortMethod = req.query.sort;
+
+      if (sortMethod === "members") {
+        const teams = await db
+          .collection("teams")
+          .aggregate([
+            { $addFields: { membersCount: { $size: { $ifNull: ["$members", []] } } } },
+            { $sort: { membersCount: -1 } },
+          ])
+          .toArray();
+
+        res.json(teams);
+      } else {
+        res.status(404).end();
+      }
       break;
     case "POST":
       const idArr: string[] = JSON.parse(req.body);

@@ -2,8 +2,9 @@ import { useState } from "react";
 import styled from "styled-components";
 // Components
 import SearchBar from "../components/feed/SearchBar";
-import PublicWorkouts from "../components/feed/PublicWorkouts";
+import WorkoutsResults from "../components/feed/WorkoutsResults";
 import UsersResults from "../components/feed/UsersResults";
+import TeamsResults from "../components/feed/TeamsResults";
 
 /**
  * TODO:
@@ -26,7 +27,7 @@ export default function feed() {
 
       <SearchCategories>
         <ul>
-          {["workouts", "users", "exercises", "teams"].map((slug) => (
+          {["workouts", "users", "teams", "exercises"].map((slug) => (
             <li
               key={slug}
               className={slug === searchCategory ? "highlight" : ""}
@@ -50,7 +51,8 @@ export default function feed() {
         <Title style={searchCategory === "" ? { height: "1.5rem" } : { height: 0, opacity: 0 }}>
           Workouts
         </Title>
-        <PublicWorkouts searchInput={searchInput} limit={searchCategory === "" ? 6 : 0} />
+
+        <WorkoutsResults searchInput={searchInput} limit={searchCategory === "" ? 6 : 0} />
       </section>
 
       <section
@@ -63,7 +65,22 @@ export default function feed() {
         <Title style={searchCategory === "" ? { height: "1.5rem" } : { height: 0, opacity: 0 }}>
           Users
         </Title>
+
         <UsersResults searchInput={searchInput} limit={searchCategory === "" ? 5 : 0} />
+      </section>
+
+      <section
+        style={
+          searchCategory === "teams" || searchCategory === ""
+            ? { height: "auto" }
+            : { height: "0px", overflow: "hidden" }
+        }
+      >
+        <Title style={searchCategory === "" ? { height: "1.5rem" } : { height: 0, opacity: 0 }}>
+          Teams
+        </Title>
+
+        <TeamsResults searchInput={searchInput} limit={searchCategory === "" ? 5 : 0} />
       </section>
     </WorkoutFeedContainer>
   );
