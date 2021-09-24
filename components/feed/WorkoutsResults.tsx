@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 // Components
-import PublicWorkoutTile from "./PublicWorkoutTile";
+import WorkoutTile from "./WorkoutTile";
 // Interfaces
 import { Workout } from "../../utils/interfaces";
 // API
@@ -14,7 +14,7 @@ interface Props {
   limit: number;
 }
 
-const PublicWorkouts: React.FC<Props> = ({ searchInput, limit }) => {
+const WorkoutsResults: React.FC<Props> = ({ searchInput, limit }) => {
   const { user } = useStoreState();
   const dispatch = useStoreDispatch();
 
@@ -99,22 +99,25 @@ const PublicWorkouts: React.FC<Props> = ({ searchInput, limit }) => {
         {Boolean(searchResults.length)
           ? searchResults
               .slice(0, limit || searchResults.length)
-              .map((workout, i) => (
-                <PublicWorkoutTile
-                  i={i}
-                  isLoading={!Boolean(initialWorkouts.length)}
-                  key={`public${workout._id}${i}`}
-                  workout={workout}
-                  removeFromSavedWorkouts={removeFromSavedWorkouts}
-                  addToSavedWorkouts={addToSavedWorkouts}
-                />
-              ))
+              .map(
+                (workout, i) =>
+                  workout && (
+                    <WorkoutTile
+                      key={workout._id || i}
+                      i={i}
+                      isLoading={!Boolean(initialWorkouts.length)}
+                      workout={workout}
+                      removeFromSavedWorkouts={removeFromSavedWorkouts}
+                      addToSavedWorkouts={addToSavedWorkouts}
+                    />
+                  )
+              )
           : searchInput && <p style={{ margin: "1rem 0", fontWeight: 300 }}>No results</p>}
       </ul>
     </Container>
   );
 };
-export default PublicWorkouts;
+export default WorkoutsResults;
 
 const Container = styled.section`
   width: 100%;

@@ -18,7 +18,7 @@ interface Props {
   addToSavedWorkouts: (workout: Workout) => void;
 }
 
-const PublicWorkoutTile: React.FC<Props> = ({
+const WorkoutTile: React.FC<Props> = ({
   i,
   isLoading,
   workout,
@@ -67,7 +67,7 @@ const PublicWorkoutTile: React.FC<Props> = ({
   }, [tile, showWorkoutInfo, loading]);
 
   return (
-    <WorkoutTile
+    <Container
       ref={tile}
       style={showWorkoutInfo && openHeight ? { height: openHeight } : { height: closedHeight }}
     >
@@ -120,7 +120,7 @@ const PublicWorkoutTile: React.FC<Props> = ({
       {showWorkoutInfo && !loading && (
         <WorkoutInfo>
           {workoutExercises.map(({ sets, exercise_id, exercise }) => (
-            <li key={`public${exercise_id}`} className="exercise">
+            <li key={exercise_id} className="exercise">
               {exercise && (
                 <>
                   <p>{exercise.name}</p>
@@ -133,12 +133,12 @@ const PublicWorkoutTile: React.FC<Props> = ({
           ))}
         </WorkoutInfo>
       )}
-    </WorkoutTile>
+    </Container>
   );
 };
-export default PublicWorkoutTile;
+export default WorkoutTile;
 
-const WorkoutTile = styled.li`
+const Container = styled.li`
   border-radius: 8px;
   box-shadow: 0 0.5px 2px ${({ theme }) => theme.boxShadow};
   background: ${({ theme }) => theme.background};
