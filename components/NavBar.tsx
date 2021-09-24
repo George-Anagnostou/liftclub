@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 // Components
@@ -14,21 +14,6 @@ import Builder from "./svg/Builder";
 const NavBar: React.FC = () => {
   const router = useRouter();
 
-  const getSlugFromUrl = () => {
-    switch (router.route.split("/")[1]) {
-      case "log":
-        return "log";
-      case "feed":
-        return "feed";
-      case "builder":
-        return "builder";
-      case "users":
-        return "profile";
-      default:
-        return "log";
-    }
-  };
-
   const { platform, user } = useStoreState();
 
   const ref = useRef<HTMLDivElement>(null);
@@ -39,14 +24,19 @@ const NavBar: React.FC = () => {
     { pathname: "/feed", icon: <Search />, slug: "feed" },
     { pathname: `/users/${user!.username}`, icon: <Profile />, slug: "profile" },
   ]);
-  const [currSlug, setCurrSlug] = useState(() => getSlugFromUrl());
+  const [currSlug, setCurrSlug] = useState("");
+
+  useEffect(() => {
+    const [activeRoute] = routes.filter((route) => router.asPath.includes(route.pathname));
+    setCurrSlug(activeRoute?.slug || "");
+  }, [router]);
 
   return (
     <Nav ref={ref} className={platform === "ios" ? "ios-safe-area" : ""}>
       <NavBarContainer>
         {routes.map(({ pathname, slug, icon }) => (
           <Link href={pathname} key={slug}>
-            <li className={currSlug === slug ? "selected" : ""} onClick={() => setCurrSlug(slug)}>
+            <li className={currSlug === slug ? "selected" : ""}>
               <a>{icon}</a>
               <p>{slug}</p>
             </li>
