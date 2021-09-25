@@ -44,15 +44,17 @@ const ChartContainer = styled.div`
 
   line,
   text {
-    fill: ${({ theme }) => theme.textLight} !important;
+    fill: ${({ theme }) => theme.border} !important;
     stroke: ${({ theme }) => theme.border} !important;
   }
   text {
     stroke-width: 0px;
-    font-size: 0.75rem;
+    font-size: 0.65rem;
   }
 
   .recharts-default-tooltip {
+    padding: 0.15rem 0.5rem !important;
+    font-size: 0.8rem !important;
     background: ${({ theme }) => theme.body} !important;
     border-radius: 5px;
     border: 1px solid ${({ theme }) => theme.border} !important;

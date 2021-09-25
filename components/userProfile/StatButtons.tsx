@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
 const options = [
-  { value: "avgWeight", text: "average" },
-  { value: "totalWeight", text: "total" },
-  { value: "maxWeight", text: "max" },
+  { value: "avgWeight", text: "Average" },
+  { value: "totalWeight", text: "Total" },
+  { value: "maxWeight", text: "Max" },
 ];
 
 interface Props {

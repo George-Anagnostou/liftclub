@@ -14,7 +14,7 @@ const ExerciseSelect: React.FC<Props> = ({ handleExerciseOptionChange, exerciseO
       defaultValue="none"
       disabled={!Boolean(exerciseOptions.length)}
     >
-      <option value="none">2. Select Exercise</option>
+      {/* <option value="none">2. Select Exercise</option> */}
       {exerciseOptions.map(({ exercise_id, exerciseName }) => (
         <option value={exercise_id} key={exercise_id}>
           {exerciseName}

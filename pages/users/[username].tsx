@@ -98,7 +98,7 @@ const Container = styled.div`
     text-align: left;
     margin-bottom: 0.5rem;
     font-weight: 300;
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 
   .loadingContainer {

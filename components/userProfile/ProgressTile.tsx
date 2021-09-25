@@ -71,6 +71,7 @@ const ProgressTile: React.FC<Props> = ({ profileData }) => {
     }));
 
     setExerciseOptions(options);
+    setSelectedExerciseId(options[0].exercise_id);
   };
 
   /**
@@ -149,7 +150,9 @@ const ProgressTile: React.FC<Props> = ({ profileData }) => {
         return profileData.workoutLog[key];
       });
 
-    if (filtered && filtered.length) setFilteredWorkouts(filtered);
+    if (filtered && filtered.length) {
+      setFilteredWorkouts(filtered);
+    }
   };
 
   const handleExerciseOptionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -206,31 +209,32 @@ const SelectContainer = styled.div`
     text-transform: capitalize;
     margin: 0.25rem 0;
     padding: 0.25rem 0.5rem;
-    font-size: 1rem;
+    font-size: 0.85rem;
     border: none;
     border-radius: 5px;
     color: ${({ theme }) => theme.text};
-    border: 1px solid ${({ theme }) => theme.border};
+    box-shadow: 0 1px 2px ${({ theme }) => theme.boxShadow};
 
-    --baseFg: ${({ theme }) => theme.buttonLight};
-    --accentFg: ${({ theme }) => theme.accentSoft};
-    --accentBg: ${({ theme }) => theme.buttonLight};
+    --BG: ${({ theme }) => theme.buttonMed};
+    --arrow: ${({ theme }) => theme.accentSoft};
+    --arrowBG: ${({ theme }) => theme.buttonLight};
 
     width: 100%;
     -webkit-appearance: none;
     appearance: none;
 
     background-color: ${({ theme }) => theme.buttonMed};
-    background-image: linear-gradient(var(--baseFg), var(--baseFg)),
-      linear-gradient(-135deg, transparent 50%, var(--accentBg) 50%),
-      linear-gradient(-225deg, transparent 50%, var(--accentBg) 50%),
-      linear-gradient(var(--accentBg) 42%, var(--accentFg) 42%);
+    background-image: linear-gradient(var(--BG), var(--BG)),
+      linear-gradient(-135deg, transparent 50%, var(--arrowBG) 50%),
+      linear-gradient(-225deg, transparent 50%, var(--arrowBG) 50%),
+      linear-gradient(var(--arrowBG) 42%, var(--arrow) 42%);
     background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
     background-size: 1px 100%, 20px 22px, 20px 22px, 20px 100%;
     background-position: right 20px center, right bottom, right bottom, right bottom;
 
     &:disabled {
-      opacity: 0.25;
+      opacity: 0.5;
+      box-shadow: none;
     }
   }
 `;
