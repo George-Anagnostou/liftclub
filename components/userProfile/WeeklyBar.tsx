@@ -68,7 +68,7 @@ const DateScrollContainer = styled.ul`
         color: ${({ theme }) => theme.textLight};
       }
       &.hasDayData {
-        background: ${({ theme }) => theme.accent};
+        background: ${({ theme }) => theme.accentSoft};
         color: ${({ theme }) => theme.accentText};
       }
     }
