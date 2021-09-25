@@ -69,9 +69,9 @@ const User_id: React.FC = () => {
 
           <TeamsTile profileTeamsJoined={profileTeamsJoined} />
 
-          <CreatedWorkoutsTile createdWorkouts={createdWorkouts} />
-
           <ProgressTile profileData={profileData} />
+
+          <CreatedWorkoutsTile createdWorkouts={createdWorkouts} />
         </>
       ) : (
         <div className="loadingContainer">
