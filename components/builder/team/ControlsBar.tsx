@@ -69,12 +69,17 @@ const Container = styled.div`
 
     input[type="text"] {
       width: 100%;
-      padding: 0.5rem 1rem;
-      font-size: 1.1rem;
-      border: none;
+      padding: 0.25rem 1rem;
+      font-size: 1rem;
       border-radius: 5px;
       color: ${({ theme }) => theme.text};
       background: inherit;
+      border: 1px solid ${({ theme }) => theme.buttonMed};
+      appearance: none;
+      &:focus {
+        outline: none;
+        border: 1px solid ${({ theme }) => theme.accentSoft};
+      }
     }
   }
 
@@ -94,12 +99,14 @@ const Container = styled.div`
       box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
       display: inline-block;
       padding: 0.25rem 1rem;
-      font-size: 1rem;
-      margin-right: 0.5rem;
+      font-size: 0.8rem;
+      margin: 0 0.5rem;
+      transition: all 0.25s ease;
 
       &:disabled {
         color: ${({ theme }) => theme.border};
         background: ${({ theme }) => theme.buttonMed};
+        box-shadow: none;
       }
     }
 
@@ -118,6 +125,7 @@ const Container = styled.div`
       &.disabled {
         color: ${({ theme }) => theme.border};
         background: ${({ theme }) => theme.buttonMed};
+        box-shadow: none;
       }
 
       input[type="checkbox"] {

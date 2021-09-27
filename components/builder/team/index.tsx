@@ -98,10 +98,12 @@ const TeamBuilderContainer = styled.section`
   }
 
   h3 {
-    color: ${({ theme }) => theme.textLight};
     text-align: left;
+    padding-left: 0.75rem;
+    margin: 0.25rem 0;
+    font-size: 1rem;
+    color: ${({ theme }) => theme.textLight};
     font-weight: 300;
-    margin: 0.5rem;
   }
 
   .fallbackText {

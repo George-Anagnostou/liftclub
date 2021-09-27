@@ -125,10 +125,12 @@ const ControlsBar = styled.div`
       padding: 0.25rem 1rem;
       font-size: 0.8rem;
       margin-right: 0.5rem;
+      transition: all 0.25s ease;
 
       &:disabled {
         color: ${({ theme }) => theme.border};
         background: ${({ theme }) => theme.buttonMed};
+        box-shadow: none;
       }
     }
 
@@ -147,6 +149,10 @@ const ControlsBar = styled.div`
       &.disabled {
         color: ${({ theme }) => theme.border};
         background: ${({ theme }) => theme.buttonMed};
+        box-shadow: none;
+        input[type="checkbox"] {
+          filter: brightness(0.5);
+        }
       }
 
       input[type="checkbox"] {

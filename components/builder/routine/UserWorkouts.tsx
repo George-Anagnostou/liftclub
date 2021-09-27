@@ -96,10 +96,12 @@ const WorkoutsList = styled.div`
   margin-bottom: 0.5rem;
 
   h3 {
-    color: ${({ theme }) => theme.textLight};
     text-align: left;
+    padding-left: 0.75rem;
+    margin: 0.25rem 0;
+    font-size: 1rem;
+    color: ${({ theme }) => theme.textLight};
     font-weight: 300;
-    margin: 0.5rem;
   }
 
   ul {
@@ -107,16 +109,18 @@ const WorkoutsList = styled.div`
     flex-wrap: wrap;
 
     li {
-      position: relative;
       background: ${({ theme }) => theme.buttonMed};
       box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
       border-radius: 5px;
       cursor: pointer;
-      padding: 0.5rem 1rem;
+      padding: 0.25rem 0.5rem;
       margin: 0 0.25rem 0.5rem;
       word-wrap: break-word;
       text-align: left;
       transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      font-weight: 300;
 
       &.highlight {
         background: ${({ theme }) => theme.accentSoft};

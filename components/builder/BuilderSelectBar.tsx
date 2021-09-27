@@ -38,7 +38,7 @@ const Bar = styled.div`
     li {
       text-transform: capitalize;
       flex: 1;
-      padding: 0.25rem 0;
+      padding: 0.5rem 0 0.25rem;
       color: ${({ theme }) => theme.textLight};
       border-bottom: 2px solid ${({ theme }) => theme.border};
       background: ${({ theme }) => theme.background};

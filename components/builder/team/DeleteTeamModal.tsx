@@ -77,6 +77,7 @@ const Container = styled.div`
   }
 
   h3 {
+    text-align: center;
     font-weight: 200;
   }
 
