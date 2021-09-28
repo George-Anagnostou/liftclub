@@ -18,7 +18,7 @@ interface Props {
   deleteWorkoutsOnSelectedDates?: () => void;
   undoRoutineStack?: Routine[];
   undoRoutine?: () => void;
-  selectedDaysFromPlan: Routine["workoutPlan"];
+  selectedDaysFromPlan?: Routine["workoutPlan"];
   copyWorkoutsToStartDate?: (date: string) => void;
 }
 

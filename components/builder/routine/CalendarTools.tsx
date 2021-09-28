@@ -11,7 +11,7 @@ import Reset from "../../svg/Reset";
 import Undo from "../../svg/Undo";
 
 interface Props {
-  selectedDaysFromPlan: Routine["workoutPlan"];
+  selectedDaysFromPlan?: Routine["workoutPlan"];
   datesSelected: { [date: string]: boolean };
   deleteWorkoutsOnSelectedDates?: () => void;
   setDatesSelected: React.Dispatch<React.SetStateAction<{ [date: string]: boolean }>>;
@@ -43,7 +43,7 @@ const CalendarTools: React.FC<Props> = ({
     <Tools>
       <div
         onClick={deleteWorkoutsOnSelectedDates ? () => deleteWorkoutsOnSelectedDates() : () => {}}
-        className={Object.keys(selectedDaysFromPlan).length ? "highlight" : ""}
+        className={Object.keys(selectedDaysFromPlan!).length ? "highlight" : ""}
       >
         <Garbage />
         <p>delete</p>
@@ -83,7 +83,7 @@ const CalendarTools: React.FC<Props> = ({
 
       <div
         onClick={() => setMoveWorkoutsMode(!moveWorkoutsMode)}
-        className={` ${Object.keys(selectedDaysFromPlan).length && "highlight"} ${
+        className={` ${Object.keys(selectedDaysFromPlan!).length && "highlight"} ${
           moveWorkoutsMode && "accent"
         }`}
       >
