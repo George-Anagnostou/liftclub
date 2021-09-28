@@ -46,7 +46,7 @@ export const daysBetween = (iso1: string, iso2: string) => {
   var elapsed = new Date(iso2).getTime() - new Date(iso1).getTime();
 
   const days = Math.round(elapsed / msPerDay);
-  return days > 1 ? days + " days" : days + " day";
+  return days;
 };
 
 export const formatIsoDate = (isoDate: string) => {
