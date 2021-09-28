@@ -11,18 +11,22 @@ import Reset from "../../svg/Reset";
 import Undo from "../../svg/Undo";
 
 interface Props {
+  selectedDaysFromPlan: Routine["workoutPlan"];
   datesSelected: { [date: string]: boolean };
-  deleteWorkoutsOnSelectedDates: (() => void) | undefined;
+  deleteWorkoutsOnSelectedDates?: () => void;
   setDatesSelected: React.Dispatch<React.SetStateAction<{ [date: string]: boolean }>>;
   multiSelectMode: boolean;
   setMultiSelectMode: React.Dispatch<React.SetStateAction<boolean>>;
   showWorkoutTags: boolean;
   setShowWorkoutTags: React.Dispatch<React.SetStateAction<boolean>>;
+  moveWorkoutsMode: boolean;
+  setMoveWorkoutsMode: React.Dispatch<React.SetStateAction<boolean>>;
   undoRoutineStack?: Routine[];
   undoRoutine?: () => void;
 }
 
 const CalendarTools: React.FC<Props> = ({
+  selectedDaysFromPlan,
   datesSelected,
   deleteWorkoutsOnSelectedDates,
   setDatesSelected,
@@ -30,6 +34,8 @@ const CalendarTools: React.FC<Props> = ({
   setMultiSelectMode,
   showWorkoutTags,
   setShowWorkoutTags,
+  moveWorkoutsMode,
+  setMoveWorkoutsMode,
   undoRoutineStack,
   undoRoutine,
 }) => {
@@ -37,26 +43,21 @@ const CalendarTools: React.FC<Props> = ({
     <Tools>
       <div
         onClick={deleteWorkoutsOnSelectedDates ? () => deleteWorkoutsOnSelectedDates() : () => {}}
-        className={Object.keys(datesSelected).length ? "highlight" : ""}
+        className={Object.keys(selectedDaysFromPlan).length ? "highlight" : ""}
       >
         <Garbage />
         <p>delete</p>
       </div>
 
       <div
-        onClick={() => setDatesSelected({})}
+        onClick={() => {
+          setDatesSelected({});
+          setMoveWorkoutsMode(false);
+        }}
         className={Object.keys(datesSelected).length ? "highlight" : ""}
       >
         <Reset />
         <p>reset</p>
-      </div>
-
-      <div
-        onClick={() => setMultiSelectMode(!multiSelectMode)}
-        className={multiSelectMode ? "highlight" : ""}
-      >
-        <Stack />
-        <p>multi</p>
       </div>
 
       <div
@@ -67,15 +68,28 @@ const CalendarTools: React.FC<Props> = ({
         <p>tags</p>
       </div>
 
+      <div
+        onClick={() => setMultiSelectMode(!multiSelectMode)}
+        className={multiSelectMode ? "accent" : ""}
+      >
+        <Stack />
+        <p>multi</p>
+      </div>
+
       <div onClick={undoRoutine} className={undoRoutineStack?.length ? "highlight" : ""}>
         <Undo />
         <p>undo</p>
       </div>
 
-      {/* <div>
-        <Copy/>
-        <p>move</p>
-      </div> */}
+      <div
+        onClick={() => setMoveWorkoutsMode(!moveWorkoutsMode)}
+        className={` ${Object.keys(selectedDaysFromPlan).length && "highlight"} ${
+          moveWorkoutsMode && "accent"
+        }`}
+      >
+        <Copy />
+        <p>copy</p>
+      </div>
     </Tools>
   );
 };
@@ -95,14 +109,18 @@ const Tools = styled.div`
     background: ${({ theme }) => theme.buttonMed};
     padding: 0.25rem 0.5rem 0.1rem;
     border-radius: 5px;
-    transition: all 0.25s ease;
+    transition: all 0.15s ease;
     display: grid;
     place-items: center;
-    box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
-    font-size: 0.6rem;
+    font-size: 0.5rem;
+    box-shadow: 0 1px 1px ${({ theme }) => theme.boxShadow};
 
     p {
       margin-top: 0.15rem;
+    }
+
+    svg {
+      transform: scale(0.9);
     }
 
     &.highlight {
@@ -110,6 +128,12 @@ const Tools = styled.div`
       color: ${({ theme }) => theme.text};
       fill: ${({ theme }) => theme.text};
       stroke: ${({ theme }) => theme.text};
+    }
+    &.accent {
+      background: ${({ theme }) => theme.accentSoft};
+      color: ${({ theme }) => theme.accentText};
+      fill: ${({ theme }) => theme.accentText};
+      stroke: ${({ theme }) => theme.accentText};
     }
   }
 `;

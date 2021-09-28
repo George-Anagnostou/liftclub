@@ -18,6 +18,8 @@ interface Props {
   deleteWorkoutsOnSelectedDates?: () => void;
   undoRoutineStack?: Routine[];
   undoRoutine?: () => void;
+  selectedDaysFromPlan: Routine["workoutPlan"];
+  copyWorkoutsToStartDate?: (date: string) => void;
 }
 
 const Calendar: React.FC<Props> = ({
@@ -27,11 +29,14 @@ const Calendar: React.FC<Props> = ({
   deleteWorkoutsOnSelectedDates,
   undoRoutineStack,
   undoRoutine,
+  selectedDaysFromPlan,
+  copyWorkoutsToStartDate,
 }) => {
   const router = useRouter();
 
   const [showWorkoutTags, setShowWorkoutTags] = useState(true);
   const [multiSelectMode, setMultiSelectMode] = useState(false);
+  const [moveWorkoutsMode, setMoveWorkoutsMode] = useState(false);
   const [{ year, month }, setYearMonthDay] = useState(getCurrYearMonthDay());
   const [daysInMonth, setDaysInMonth] = useState(0);
 
@@ -68,8 +73,11 @@ const Calendar: React.FC<Props> = ({
           setMultiSelectMode={setMultiSelectMode}
           showWorkoutTags={showWorkoutTags}
           setShowWorkoutTags={setShowWorkoutTags}
+          moveWorkoutsMode={moveWorkoutsMode}
+          setMoveWorkoutsMode={setMoveWorkoutsMode}
           undoRoutineStack={undoRoutineStack}
           undoRoutine={undoRoutine}
+          selectedDaysFromPlan={selectedDaysFromPlan}
         />
       )}
 
@@ -109,6 +117,8 @@ const Calendar: React.FC<Props> = ({
             setDatesSelected={setDatesSelected}
             showWorkoutTags={showWorkoutTags}
             multiSelectMode={multiSelectMode}
+            moveWorkoutsMode={moveWorkoutsMode}
+            copyWorkoutsToStartDate={copyWorkoutsToStartDate}
           />
         ))}
       </DaysCtrl>
@@ -130,13 +140,15 @@ const MonthCtrl = styled.div`
 
   div {
     align-items: center;
-    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+
     .month {
       font-size: 1.3rem;
       width: 150px;
+      font-weight: 200;
     }
     .year {
-      font-size: 0.7rem;
+      font-size: 0.6rem;
       color: ${({ theme }) => theme.textLight};
     }
   }
@@ -159,6 +171,7 @@ const DaysOfTheWeek = styled.ul`
   li {
     flex: 1;
     font-weight: 200;
+    font-size: 0.85rem;
     color: ${({ theme }) => theme.textLight};
   }
 `;

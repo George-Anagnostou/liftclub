@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { daysBetween } from "../../../utils";
 // Utils
 import { formatRoutineWorkoutPlanForCalendar } from "../../../utils/dataMutators";
 // Interfaces
@@ -27,10 +28,11 @@ const RoutineBuilder: React.FC = () => {
 
   const clearRoutine = () => {
     setRoutine(initialRoutineState);
+    setUndoRoutineStack([]);
   };
 
-  const addCurrentRoutineToUndo = () => {
-    setUndoRoutineStack((prev) => [routine, ...prev]);
+  const addRoutineToUndo = () => {
+    setUndoRoutineStack([routine, ...undoRoutineStack]);
   };
 
   // Take off the top of undo stack and set it to current routine
@@ -44,7 +46,9 @@ const RoutineBuilder: React.FC = () => {
   };
 
   const deleteWorkoutsOnSelectedDates = () => {
-    addCurrentRoutineToUndo();
+    if (selectedDaysFromPlan.length === 0) return;
+
+    addRoutineToUndo();
 
     setRoutine((prev) => ({
       ...prev,
@@ -55,17 +59,66 @@ const RoutineBuilder: React.FC = () => {
   };
 
   const addWorkoutToDatesSelected = (workout: Workout) => {
-    addCurrentRoutineToUndo();
+    addRoutineToUndo();
 
-    const plan = Object.keys(datesSelected).map((date) => {
-      return { isoDate: date, workout_id: workout._id, workout };
-    });
+    const plan = Object.keys(datesSelected).map((date) => ({
+      isoDate: date,
+      workout_id: workout._id,
+      workout,
+    }));
 
     setRoutine((prev) => ({
       ...prev,
       workoutPlan: [
-        ...prev.workoutPlan.filter((each) => !datesSelected[each.isoDate.substring(0, 10)]),
+        ...prev.workoutPlan.filter((planDay) => !datesSelected[planDay.isoDate.substring(0, 10)]),
         ...plan,
+      ].sort((a, b) => a.isoDate.localeCompare(b.isoDate)),
+    }));
+  };
+
+  const copyWorkoutsToStartDate = (startDate: string) => {
+    if (selectedDaysFromPlan.length === 0) return;
+
+    addRoutineToUndo();
+
+    const newDatesMap = new Map();
+    newDatesMap.set(startDate, true);
+
+    // Construct an array of the new workouts to add to the plan
+    const newDates: Routine["workoutPlan"] = [
+      {
+        isoDate: startDate,
+        workout_id: selectedDaysFromPlan[0].workout_id,
+        workout: selectedDaysFromPlan[0].workout,
+      },
+    ];
+
+    for (let i = 1; i < selectedDaysFromPlan.length; i++) {
+      // Create date object from previous new date
+      const date = new Date(newDates[i - 1].isoDate);
+      // Increment days from the previous date
+      date.setDate(
+        date.getDate() +
+          daysBetween(selectedDaysFromPlan[i - 1].isoDate, selectedDaysFromPlan[i].isoDate)
+      );
+      const newDate = date.toISOString().substring(0, 10);
+
+      newDatesMap.set(newDate, true);
+
+      // Add to new dates array
+      newDates.push({
+        isoDate: newDate,
+        workout_id: selectedDaysFromPlan[i].workout_id,
+        workout: selectedDaysFromPlan[i].workout,
+      });
+    }
+
+    // Filter out any overlapping dates and insert the new dates
+    setRoutine((prev) => ({
+      ...prev,
+      workoutPlan: [
+        ...prev.workoutPlan.filter((planDay) => !newDatesMap.get(planDay.isoDate.substring(0, 10))),
+        ...newDates,
       ].sort((a, b) => a.isoDate.localeCompare(b.isoDate)),
     }));
   };
@@ -94,6 +147,8 @@ const RoutineBuilder: React.FC = () => {
         deleteWorkoutsOnSelectedDates={deleteWorkoutsOnSelectedDates}
         undoRoutineStack={undoRoutineStack}
         undoRoutine={undoRoutine}
+        selectedDaysFromPlan={selectedDaysFromPlan}
+        copyWorkoutsToStartDate={copyWorkoutsToStartDate}
       />
 
       <UserWorkouts
