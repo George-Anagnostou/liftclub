@@ -31,7 +31,6 @@ const UserTeams: React.FC<Props> = ({ team, setTeam, teamSaved, clearTeam }) => 
     setLoading(team._id);
 
     const teamData = await getTeamById(team._id);
-    console.log(teamData);
     if (teamData) setTeam(teamData);
 
     setLoading("");
