@@ -1,5 +1,6 @@
 // this event listener is for debugging purposes
 self.addEventListener("install", (event) => {
+  console.log("here in service worker");
   self.skipWaiting();
   //event.waitUntil();
 });
