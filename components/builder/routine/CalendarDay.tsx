@@ -12,7 +12,7 @@ interface Props {
   setDatesSelected: React.Dispatch<React.SetStateAction<{ [date: string]: boolean }>>;
   showWorkoutTags: boolean;
   multiSelectMode: boolean;
-  moveWorkoutsMode: boolean;
+  copyWorkoutsMode: boolean;
   copyWorkoutsToStartDate?: (date: string) => void;
 }
 
@@ -25,7 +25,7 @@ const CalendarDay: React.FC<Props> = ({
   setDatesSelected,
   showWorkoutTags,
   multiSelectMode,
-  moveWorkoutsMode,
+  copyWorkoutsMode,
   copyWorkoutsToStartDate,
 }) => {
   const formatDate = (y: string | number, m: string | number, d: string | number) => {
@@ -40,7 +40,7 @@ const CalendarDay: React.FC<Props> = ({
   const handleTouchStart = () => {
     const targetDate = formatDate(year, month, day);
 
-    if (moveWorkoutsMode && copyWorkoutsToStartDate) {
+    if (copyWorkoutsMode && copyWorkoutsToStartDate) {
       copyWorkoutsToStartDate(targetDate);
     } else if (multiSelectMode) {
       // If day is already selected, remove it. Otherwise, add it.
@@ -60,7 +60,7 @@ const CalendarDay: React.FC<Props> = ({
   };
 
   const handleTouchMove = (e) => {
-    if (moveWorkoutsMode) return;
+    if (copyWorkoutsMode) return;
 
     const touch = e.touches[0] || e.changedTouches[0];
 

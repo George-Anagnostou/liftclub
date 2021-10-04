@@ -36,7 +36,7 @@ const Calendar: React.FC<Props> = ({
 
   const [showWorkoutTags, setShowWorkoutTags] = useState(true);
   const [multiSelectMode, setMultiSelectMode] = useState(false);
-  const [moveWorkoutsMode, setMoveWorkoutsMode] = useState(false);
+  const [copyWorkoutsMode, setCopyWorkoutsMode] = useState(false);
   const [{ year, month }, setYearMonthDay] = useState(getCurrYearMonthDay());
   const [daysInMonth, setDaysInMonth] = useState(0);
 
@@ -73,8 +73,8 @@ const Calendar: React.FC<Props> = ({
           setMultiSelectMode={setMultiSelectMode}
           showWorkoutTags={showWorkoutTags}
           setShowWorkoutTags={setShowWorkoutTags}
-          moveWorkoutsMode={moveWorkoutsMode}
-          setMoveWorkoutsMode={setMoveWorkoutsMode}
+          copyWorkoutsMode={copyWorkoutsMode}
+          setCopyWorkoutsMode={setCopyWorkoutsMode}
           undoRoutineStack={undoRoutineStack}
           undoRoutine={undoRoutine}
           selectedDaysFromPlan={selectedDaysFromPlan}
@@ -117,7 +117,7 @@ const Calendar: React.FC<Props> = ({
             setDatesSelected={setDatesSelected}
             showWorkoutTags={showWorkoutTags}
             multiSelectMode={multiSelectMode}
-            moveWorkoutsMode={moveWorkoutsMode}
+            copyWorkoutsMode={copyWorkoutsMode}
             copyWorkoutsToStartDate={copyWorkoutsToStartDate}
           />
         ))}

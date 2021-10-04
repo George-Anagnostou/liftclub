@@ -19,8 +19,8 @@ interface Props {
   setMultiSelectMode: React.Dispatch<React.SetStateAction<boolean>>;
   showWorkoutTags: boolean;
   setShowWorkoutTags: React.Dispatch<React.SetStateAction<boolean>>;
-  moveWorkoutsMode: boolean;
-  setMoveWorkoutsMode: React.Dispatch<React.SetStateAction<boolean>>;
+  copyWorkoutsMode: boolean;
+  setCopyWorkoutsMode: React.Dispatch<React.SetStateAction<boolean>>;
   undoRoutineStack?: Routine[];
   undoRoutine?: () => void;
 }
@@ -34,8 +34,8 @@ const CalendarTools: React.FC<Props> = ({
   setMultiSelectMode,
   showWorkoutTags,
   setShowWorkoutTags,
-  moveWorkoutsMode,
-  setMoveWorkoutsMode,
+  copyWorkoutsMode,
+  setCopyWorkoutsMode,
   undoRoutineStack,
   undoRoutine,
 }) => {
@@ -52,7 +52,7 @@ const CalendarTools: React.FC<Props> = ({
       <div
         onClick={() => {
           setDatesSelected({});
-          setMoveWorkoutsMode(false);
+          setCopyWorkoutsMode(false);
         }}
         className={Object.keys(datesSelected).length ? "highlight" : ""}
       >
@@ -82,9 +82,9 @@ const CalendarTools: React.FC<Props> = ({
       </div>
 
       <div
-        onClick={() => setMoveWorkoutsMode(!moveWorkoutsMode)}
+        onClick={() => setCopyWorkoutsMode(!copyWorkoutsMode)}
         className={` ${Object.keys(selectedDaysFromPlan!).length && "highlight"} ${
-          moveWorkoutsMode && "accent"
+          copyWorkoutsMode && "accent"
         }`}
       >
         <Copy />
