@@ -13,12 +13,10 @@ const SeoHead: React.FC<Props> = ({ title }) => {
       <title>{title}</title>
 
       <link rel="icon" href="/favicon.png" />
-      
+
       <meta name="viewport" content="width=device-width,initial-scale=1" />
 
       <meta name="mobile-web-app-capable" content="yes" />
-
-      <link rel="serviceworker" href="/sw.js" />
 
       <link rel="manifest" href="/manifest.json" />
 
