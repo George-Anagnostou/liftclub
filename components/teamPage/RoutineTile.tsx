@@ -91,7 +91,7 @@ export default RoutineTile;
 const Container = styled.div`
   width: 100%;
   background: ${({ theme }) => theme.background};
-  padding: 1rem 0.5rem;
+  padding: 0.5rem;
   border-radius: 10px;
   position: relative;
 
@@ -100,10 +100,11 @@ const Container = styled.div`
     top: 0.5rem;
     right: 0.5rem;
     border-radius: 5px;
-    padding: 0.25rem 0.5rem;
+    padding: 0.1rem 0.5rem;
     border: none;
     background: ${({ theme }) => theme.buttonMed};
     color: ${({ theme }) => theme.textLight};
+    font-size: 0.8rem;
   }
 `;
 
@@ -115,13 +116,13 @@ const RoutineInfo = styled.div`
 
   .routineName {
     flex: 1;
-    font-weight: 400;
-    font-size: 1.75rem;
+    font-weight: 300;
+    font-size: 1.5rem;
   }
 
   .routineStats {
     color: ${({ theme }) => theme.textLight};
-    font-size: 1rem;
+    font-size: 0.8rem;
   }
 `;
 
@@ -132,11 +133,13 @@ const UniqueWorkoutList = styled.ul`
   li {
     text-align: left;
     background: ${({ theme }) => theme.buttonMed};
-    padding: 0.5rem 0.5rem;
+    padding: 0.25rem 0.5rem;
     margin: 0 0.25rem 0.5rem;
     border-radius: 5px;
     display: flex;
     align-items: center;
+    font-weight: 300;
+    font-size: 0.9rem;
 
     button {
       font-size: 0.7rem;

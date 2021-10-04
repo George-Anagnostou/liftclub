@@ -78,7 +78,7 @@ const MembersList = styled.div`
       justify-content: space-between;
       align-items: center;
 
-      padding: 0.5rem;
+      padding: 0.25rem 0.5rem;
       margin-bottom: 0.5rem;
       border-radius: 5px;
       background: ${({ theme }) => theme.buttonMed};
@@ -93,8 +93,8 @@ const MembersList = styled.div`
         cursor: pointer;
         border-radius: 5px;
         border: none;
-        padding: 0.25rem;
-        box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
+        padding: 0.15rem 0.5rem;
+        font-size: 0.65rem;
 
         &.follow {
           background: ${({ theme }) => theme.accentSoft};

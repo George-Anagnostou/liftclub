@@ -87,18 +87,20 @@ const TopTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMembers }
       <div className="info">
         <div>
           <p>
-            Leader -{" "}
             <Link href={`/users/${team.creatorName}`}>
-              <a className="leader">{team.creatorName}</a>
+              <a className="leader">
+                <span>Led by: </span>
+                {team.creatorName}
+              </a>
             </Link>
           </p>
 
           <p className="membersCount" onClick={() => setShowMembers(true)}>
-            {team.members.length} {team.members.length === 1 ? "member" : "members"}
+            {team.members.length} <span>{team.members.length === 1 ? "member" : "members"}</span>
           </p>
         </div>
 
-        {(function () {
+        {(() => {
           const joined = user?.teamsJoined?.includes(team._id);
           return (
             <button
@@ -128,7 +130,7 @@ export default TopTile;
 const Tile = styled.div`
   width: 100%;
   background: ${({ theme }) => theme.background};
-  padding: 1rem 0.5rem;
+  padding: 1rem 0.5rem 0.5rem;
   border-radius: 10px;
   position: relative;
 
@@ -141,12 +143,13 @@ const Tile = styled.div`
     border: none;
     background: ${({ theme }) => theme.buttonMed};
     color: ${({ theme }) => theme.textLight};
+    font-size: 0.8rem;
   }
 
   h1 {
     margin: 0.5rem;
     font-weight: 300;
-    font-size: 2rem;
+    font-size: 1.75rem;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: pre-wrap;
@@ -154,15 +157,21 @@ const Tile = styled.div`
   }
 
   .info {
-    color: ${({ theme }) => theme.textLight};
     text-align: left;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
     width: 100%;
 
-    p {
-      margin-right: 0.25rem;
+    div {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+
+      p {
+        margin-right: 0.25rem;
+        span {
+          color: ${({ theme }) => theme.textLight};
+          font-size: 0.75rem;
+        }
+      }
     }
 
     .leader:active,
@@ -171,9 +180,10 @@ const Tile = styled.div`
     }
 
     button {
+      float: right;
       border-radius: 5px;
       border: none;
-      margin-left: auto;
+      margin-top: 0.25rem;
       padding: 0.25rem 0.75rem;
       font-size: 0.75rem;
       border-radius: 5px;

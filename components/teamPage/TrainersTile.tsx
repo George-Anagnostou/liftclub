@@ -105,7 +105,7 @@ export default TrainersTile;
 const Tile = styled.div`
   width: 100%;
   background: ${({ theme }) => theme.background};
-  padding: 1rem 0.5rem;
+  padding: 0.5rem;
   border-radius: 10px;
 `;
 
@@ -122,9 +122,8 @@ const TrainerList = styled.ul`
     margin: 0.25rem;
     background: ${({ theme }) => theme.buttonMed};
 
-    padding: 0.5rem;
-    border-radius: 10px;
-    box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
+    padding: 0.25rem 0.5rem;
+    border-radius: 7px;
 
     .icon {
       background: ${({ theme }) => theme.buttonLight};
@@ -161,6 +160,8 @@ const TrainerList = styled.ul`
 
     p {
       margin-left: 0.25rem;
+      font-size: 0.9rem;
+      font-weight: 300;
     }
   }
 `;
