@@ -102,7 +102,6 @@ const Container = styled.div`
   border-radius: 5px;
   padding-top: 5px;
   margin: 1.5px;
-  background: ${({ theme }) => theme.buttonLight};
   color: ${({ theme }) => theme.textLight};
   position: relative;
   user-select: none;
@@ -120,7 +119,7 @@ const Container = styled.div`
   &.selected {
     background: ${({ theme }) => theme.border};
     color: ${({ theme }) => theme.text};
-    border-radius: 20px;
+    border-radius: 10px;
   }
   &.hasWorkout {
     background: ${({ theme }) => theme.accentSoft};
