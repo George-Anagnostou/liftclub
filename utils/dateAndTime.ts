@@ -9,7 +9,7 @@ export const getCurrYearMonthDay = () => {
   return { year: currYear, month: currMonth, day: currDay };
 };
 
-export const timeSince = (previous, current = Date.now()) => {
+export const timeSince = (previous: number, current = Date.now()) => {
   if (isNaN(previous)) return;
 
   var msPerMinute = 60 * 1000;
