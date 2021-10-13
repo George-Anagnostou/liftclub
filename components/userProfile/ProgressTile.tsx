@@ -213,7 +213,6 @@ const SelectContainer = styled.div`
     border: none;
     border-radius: 5px;
     color: ${({ theme }) => theme.text};
-    box-shadow: 0 1px 2px ${({ theme }) => theme.boxShadow};
 
     --BG: ${({ theme }) => theme.buttonMed};
     --arrow: ${({ theme }) => theme.accentSoft};

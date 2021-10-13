@@ -10,6 +10,7 @@ import Settings from "../svg/Settings";
 import FollowsModal from "./FollowsModal";
 // Interfaces
 import { User } from "../../utils/interfaces";
+import { daysBetween, timeSince } from "../../utils";
 
 interface Props {
   profileData: User;
@@ -84,7 +85,20 @@ const NameTile: React.FC<Props> = ({ profileData, setProfileData, isProfileOwner
         <h1>{profileData.username}</h1>
 
         <p>
-          {Object.keys(profileData.workoutLog).length} <span>days logged</span>
+          <span>Logged</span> {Object.keys(profileData.workoutLog).length} <span>days</span>
+        </p>
+
+        {/* <p>
+          <span>Joined</span> {daysBetween(profileData.accountCreated, new Date().toISOString())}{" "}
+          <span>days ago</span>
+        </p> */}
+
+        <p>
+          <span>Last logged in</span>{" "}
+          {timeSince(new Date(profileData.lastLoggedIn).getTime())?.split(" ")[0]}{" "}
+          <span>
+            {timeSince(new Date(profileData.lastLoggedIn).getTime())?.split(" ").slice(1).join(" ")}
+          </span>
         </p>
 
         <div className="follows">

@@ -3,12 +3,17 @@ import Link from "next/link";
 import styled from "styled-components";
 // Interfaces
 import { Team } from "../../utils/interfaces";
+// Context
+import { useStoreState } from "../../store";
 
 interface Props {
   profileTeamsJoined: Team[];
+  profile_id: string;
 }
 
-const TeamsTile: React.FC<Props> = ({ profileTeamsJoined }) => {
+const TeamsTile: React.FC<Props> = ({ profileTeamsJoined, profile_id }) => {
+  const { user } = useStoreState();
+
   return (
     <Container>
       <div className="topbar">
@@ -24,8 +29,17 @@ const TeamsTile: React.FC<Props> = ({ profileTeamsJoined }) => {
           profileTeamsJoined.map((team) => (
             <TeamItem key={team._id}>
               <Link href={`/teams/${team._id}`}>
-                <div className="teamInfo">
-                  <p className="name">{team.teamName}</p>
+                <div className="team-info">
+                  <p className="team-name">
+                    {(() => {
+                      if (team.creator_id === profile_id) return "Leader of ";
+                      else if (team.trainers.some((trainer) => String(trainer) === profile_id))
+                        return "Trainer of ";
+                      else return "Member of ";
+                    })()}
+
+                    <span>{team.teamName}</span>
+                  </p>
                   <p className="members">
                     {team.members.length} {team.members.length === 1 ? "member" : "members"}
                   </p>
@@ -34,7 +48,7 @@ const TeamsTile: React.FC<Props> = ({ profileTeamsJoined }) => {
             </TeamItem>
           ))
         ) : (
-          <p className="noTeams">None</p>
+          <p className="no-teams">None</p>
         )}
       </TeamsList>
     </Container>
@@ -69,31 +83,30 @@ const Container = styled.section`
 `;
 
 const TeamsList = styled.ul`
-  display: flex;
-  overflow-x: scroll;
-  overflow-y: show;
-  padding-bottom: 0.25rem;
-
-  .noTeams {
-    margin-left: 0.5rem;
+  .no-teams {
+    line-height: 1.2rem;
+    font-size: 0.9rem;
+    padding: 0.25rem;
+    font-weight: 200;
   }
 `;
 
 const TeamItem = styled.li`
-  background: ${({ theme }) => theme.buttonMed};
-  box-shadow: 0 1px 2px ${({ theme }) => theme.boxShadow};
   padding: 0.25rem 0.5rem;
-  margin-right: 0.5rem;
-  border-radius: 8px;
-  text-align: center;
-  min-width: max-content;
+  width: 100%;
 
-  .teamInfo {
-    p {
-    }
+  .team-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-    .name {
-      font-size: 0.95rem;
+    .team-name {
+      font-size: 0.8rem;
+      font-weight: 200;
+      span {
+        font-weight: 300;
+        font-size: 0.95rem;
+      }
     }
 
     .members {

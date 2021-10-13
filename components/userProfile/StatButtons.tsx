@@ -35,12 +35,12 @@ export default StatButtons;
 
 const Buttons = styled.div`
   display: flex;
-  width: 90%;
+  width: 100%;
   margin: 0 auto 0.5rem;
 
   button {
     flex: 1;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     padding: 0.25rem;
     border-radius: 0px;
     color: ${({ theme }) => theme.textLight};

@@ -67,7 +67,7 @@ const User_id: React.FC = () => {
             user_id={user._id}
           />
 
-          <TeamsTile profileTeamsJoined={profileTeamsJoined} />
+          <TeamsTile profileTeamsJoined={profileTeamsJoined} profile_id={profileData._id} />
 
           <ProgressTile profileData={profileData} />
 
