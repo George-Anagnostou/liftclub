@@ -13,6 +13,8 @@ export type User = {
   profileImgUrl?: string;
   password?: string;
   recentlyViewedUsers?: string[];
+  lastLoggedIn: string;
+  accountCreated: string;
 };
 
 export interface ShortUser {

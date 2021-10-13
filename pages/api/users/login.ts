@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { User } from "../../../utils/interfaces";
 import { connectToDatabase } from "../../../utils/mongodb";
+import { ObjectId } from "mongodb";
 import bcrypt from "bcryptjs";
 import * as jwt from "jsonwebtoken";
 
@@ -25,9 +26,18 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const token = jwt.sign({ id: user._id }, JWT_SECRET);
 
-    validLogin && token
-      ? res.status(201).json({ userData: user, token: token })
-      : res.status(400).end(); // Status 400 for bad password
+    if (validLogin && token) {
+      db.collection("users").findOneAndUpdate(
+        { _id: new ObjectId(user._id) },
+        { $set: { lastLoggedIn: new Date().toISOString() } }
+      );
+
+      user.lastLoggedIn = new Date().toISOString();
+
+      res.status(201).json({ userData: user, token: token });
+    } else {
+      res.status(400).end();
+    }
   } else {
     // Status 401 for bad username
     res.status(401).end();
