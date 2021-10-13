@@ -89,7 +89,7 @@ const WorkoutTile: React.FC<Props> = ({
               <h3>{workout.name}</h3>
 
               <p>
-                <span>{timeSince(new Date(workout.date_created))}</span> {"- "}
+                <span>{timeSince(new Date(workout.date_created).getTime())}</span> {"- "}
                 <Link href={`users/${workout.creatorName}`}>
                   <a className="creator">{workout.creatorName}</a>
                 </Link>
