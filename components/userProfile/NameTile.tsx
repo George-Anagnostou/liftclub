@@ -10,7 +10,7 @@ import Settings from "../svg/Settings";
 import FollowsModal from "./FollowsModal";
 // Interfaces
 import { User } from "../../utils/interfaces";
-import { daysBetween, timeSince } from "../../utils";
+import { timeSince } from "../../utils";
 
 interface Props {
   profileData: User;

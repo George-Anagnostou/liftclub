@@ -91,14 +91,60 @@ const DateScrollClone: React.FC<Props> = ({
   return (
     <DateScrollContainer>
       {Array.from(Array(90).keys()).map((numDays) => (
-        <li onClick={() => handleDateClick(-numDays)} className="date" key={-numDays}>
+        <Day onClick={() => handleDateClick(-numDays)} key={-numDays}>
           {renderDate(-numDays)}
-        </li>
+        </Day>
       ))}
     </DateScrollContainer>
   );
 };
 export default DateScrollClone;
+
+const Day = styled.li`
+  min-width: 55px;
+  margin: 0 0.1rem;
+  cursor: pointer;
+  height: fit-content;
+  text-align: center;
+
+  div {
+    border-radius: 10px;
+    padding: 0.25rem;
+    transition: all 0.2s ease-in-out;
+
+    color: ${({ theme }) => theme.text};
+    box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
+
+    p {
+      font-weight: 200;
+      margin: 0.25rem 0;
+    }
+
+    .month {
+      text-transform: uppercase;
+    }
+    .dow {
+      font-weight: 400;
+    }
+    .day {
+    }
+
+    &.selected {
+      background: ${({ theme }) => theme.background};
+    }
+    &.notSelected {
+      transform: scale(0.8);
+      background: ${({ theme }) => theme.background};
+      color: ${({ theme }) => theme.textLight};
+    }
+    &.hasDayData {
+      background: ${({ theme }) => theme.accent};
+      color: ${({ theme }) => theme.accentText};
+    }
+    &.noDayData {
+    }
+  }
+`;
 
 const DateScrollContainer = styled.ul`
   display: flex;
@@ -108,52 +154,6 @@ const DateScrollContainer = styled.ul`
   width: calc(100% + 1rem);
   padding: 0.25rem 0 0.5rem;
   overflow-x: auto;
-
-  .date {
-    min-width: 55px;
-    margin: 0 0.1rem;
-    cursor: pointer;
-    height: fit-content;
-    text-align: center;
-
-    div {
-      border-radius: 10px;
-      padding: 0.25rem;
-      transition: all 0.2s ease-in-out;
-
-      color: ${({ theme }) => theme.text};
-      box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
-
-      p {
-        font-weight: 200;
-        margin: 0.25rem 0;
-      }
-
-      .month {
-        text-transform: uppercase;
-      }
-      .dow {
-        font-weight: 400;
-      }
-      .day {
-      }
-
-      &.selected {
-        background: ${({ theme }) => theme.background};
-      }
-      &.notSelected {
-        transform: scale(0.8);
-        background: ${({ theme }) => theme.background};
-        color: ${({ theme }) => theme.textLight};
-      }
-      &.hasDayData {
-        background: ${({ theme }) => theme.accent};
-        color: ${({ theme }) => theme.accentText};
-      }
-      &.noDayData {
-      }
-    }
-  }
 
   @media (max-width: 425px) {
     /* Remove scroll bar on mobile */
