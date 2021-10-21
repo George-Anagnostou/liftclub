@@ -26,12 +26,16 @@ export default function builder() {
 
   // Sets margin when builder type changes
   useEffect(() => {
-    if (builderType === "workout") {
-      setMargin(0);
-    } else if (builderType === "routine") {
-      setMargin(-100);
-    } else if (builderType === "team") {
-      setMargin(-200);
+    switch (builderType) {
+      case "workout":
+        setMargin(0);
+        break;
+      case "routine":
+        setMargin(-100);
+        break;
+      case "team":
+        setMargin(-200);
+        break;
     }
   }, [builderType]);
 
