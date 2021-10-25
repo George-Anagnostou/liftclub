@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 // Context
-import { useUserDispatch, useUserState } from "../../../store";
-// API
-import { postNewTeam, updateTeam } from "../../../utils/api";
+import { useBuilderDispatch, useUserDispatch, useUserState } from "../../../store";
+import { userJoiningTeam } from "../../../store/actions/userActions";
+import {
+  addTeamToCreatedTeams,
+  updateExistingCreatedTeam,
+} from "../../../store/actions/builderActions";
 // Interfaces
 import { Team } from "../../../utils/interfaces";
 // Components
@@ -11,7 +14,6 @@ import ControlsBar from "./ControlsBar";
 import UserTeams from "./UserTeams";
 import TrainersTile from "./TrainersTile";
 import RoutinesTile from "./RoutinesTile";
-import { userJoiningTeam } from "../../../store/actions/userActions";
 
 type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
 
@@ -31,22 +33,28 @@ const initialTeam: EditableTeam = {
 
 const TeamBuilder: React.FC = () => {
   const { user } = useUserState();
-  const dispatch = useUserDispatch();
+  const userDispatch = useUserDispatch();
+  const builderDispatch = useBuilderDispatch();
 
   const [team, setTeam] = useState<EditableTeam>(initialTeam);
   const [teamSaved, setTeamSaved] = useState<boolean | null>(null);
 
   const saveTeam = async () => {
+    let saved: boolean = false;
+
     if (team._id) {
-      const saved = await updateTeam(team);
-      setTeamSaved(saved);
+      saved = await updateExistingCreatedTeam(builderDispatch, team);
     } else {
-      const team_id = await postNewTeam(team);
+      const team_id = await addTeamToCreatedTeams(builderDispatch, team);
       if (team_id) {
-        setTeamSaved(true);
-        setTeam({ ...team, _id: team_id });
-        userJoiningTeam(dispatch, user!._id, team_id);
+        saved = true;
+        userJoiningTeam(userDispatch, user!._id, team_id);
       }
+    }
+
+    if (saved) {
+      setTeamSaved(true);
+      clearTeam();
     }
   };
 
@@ -79,7 +87,7 @@ const TeamBuilder: React.FC = () => {
         teamSaved={teamSaved}
       />
 
-      <UserTeams team={team} setTeam={setTeam} teamSaved={teamSaved} clearTeam={clearTeam} />
+      <UserTeams team={team} setTeam={setTeam} clearTeam={clearTeam} />
 
       <RoutinesTile team={team} setTeam={setTeam} />
 

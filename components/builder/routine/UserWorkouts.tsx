@@ -1,9 +1,6 @@
-import { useEffect, useState } from "react";
 import styled from "styled-components";
-// Utils
-import { getUserMadeWorkouts, getWorkoutsFromIdArray } from "../../../utils/api";
 // Context
-import { useStoreState } from "../../../store";
+import { useBuilderState } from "../../../store";
 // Interfaces
 import { Workout, Routine } from "../../../utils/interfaces";
 
@@ -13,31 +10,7 @@ interface Props {
 }
 
 const UserWorkouts: React.FC<Props> = ({ selectedDaysFromPlan, addWorkoutToDatesSelected }) => {
-  const { user } = useStoreState();
-
-  const [userMadeWorkouts, setUserMadeWorkouts] = useState<Workout[]>([]);
-  const [userSavedWorkouts, setUserSavedWorkouts] = useState<Workout[]>([]);
-
-  const loadUserMadeWorkouts = async () => {
-    const madeWorkouts = await getUserMadeWorkouts(user!._id);
-    madeWorkouts.sort((a, b) => a.name.length - b.name.length);
-    setUserMadeWorkouts(madeWorkouts);
-  };
-
-  const loadUserSavedWorkouts = async () => {
-    if (!user?.savedWorkouts) return;
-    const workouts = await getWorkoutsFromIdArray(user.savedWorkouts);
-    setUserSavedWorkouts(workouts.reverse());
-  };
-
-  useEffect(() => {
-    if (user) {
-      // Get all workouts made by the user
-      loadUserMadeWorkouts();
-      // Get all workotus saved by the user
-      loadUserSavedWorkouts();
-    }
-  }, [user]);
+  const { workouts } = useBuilderState();
 
   const renderWorkoutItem = (workout: Workout) => {
     const isWorkoutInSelected = selectedDaysFromPlan.filter(
@@ -61,8 +34,8 @@ const UserWorkouts: React.FC<Props> = ({ selectedDaysFromPlan, addWorkoutToDates
         <h3>Created</h3>
 
         <ul>
-          {Boolean(userMadeWorkouts.length) ? (
-            userMadeWorkouts.map((workout, i) => renderWorkoutItem(workout))
+          {workouts.created && Boolean(workouts.created.length) ? (
+            workouts.created.map((workout, i) => renderWorkoutItem(workout))
           ) : (
             <p className="fallbackText">None</p>
           )}
@@ -72,8 +45,8 @@ const UserWorkouts: React.FC<Props> = ({ selectedDaysFromPlan, addWorkoutToDates
       <WorkoutsList>
         <h3>Saved</h3>
         <ul>
-          {Boolean(userSavedWorkouts.length) ? (
-            userSavedWorkouts.map((workout, i) => renderWorkoutItem(workout))
+          {workouts.saved && Boolean(workouts.saved.length) ? (
+            workouts.saved.map((workout, i) => renderWorkoutItem(workout))
           ) : (
             <p className="fallbackText">None</p>
           )}

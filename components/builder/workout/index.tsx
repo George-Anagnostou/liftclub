@@ -6,12 +6,12 @@ import ExerciseList from "./ExerciseList";
 import UserWorkouts from "./UserWorkouts";
 import CustomWorkout from "./CustomWorkout";
 // Context
-import { useStoreState } from "../../../store";
+import { useUserState } from "../../../store";
 // Interfaces
 import { Exercise, Workout } from "../../../utils/interfaces";
 import { moveItemInArray } from "../../../utils/";
 
-const CustomWorkoutInit = {
+const InitialCustomWorkout = {
   _id: "",
   name: "",
   creator_id: "",
@@ -23,11 +23,10 @@ const CustomWorkoutInit = {
 };
 
 const WorkoutBuilder: React.FC = () => {
-  const { user } = useStoreState();
+  const { user } = useUserState();
 
   const [exerciseListBottom, setExerciseListBottom] = useState(-80); // number ranging from -80 to 0
-  const [workoutSavedSuccessfully, setWorkoutSavedSuccessfully] = useState<boolean | null>(null);
-  const [customWorkout, setCustomWorkout] = useState<Workout>(CustomWorkoutInit);
+  const [customWorkout, setCustomWorkout] = useState<Workout>(InitialCustomWorkout);
 
   // Returns boolean for whether or not an exercise exists in customWorkoutExercises
   const isExerciseInCustomWorkout = (exercise_id: string) => {
@@ -62,7 +61,7 @@ const WorkoutBuilder: React.FC = () => {
   };
 
   // Resets custom workout state
-  const clearCustomWorkout = () => setCustomWorkout(CustomWorkoutInit);
+  const clearCustomWorkout = () => setCustomWorkout(InitialCustomWorkout);
 
   const handleDragEnd = (result: any) => {
     const startIndex: number = result.source?.index;
@@ -83,16 +82,13 @@ const WorkoutBuilder: React.FC = () => {
           user={user}
           customWorkout={customWorkout}
           setCustomWorkout={setCustomWorkout}
-          workoutSavedSuccessfully={workoutSavedSuccessfully}
           clearCustomWorkout={clearCustomWorkout}
           removeExercise={removeExercise}
-          setWorkoutSavedSuccessfully={setWorkoutSavedSuccessfully}
           setExerciseListBottom={setExerciseListBottom}
         />
       </DragDropContext>
 
       <UserWorkouts
-        workoutSavedSuccessfully={workoutSavedSuccessfully}
         customWorkout={customWorkout}
         clearCustomWorkout={clearCustomWorkout}
         setCustomWorkout={setCustomWorkout}

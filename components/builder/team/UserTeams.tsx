@@ -2,28 +2,30 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 // Context
-import { useUserState } from "../../../store";
+import { useBuilderDispatch, useBuilderState, useUserState } from "../../../store";
 // API
-import { getTeamById, getUserMadeTeams } from "../../../utils/api";
+import { getTeamById } from "../../../utils/api";
 // Interfaces
 import { Team } from "../../../utils/interfaces";
 import { EditableTeam } from "./index";
 // Components
 import DeleteTeamModal from "./DeleteTeamModal";
+import { getUserCreatedTeams } from "../../../store/actions/builderActions";
 
 interface Props {
   team: EditableTeam;
   setTeam: React.Dispatch<React.SetStateAction<EditableTeam>>;
-  teamSaved: boolean | null;
   clearTeam: () => void;
 }
 
-const UserTeams: React.FC<Props> = ({ team, setTeam, teamSaved, clearTeam }) => {
+const UserTeams: React.FC<Props> = ({ team, setTeam, clearTeam }) => {
   const { user } = useUserState();
+  const { teams } = useBuilderState();
+  const builderDispatch = useBuilderDispatch();
+  
   const router = useRouter();
 
   const [teamToDelete, setTeamToDelete] = useState<Team | null>(null);
-  const [userTeams, setUserTeams] = useState<Team[] | null>(null);
   const [loading, setLoading] = useState<string>("");
   const [hasQueriedUrl, setHasQueriedUrl] = useState(false);
 
@@ -37,32 +39,28 @@ const UserTeams: React.FC<Props> = ({ team, setTeam, teamSaved, clearTeam }) => 
   };
 
   useEffect(() => {
-    const getUserTeams = async () => {
-      const teams = await getUserMadeTeams(user!._id);
-      if (teams && teams.length) setUserTeams(teams);
-    };
-    if (user || teamSaved) getUserTeams();
-  }, [user, teamSaved]);
+    if (user && !teams.created) getUserCreatedTeams(builderDispatch, user._id);
+  }, [user]);
 
   // If url has query for specific team, set that team
   useEffect(() => {
     const queriedTeam_id = router.query.team as string;
 
-    if (queriedTeam_id && userTeams && !hasQueriedUrl) {
-      const queried = userTeams.find((each) => each._id === queriedTeam_id);
+    if (queriedTeam_id && teams.created && !hasQueriedUrl) {
+      const queried = teams.created.find((each) => each._id === queriedTeam_id);
 
       if (queried) handleTeamClick(queried);
       setHasQueriedUrl(true);
     }
-  }, [userTeams]);
+  }, [teams.created]);
 
   return (
     <Container className="tile">
       <h3>Your Teams</h3>
 
-      {userTeams ? (
+      {teams.created ? (
         <ul>
-          {userTeams.map((userTeam) => (
+          {teams.created.map((userTeam) => (
             <li
               key={userTeam._id}
               onClick={() => handleTeamClick(userTeam)}
@@ -85,7 +83,6 @@ const UserTeams: React.FC<Props> = ({ team, setTeam, teamSaved, clearTeam }) => 
           team={teamToDelete}
           setTeamToDelete={setTeamToDelete}
           clearTeam={clearTeam}
-          setUserTeams={setUserTeams}
         />
       )}
     </Container>

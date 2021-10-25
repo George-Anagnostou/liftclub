@@ -6,6 +6,8 @@ import WorkoutBuilder from "../components/builder/workout";
 import RoutineBuilder from "../components/builder/routine";
 import TeamBuilder from "../components/builder/team";
 import BuilderSelectBar from "../components/builder/BuilderSelectBar";
+// Builder Context
+import { BuilderStoreProvider } from "../store";
 
 const Builders = [
   { slug: "workout", component: <WorkoutBuilder /> },
@@ -41,15 +43,17 @@ export default function builder() {
 
   return (
     <Container>
-      <BuilderSelectBar builderType={builderType} setBuilderType={setBuilderType} />
+      <BuilderStoreProvider>
+        <BuilderSelectBar builderType={builderType} setBuilderType={setBuilderType} />
 
-      <BuilderSlideContainer style={{ marginLeft: `${margin}vw` }}>
-        {Builders.map(({ slug, component }, i) => (
-          <div className="builder" key={i} style={builderType !== slug ? { height: "85vh" } : {}}>
-            {component}
-          </div>
-        ))}
-      </BuilderSlideContainer>
+        <BuilderSlideContainer style={{ marginLeft: `${margin}vw` }}>
+          {Builders.map(({ slug, component }, i) => (
+            <div className="builder" key={i} style={builderType !== slug ? { height: "85vh" } : {}}>
+              {component}
+            </div>
+          ))}
+        </BuilderSlideContainer>
+      </BuilderStoreProvider>
     </Container>
   );
 }

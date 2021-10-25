@@ -140,7 +140,7 @@ const MonthCtrl = styled.div`
 
   div {
     align-items: center;
-    margin-bottom: 0.5rem;
+    margin: 0.5rem 0;
 
     .month {
       font-size: 1.3rem;
@@ -158,9 +158,8 @@ const MonthCtrl = styled.div`
     color: ${({ theme }) => theme.textLight};
     background: ${({ theme }) => theme.body};
     height: 35px;
-    width: 35px;
+    width: 55px;
     border-radius: 8px;
-    display: grid;
   }
 `;
 

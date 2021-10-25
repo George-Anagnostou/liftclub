@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-// API
-import { deleteRoutine } from "../../../utils/api";
+// Context
+import { useBuilderDispatch } from "../../../store";
+import { deleteRoutineFromCreatedRoutines } from "../../../store/actions/builderActions";
 // Interfaces
 import { Routine } from "../../../utils/interfaces";
 // Components
@@ -11,22 +12,14 @@ interface Props {
   routine: Routine;
   setRoutineToDelete: React.Dispatch<React.SetStateAction<Routine | null>>;
   clearRoutine: () => void;
-  setUserRoutines: React.Dispatch<React.SetStateAction<Routine[] | null>>;
 }
 
-const DeleteRoutineModal: React.FC<Props> = ({
-  routine,
-  setRoutineToDelete,
-  clearRoutine,
-  setUserRoutines,
-}) => {
-  const handleDeleteRoutine = async () => {
-    const deleted = await deleteRoutine(routine._id);
+const DeleteRoutineModal: React.FC<Props> = ({ routine, setRoutineToDelete, clearRoutine }) => {
+  const builderDispatch = useBuilderDispatch();
 
+  const handleDeleteRoutine = async () => {
+    const deleted = await deleteRoutineFromCreatedRoutines(builderDispatch, routine._id);
     if (deleted) {
-      setUserRoutines((prev) =>
-        prev && prev.length > 1 ? prev.filter((each) => each._id !== routine._id) : null
-      );
       setRoutineToDelete(null);
       clearRoutine();
     }

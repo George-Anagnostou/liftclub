@@ -29,7 +29,9 @@ const ControlsBar: React.FC<Props> = ({ team, setTeam, clearTeam, saveTeam, team
           placeholder="Name your team"
         />
 
-        {teamSaved && <Checkmark styles={{ position: "absolute", right: "1.4rem" }} />}
+        {teamSaved && (
+          <Checkmark styles={{ position: "absolute", right: 0, transform: "scale(0.7)" }} />
+        )}
       </div>
       <div className="controls">
         <button onClick={saveTeam} disabled={!Boolean(team.teamName && team.routine_id)}>
@@ -66,6 +68,7 @@ const Container = styled.div`
 
     display: flex;
     align-items: center;
+    position: relative;
 
     input[type="text"] {
       width: 100%;

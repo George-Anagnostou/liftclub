@@ -1,8 +1,9 @@
 import styled from "styled-components";
 // Components
 import Modal from "../../Wrappers/Modal";
-// API
-import { deleteWorkout } from "../../../utils/api";
+// Context
+import { deleteWorkoutFromCreatedWorkouts } from "../../../store/actions/builderActions";
+import { useBuilderDispatch } from "../../../store";
 // Interfaces
 import { Workout } from "../../../utils/interfaces";
 
@@ -17,8 +18,10 @@ const DeleteWorkoutModal: React.FC<Props> = ({
   setWorkoutToDelete,
   clearCustomWorkout,
 }) => {
+  const dispatch = useBuilderDispatch();
+
   const handleDeleteWorkout = async () => {
-    const deleted = await deleteWorkout(workout._id);
+    const deleted = await deleteWorkoutFromCreatedWorkouts(dispatch, workout._id);
 
     if (deleted) {
       setWorkoutToDelete(null);

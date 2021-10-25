@@ -4,6 +4,7 @@ import {
   NewExercise,
   NewWorkout,
   Routine,
+  NewRoutine,
   Team,
   User,
   ShortUser,
@@ -291,7 +292,7 @@ export const getRoutineFromId = async (routine_id: string): Promise<Routine | fa
     return false;
   }
 };
-export const postNewRoutine = async (newRoutine: Routine): Promise<string | false> => {
+export const postNewRoutine = async (newRoutine: NewRoutine): Promise<string | false> => {
   try {
     const res = await fetch(`/api/routines`, {
       method: "POST",

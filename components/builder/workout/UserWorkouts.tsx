@@ -1,35 +1,32 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 // Utils
-import { getUserMadeWorkouts, getWorkoutsFromIdArray } from "../../../utils/api";
 import { addExerciseDataToWorkout } from "../../../utils";
 // Context
-import { useStoreState } from "../../../store";
-import DeleteWorkoutModal from "./DeleteWorkoutModal";
-// Utils
+import { useBuilderDispatch, useBuilderState, useUserState } from "../../../store";
+import {
+  getUserCreatedWorkouts,
+  getUserSavedWorkouts,
+} from "../../../store/actions/builderActions";
 // Interfaces
 import { Workout } from "../../../utils/interfaces";
+// Components
+import DeleteWorkoutModal from "./DeleteWorkoutModal";
 
 interface Props {
   setCustomWorkout: React.Dispatch<React.SetStateAction<Workout>>;
   customWorkout: Workout;
-  workoutSavedSuccessfully: boolean | null;
   clearCustomWorkout: () => void;
 }
 
-const UserWorkouts: React.FC<Props> = ({
-  setCustomWorkout,
-  customWorkout,
-  workoutSavedSuccessfully,
-  clearCustomWorkout,
-}) => {
-  const { user } = useStoreState();
+const UserWorkouts: React.FC<Props> = ({ setCustomWorkout, customWorkout, clearCustomWorkout }) => {
+  const { user } = useUserState();
+  const { workouts } = useBuilderState();
+  const builderDispatch = useBuilderDispatch();
 
-  const [userMadeWorkouts, setUserMadeWorkouts] = useState<Workout[]>([]);
-  const [userSavedWorkouts, setUserSavedWorkouts] = useState<Workout[]>([]);
   const [workoutToDelete, setWorkoutToDelete] = useState<Workout | null>(null);
 
-  const displaySavedWorkout = async (workout: Workout) => {
+  const displayWorkout = async (workout: Workout) => {
     const mergedData = await addExerciseDataToWorkout(workout);
 
     if (mergedData.creator_id !== user!._id) {
@@ -40,26 +37,12 @@ const UserWorkouts: React.FC<Props> = ({
     setCustomWorkout(mergedData);
   };
 
-  const loadUserMadeWorkouts = async () => {
-    const madeWorkouts = await getUserMadeWorkouts(user!._id);
-    madeWorkouts.sort((a, b) => a.name.length - b.name.length);
-    setUserMadeWorkouts(madeWorkouts);
-  };
-
-  const loadUserSavedWorkouts = async () => {
-    if (!user?.savedWorkouts) return;
-    const workouts = await getWorkoutsFromIdArray(user.savedWorkouts);
-    setUserSavedWorkouts(workouts.reverse());
-  };
-
   useEffect(() => {
     if (user) {
-      // Get all workouts made by the user
-      loadUserMadeWorkouts();
-      // Get all workotus saved by the user
-      loadUserSavedWorkouts();
+      if (!workouts.created) getUserCreatedWorkouts(builderDispatch, user._id);
+      if (!workouts.saved) getUserSavedWorkouts(builderDispatch, user.savedWorkouts || []);
     }
-  }, [user, workoutSavedSuccessfully, workoutToDelete]);
+  }, [workouts, user]);
 
   return (
     <Container>
@@ -75,15 +58,14 @@ const UserWorkouts: React.FC<Props> = ({
         <h3>Created</h3>
 
         <ul>
-          {Boolean(userMadeWorkouts.length) ? (
-            userMadeWorkouts.map((workout, i) => (
+          {Boolean(workouts.created?.length) ? (
+            workouts.created!.map((workout, i) => (
               <li
                 key={i}
-                onClick={() => displaySavedWorkout(workout)}
+                onClick={() => displayWorkout(workout)}
                 className={customWorkout._id === workout._id ? "highlight" : ""}
               >
                 {workout.name}
-
                 <button onClick={() => setWorkoutToDelete(workout)}>X</button>
               </li>
             ))
@@ -96,11 +78,11 @@ const UserWorkouts: React.FC<Props> = ({
       <WorkoutsList>
         <h3>Saved</h3>
         <ul>
-          {Boolean(userSavedWorkouts.length) ? (
-            userSavedWorkouts.map((workout, i) => (
+          {Boolean(workouts.saved?.length) ? (
+            workouts.saved!.map((workout, i) => (
               <li
                 key={i}
-                onClick={() => displaySavedWorkout(workout)}
+                onClick={() => displayWorkout(workout)}
                 className={customWorkout._id === workout._id ? "highlight" : ""}
               >
                 {workout.name}
@@ -168,7 +150,7 @@ const WorkoutsList = styled.div`
         border-radius: 3px;
         margin-left: 0.3rem;
         height: 20px;
-        width: 20px;
+        min-width: 20px;
         transition: all 0.25s ease;
       }
 

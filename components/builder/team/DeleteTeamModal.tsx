@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-// API
-import { deleteTeam } from "../../../utils/api";
+import { useBuilderDispatch } from "../../../store";
+import { deleteTeamFromCreatedTeams } from "../../../store/actions/builderActions";
 // Interface
 import { Team } from "../../../utils/interfaces";
 // Components
@@ -11,17 +11,15 @@ interface Props {
   team: Team;
   setTeamToDelete: React.Dispatch<React.SetStateAction<Team | null>>;
   clearTeam: () => void;
-  setUserTeams: React.Dispatch<React.SetStateAction<Team[] | null>>;
 }
 
-const DeleteTeamModal: React.FC<Props> = ({ team, setTeamToDelete, clearTeam, setUserTeams }) => {
+const DeleteTeamModal: React.FC<Props> = ({ team, setTeamToDelete, clearTeam }) => {
+  const builderDispatch = useBuilderDispatch();
+
   const handleDeleteRoutine = async () => {
-    const deleted = await deleteTeam(team._id);
+    const deleted = await deleteTeamFromCreatedTeams(builderDispatch, team._id);
 
     if (deleted) {
-      setUserTeams((prev) =>
-        prev && prev.length > 1 ? prev.filter((each) => each._id !== team._id) : null
-      );
       setTeamToDelete(null);
       clearTeam();
     }

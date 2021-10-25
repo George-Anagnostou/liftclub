@@ -6,12 +6,16 @@ import {
   setIsUsingPWA,
   setPlatformToiOS,
 } from "./actions/userActions";
-import { StoreProvider, useStoreDispatch, useStoreState } from "./context/state";
+import { UserStoreProvider, useUserDispatch, useUserState } from "./context/userState";
+import { BuilderStoreProvider, useBuilderDispatch, useBuilderState } from "./context/builderState";
 
 export {
-  StoreProvider,
-  useStoreDispatch,
-  useStoreState,
+  UserStoreProvider,
+  useUserDispatch,
+  useUserState,
+  BuilderStoreProvider,
+  useBuilderDispatch,
+  useBuilderState,
   loginWithToken,
   logoutUser,
   authLogin,

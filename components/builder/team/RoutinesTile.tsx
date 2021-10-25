@@ -1,42 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 // Context
-import { useUserState } from "../../../store";
+import { useBuilderState } from "../../../store";
 // Interfaces
 import { EditableTeam } from "./index";
 import { Routine } from "../../../utils/interfaces";
-// API
-import { getRoutinesFromCreatorId } from "../../../utils/api";
 
 interface Props {
   team: EditableTeam;
   setTeam: React.Dispatch<React.SetStateAction<EditableTeam>>;
 }
 const RoutinesTile: React.FC<Props> = ({ team, setTeam }) => {
-  const { user } = useUserState();
-  const [routines, setRoutines] = useState<Routine[] | null>(null);
+  const { routines } = useBuilderState();
 
   const handleRoutineClick = (routine: Routine) => {
     setTeam({ ...team, routine: routine, routine_id: routine._id });
   };
 
-  // Set userRoutines on mount
-  useEffect(() => {
-    const getUserRoutines = async () => {
-      if (!user) return;
-      const routines = await getRoutinesFromCreatorId(user._id);
-      if (routines) setRoutines(routines);
-    };
-
-    if (user && !routines) getUserRoutines();
-  }, [user]);
-
   return (
     <Container className="tile">
       <h3>Your Routines</h3>
       <ul>
-        {routines ? (
-          routines.map((routine) => (
+        {routines.created ? (
+          routines.created.map((routine) => (
             <li
               key={routine._id}
               onClick={() => handleRoutineClick(routine)}

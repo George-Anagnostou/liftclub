@@ -15,7 +15,6 @@ const initialRoutineState = { _id: "", creator_id: "", creatorName: "", name: ""
 const RoutineBuilder: React.FC = () => {
   const [routine, setRoutine] = useState<Routine>(initialRoutineState);
   const [selectedDaysFromPlan, setSelectedDaysFromPlan] = useState<Routine["workoutPlan"]>([]);
-  const [routineSaved, setRoutineSaved] = useState<null | boolean>(null);
   const [datesSelected, setDatesSelected] = useState<{ [date: string]: boolean }>({});
   const [undoRoutineStack, setUndoRoutineStack] = useState<Routine[]>([]);
 
@@ -125,20 +124,9 @@ const RoutineBuilder: React.FC = () => {
 
   return (
     <>
-      <ControlsBar
-        routine={routine}
-        setRoutine={setRoutine}
-        clearRoutine={clearRoutine}
-        routineSaved={routineSaved}
-        setRoutineSaved={setRoutineSaved}
-      />
+      <ControlsBar routine={routine} setRoutine={setRoutine} clearRoutine={clearRoutine} />
 
-      <UserRoutines
-        clearRoutine={clearRoutine}
-        setRoutine={setRoutine}
-        routine={routine}
-        routineSaved={routineSaved}
-      />
+      <UserRoutines routine={routine} setRoutine={setRoutine} clearRoutine={clearRoutine} />
 
       <Calendar
         data={formatRoutineWorkoutPlanForCalendar(routine.workoutPlan)}

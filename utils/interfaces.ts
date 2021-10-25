@@ -41,7 +41,7 @@ export interface WorkoutLogItem {
 }
 
 export interface Team {
-  readonly _id: string;
+  _id: string;
   teamName: string;
   members: string[];
   dateCreated: string;
@@ -58,6 +58,14 @@ export interface Routine {
   creatorName: string;
   name: string;
   workoutPlan: { isoDate: string; workout_id: string; workout: Workout }[];
+}
+
+export interface NewRoutine {
+  _id?: string;
+  creator_id: string;
+  creatorName: string;
+  name: string;
+  workoutPlan: { isoDate: string; workout_id: string }[];
 }
 
 export interface RoutineWorkoutPlanForCalendar {

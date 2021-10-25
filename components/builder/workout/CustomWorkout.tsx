@@ -1,19 +1,21 @@
-import { useEffect } from "react";
 import styled from "styled-components";
 import { Droppable } from "react-beautiful-dnd";
 import update from "immutability-helper";
-//Utils
-import { postNewWorkout, updateExistingWorkout } from "../../../utils/api";
+// Interfaces
 import { User, Workout } from "../../../utils/interfaces";
 // Components
 import CustomWorkoutExercise from "./CustomWorkoutExercise";
 import CustomWorkoutControls from "./WorkoutControls";
+// Context
+import { useBuilderDispatch } from "../../../store";
+import {
+  addWorkoutToCreatedWorkouts,
+  updateExistingCreatedWorkout,
+} from "../../../store/actions/builderActions";
 
 interface Props {
   customWorkout: Workout;
   setCustomWorkout: React.Dispatch<React.SetStateAction<Workout>>;
-  workoutSavedSuccessfully: boolean | null;
-  setWorkoutSavedSuccessfully: React.Dispatch<React.SetStateAction<boolean | null>>;
   clearCustomWorkout: () => void;
   removeExercise: (exercise_id: string) => void;
   user: User | undefined;
@@ -23,13 +25,13 @@ interface Props {
 const CustomWorkout: React.FC<Props> = ({
   customWorkout,
   setCustomWorkout,
-  workoutSavedSuccessfully,
-  setWorkoutSavedSuccessfully,
   clearCustomWorkout,
   removeExercise,
   user,
   setExerciseListBottom,
 }) => {
+  const builderDispatch = useBuilderDispatch();
+
   // Handles changes for custom workout name
   const handleWorkoutNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCustomWorkout((prev) => {
@@ -88,7 +90,7 @@ const CustomWorkout: React.FC<Props> = ({
   };
 
   const saveCustomWorkout = async () => {
-    if (!user) return;
+    if (!user) return false;
 
     const { exercises } = customWorkout;
     // Only take exercise_id and sets (exercise data not needed for DB)
@@ -98,12 +100,12 @@ const CustomWorkout: React.FC<Props> = ({
       ...customWorkout,
       exercises: composedExercises,
     };
+    let saveStatus: boolean = false;
 
     if (composedWorkout.creator_id === user._id) {
       // Workout owner is editing existing workout
 
-      const saveStatus = await updateExistingWorkout(composedWorkout);
-      setWorkoutSavedSuccessfully(saveStatus);
+      saveStatus = await updateExistingCreatedWorkout(builderDispatch, composedWorkout);
     } else {
       // User is saving their version of a saved workout or building a new workout
 
@@ -115,28 +117,21 @@ const CustomWorkout: React.FC<Props> = ({
       // Only allow admins to save public workouts
       if (!user.isTrainer) composedWorkout.isPublic = false;
       // Remove any existing _id
-      const { _id, ...rest } = composedWorkout;
+      const { _id, ...workout } = composedWorkout;
       // Add date created
-      rest.date_created = new Date().toISOString();
+      workout.date_created = new Date().toISOString();
 
-      const saveStatus = await postNewWorkout(rest);
-      setWorkoutSavedSuccessfully(saveStatus);
+      saveStatus = await addWorkoutToCreatedWorkouts(builderDispatch, workout);
     }
 
-    clearCustomWorkout();
+    return saveStatus;
   };
-
-  // Remove saved successfully notification after 5 seconds
-  useEffect(() => {
-    if (workoutSavedSuccessfully) setTimeout(() => setWorkoutSavedSuccessfully(null), 3000);
-  }, [workoutSavedSuccessfully]);
 
   return (
     <>
       <CustomWorkoutControls
         customWorkout={customWorkout}
         handleWorkoutNameChange={handleWorkoutNameChange}
-        workoutSavedSuccessfully={workoutSavedSuccessfully}
         saveCustomWorkout={saveCustomWorkout}
         clearCustomWorkout={clearCustomWorkout}
         handlePrivacyChange={handlePrivacyChange}

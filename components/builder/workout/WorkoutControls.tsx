@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useStoreState } from "../../../store";
+import { useUserState } from "../../../store";
 import { Workout } from "../../../utils/interfaces";
 // Components
 import Checkmark from "../../Checkmark";
@@ -8,8 +8,7 @@ import Checkmark from "../../Checkmark";
 interface Props {
   customWorkout: Workout;
   handleWorkoutNameChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  workoutSavedSuccessfully: boolean | null;
-  saveCustomWorkout: () => Promise<void>;
+  saveCustomWorkout: () => Promise<boolean>;
   clearCustomWorkout: () => void;
   handlePrivacyChange: () => void;
 }
@@ -17,12 +16,25 @@ interface Props {
 const CustomWorkoutControls: React.FC<Props> = ({
   customWorkout,
   handleWorkoutNameChange,
-  workoutSavedSuccessfully,
   saveCustomWorkout,
   clearCustomWorkout,
   handlePrivacyChange,
 }) => {
-  const { user } = useStoreState();
+  const { user } = useUserState();
+
+  const [workoutSavedSuccessfully, setWorkoutSavedSuccessfully] = useState<boolean | null>(null);
+
+  const handleSaveClick = async () => {
+    const saved = await saveCustomWorkout();
+    setWorkoutSavedSuccessfully(saved);
+
+    if (saved) clearCustomWorkout();
+  };
+
+  // Remove saved successfully notification after 5 seconds
+  useEffect(() => {
+    if (workoutSavedSuccessfully) setTimeout(() => setWorkoutSavedSuccessfully(null), 3000);
+  }, [workoutSavedSuccessfully]);
 
   return (
     <ControlsBar>
@@ -36,12 +48,12 @@ const CustomWorkoutControls: React.FC<Props> = ({
         />
 
         {workoutSavedSuccessfully && (
-          <Checkmark styles={{ position: "absolute", right: "1.4rem" }} />
+          <Checkmark styles={{ position: "absolute", right: 0, transform: "scale(0.7)" }} />
         )}
       </div>
 
       <div className="controls">
-        <button onClick={saveCustomWorkout} disabled={!Boolean(customWorkout.exercises.length)}>
+        <button onClick={handleSaveClick} disabled={!Boolean(customWorkout.exercises.length)}>
           Save
         </button>
 
@@ -90,6 +102,7 @@ const ControlsBar = styled.div`
 
     display: flex;
     align-items: center;
+    position: relative;
 
     input[type="text"] {
       width: 100%;
@@ -100,6 +113,7 @@ const ControlsBar = styled.div`
       background: inherit;
       border: 1px solid ${({ theme }) => theme.buttonMed};
       appearance: none;
+
       &:focus {
         outline: none;
         border: 1px solid ${({ theme }) => theme.accentSoft};

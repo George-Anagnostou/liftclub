@@ -1,9 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 // Context
-import { useUserState } from "../../../store";
-// API
-import { postNewRoutine, updateRoutine } from "../../../utils/api";
+import { useBuilderDispatch, useUserState } from "../../../store";
+import {
+  addRoutineToCreatedRoutines,
+  updateExistingCreatedRoutine,
+} from "../../../store/actions/builderActions";
 // Interfaces
 import { Routine } from "../../../utils/interfaces";
 // Components
@@ -13,18 +15,13 @@ interface Props {
   setRoutine: React.Dispatch<React.SetStateAction<Routine>>;
   routine: Routine;
   clearRoutine: () => void;
-  routineSaved: boolean | null;
-  setRoutineSaved: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
-const ControlsBar: React.FC<Props> = ({
-  setRoutine,
-  routine,
-  clearRoutine,
-  routineSaved,
-  setRoutineSaved,
-}) => {
+const ControlsBar: React.FC<Props> = ({ setRoutine, routine, clearRoutine }) => {
   const { user } = useUserState();
+  const builderDispatch = useBuilderDispatch();
+
+  const [routineSaved, setRoutineSaved] = useState<null | boolean>(null);
 
   const saveRoutine = async () => {
     const routineForDB: any = {
@@ -35,10 +32,11 @@ const ControlsBar: React.FC<Props> = ({
       })),
     };
 
+    let saved: boolean = false;
+
     if (routine._id) {
       // Saving an existing routine
-      const saved = await updateRoutine(routineForDB);
-      setRoutineSaved(saved);
+      saved = await updateExistingCreatedRoutine(builderDispatch, routineForDB);
     } else {
       // Saving a new routine
       routineForDB.creator_id = user!._id;
@@ -46,17 +44,12 @@ const ControlsBar: React.FC<Props> = ({
       routineForDB.name = routineForDB.name || "New Routine";
       delete routineForDB._id;
 
-      const routine_id = await postNewRoutine(routineForDB);
+      saved = await addRoutineToCreatedRoutines(builderDispatch, routineForDB);
+    }
 
-      if (routine_id) {
-        setRoutineSaved(true);
-        setRoutine({
-          ...routine,
-          _id: routine_id,
-          creator_id: user!._id,
-          name: routineForDB.name || "New Routine",
-        });
-      }
+    if (saved) {
+      setRoutineSaved(true);
+      clearRoutine();
     }
   };
 
@@ -83,7 +76,9 @@ const ControlsBar: React.FC<Props> = ({
           placeholder="Name your routine"
         />
 
-        {routineSaved && <Checkmark styles={{ position: "absolute", right: "1.4rem" }} />}
+        {routineSaved && (
+          <Checkmark styles={{ position: "absolute", right: 0, transform: "scale(0.7)" }} />
+        )}
       </div>
       <div className="controls">
         <button onClick={saveRoutine} disabled={!Boolean(routine.workoutPlan.length)}>
@@ -120,6 +115,7 @@ const Container = styled.div`
 
     display: flex;
     align-items: center;
+    position: relative;
 
     input[type="text"] {
       width: 100%;
@@ -130,6 +126,7 @@ const Container = styled.div`
       background: inherit;
       border: 1px solid ${({ theme }) => theme.buttonMed};
       appearance: none;
+
       &:focus {
         outline: none;
         border: 1px solid ${({ theme }) => theme.accentSoft};

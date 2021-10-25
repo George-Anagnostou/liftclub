@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 // Context
-import { useUserState } from "../../../store";
-// API
-import { getRoutinesFromCreatorId } from "../../../utils/api";
+import { useBuilderDispatch, useBuilderState, useUserState } from "../../../store";
+import { getUserCreatedRoutines } from "../../../store/actions/builderActions";
 // Interfaces
 import { Routine } from "../../../utils/interfaces";
 // Components
@@ -14,44 +13,34 @@ interface Props {
   routine: Routine;
   setRoutine: React.Dispatch<React.SetStateAction<Routine>>;
   clearRoutine: () => void;
-  routineSaved: boolean | null;
 }
 
-const UserRoutines: React.FC<Props> = ({ routine, setRoutine, clearRoutine, routineSaved }) => {
+const UserRoutines: React.FC<Props> = ({ routine, setRoutine, clearRoutine }) => {
   const { user } = useUserState();
+  const { routines } = useBuilderState();
+  const builderDispatch = useBuilderDispatch();
+
   const router = useRouter();
 
   const [routineToDelete, setRoutineToDelete] = useState<Routine | null>(null);
-  const [userRoutines, setUserRoutines] = useState<Routine[] | null>(null);
   const [hasQueriedUrl, setHasQueriedUrl] = useState(false);
 
-  const getUserRoutines = async () => {
-    if (!user) return;
-    const routines = await getRoutinesFromCreatorId(user._id);
-    if (routines) setUserRoutines(routines);
-  };
-
-  // Set userRoutines on mount
+  // Set routines created on mount
   useEffect(() => {
-    if (user && !userRoutines) getUserRoutines();
+    if (user && !routines.created) getUserCreatedRoutines(builderDispatch, user._id);
   }, [user]);
-
-  // Get the routines after user saves a routine
-  useEffect(() => {
-    if (routineSaved) getUserRoutines();
-  }, [routineSaved]);
 
   // If url has query for specific routine, set that routine
   useEffect(() => {
     const queriedRoutine_id = router.query.routine as string;
 
-    if (queriedRoutine_id && userRoutines && !hasQueriedUrl) {
-      const queried = userRoutines.find((each) => each._id === queriedRoutine_id);
+    if (queriedRoutine_id && routines.created && !hasQueriedUrl) {
+      const queried = routines.created.find((each) => each._id === queriedRoutine_id);
 
       if (queried) setRoutine(queried);
       setHasQueriedUrl(true);
     }
-  }, [userRoutines]);
+  }, [routines.created]);
 
   return (
     <>
@@ -60,14 +49,14 @@ const UserRoutines: React.FC<Props> = ({ routine, setRoutine, clearRoutine, rout
           routine={routineToDelete}
           setRoutineToDelete={setRoutineToDelete}
           clearRoutine={clearRoutine}
-          setUserRoutines={setUserRoutines}
         />
       )}
+
       <Container>
         <h3>Your Routines</h3>
         <ul>
-          {userRoutines ? (
-            userRoutines.map((rout) => (
+          {routines.created ? (
+            routines.created.map((rout) => (
               <li
                 key={rout._id}
                 onClick={() => setRoutine(rout)}
