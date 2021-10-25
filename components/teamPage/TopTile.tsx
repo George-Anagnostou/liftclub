@@ -4,7 +4,7 @@ import styled from "styled-components";
 // API
 import { getUsersFromIdArr } from "../../utils/api";
 // Context
-import { useStoreDispatch, useStoreState } from "../../store";
+import { useUserDispatch, useUserState } from "../../store";
 import { Team, ShortUser } from "../../utils/interfaces";
 // Components
 import MembersModal from "./MembersModal";
@@ -23,8 +23,8 @@ interface Props {
 }
 
 const TopTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMembers }) => {
-  const { user } = useStoreState();
-  const dispatch = useStoreDispatch();
+  const { user } = useUserState();
+  const dispatch = useUserDispatch();
 
   const [showMembers, setShowMembers] = useState(false);
 

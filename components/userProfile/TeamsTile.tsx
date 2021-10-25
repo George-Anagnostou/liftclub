@@ -4,7 +4,7 @@ import styled from "styled-components";
 // Interfaces
 import { Team } from "../../utils/interfaces";
 // Context
-import { useStoreState } from "../../store";
+import { useUserState } from "../../store";
 
 interface Props {
   profileTeamsJoined: Team[];
@@ -12,7 +12,7 @@ interface Props {
 }
 
 const TeamsTile: React.FC<Props> = ({ profileTeamsJoined, profile_id }) => {
-  const { user } = useStoreState();
+  const { user } = useUserState();
 
   return (
     <Container>

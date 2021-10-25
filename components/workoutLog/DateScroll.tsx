@@ -2,7 +2,7 @@ import React from "react";
 import { useCallback } from "react";
 import styled from "styled-components";
 // Context
-import { useStoreState } from "../../store";
+import { useUserState } from "../../store";
 // Utils
 import { addExerciseDataToLoggedWorkout, getCurrYearMonthDay } from "../../utils";
 import { getWorkoutFromId } from "../../utils/api";
@@ -26,7 +26,7 @@ const DateScrollClone: React.FC<Props> = ({
 }) => {
   useCountRenders();
 
-  const { user } = useStoreState();
+  const { user } = useUserState();
 
   const makeDateString = (numOfDaysToShift: number) => {
     const { year, month, day } = getCurrYearMonthDay();

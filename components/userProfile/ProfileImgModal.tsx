@@ -7,7 +7,7 @@ import UploadImgToS3 from "./UploadImgToS3";
 // Interfaces
 import { User } from "../../utils/interfaces";
 import { saveProfileImgUrl } from "../../utils/api";
-import { useStoreState } from "../../store";
+import { useUserState } from "../../store";
 
 const icons = ["default-man", "default-woman"];
 
@@ -22,7 +22,7 @@ const ProfileImgModal: React.FC<Props> = ({
   showProfileImgModal,
   setProfileData,
 }) => {
-  const { user } = useStoreState();
+  const { user } = useUserState();
 
   const [selectedDefaultIcon, setSelectedDefaultIcon] = useState("");
 

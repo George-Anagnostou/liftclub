@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import useSWR from "swr";
 // Context
-import { useStoreState } from "../../../store";
+import { useUserState } from "../../../store";
 // Interfaces
 import { Exercise } from "../../../utils/interfaces";
 // Components
@@ -27,7 +27,7 @@ const ExerciseList: React.FC<Props> = ({
   setExerciseListBottom,
   exerciseListBottom,
 }) => {
-  const { user } = useStoreState();
+  const { user } = useUserState();
 
   const { data, error } = useSWR("/api/exercises", fetcher);
 

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 // Context
-import { useStoreDispatch, createAccount } from "../../store";
+import { useUserDispatch, createAccount } from "../../store";
 
 interface Props {
   changeFormType: () => void;
@@ -9,7 +9,7 @@ interface Props {
 }
 
 const CreateAcc: React.FC<Props> = ({ changeFormType, handleAuthSuccess }) => {
-  const dispatch = useStoreDispatch();
+  const dispatch = useUserDispatch();
 
   const [usernameExists, setUsernameExists] = useState(false);
   const [accCreds, setAccCreds] = useState<{ username: string; password: string }>({

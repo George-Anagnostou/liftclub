@@ -4,7 +4,7 @@ import styled from "styled-components";
 // Utils
 import { getTeamsFromIdArray, getUserFromUsername, getUserMadeWorkouts } from "../../utils/api";
 // Context
-import { useStoreState } from "../../store";
+import { useUserState } from "../../store";
 // Components
 import LoadingSpinner from "../../components/LoadingSpinner";
 import NameTile from "../../components/userProfile/NameTile";
@@ -19,7 +19,7 @@ import { User, Workout, Team } from "../../utils/interfaces";
 const User_id: React.FC = () => {
   const router = useRouter();
   const username: string = router.query.username as string;
-  const { user, isSignedIn } = useStoreState();
+  const { user, isSignedIn } = useUserState();
 
   const [profileData, setProfileData] = useState<User | null>(null);
   const [createdWorkouts, setCreatedWorkouts] = useState<Workout[]>([]);

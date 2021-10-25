@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import styled from "styled-components";
 // Context
-import { useStoreDispatch, useStoreState } from "../../store";
+import { useUserDispatch, useUserState } from "../../store";
 import { addUserFollow, removeUserFollow } from "../../store/actions/userActions";
 // Components
 import ProfileImg from "./ProfileImg";
@@ -19,8 +19,8 @@ interface Props {
 }
 
 const NameTile: React.FC<Props> = ({ profileData, setProfileData, isProfileOwner }) => {
-  const { user } = useStoreState();
-  const dispatch = useStoreDispatch();
+  const { user } = useUserState();
+  const dispatch = useUserDispatch();
 
   const [showFollowsModal, setShowFollowsModal] = useState(false);
   const [modalData, setModalData] = useState<string[]>([]);

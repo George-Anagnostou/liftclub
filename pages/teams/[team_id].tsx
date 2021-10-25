@@ -9,7 +9,7 @@ import TopTile from "../../components/teamPage/TopTile";
 import TrainersTile from "../../components/teamPage/TrainersTile";
 import RoutineTile from "../../components/teamPage/RoutineTile";
 // Context
-import { useStoreState } from "../../store";
+import { useUserState } from "../../store";
 // Interfaces
 import { ShortUser, Team } from "../../utils/interfaces";
 
@@ -17,7 +17,7 @@ const Team_id: React.FC = () => {
   const router = useRouter();
   const { team_id } = router.query;
 
-  const { isSignedIn } = useStoreState();
+  const { isSignedIn } = useUserState();
 
   const [team, setTeam] = useState<Team | null>(null);
   const [teamMembers, setTeamMembers] = useState<ShortUser[] | null>(null);

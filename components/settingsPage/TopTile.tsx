@@ -2,10 +2,10 @@ import styled from "styled-components";
 // Components
 import ThemeToggle from "../Themes/ThemeToggle";
 // Context
-import { useStoreState } from "../../store";
+import { useUserState } from "../../store";
 
 const TopTile: React.FC = () => {
-  const { user } = useStoreState();
+  const { user } = useUserState();
 
   return (
     <Tile>

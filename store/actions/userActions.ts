@@ -2,7 +2,7 @@ import { WorkoutLogItem } from "../../utils/interfaces";
 
 /**
  *
- * @param dispatch Dispatch function from useStoreDispatch()
+ * @param dispatch Dispatch function from useUserDispatch()
  * @param user_id User id as type string
  * @returns Boolean for the outcome of login request
  */
@@ -27,18 +27,19 @@ export const loginWithToken = async (dispatch: any, token: string) => {
 
 /**
  *
- * @param dispatch Dispatch function from useStoreDispatch()
+ * @param dispatch Dispatch function from useUserDispatch()
  */
 
-export const logoutUser = async (dispatch: any) => {
-  dispatch({ type: "LOGOUT" });
+export const logoutUser = async (userDispatch: any, builderDispatch: any) => {
+  userDispatch({ type: "LOGOUT" });
+  builderDispatch({ type: "LOGOUT" });
   localStorage.removeItem("workoutID");
   localStorage.removeItem("authToken");
 };
 
 /**
  *
- * @param dispatch Dispatch function from useStoreDispatch()
+ * @param dispatch Dispatch function from useUserDispatch()
  * @param username Username from login form
  * @param password Password from login form
  * @returns If successful login, returns user data, else returns false
@@ -68,7 +69,7 @@ export const authLogin = async (dispatch: any, username: string, password: strin
 
 /**
  *
- * @param dispatch Dispatch function from useStoreDispatch()
+ * @param dispatch Dispatch function from useUserDispatch()
  * @param username Username from create account form
  * @param password Password from create account from
  * @returns If successful account creation, returns user data, else returns false
@@ -100,7 +101,7 @@ export const createAccount = async (dispatch: any, username: string, password: s
 
 /**
  *
- * @param dispatch Dispatch function from useStoreDispatch()
+ * @param dispatch Dispatch function from useUserDispatch()
  */
 
 export const setIsUsingPWA = (dispatch: any) => {
@@ -109,7 +110,7 @@ export const setIsUsingPWA = (dispatch: any) => {
 
 /**
  *
- * @param dispatch Dispatch function from useStoreDispatch()
+ * @param dispatch Dispatch function from useUserDispatch()
  */
 
 export const setPlatformToiOS = (dispatch: any) => {
@@ -118,7 +119,7 @@ export const setPlatformToiOS = (dispatch: any) => {
 
 /**
  *
- * @param dispatch Dispatch function from useStoreDispatch()
+ * @param dispatch Dispatch function from useUserDispatch()
  * @param user_id User id string
  * @param logValue An object with workout log data
  * @param logKey Date string (ex: 2021-07-22)
@@ -151,7 +152,7 @@ export const addDayToWorkoutLog = async (
 
 /**
  *
- * @param dispatch Dispatch function from useStoreDispatch()
+ * @param dispatch Dispatch function from useUserDispatch()
  * @param user_id User id string
  * @param logKey Date string (ex: 2021-07-22)
  * @returns Boolean for the success of the api call
@@ -175,7 +176,7 @@ export const deleteDayFromWorkoutLog = async (dispatch: any, user_id: string, lo
 
 /**
  *
- * @param dispatch Dispatch function from useStoreDispatch()
+ * @param dispatch Dispatch function from useUserDispatch()
  * @param user_id User id string
  * @param target_id id of the user to be followed
  * @returns Boolean for the success of the api call
@@ -203,7 +204,7 @@ export const addUserFollow = async (dispatch, user_id: string, target_id: string
 
 /**
  *
- * @param dispatch Dispatch function from useStoreDispatch()
+ * @param dispatch Dispatch function from useUserDispatch()
  * @param user_id User id string
  * @param target_id id of the user to be unfollowed
  * @returns Boolean for the success of the api call
@@ -231,7 +232,7 @@ export const removeUserFollow = async (dispatch, user_id: string, target_id: str
 
 /**
  *
- * @param dispatch Dispatch function from useStoreDispatch()
+ * @param dispatch Dispatch function from useUserDispatch()
  * @param user_id User id string
  * @param team_id Team id string
  * @returns Boolean for the success of the api call
@@ -259,7 +260,7 @@ export const userJoiningTeam = async (dispatch, user_id: string, team_id: string
 
 /**
  *
- * @param dispatch Dispatch function from useStoreDispatch()
+ * @param dispatch Dispatch function from useUserDispatch()
  * @param user_id User id string
  * @param team_id Team id string
  * @returns Boolean for the success of the api call
@@ -287,7 +288,7 @@ export const userLeavingTeam = async (dispatch, user_id: string, team_id: string
 
 /**
  *
- * @param dispatch Dispatch function from useStoreDispatch()
+ * @param dispatch Dispatch function from useUserDispatch()
  * @param user_id User id string
  * @param workout_id Workout id string
  * @returns Boolean for the success of the api call
@@ -315,7 +316,7 @@ export const addSavedWorkout = async (dispatch, user_id: string, workout_id: str
 
 /**
  *
- * @param dispatch Dispatch function from useStoreDispatch()
+ * @param dispatch Dispatch function from useUserDispatch()
  * @param user_id User id string
  * @param workout_id Workout id string
  * @returns Boolean for the success of the api call

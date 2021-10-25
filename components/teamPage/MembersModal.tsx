@@ -2,7 +2,7 @@ import Link from "next/link";
 import React from "react";
 import styled from "styled-components";
 // Context
-import { useStoreState } from "../../store";
+import { useUserState } from "../../store";
 // Interfaces
 import { ShortUser } from "../../utils/interfaces";
 // Components
@@ -24,7 +24,7 @@ const MembersModal: React.FC<Props> = ({
   handleUnfollowClick,
   handleFollowClick,
 }) => {
-  const { user } = useStoreState();
+  const { user } = useUserState();
 
   return (
     <Modal removeModal={() => setShowMembers(false)} isOpen={showMembers}>

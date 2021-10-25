@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 // Context
-import { useStoreState } from "../../../store";
+import { useUserState } from "../../../store";
 // API
 import { postNewRoutine, updateRoutine } from "../../../utils/api";
 // Interfaces
@@ -24,7 +24,7 @@ const ControlsBar: React.FC<Props> = ({
   routineSaved,
   setRoutineSaved,
 }) => {
-  const { user } = useStoreState();
+  const { user } = useUserState();
 
   const saveRoutine = async () => {
     const routineForDB: any = {

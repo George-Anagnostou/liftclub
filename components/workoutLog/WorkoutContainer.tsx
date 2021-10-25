@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 // Context
-import { useStoreDispatch, useStoreState } from "../../store";
+import { useUserDispatch, useUserState } from "../../store";
 import { addDayToWorkoutLog } from "../../store/actions/userActions";
 // Interfaces
 import { Exercise, WorkoutLogItem } from "../../utils/interfaces";
@@ -31,8 +31,8 @@ const WorkoutContainerClone: React.FC<Props> = ({
   deleteWorkout,
   selectedDate,
 }) => {
-  const { user } = useStoreState();
-  const dispatch = useStoreDispatch();
+  const { user } = useUserState();
+  const dispatch = useUserDispatch();
 
   const [exerciseInfo, setExerciseInfo] = useState<Exercise | null>(null);
   const [saveSuccess, setSaveSuccess] = useState<boolean | null>(null);

@@ -8,13 +8,13 @@ import Search from "./svg/Magnifying";
 import Profile from "./svg/Profile";
 // import Create from "../public/navIcons/Create";
 // Context
-import { useStoreState } from "../store";
+import { useUserState } from "../store";
 import Builder from "./svg/Builder";
 
 const NavBar: React.FC = () => {
   const router = useRouter();
 
-  const { platform, user } = useStoreState();
+  const { platform, user } = useUserState();
 
   const ref = useRef<HTMLDivElement>(null);
 

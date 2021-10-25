@@ -2,7 +2,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 // Context
-import { useStoreDispatch, useStoreState } from "../../store";
+import { useUserDispatch, useUserState } from "../../store";
 import { addUserFollow, removeUserFollow } from "../../store/actions/userActions";
 import { getUsersFromIdArr } from "../../utils/api";
 // Interfaces
@@ -18,8 +18,8 @@ interface Props {
 }
 
 const FollowsModal: React.FC<Props> = ({ member_ids, setShowFollowsModal, showFollowsModal }) => {
-  const { user } = useStoreState();
-  const dispatch = useStoreDispatch();
+  const { user } = useUserState();
+  const dispatch = useUserDispatch();
 
   const [members, setMembers] = useState<ShortUser[] | null>(null);
   const [loading, setLoading] = useState(false);

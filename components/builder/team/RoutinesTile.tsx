@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 // Context
-import { useStoreState } from "../../../store";
+import { useUserState } from "../../../store";
 // Interfaces
 import { EditableTeam } from "./index";
 import { Routine } from "../../../utils/interfaces";
@@ -13,7 +13,7 @@ interface Props {
   setTeam: React.Dispatch<React.SetStateAction<EditableTeam>>;
 }
 const RoutinesTile: React.FC<Props> = ({ team, setTeam }) => {
-  const { user } = useStoreState();
+  const { user } = useUserState();
   const [routines, setRoutines] = useState<Routine[] | null>(null);
 
   const handleRoutineClick = (routine: Routine) => {

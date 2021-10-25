@@ -14,7 +14,7 @@ import {
   dateToISOWithLocal,
 } from "../utils";
 // Context
-import { useStoreDispatch, useStoreState } from "../store";
+import { useUserDispatch, useUserState } from "../store";
 import { deleteDayFromWorkoutLog } from "../store/actions/userActions";
 // API
 import { getWorkoutFromId } from "../utils/api";
@@ -22,8 +22,8 @@ import { getWorkoutFromId } from "../utils/api";
 import { Workout, WorkoutLogItem } from "../utils/interfaces";
 
 export default function log() {
-  const { user, isSignedIn } = useStoreState();
-  const dispatch = useStoreDispatch();
+  const { user, isSignedIn } = useUserState();
+  const dispatch = useUserDispatch();
 
   const [loading, setLoading] = useState(true);
   const [currentDayData, setCurrentDayData] = useState<WorkoutLogItem | null>(null);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 // Context
-import { useStoreDispatch, useStoreState } from "../../../store";
+import { useUserDispatch, useUserState } from "../../../store";
 // API
 import { postNewTeam, updateTeam } from "../../../utils/api";
 // Interfaces
@@ -30,8 +30,8 @@ const initialTeam: EditableTeam = {
 };
 
 const TeamBuilder: React.FC = () => {
-  const { user } = useStoreState();
-  const dispatch = useStoreDispatch();
+  const { user } = useUserState();
+  const dispatch = useUserDispatch();
 
   const [team, setTeam] = useState<EditableTeam>(initialTeam);
   const [teamSaved, setTeamSaved] = useState<boolean | null>(null);

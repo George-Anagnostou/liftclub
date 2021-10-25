@@ -5,7 +5,7 @@ import styled from "styled-components";
 // API
 import { getUsersFromIdArr, queryUsersByUsername } from "../../utils/api";
 // Context
-import { useStoreDispatch, useStoreState } from "../../store";
+import { useUserDispatch, useUserState } from "../../store";
 import { addToRecentlyViewedUsers } from "../../store/actions/userActions";
 // Hooks
 import { useDebouncedState } from "../hooks/useDebouncedState";
@@ -18,8 +18,8 @@ interface Props {
 }
 
 const UsersResults: React.FC<Props> = ({ searchInput, limit }) => {
-  const { user } = useStoreState();
-  const dispatch = useStoreDispatch();
+  const { user } = useUserState();
+  const dispatch = useUserDispatch();
 
   const [recentlyViewedUsers, setRecentlyViewedUsers] = useState<ShortUser[]>([]);
   const [searchResults, setSearchResults] = useState<ShortUser[] | null>(null);

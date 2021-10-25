@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
 // Context
-import { useStoreDispatch, useStoreState } from "../../store";
+import { useUserDispatch, useUserState } from "../../store";
 import { addSavedWorkout, removeSavedWorkout } from "../../store/actions/userActions";
 // Utils
 import { getWorkoutsFromIdArray } from "../../utils/api";
@@ -16,8 +16,8 @@ interface Props {
 }
 
 const RoutineTile: React.FC<Props> = ({ team }) => {
-  const { user } = useStoreState();
-  const dispatch = useStoreDispatch();
+  const { user } = useUserState();
+  const dispatch = useUserDispatch();
 
   const [uniqueWorkoutsInRoutine, setUniqueWorkoutsInRoutine] = useState<Workout[] | null>(null);
 

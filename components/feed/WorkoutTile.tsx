@@ -8,7 +8,7 @@ import { addExerciseDataToWorkout, timeSince } from "../../utils";
 // Interfaces
 import { Workout } from "../../utils/interfaces";
 // Context
-import { useStoreState } from "../../store";
+import { useUserState } from "../../store";
 
 interface Props {
   i: number;
@@ -25,7 +25,7 @@ const WorkoutTile: React.FC<Props> = ({
   removeFromSavedWorkouts,
   addToSavedWorkouts,
 }) => {
-  const { user } = useStoreState();
+  const { user } = useUserState();
 
   const tile = useRef<any>();
 

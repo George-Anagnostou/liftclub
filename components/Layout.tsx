@@ -6,9 +6,9 @@ import SeoHead from "./SeoHead";
 import NavBar from "./NavBar";
 // Context
 import {
-  useStoreDispatch,
+  useUserDispatch,
   loginWithToken,
-  useStoreState,
+  useUserState,
   setIsUsingPWA,
   setPlatformToiOS,
 } from "../store";
@@ -23,8 +23,8 @@ interface Props {
 const Layout: React.FC<Props> = ({ title = "Lift Club", children }) => {
   const router = useRouter();
 
-  const dispatch = useStoreDispatch();
-  const { user, platform, isUsingPWA, isSignedIn } = useStoreState();
+  const dispatch = useUserDispatch();
+  const { user, platform, isUsingPWA, isSignedIn } = useUserState();
 
   // Check local storage for user_id for persistant login
   const checkForAuthToken = async () => {

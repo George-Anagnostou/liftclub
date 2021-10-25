@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useStoreState } from "../../store";
+import { useUserState } from "../../store";
 
 // API
 import { saveUserWeight } from "../../utils/api";
 
 const WeightInput: React.FC = () => {
-  const { user } = useStoreState();
+  const { user } = useUserState();
 
   const [inputWeight, setInputWeight] = useState("");
   const [displayWeight, setDisplayWeight] = useState(0);

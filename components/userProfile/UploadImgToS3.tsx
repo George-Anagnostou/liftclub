@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { config, S3 } from "aws-sdk";
 import styled from "styled-components";
 // Utils
-import { useStoreState } from "../../store";
+import { useUserState } from "../../store";
 import { saveProfileImgUrl } from "../../utils/api";
 // Interface
 import { User } from "../../utils/interfaces";
@@ -32,7 +32,7 @@ interface Props {
 }
 
 const UploadImgToS3: React.FC<Props> = ({ setProfileData }) => {
-  const { user } = useStoreState();
+  const { user } = useUserState();
 
   const savingCircle = useRef<SVGCircleElement>(null);
 

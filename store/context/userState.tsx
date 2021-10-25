@@ -19,21 +19,21 @@ const InitialStoreState = {
 const StoreStateContext = createContext<StoreContextState>(InitialStoreState);
 const StoreDispatchContext = createContext<any>(null);
 
-export function useStoreState() {
+export function useUserState() {
   const context = useContext(StoreStateContext);
   if (context === undefined) throw new Error("useAuthState must be used within a AuthProvider");
 
   return context;
 }
 
-export function useStoreDispatch() {
+export function useUserDispatch() {
   const context = useContext(StoreDispatchContext);
   if (context === undefined) throw new Error("useAuthDispatch must be used within a AuthProvider");
 
   return context;
 }
 
-export const StoreProvider = ({ children }) => {
+export const UserStoreProvider = ({ children }) => {
   const [user, dispatch] = useReducer(userReducer, InitialStoreState);
 
   return (

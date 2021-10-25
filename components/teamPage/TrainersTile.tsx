@@ -6,7 +6,7 @@ import Checkmark from "../Checkmark";
 // Utils
 import { addTrainerToTeam, getUsersFromIdArr, removeTrainerFromTeam } from "../../utils/api";
 // Context
-import { useStoreState } from "../../store";
+import { useUserState } from "../../store";
 // Interfaces
 import { Team, ShortUser } from "../../utils/interfaces";
 import TrainerModal from "./TrainerModal";
@@ -19,7 +19,7 @@ interface Props {
 }
 
 const TrainersTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMembers }) => {
-  const { user } = useStoreState();
+  const { user } = useUserState();
 
   const [showTrainerModal, setShowTrainerModal] = useState(false);
 

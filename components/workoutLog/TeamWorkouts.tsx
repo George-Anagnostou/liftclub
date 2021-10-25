@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useStoreState } from "../../store";
+import { useUserState } from "../../store";
 // API
 import { getTeamsFromIdArray, getWorkoutFromId } from "../../utils/api";
 // Interfaces
@@ -12,7 +12,7 @@ interface Props {
 }
 
 const TeamWorkouts: React.FC<Props> = ({ selectedDate, displayWorkout }) => {
-  const { user } = useStoreState();
+  const { user } = useUserState();
 
   const [teamsJoined, setTeamsJoined] = useState<Team[] | null>(null);
   const [todaysWorkouts, setTodaysWorkouts] = useState<

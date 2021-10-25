@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 // Context
-import { useStoreState } from "../../../store";
+import { useUserState } from "../../../store";
 // API
 import { getRoutinesFromCreatorId } from "../../../utils/api";
 // Interfaces
@@ -18,7 +18,7 @@ interface Props {
 }
 
 const UserRoutines: React.FC<Props> = ({ routine, setRoutine, clearRoutine, routineSaved }) => {
-  const { user } = useStoreState();
+  const { user } = useUserState();
   const router = useRouter();
 
   const [routineToDelete, setRoutineToDelete] = useState<Routine | null>(null);

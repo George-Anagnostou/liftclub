@@ -7,7 +7,7 @@ import { Workout } from "../../utils/interfaces";
 // API
 import { addSavedWorkout, removeSavedWorkout } from "../../store/actions/userActions";
 import { getPublicWorkouts } from "../../utils/api";
-import { useStoreDispatch, useStoreState } from "../../store";
+import { useUserDispatch, useUserState } from "../../store";
 
 interface Props {
   searchInput: string;
@@ -15,8 +15,8 @@ interface Props {
 }
 
 const WorkoutsResults: React.FC<Props> = ({ searchInput, limit }) => {
-  const { user } = useStoreState();
-  const dispatch = useStoreDispatch();
+  const { user } = useUserState();
+  const dispatch = useUserDispatch();
 
   const [initialWorkouts, setInitialWorkouts] = useState<Workout[]>([]);
   const [searchResults, setSearchResults] = useState<Workout[]>([]);

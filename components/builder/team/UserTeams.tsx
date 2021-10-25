@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 // Context
-import { useStoreState } from "../../../store";
+import { useUserState } from "../../../store";
 // API
 import { getTeamById, getUserMadeTeams } from "../../../utils/api";
 // Interfaces
@@ -19,7 +19,7 @@ interface Props {
 }
 
 const UserTeams: React.FC<Props> = ({ team, setTeam, teamSaved, clearTeam }) => {
-  const { user } = useStoreState();
+  const { user } = useUserState();
   const router = useRouter();
 
   const [teamToDelete, setTeamToDelete] = useState<Team | null>(null);
