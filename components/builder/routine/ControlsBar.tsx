@@ -24,28 +24,11 @@ const ControlsBar: React.FC<Props> = ({ setRoutine, routine, clearRoutine }) => 
   const [routineSaved, setRoutineSaved] = useState<null | boolean>(null);
 
   const saveRoutine = async () => {
-    const routineForDB: any = {
-      ...routine,
-      workoutPlan: routine!.workoutPlan.map(({ isoDate, workout_id }) => ({
-        isoDate,
-        workout_id,
-      })),
-    };
-
     let saved: boolean = false;
 
-    if (routine._id) {
-      // Saving an existing routine
-      saved = await updateExistingCreatedRoutine(builderDispatch, routineForDB);
-    } else {
-      // Saving a new routine
-      routineForDB.creator_id = user!._id;
-      routineForDB.creatorName = user!.username;
-      routineForDB.name = routineForDB.name || "New Routine";
-      delete routineForDB._id;
-
-      saved = await addRoutineToCreatedRoutines(builderDispatch, routineForDB);
-    }
+    saved = routine._id
+      ? await updateExistingCreatedRoutine(builderDispatch, routine)
+      : await addRoutineToCreatedRoutines(builderDispatch, routine, user!);
 
     if (saved) {
       setRoutineSaved(true);

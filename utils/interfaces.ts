@@ -53,7 +53,7 @@ export interface Team {
 }
 
 export interface Routine {
-  readonly _id: string;
+  _id: string;
   creator_id: string;
   creatorName: string;
   name: string;

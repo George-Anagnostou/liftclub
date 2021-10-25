@@ -14,7 +14,7 @@ import {
   postNewTeam,
   updateTeam,
 } from "../../utils/api";
-import { NewRoutine, NewWorkout, Routine, Workout } from "../../utils/interfaces";
+import { NewRoutine, NewWorkout, Routine, User, Workout } from "../../utils/interfaces";
 
 export const getUserCreatedWorkouts = async (dispatch, user_id: string) => {
   const workouts = await getUserMadeWorkouts(user_id);
@@ -67,22 +67,44 @@ export const deleteRoutineFromCreatedRoutines = async (dispatch, routine_id: str
   return deleted;
 };
 
-export const addRoutineToCreatedRoutines = async (dispatch, newRoutine: NewRoutine) => {
-  const routine_id = await postNewRoutine(newRoutine);
+export const addRoutineToCreatedRoutines = async (dispatch, routine: Routine, user: User) => {
+  routine.creator_id = user._id;
+  routine.creatorName = user.username;
+  routine.name = routine.name || "New Routine";
+
+  const routineForDB: NewRoutine = {
+    ...routine,
+    workoutPlan: routine.workoutPlan.map(({ isoDate, workout_id }) => ({
+      isoDate,
+      workout_id,
+    })),
+  };
+
+  delete routineForDB._id;
+
+  const routine_id = await postNewRoutine(routineForDB);
 
   if (routine_id) {
-    newRoutine._id = routine_id;
+    routine._id = routine_id;
 
-    dispatch({ type: "ADD_CREATED_ROUTINE", payload: { routine: newRoutine } });
+    dispatch({ type: "ADD_CREATED_ROUTINE", payload: { routine: routine } });
 
     return true;
+  } else {
+    return false;
   }
-
-  return false;
 };
 
 export const updateExistingCreatedRoutine = async (dispatch, routine: Routine) => {
-  const saveStatus = await updateRoutine(routine);
+  const routineForDB: any = {
+    ...routine,
+    workoutPlan: routine.workoutPlan.map(({ isoDate, workout_id }) => ({
+      isoDate,
+      workout_id,
+    })),
+  };
+
+  const saveStatus = await updateRoutine(routineForDB);
 
   if (saveStatus) dispatch({ type: "UPDATE_CREATED_ROUTINE", payload: { routine } });
 
