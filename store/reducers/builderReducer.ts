@@ -106,13 +106,6 @@ export default function builderReducer(state: AppState, action) {
         teams: { ...state.teams, created: newCreatedTeams },
       };
 
-    case "LOGOUT":
-      return {
-        workouts: { saved: undefined, created: undefined },
-        routines: { created: undefined },
-        teams: { created: undefined },
-      };
-
     default:
       throw new Error();
   }

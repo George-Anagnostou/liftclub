@@ -5,18 +5,16 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import WeightInput from "../components/settingsPage/WeightInput";
 import TopTile from "../components/settingsPage/TopTile";
 // Context
-import { useUserState, useUserDispatch, logoutUser, useBuilderDispatch } from "../store";
+import { useUserState, useUserDispatch, logoutUser } from "../store";
 
 export default function settings() {
   const userDispatch = useUserDispatch();
-  const builderDispatch = useBuilderDispatch();
 
   const { user } = useUserState();
   const router = useRouter();
 
   const handleLogoutClick = () => {
-    logoutUser(userDispatch, builderDispatch);
-
+    logoutUser(userDispatch);
     router.push("/");
   };
 

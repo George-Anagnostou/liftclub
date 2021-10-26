@@ -27,12 +27,13 @@ export const loginWithToken = async (dispatch: any, token: string) => {
 
 /**
  *
- * @param dispatch Dispatch function from useUserDispatch()
+ * @param userDispatch Dispatch function from useUserDispatch()
+ * @param builderDispatch Dispatch function from useBuilderDispatch()
  */
 
-export const logoutUser = async (userDispatch: any, builderDispatch: any) => {
+export const logoutUser = async (userDispatch: any) => {
   userDispatch({ type: "LOGOUT" });
-  builderDispatch({ type: "LOGOUT" });
+
   localStorage.removeItem("workoutID");
   localStorage.removeItem("authToken");
 };
