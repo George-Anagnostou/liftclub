@@ -10,9 +10,9 @@ import CreateAcc from "../components/homepage/CreateAcc";
 export default function Home() {
   const router = useRouter();
 
-  const getFormType = () => (router.query.create ? "create" : "login");
-
-  const [formType, setFormType] = useState<"login" | "create">(getFormType);
+  const [formType, setFormType] = useState<"login" | "create">(
+    router.query.create ? "create" : "login"
+  );
 
   const changeFormType = () => setFormType(formType === "login" ? "create" : "login");
 
@@ -37,7 +37,7 @@ export default function Home() {
 }
 
 const HomeContainer = styled.div`
-  font-family: Tahoma, Helvetica;
+  /* font-family: Tahoma, Helvetica; */
   display: flex;
   flex-direction: column;
   justify-content: center;

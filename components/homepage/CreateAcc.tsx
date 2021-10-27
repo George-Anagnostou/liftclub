@@ -62,11 +62,11 @@ const CreateAcc: React.FC<Props> = ({ changeFormType, handleAuthSuccess }) => {
         <button type="submit">Create Account</button>
       </form>
 
+      {usernameExists && <p>Username is already registered.</p>}
+
       <a onClick={changeFormType}>
         <p>Have an account? Login here</p>
       </a>
-
-      {usernameExists && <p>Username is already taken</p>}
     </CreateContainer>
   );
 };
@@ -108,17 +108,23 @@ const CreateContainer = styled.div`
       font-size: 1rem;
       border-radius: 5px;
 
+      &:focus,
       &:active {
         background: ${({ theme }) => theme.background};
+        outline: none;
       }
     }
   }
 
   a {
+    display: block;
+    font-size: 0.8rem;
+    margin-top: 2rem;
     font-style: italic;
     color: ${({ theme }) => theme.textLight};
     text-decoration: none;
 
+    &:active,
     &:hover {
       text-decoration: underline;
     }

@@ -57,7 +57,7 @@ const Login: React.FC<Props> = ({ changeFormType, handleAuthSuccess }) => {
         <button type="submit">Login</button>
       </form>
 
-      {invalidLoginCreds && <p>Email or Password was incorrect</p>}
+      {invalidLoginCreds && <p>Username or password was incorrect</p>}
 
       <a onClick={changeFormType}>
         <p>Create an account here</p>
@@ -101,17 +101,23 @@ const LoginContainer = styled.div`
       font-size: 1rem;
       border-radius: 5px;
 
+      &:focus,
       &:active {
         background: ${({ theme }) => theme.background};
+        outline: none;
       }
     }
   }
 
   a {
+    display: block;
+    font-size: 0.8rem;
+    margin-top: 2rem;
     font-style: italic;
     color: ${({ theme }) => theme.textLight};
     text-decoration: none;
 
+    &:active,
     &:hover {
       text-decoration: underline;
     }
