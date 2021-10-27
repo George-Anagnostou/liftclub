@@ -41,7 +41,7 @@ const CreateAcc: React.FC<Props> = ({ changeFormType, handleAuthSuccess }) => {
         <div>
           <input
             type="text"
-            name="username"
+            name="liftclub-username"
             id="username"
             value={accCreds.username}
             onChange={handleUsernameChange}
@@ -59,7 +59,7 @@ const CreateAcc: React.FC<Props> = ({ changeFormType, handleAuthSuccess }) => {
             required
           />
         </div>
-        <button type="submit">Join</button>
+        <button type="submit">Create Account</button>
       </form>
 
       <a onClick={changeFormType}>
@@ -74,20 +74,32 @@ export default CreateAcc;
 
 const CreateContainer = styled.div`
   text-align: center;
+  width: 90%;
 
   form {
     margin: 1rem 0.5rem;
+
     input {
       width: 90%;
+      min-width: 90%;
       margin: 0.5rem 0;
       padding: 0.5rem 0 0.5rem 0.5rem;
       font-size: 1rem;
       border: none;
-      border-radius: 5px;
-      background: ${({ theme }) => theme.shades[1]};
-      color: ${({ theme }) => theme.shades[8]};
+      background: inherit;
+      border-radius: 0;
+      border: 1px solid transparent;
+      border-bottom: 1px solid ${({ theme }) => theme.text};
+      color: inherit;
+
+      &:focus {
+        border: 1px solid ${({ theme }) => theme.text};
+        outline: none;
+        border-radius: 5px;
+      }
     }
     button {
+      margin-top: 1rem;
       padding: 0.5rem;
       width: 90%;
       color: ${({ theme }) => theme.accentSoft};

@@ -36,7 +36,7 @@ const Login: React.FC<Props> = ({ changeFormType, handleAuthSuccess }) => {
       <form action="POST" onSubmit={handleLogin}>
         <input
           type="text"
-          name="username"
+          name="liftclub-username"
           id="username"
           value={loginCreds.username}
           onChange={handleUsernameChange}
@@ -69,6 +69,7 @@ export default Login;
 
 const LoginContainer = styled.div`
   text-align: center;
+  width: 90%;
 
   form {
     margin: 1rem 0.5rem;
@@ -78,11 +79,20 @@ const LoginContainer = styled.div`
       padding: 0.5rem 0 0.5rem 0.5rem;
       font-size: 1rem;
       border: none;
-      border-radius: 5px;
-      background: ${({ theme }) => theme.shades[1]};
-      color: ${({ theme }) => theme.shades[8]};
+      background: inherit;
+      border-radius: 0;
+      border: 1px solid transparent;
+      border-bottom: 1px solid ${({ theme }) => theme.text};
+      color: inherit;
+
+      &:focus {
+        border: 1px solid ${({ theme }) => theme.text};
+        outline: none;
+        border-radius: 5px;
+      }
     }
     button {
+      margin-top: 1rem;
       padding: 0.5rem;
       width: 90%;
       color: ${({ theme }) => theme.accentSoft};
