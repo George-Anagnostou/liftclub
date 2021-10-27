@@ -1,10 +1,11 @@
 import styled from "styled-components";
+import Image from "next/image";
 
 const Branding: React.FC = () => {
   return (
     <Brand>
       <div>
-        <img src="favicon.png" alt="brand logo" />
+        <Image src="/favicon.png" layout="fixed" height="100" width="100" />
       </div>
 
       <h1>Lift Club</h1>
@@ -28,7 +29,8 @@ const Brand = styled.div`
 
   h1 {
     margin-top: 1rem;
-    font-weight: 200;
+    font-weight: 400;
     color: ${({ theme }) => theme.text};
+    width: max-content;
   }
 `;
