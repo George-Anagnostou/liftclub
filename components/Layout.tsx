@@ -15,6 +15,8 @@ import {
 // Styles
 import { GlobalStyles } from "./GlobalStyles";
 
+const MarketingPages = { "/purpose": 1 };
+
 interface Props {
   children?: React.ReactNode;
   title?: string;
@@ -26,42 +28,46 @@ const Layout: React.FC<Props> = ({ title = "Lift Club", children }) => {
   const dispatch = useUserDispatch();
   const { user, platform, isUsingPWA, isSignedIn } = useUserState();
 
-  // Check local storage for user_id for persistant login
-  const checkForAuthToken = async () => {
+  const getAuthToken = () => {
     const token = localStorage.getItem("authToken");
+    return token;
+  };
 
-    // If local storage token exists, attempt login
-    if (token) {
-      const loginSuccess = await loginWithToken(dispatch, token);
+  const loginWithAuthToken = async (token: string) => {
+    const loginSuccess = await loginWithToken(dispatch, token);
 
-      if (loginSuccess) {
-        router.pathname === "/" && router.push("/log");
-      } else {
-        router.push("/");
-        localStorage.removeItem("authToken");
-      }
+    if (loginSuccess) {
+      router.pathname === "/" && router.push("/log");
     } else {
       router.push("/");
+      localStorage.removeItem("authToken");
     }
   };
 
   useEffect(() => {
-    if (!isSignedIn) checkForAuthToken();
+    console.log("is signed in: ", isSignedIn);
+    if (!isSignedIn) {
+      const token = getAuthToken();
+      if (token) {
+        loginWithAuthToken(token);
+      } else if (MarketingPages[router.pathname]) {
+      } else {
+        console.log("going home");
+        router.push("/");
+      }
+    }
   }, [router.pathname]);
 
   useEffect(() => {
     // Detects if device is on iOS
-    const isIos = () => {
-      const userAgent = window.navigator.userAgent.toLowerCase();
-      return /iphone|ipad|ipod/.test(userAgent);
-    };
+    const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
 
-    // Detects if device is in standalone mode
-    const isInStandaloneMode = "standalone" in window.navigator && window.navigator["standalone"];
+    // Detects if device is in standalone mode (using downloaded PWA)
+    const isPWA = "standalone" in window.navigator && window.navigator["standalone"];
 
-    if (isIos() && isInStandaloneMode) setPlatformToiOS(dispatch);
+    if (isIos && isPWA) setPlatformToiOS(dispatch);
 
-    if (isInStandaloneMode) setIsUsingPWA(dispatch);
+    if (isPWA) setIsUsingPWA(dispatch);
   }, []);
 
   return (
