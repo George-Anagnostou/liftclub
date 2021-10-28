@@ -45,14 +45,13 @@ const Layout: React.FC<Props> = ({ title = "Lift Club", children }) => {
   };
 
   useEffect(() => {
-    console.log("is signed in: ", isSignedIn);
+    if (MarketingPages[router.pathname]) return;
+
     if (!isSignedIn) {
       const token = getAuthToken();
       if (token) {
         loginWithAuthToken(token);
-      } else if (MarketingPages[router.pathname]) {
       } else {
-        console.log("going home");
         router.push("/");
       }
     }
