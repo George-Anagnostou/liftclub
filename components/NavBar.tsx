@@ -32,7 +32,11 @@ const NavBar: React.FC = () => {
   }, [router]);
 
   return (
-    <Nav ref={ref} className={platform === "ios" ? "ios-safe-area" : ""}>
+    <Nav
+      ref={ref}
+      className={platform === "ios" ? "ios-safe-area" : ""}
+      style={{ maxWidth: user ? "700px" : "100%" }}
+    >
       <NavBarContainer>
         {routes.map(({ pathname, slug, icon }) => (
           <Link href={pathname} key={slug}>
@@ -54,6 +58,7 @@ const Nav = styled.nav`
   width: 100%;
   z-index: 99;
   pointer-events: none;
+  margin: auto;
 
   &.ios-safe-area {
     ul {

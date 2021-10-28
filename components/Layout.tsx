@@ -75,7 +75,10 @@ const Layout: React.FC<Props> = ({ title = "Lift Club", children }) => {
 
       <SeoHead title={title} />
 
-      <MainContainer className={platform === "ios" && isUsingPWA ? "ios-safe-area" : ""}>
+      <MainContainer
+        className={platform === "ios" && isUsingPWA ? "ios-safe-area" : ""}
+        style={{ maxWidth: user ? "700px" : "100%" }}
+      >
         {children}
 
         {user && <NavBar />}
@@ -89,6 +92,7 @@ const MainContainer = styled.main`
   text-align: center;
   padding-bottom: 3rem;
   position: relative;
+  margin: auto;
 
   &.ios-safe-area {
     padding-bottom: 4rem;
