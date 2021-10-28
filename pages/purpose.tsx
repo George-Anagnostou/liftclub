@@ -1,13 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
 import Image from "next/image";
 import Branding from "../components/homepage/Branding";
+import { ThemeToggleContext, useThemeState } from "../components/Themes/useThemeState";
 
 interface Props {}
 
 const purpose: React.FC<Props> = () => {
-  const [imgNum, setImgNum] = useState(0);
+  const { themeMode } = useThemeState();
+
+  const [imgNum, setImgNum] = useState<undefined | number>(undefined);
+
+  useEffect(() => {
+    themeMode === "dark" ? setImgNum(1) : setImgNum(0);
+  }, [themeMode]);
 
   return (
     <Container>
@@ -36,13 +43,15 @@ const purpose: React.FC<Props> = () => {
       </Text>
 
       <Images>
-        <div className="slider" style={{ marginLeft: `${imgNum * -100}%` }}>
+        <div className="slider" style={{ marginLeft: `${(imgNum || 0) * -100}%` }}>
           <div className={`image ${imgNum === 0 && "show"}`}>
             <Image
               src="/app-screenshots/liftclub-mobile2.jpg"
               layout="intrinsic"
               height={500}
               width={230}
+              quality={100}
+              priority
             />
           </div>
           <div className={`image ${imgNum === 1 && "show"}`}>
@@ -51,6 +60,8 @@ const purpose: React.FC<Props> = () => {
               layout="intrinsic"
               height={500}
               width={230}
+              quality={100}
+              priority
             />
           </div>
           <div className={`image ${imgNum === 2 && "show"}`}>
@@ -59,13 +70,19 @@ const purpose: React.FC<Props> = () => {
               layout="intrinsic"
               height={450}
               width={800}
+              quality={100}
+              priority
             />
           </div>
         </div>
 
         <div className="img-btns">
           {[0, 1, 2].map((num) => (
-            <span onClick={() => setImgNum(num)} className={imgNum === num ? "highlight" : ""} />
+            <span
+              onClick={() => setImgNum(num)}
+              className={imgNum === num ? "highlight" : ""}
+              key={num}
+            />
           ))}
         </div>
       </Images>
@@ -84,6 +101,7 @@ const Container = styled.section`
 
   @media screen and (max-width: 600px) {
     flex-direction: column;
+    height: auto;
   }
 `;
 
@@ -101,10 +119,19 @@ const Text = styled.div`
   padding: 1rem 3rem;
   flex: 1;
 
+  @media screen and (max-width: 600px) {
+    padding: 1rem 0;
+  }
+
   h1 {
     font-weight: 500;
-    font-size: 2rem;
+    font-size: 3.5rem;
     margin-bottom: 1rem;
+    color: ${({ theme }) => theme.body};
+    text-shadow: -2px 2px 0 ${({ theme }) => theme.accent},
+      1px 1px 0 ${({ theme }) => theme.accentSoft}, 1px -1px 0 ${({ theme }) => theme.accent},
+      -1px -1px 0 ${({ theme }) => theme.accentSoft};
+    letter-spacing: 1px;
   }
 
   p {
@@ -115,7 +142,7 @@ const Text = styled.div`
 `;
 
 const Buttons = styled.div`
-  border-top: 1px solid ${({ theme }) => theme.textLight};
+  border-top: 1px solid ${({ theme }) => theme.accent};
   margin-top: 2rem;
   padding: 1rem 0;
 
@@ -128,11 +155,12 @@ const Buttons = styled.div`
 
   button {
     background: inherit;
-    border: 1px solid ${({ theme }) => theme.textLight};
+    border: 1px solid ${({ theme }) => theme.accent};
     margin-right: 1rem;
     padding: 0.25rem 0.5rem;
     border-radius: 3px;
     color: ${({ theme }) => theme.textLight};
+    box-shadow: 0 2px 5px ${({ theme }) => theme.boxShadow};
   }
 `;
 
@@ -157,10 +185,11 @@ const Images = styled.div`
       place-items: center;
       min-height: 100%;
       min-width: 100%;
-      transition: all 0.25s ease-in;
+      transition: all 0.15s ease-in;
 
-      img {
+      > div {
         border-radius: 10px;
+        box-shadow: 0px 10px 20px ${({ theme }) => theme.boxShadow};
       }
 
       &.show {
@@ -181,7 +210,9 @@ const Images = styled.div`
       height: 15px;
       width: 15px;
       background: ${({ theme }) => theme.textLight};
-
+      &:hover {
+        background: ${({ theme }) => theme.border};
+      }
       &.highlight {
         background: ${({ theme }) => theme.accent};
       }
