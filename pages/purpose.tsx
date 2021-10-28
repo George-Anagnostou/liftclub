@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Link from "next/link";
 import Image from "next/image";
 import Branding from "../components/homepage/Branding";
-import { ThemeToggleContext, useThemeState } from "../components/Themes/useThemeState";
+import { useThemeState } from "../components/Themes/useThemeState";
 
 interface Props {}
 
