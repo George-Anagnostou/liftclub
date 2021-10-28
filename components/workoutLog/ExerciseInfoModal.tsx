@@ -97,23 +97,25 @@ const ExerciseInfo = styled.div`
 `;
 
 const MuscleIcons = {
-  core: <Image src="/muscleGroupIcons/abs.jpg" layout="intrinsic" height={100} width={100} />,
-  quads: <Image src="/muscleGroupIcons/quads.jpg" layout="intrinsic" height={100} width={100} />,
-  chest: <Image src="/muscleGroupIcons/chest.jpg" layout="intrinsic" height={100} width={100} />,
-  calves: <Image src="/muscleGroupIcons/calves.jpg" layout="intrinsic" height={100} width={100} />,
+  core: <Image src="/muscle-group-icons/abs.jpg" layout="intrinsic" height={100} width={100} />,
+  quads: <Image src="/muscle-group-icons/quads.jpg" layout="intrinsic" height={100} width={100} />,
+  chest: <Image src="/muscle-group-icons/chest.jpg" layout="intrinsic" height={100} width={100} />,
+  calves: (
+    <Image src="/muscle-group-icons/calves.jpg" layout="intrinsic" height={100} width={100} />
+  ),
   "upper arm": (
-    <Image src="/muscleGroupIcons/biceps.jpg" layout="intrinsic" height={100} width={100} />
+    <Image src="/muscle-group-icons/biceps.jpg" layout="intrinsic" height={100} width={100} />
   ),
   shoulder: (
-    <Image src="/muscleGroupIcons/shoulder.jpg" layout="intrinsic" height={100} width={100} />
+    <Image src="/muscle-group-icons/shoulder.jpg" layout="intrinsic" height={100} width={100} />
   ),
   hamstrings: (
-    <Image src="/muscleGroupIcons/hamstrings.jpg" layout="intrinsic" height={100} width={100} />
+    <Image src="/muscle-group-icons/hamstrings.jpg" layout="intrinsic" height={100} width={100} />
   ),
   "lower back": (
-    <Image src="/muscleGroupIcons/lower-back.jpg" layout="intrinsic" height={100} width={100} />
+    <Image src="/muscle-group-icons/lower-back.jpg" layout="intrinsic" height={100} width={100} />
   ),
   "upper back": (
-    <Image src="/muscleGroupIcons/upper-back.jpg" layout="intrinsic" height={100} width={100} />
+    <Image src="/muscle-group-icons/upper-back.jpg" layout="intrinsic" height={100} width={100} />
   ),
 };
