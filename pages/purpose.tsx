@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
+import Image from "next/image";
 import Branding from "../components/homepage/Branding";
 
 interface Props {}
 
 const purpose: React.FC<Props> = () => {
+  const [imgNum, setImgNum] = useState(0);
+
   return (
     <Container>
       <Link href="/">
@@ -32,7 +35,40 @@ const purpose: React.FC<Props> = () => {
         </Buttons>
       </Text>
 
-      <Images></Images>
+      <Images>
+        <div className="slider" style={{ marginLeft: `${imgNum * -100}%` }}>
+          <div className={`image ${imgNum === 0 && "show"}`}>
+            <Image
+              src="/app-screenshots/liftclub-mobile2.jpg"
+              layout="intrinsic"
+              height={500}
+              width={230}
+            />
+          </div>
+          <div className={`image ${imgNum === 1 && "show"}`}>
+            <Image
+              src="/app-screenshots/liftclub-mobile1.jpg"
+              layout="intrinsic"
+              height={500}
+              width={230}
+            />
+          </div>
+          <div className={`image ${imgNum === 2 && "show"}`}>
+            <Image
+              src="/app-screenshots/liftclub-main.jpg"
+              layout="intrinsic"
+              height={450}
+              width={800}
+            />
+          </div>
+        </div>
+
+        <div className="img-btns">
+          {[0, 1, 2].map((num) => (
+            <span onClick={() => setImgNum(num)} className={imgNum === num ? "highlight" : ""} />
+          ))}
+        </div>
+      </Images>
     </Container>
   );
 };
@@ -41,9 +77,14 @@ export default purpose;
 
 const Container = styled.section`
   display: flex;
+  height: 93vh;
   justify-content: center;
-  align-items: flex-start;
-  padding-top: 10vh;
+  align-items: center;
+  padding: 11vh 1rem 0;
+
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+  }
 `;
 
 const LogoIcon = styled.div`
@@ -57,7 +98,8 @@ const LogoIcon = styled.div`
 
 const Text = styled.div`
   text-align: left;
-  padding: 1rem;
+  padding: 1rem 3rem;
+  flex: 1;
 
   h1 {
     font-weight: 500;
@@ -68,6 +110,7 @@ const Text = styled.div`
   p {
     font-weight: 200;
     letter-spacing: 1px;
+    width: 90%;
   }
 `;
 
@@ -93,4 +136,55 @@ const Buttons = styled.div`
   }
 `;
 
-const Images = styled.div``;
+const Images = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow-x: hidden;
+  overflow-y: show;
+  height: 100%;
+
+  .slider {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    transition: margin-left 0.25s ease-out;
+
+    .image {
+      opacity: 0;
+      display: grid;
+      place-items: center;
+      min-height: 100%;
+      min-width: 100%;
+      transition: all 0.25s ease-in;
+
+      img {
+        border-radius: 10px;
+      }
+
+      &.show {
+        opacity: 1;
+      }
+    }
+  }
+
+  .img-btns {
+    margin: 1.5rem auto 0;
+    width: fit-content;
+    display: flex;
+
+    span {
+      transition: all 0.25s ease-in;
+      margin: 0 0.35rem;
+      border-radius: 50%;
+      height: 15px;
+      width: 15px;
+      background: ${({ theme }) => theme.textLight};
+
+      &.highlight {
+        background: ${({ theme }) => theme.accent};
+      }
+    }
+  }
+`;
