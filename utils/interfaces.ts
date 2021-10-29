@@ -61,7 +61,6 @@ export interface Routine {
 }
 
 export interface NewRoutine {
-  _id?: string;
   creator_id: string;
   creatorName: string;
   name: string;
