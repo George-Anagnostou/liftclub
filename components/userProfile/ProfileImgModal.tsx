@@ -77,11 +77,12 @@ const ProfileImgModal: React.FC<Props> = ({
 export default ProfileImgModal;
 
 const Box = styled.div`
-  margin: 10vh 0.5rem 0;
-  padding: 1rem 0rem;
+  padding: 1rem 3rem;
   border-radius: 10px;
   background: ${({ theme }) => theme.background};
   position: relative;
+  width: fit-content;
+  margin: 10vh auto 0;
 
   .close-btn {
     position: absolute;
@@ -91,9 +92,8 @@ const Box = styled.div`
     color: ${({ theme }) => theme.textLight};
     border: none;
     border-radius: 3px;
-    height: 15px;
-    width: 15px;
     font-size: 10px;
+    cursor: pointer;
   }
 `;
 
@@ -105,7 +105,7 @@ const DefaultIcons = styled.form`
     border: none;
     border-radius: 5px;
     padding: 0.25rem 0.5rem;
-    border: 1px solid ${({ theme }) => theme.border};
+
     font-size: 1rem;
     transition: all 0.3s ease;
     display: block;
@@ -132,6 +132,7 @@ const Icon = styled.div`
   justify-content: center;
   align-items: center;
   transition: all 0.2s ease;
+  cursor: pointer;
 
   &.selected {
     border: 3px solid ${({ theme }) => theme.border};

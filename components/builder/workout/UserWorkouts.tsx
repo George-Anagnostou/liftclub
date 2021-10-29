@@ -99,7 +99,7 @@ const UserWorkouts: React.FC<Props> = ({ setCustomWorkout, customWorkout, clearC
 export default UserWorkouts;
 
 const Container = styled.div`
-  width: calc(100vw - 1rem);
+  width: 100%;
   margin-bottom: 0.5rem;
 
   display: flex;

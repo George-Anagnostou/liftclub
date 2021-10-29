@@ -46,7 +46,7 @@ export default function builder() {
       <BuilderStoreProvider>
         <BuilderSelectBar builderType={builderType} setBuilderType={setBuilderType} />
 
-        <BuilderSlideContainer style={{ marginLeft: `${margin}vw` }}>
+        <BuilderSlideContainer style={{ marginLeft: `${margin}%` }}>
           {Builders.map(({ slug, component }, i) => (
             <div className="builder" key={i} style={builderType !== slug ? { height: "85vh" } : {}}>
               {component}
@@ -63,10 +63,11 @@ const Container = styled.section`
   flex-direction: column;
   overflow: hidden;
   position: relative;
+  width: 100%;
 `;
 
 const BuilderSlideContainer = styled.div`
-  width: 300vw;
+  width: 300%;
   height: min-content;
 
   display: flex;
@@ -74,8 +75,9 @@ const BuilderSlideContainer = styled.div`
   transition: margin 0.2s ease-out;
 
   .builder {
-    width: 100vw;
+    width: 33.33%;
     padding: 0 0.5rem 1rem;
     box-sizing: content-box;
+    box-sizing: border-box;
   }
 `;

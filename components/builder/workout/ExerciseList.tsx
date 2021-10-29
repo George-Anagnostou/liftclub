@@ -131,7 +131,8 @@ export default ExerciseList;
 
 const ExercisesContainer = styled.div`
   height: 75vh;
-  width: 100vw;
+  width: 100%;
+  max-width: 700px;
   margin-left: -0.5rem;
   overflow-y: auto;
   border-radius: 20px 20px 0 0;
