@@ -158,7 +158,9 @@ export const postNewWorkout = async (workout: NewWorkout) => {
       body: JSON.stringify(workout),
     });
 
-    return res.status === 201;
+    const workout_id = await res.json();
+
+    return workout_id;
   } catch (e) {
     console.log(e);
     return false;

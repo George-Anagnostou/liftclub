@@ -44,9 +44,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       newWorkout.creator_id = new ObjectId(newWorkout.creator_id);
       newWorkout.exercises.map((each) => (each.exercise_id = new ObjectId(each.exercise_id)));
 
-      const added = await db.collection("workouts").insertOne(newWorkout);
+      const { insertedId } = await db.collection("workouts").insertOne(newWorkout);
 
-      added.insertedId ? res.status(201).end() : res.status(404).end();
+      insertedId ? res.status(201).json(insertedId) : res.status(404).end();
 
       break;
     case "PUT":

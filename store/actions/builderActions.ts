@@ -31,11 +31,17 @@ export const getUserSavedWorkouts = async (dispatch, idArr: string[]) => {
 };
 
 export const addWorkoutToCreatedWorkouts = async (dispatch, workout: NewWorkout) => {
-  const saveStatus = await postNewWorkout(workout);
+  const workout_id = await postNewWorkout(workout);
 
-  if (saveStatus) dispatch({ type: "ADD_CREATED_WORKOUT", payload: { workout } });
+  if (workout_id) {
+    workout["_id"] = workout_id;
 
-  return saveStatus;
+    dispatch({ type: "ADD_CREATED_WORKOUT", payload: { workout } });
+
+    return true;
+  } else {
+    return false;
+  }
 };
 
 export const deleteWorkoutFromCreatedWorkouts = async (dispatch, workout_id: string) => {
@@ -80,7 +86,7 @@ export const addRoutineToCreatedRoutines = async (dispatch, routine: Routine, us
     })),
   };
 
-  delete routineForDB._id;
+  delete routineForDB["_id"];
 
   const routine_id = await postNewRoutine(routineForDB);
 
