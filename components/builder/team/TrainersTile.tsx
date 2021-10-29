@@ -55,7 +55,7 @@ const TrainersTile: React.FC<Props> = ({ team, setTeam }) => {
               {trainer.profileImgUrl ? (
                 <img src={trainer.profileImgUrl} alt={trainer.username} />
               ) : (
-                <Image src="/favicon.png" height="30" width="30"></Image>
+                <Image src="/favicon.png" height="30" width="30" />
               )}
 
               <p className="username">{trainer.username}</p>
@@ -103,7 +103,7 @@ const TrainersTile: React.FC<Props> = ({ team, setTeam }) => {
                   {trainer.profileImgUrl ? (
                     <img src={trainer.profileImgUrl} alt={trainer.username} />
                   ) : (
-                    <Image src="/favicon.png" height="30" width="30"></Image>
+                    <Image src="/favicon.png" height="30" width="30" />
                   )}
 
                   <p>{trainer.username}</p>

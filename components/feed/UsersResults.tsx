@@ -63,7 +63,7 @@ const UsersResults: React.FC<Props> = ({ searchInput, limit }) => {
                       {profileImgUrl ? (
                         <img src={profileImgUrl} alt={username} />
                       ) : (
-                        <Image src="/favicon.png" height="30" width="30"></Image>
+                        <Image src="/favicon.png" height="30" width="30" />
                       )}
 
                       <p>{username}</p>
@@ -88,7 +88,7 @@ const UsersResults: React.FC<Props> = ({ searchInput, limit }) => {
                     {profileImgUrl ? (
                       <img src={profileImgUrl} alt={username} />
                     ) : (
-                      <Image src="/favicon.png" height="30" width="30"></Image>
+                      <Image src="/favicon.png" height="30" width="30" />
                     )}
 
                     <p>{username}</p>

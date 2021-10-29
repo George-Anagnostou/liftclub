@@ -187,7 +187,7 @@ const Images = styled.div`
       min-width: 100%;
       transition: all 0.15s ease-in;
 
-      > div {
+      > span {
         border-radius: 10px;
         box-shadow: 0px 10px 20px ${({ theme }) => theme.boxShadow};
       }

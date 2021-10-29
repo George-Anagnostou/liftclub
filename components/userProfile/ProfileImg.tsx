@@ -34,7 +34,7 @@ const ProfileImg: React.FC<Props> = ({ profileData, setProfileData, isProfileOwn
           </div>
         ) : (
           // Show default image for users who have no profileImgUrl saved
-          <Image src="/favicon.png" height="100" width="100"></Image>
+          <Image src="/favicon.png" height="100" width="100" />
         )}
       </ProfileImage>
 

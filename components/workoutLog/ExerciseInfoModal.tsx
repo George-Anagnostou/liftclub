@@ -5,6 +5,30 @@ import Image from "next/image";
 import { Exercise } from "../../utils/interfaces";
 import Modal from "../Wrappers/Modal";
 
+const MuscleIcons = {
+  core: <Image src="/muscle-group-icons/abs.jpg" layout="intrinsic" height={100} width={100} />,
+  quads: <Image src="/muscle-group-icons/quads.jpg" layout="intrinsic" height={100} width={100} />,
+  chest: <Image src="/muscle-group-icons/chest.jpg" layout="intrinsic" height={100} width={100} />,
+  calves: (
+    <Image src="/muscle-group-icons/calves.jpg" layout="intrinsic" height={100} width={100} />
+  ),
+  "upper arm": (
+    <Image src="/muscle-group-icons/biceps.jpg" layout="intrinsic" height={100} width={100} />
+  ),
+  shoulder: (
+    <Image src="/muscle-group-icons/shoulder.jpg" layout="intrinsic" height={100} width={100} />
+  ),
+  hamstrings: (
+    <Image src="/muscle-group-icons/hamstrings.jpg" layout="intrinsic" height={100} width={100} />
+  ),
+  "lower back": (
+    <Image src="/muscle-group-icons/lower-back.jpg" layout="intrinsic" height={100} width={100} />
+  ),
+  "upper back": (
+    <Image src="/muscle-group-icons/upper-back.jpg" layout="intrinsic" height={100} width={100} />
+  ),
+};
+
 interface Props {
   exerciseInfo: Exercise;
   setExerciseInfo: React.Dispatch<React.SetStateAction<Exercise | null>>;
@@ -95,27 +119,3 @@ const ExerciseInfo = styled.div`
     border: 2px solid ${({ theme }) => theme.border};
   }
 `;
-
-const MuscleIcons = {
-  core: <Image src="/muscle-group-icons/abs.jpg" layout="intrinsic" height={100} width={100} />,
-  quads: <Image src="/muscle-group-icons/quads.jpg" layout="intrinsic" height={100} width={100} />,
-  chest: <Image src="/muscle-group-icons/chest.jpg" layout="intrinsic" height={100} width={100} />,
-  calves: (
-    <Image src="/muscle-group-icons/calves.jpg" layout="intrinsic" height={100} width={100} />
-  ),
-  "upper arm": (
-    <Image src="/muscle-group-icons/biceps.jpg" layout="intrinsic" height={100} width={100} />
-  ),
-  shoulder: (
-    <Image src="/muscle-group-icons/shoulder.jpg" layout="intrinsic" height={100} width={100} />
-  ),
-  hamstrings: (
-    <Image src="/muscle-group-icons/hamstrings.jpg" layout="intrinsic" height={100} width={100} />
-  ),
-  "lower back": (
-    <Image src="/muscle-group-icons/lower-back.jpg" layout="intrinsic" height={100} width={100} />
-  ),
-  "upper back": (
-    <Image src="/muscle-group-icons/upper-back.jpg" layout="intrinsic" height={100} width={100} />
-  ),
-};
