@@ -2,7 +2,7 @@ import { screen, render, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom/extend-expect";
 
-import WorkoutControls from "../../../../components/builder/workout/WorkoutControls";
+import WorkoutControls from "../../../../components/builder/workout/ControlsBar";
 import { Workout } from "../../../../utils/interfaces";
 
 const MockNewCustomWorkout: Workout = {
