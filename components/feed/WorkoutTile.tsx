@@ -152,6 +152,7 @@ const TitleBar = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  cursor: pointer;
 
   .name {
     text-align: left;
@@ -173,9 +174,6 @@ const TitleBar = styled.div`
 
         &:hover {
           text-decoration: underline;
-          cursor: pointer;
-
-          color: ${({ theme }) => theme.textLight};
         }
       }
     }

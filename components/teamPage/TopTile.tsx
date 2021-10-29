@@ -76,7 +76,7 @@ const TopTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMembers }
 
   return (
     <Tile>
-      <h1>{team.teamName}</h1>
+      <h1 className="team-name">{team.teamName}</h1>
 
       {user?._id === team.creator_id && (
         <Link href={`/builder?builder=team&team=${team._id}`}>
@@ -146,7 +146,7 @@ const Tile = styled.div`
     font-size: 0.8rem;
   }
 
-  h1 {
+  .team-name {
     margin: 0.5rem;
     font-weight: 300;
     font-size: 1.75rem;
@@ -167,6 +167,12 @@ const Tile = styled.div`
 
       p {
         margin-right: 0.25rem;
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
+
         span {
           color: ${({ theme }) => theme.textLight};
           font-size: 0.75rem;

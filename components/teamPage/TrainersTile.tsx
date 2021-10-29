@@ -124,6 +124,7 @@ const TrainerList = styled.ul`
 
     padding: 0.25rem 0.5rem;
     border-radius: 7px;
+    cursor: pointer;
 
     .icon {
       background: ${({ theme }) => theme.buttonLight};

@@ -94,6 +94,7 @@ const SearchInput = styled.div`
       width: 2rem;
       height: 2.25rem;
       position: relative;
+      cursor: pointer;
 
       span {
         position: absolute;

@@ -131,6 +131,7 @@ const SearchResults = styled.ul`
     justify-content: space-between;
     font-size: 1rem;
     border-radius: 8px;
+    cursor: pointer;
 
     img {
       height: 30px;

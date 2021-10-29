@@ -94,6 +94,13 @@ const TeamsList = styled.ul`
 const TeamItem = styled.li`
   padding: 0.25rem 0.5rem;
   width: 100%;
+  cursor: pointer;
+
+  &:hover {
+    span {
+      text-decoration: underline;
+    }
+  }
 
   .team-info {
     display: flex;
@@ -103,6 +110,7 @@ const TeamItem = styled.li`
     .team-name {
       font-size: 0.8rem;
       font-weight: 200;
+
       span {
         font-weight: 300;
         font-size: 0.95rem;

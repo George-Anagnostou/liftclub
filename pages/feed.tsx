@@ -134,6 +134,7 @@ const SearchCategories = styled.div`
       text-transform: capitalize;
       border: 1px solid ${({ theme }) => theme.border};
       transition: all 0.25s ease;
+      cursor: pointer;
 
       &.highlight {
         border: 1px solid ${({ theme }) => theme.accentSoft};

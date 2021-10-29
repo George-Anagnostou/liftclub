@@ -71,6 +71,7 @@ const SearchResults = styled.ul`
     align-items: flex-start;
     font-size: 1rem;
     border-radius: 8px;
+    cursor: pointer;
 
     p {
       font-weight: 300;

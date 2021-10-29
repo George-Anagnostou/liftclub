@@ -135,6 +135,7 @@ const SortOptions = styled.ul`
     padding: 0.1rem 1rem;
     border: 1px solid ${({ theme }) => theme.border};
     border-radius: 5px;
+    cursor: pointer;
 
     &.highlight {
       border: 1px solid ${({ theme }) => theme.accentSoft};
