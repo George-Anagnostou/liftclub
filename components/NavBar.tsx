@@ -104,13 +104,5 @@ const NavBarContainer = styled.ul`
         color: ${({ theme }) => theme.text};
       }
     }
-    &:hover {
-      fill: ${({ theme }) => theme.text};
-      stroke-width: 5px;
-      stroke: ${({ theme }) => theme.text};
-      p {
-        color: ${({ theme }) => theme.text};
-      }
-    }
   }
 `;
