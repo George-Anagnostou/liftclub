@@ -78,6 +78,8 @@ const NavBarContainer = styled.ul`
   li {
     flex: 1;
     pointer-events: visible;
+    cursor: pointer;
+    user-select: none;
 
     fill: ${({ theme }) => theme.textLight};
     stroke: ${({ theme }) => theme.textLight};
@@ -86,7 +88,6 @@ const NavBarContainer = styled.ul`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
 
     p {
       font-size: 0.5rem;
