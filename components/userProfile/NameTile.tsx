@@ -177,6 +177,13 @@ const TileContainer = styled.header`
     .follows {
       display: flex;
 
+      p {
+        cursor: pointer;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
       p:last-child {
         margin-left: 0.5rem;
       }
@@ -189,4 +196,5 @@ const SettingsIcon = styled.div`
   top: 0.5rem;
   right: 0.5rem;
   fill: ${({ theme }) => theme.textLight};
+  cursor: pointer;
 `;

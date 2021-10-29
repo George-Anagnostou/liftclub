@@ -181,6 +181,7 @@ const PreviewImg = styled.img`
   width: 100%;
   object-fit: cover;
   border-radius: 50%;
+  cursor: pointer;
 `;
 
 const FileInput = styled.input`
@@ -189,6 +190,7 @@ const FileInput = styled.input`
   opacity: 0;
   position: absolute;
   z-index: 9;
+  cursor: pointer;
 `;
 
 const SavingIndicator = styled.svg`
