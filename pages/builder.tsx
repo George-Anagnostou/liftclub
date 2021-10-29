@@ -75,9 +75,31 @@ const BuilderSlideContainer = styled.div`
   transition: margin 0.2s ease-out;
 
   .builder {
-    width: 33.33%;
+    width: 33.333%;
     padding: 0 0.5rem 1rem;
     box-sizing: content-box;
     box-sizing: border-box;
+  }
+
+  .tile {
+    width: 100%;
+    border-radius: 5px;
+    background: ${({ theme }) => theme.background};
+    margin-bottom: 0.5rem;
+
+    h3 {
+      text-align: left;
+      padding: 0.5rem 0.5rem 0.25rem;
+      font-size: 1rem;
+      color: ${({ theme }) => theme.textLight};
+      font-weight: 400;
+    }
+
+    .fallback-text {
+      width: fit-content;
+      padding: 0 1rem 0.5rem;
+      color: ${({ theme }) => theme.textLight};
+      font-weight: 200;
+    }
   }
 `;

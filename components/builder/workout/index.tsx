@@ -1,15 +1,19 @@
 import { useState } from "react";
-import styled from "styled-components";
 import { DragDropContext } from "react-beautiful-dnd";
 // Components
 import ExerciseList from "./ExerciseList";
 import UserWorkouts from "./UserWorkouts";
 import CustomWorkout from "./CustomWorkout";
 // Context
-import { useUserState } from "../../../store";
+import { useBuilderDispatch, useUserState } from "../../../store";
 // Interfaces
 import { Exercise, Workout } from "../../../utils/interfaces";
 import { moveItemInArray } from "../../../utils/";
+import ControlsBar from "./ControlsBar";
+import {
+  addWorkoutToCreatedWorkouts,
+  updateExistingCreatedWorkout,
+} from "../../../store/actions/builderActions";
 
 const InitialCustomWorkout = {
   _id: "",
@@ -24,6 +28,7 @@ const InitialCustomWorkout = {
 
 const WorkoutBuilder: React.FC = () => {
   const { user } = useUserState();
+  const builderDispatch = useBuilderDispatch();
 
   const [exerciseListBottom, setExerciseListBottom] = useState(-80); // number ranging from -80 to 0
   const [customWorkout, setCustomWorkout] = useState<Workout>(InitialCustomWorkout);
@@ -63,6 +68,58 @@ const WorkoutBuilder: React.FC = () => {
   // Resets custom workout state
   const clearCustomWorkout = () => setCustomWorkout(InitialCustomWorkout);
 
+  const saveCustomWorkout = async () => {
+    if (!user) return false;
+
+    const { exercises } = customWorkout;
+    // Only take exercise_id and sets (exercise data not needed for DB)
+    const composedExercises = exercises.map(({ exercise_id, sets }) => ({ exercise_id, sets }));
+
+    const composedWorkout = {
+      ...customWorkout,
+      exercises: composedExercises,
+    };
+    let saveStatus: boolean = false;
+
+    if (composedWorkout.creator_id === user._id) {
+      // Workout owner is editing existing workout
+
+      saveStatus = await updateExistingCreatedWorkout(builderDispatch, composedWorkout);
+    } else {
+      // User is saving their version of a saved workout or building a new workout
+
+      composedWorkout.name = composedWorkout.name || "New Workout";
+      // Set creator_id to user's _id
+      composedWorkout.creator_id = user._id;
+      // Set creatorName to user's username
+      composedWorkout.creatorName = user.username;
+      // Only allow admins to save public workouts
+      if (!user.isTrainer) composedWorkout.isPublic = false;
+      // Remove any existing _id
+      const { _id, ...workout } = composedWorkout;
+      // Add date created
+      workout.date_created = new Date().toISOString();
+
+      saveStatus = await addWorkoutToCreatedWorkouts(builderDispatch, workout);
+    }
+
+    return saveStatus;
+  };
+
+  // Handles changes for custom workout name
+  const handleWorkoutNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCustomWorkout((prev) => {
+      return { ...prev, name: e.target.value };
+    });
+  };
+
+  // Handles changes for custom workout privacy
+  const handlePrivacyChange = () => {
+    setCustomWorkout((prev) => {
+      return { ...prev, isPublic: !prev.isPublic };
+    });
+  };
+
   const handleDragEnd = (result: any) => {
     const startIndex: number = result.source?.index;
     const endIndex: number = result.destination?.index > -1 ? result.destination.index : startIndex;
@@ -76,13 +133,19 @@ const WorkoutBuilder: React.FC = () => {
   };
 
   return (
-    <Container>
+    <>
+      <ControlsBar
+        customWorkout={customWorkout}
+        handleWorkoutNameChange={handleWorkoutNameChange}
+        saveCustomWorkout={saveCustomWorkout}
+        clearCustomWorkout={clearCustomWorkout}
+        handlePrivacyChange={handlePrivacyChange}
+      />
+
       <DragDropContext onDragEnd={handleDragEnd}>
         <CustomWorkout
-          user={user}
           customWorkout={customWorkout}
           setCustomWorkout={setCustomWorkout}
-          clearCustomWorkout={clearCustomWorkout}
           removeExercise={removeExercise}
           setExerciseListBottom={setExerciseListBottom}
         />
@@ -101,12 +164,7 @@ const WorkoutBuilder: React.FC = () => {
         setExerciseListBottom={setExerciseListBottom}
         exerciseListBottom={exerciseListBottom}
       />
-    </Container>
+    </>
   );
 };
 export default WorkoutBuilder;
-
-const Container = styled.section`
-  display: flex;
-  flex-direction: column;
-`;

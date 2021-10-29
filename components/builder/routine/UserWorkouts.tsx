@@ -19,7 +19,7 @@ const UserWorkouts: React.FC<Props> = ({ selectedDaysFromPlan, addWorkoutToDates
 
     return (
       <li
-        key={workout._id}
+        key={"routine" + workout._id}
         onClick={() => addWorkoutToDatesSelected(workout)}
         className={isWorkoutInSelected ? "highlight" : ""}
       >
@@ -29,54 +29,35 @@ const UserWorkouts: React.FC<Props> = ({ selectedDaysFromPlan, addWorkoutToDates
   };
 
   return (
-    <Container>
-      <WorkoutsList>
+    <>
+      <WorkoutsList className="tile">
         <h3>Created</h3>
 
         <ul>
           {workouts.created && Boolean(workouts.created.length) ? (
             workouts.created.map((workout, i) => renderWorkoutItem(workout))
           ) : (
-            <p className="fallbackText">None</p>
+            <p className="fallback-text">None</p>
           )}
         </ul>
       </WorkoutsList>
 
-      <WorkoutsList>
+      <WorkoutsList className="tile">
         <h3>Saved</h3>
         <ul>
           {workouts.saved && Boolean(workouts.saved.length) ? (
             workouts.saved.map((workout, i) => renderWorkoutItem(workout))
           ) : (
-            <p className="fallbackText">None</p>
+            <p className="fallback-text">None</p>
           )}
         </ul>
       </WorkoutsList>
-    </Container>
+    </>
   );
 };
 export default UserWorkouts;
 
-const Container = styled.div`
-  width: 100%;
-  margin-bottom: 0.5rem;
-`;
-
 const WorkoutsList = styled.div`
-  width: 100%;
-  border-radius: 5px;
-  background: ${({ theme }) => theme.background};
-  margin-bottom: 0.5rem;
-
-  h3 {
-    text-align: left;
-    padding-left: 0.75rem;
-    margin: 0.25rem 0;
-    font-size: 1rem;
-    color: ${({ theme }) => theme.textLight};
-    font-weight: 300;
-  }
-
   ul {
     display: flex;
     flex-wrap: wrap;
@@ -102,7 +83,7 @@ const WorkoutsList = styled.div`
     }
   }
 
-  .fallbackText {
+  .fallback-text {
     width: fit-content;
     padding: 0 0.75rem 0.5rem;
     color: ${({ theme }) => theme.textLight};

@@ -48,6 +48,26 @@ const TrainersTile: React.FC<Props> = ({ team, setTeam }) => {
     <Container className="tile">
       <h3>Trainers</h3>
 
+      <Trainers>
+        {team.trainers.length ? (
+          team.trainers.map((trainer, i) => (
+            <li key={trainer._id} className="trainer">
+              {trainer.profileImgUrl ? (
+                <img src={trainer.profileImgUrl} alt={trainer.username} />
+              ) : (
+                <Image src="/favicon.png" height="30" width="30"></Image>
+              )}
+
+              <p className="username">{trainer.username}</p>
+
+              <button onClick={() => removeTrainer(i)}>X</button>
+            </li>
+          ))
+        ) : (
+          <p className="fallback-text">None</p>
+        )}
+      </Trainers>
+
       <SearchContainer>
         <SearchBar>
           <span className="icon">
@@ -109,39 +129,24 @@ const TrainersTile: React.FC<Props> = ({ team, setTeam }) => {
           </SearchResults>
         )}
       </SearchContainer>
-
-      <Trainers>
-        {team.trainers.map((trainer, i) => (
-          <li key={trainer._id} className="trainer">
-            {trainer.profileImgUrl ? (
-              <img src={trainer.profileImgUrl} alt={trainer.username} />
-            ) : (
-              <Image src="/favicon.png" height="30" width="30"></Image>
-            )}
-
-            <p className="username">{trainer.username}</p>
-
-            <button onClick={() => removeTrainer(i)}>X</button>
-          </li>
-        ))}
-      </Trainers>
     </Container>
   );
 };
 
 export default TrainersTile;
 
-const Container = styled.div``;
+const Container = styled.div`
+  padding-bottom: 0.25rem;
+`;
 
 const SearchContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 0.25rem;
-  background: ${({ theme }) => theme.buttonMed};
+  margin: 0 0.25rem;
+  background: inherit;
   padding: 0.25rem 0.25rem;
   border-radius: 5px;
   position: relative;
-  height: 2.75rem;
 `;
 
 const SearchResults = styled.ul`
@@ -154,7 +159,7 @@ const SearchResults = styled.ul`
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  max-height: calc(2.25rem * 8);
+  max-height: 24rem;
   overflow-y: scroll;
 
   .result {

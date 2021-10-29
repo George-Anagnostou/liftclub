@@ -21,7 +21,7 @@ const RoutinesTile: React.FC<Props> = ({ team, setTeam }) => {
     <Container className="tile">
       <h3>Your Routines</h3>
       <ul>
-        {routines.created ? (
+        {routines.created?.length ? (
           routines.created.map((routine) => (
             <li
               key={routine._id}
@@ -32,7 +32,7 @@ const RoutinesTile: React.FC<Props> = ({ team, setTeam }) => {
             </li>
           ))
         ) : (
-          <p className="fallbackText">None</p>
+          <p className="fallback-text">None</p>
         )}
       </ul>
     </Container>
@@ -86,7 +86,7 @@ const Container = styled.div`
     }
   }
 
-  .fallbackText {
+  .fallback-text {
     width: fit-content;
     padding: 0 0.75rem 0.5rem;
     color: ${({ theme }) => theme.textLight};

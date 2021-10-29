@@ -22,7 +22,7 @@ const UserTeams: React.FC<Props> = ({ team, setTeam, clearTeam }) => {
   const { user } = useUserState();
   const { teams } = useBuilderState();
   const builderDispatch = useBuilderDispatch();
-  
+
   const router = useRouter();
 
   const [teamToDelete, setTeamToDelete] = useState<Team | null>(null);
@@ -55,28 +55,30 @@ const UserTeams: React.FC<Props> = ({ team, setTeam, clearTeam }) => {
   }, [teams.created]);
 
   return (
-    <Container className="tile">
-      <h3>Your Teams</h3>
+    <>
+      <Container className="tile">
+        <h3>Your Teams</h3>
 
-      {teams.created ? (
-        <ul>
-          {teams.created.map((userTeam) => (
-            <li
-              key={userTeam._id}
-              onClick={() => handleTeamClick(userTeam)}
-              className={`${team._id === userTeam._id && "highlight"} ${
-                loading === userTeam._id && "loading"
-              }`}
-            >
-              {userTeam.teamName}
+        {teams.created?.length ? (
+          <ul>
+            {teams.created.map((userTeam) => (
+              <li
+                key={userTeam._id}
+                onClick={() => handleTeamClick(userTeam)}
+                className={`${team._id === userTeam._id && "highlight"} ${
+                  loading === userTeam._id && "loading"
+                }`}
+              >
+                {userTeam.teamName}
 
-              <button onClick={() => setTeamToDelete(userTeam)}>X</button>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className="fallbackText">None</p>
-      )}
+                <button onClick={() => setTeamToDelete(userTeam)}>X</button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="fallback-text">None</p>
+        )}
+      </Container>
 
       {teamToDelete && (
         <DeleteTeamModal
@@ -85,7 +87,7 @@ const UserTeams: React.FC<Props> = ({ team, setTeam, clearTeam }) => {
           clearTeam={clearTeam}
         />
       )}
-    </Container>
+    </>
   );
 };
 export default UserTeams;

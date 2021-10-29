@@ -49,7 +49,7 @@ const ControlsBar: React.FC<Props> = ({ setRoutine, routine, clearRoutine }) => 
   }, [routineSaved]);
 
   return (
-    <Container>
+    <Container className="tile">
       <div className="input-wrapper">
         <input
           type="text"
@@ -63,6 +63,7 @@ const ControlsBar: React.FC<Props> = ({ setRoutine, routine, clearRoutine }) => 
           <Checkmark styles={{ position: "absolute", right: 0, transform: "scale(0.7)" }} />
         )}
       </div>
+      
       <div className="controls">
         <button onClick={saveRoutine} disabled={!Boolean(routine.workoutPlan.length)}>
           Save
@@ -81,14 +82,6 @@ const ControlsBar: React.FC<Props> = ({ setRoutine, routine, clearRoutine }) => 
 export default ControlsBar;
 
 const Container = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-
-  background: ${({ theme }) => theme.background};
-  border-radius: 5px;
-  width: 100%;
   padding: 0.5rem;
 
   .input-wrapper {

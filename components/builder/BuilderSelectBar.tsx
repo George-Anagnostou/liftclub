@@ -42,7 +42,7 @@ const Bar = styled.div`
       color: ${({ theme }) => theme.textLight};
       border-bottom: 2px solid ${({ theme }) => theme.border};
       background: ${({ theme }) => theme.background};
-
+      cursor: pointer;
       transition: all 0.5s ease;
 
       &.selected {

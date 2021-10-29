@@ -19,7 +19,7 @@ const ControlsBar: React.FC<Props> = ({ team, setTeam, clearTeam, saveTeam, team
   };
 
   return (
-    <Container>
+    <Container className="tile">
       <div className="input-wrapper">
         <input
           type="text"

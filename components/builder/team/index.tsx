@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
 // Context
 import { useBuilderDispatch, useUserDispatch, useUserState } from "../../../store";
 import { userJoiningTeam } from "../../../store/actions/userActions";
@@ -78,7 +77,7 @@ const TeamBuilder: React.FC = () => {
   }, [user]);
 
   return (
-    <TeamBuilderContainer>
+    <>
       <ControlsBar
         team={team}
         setTeam={setTeam}
@@ -92,31 +91,7 @@ const TeamBuilder: React.FC = () => {
       <RoutinesTile team={team} setTeam={setTeam} />
 
       <TrainersTile team={team} setTeam={setTeam} />
-    </TeamBuilderContainer>
+    </>
   );
 };
 export default TeamBuilder;
-
-const TeamBuilderContainer = styled.section`
-  .tile {
-    width: 100%;
-    border-radius: 5px;
-    background: ${({ theme }) => theme.background};
-    margin-bottom: 0.5rem;
-  }
-
-  h3 {
-    text-align: left;
-    padding-left: 0.75rem;
-    margin: 0.25rem 0;
-    font-size: 1rem;
-    color: ${({ theme }) => theme.textLight};
-    font-weight: 300;
-  }
-
-  .fallbackText {
-    width: fit-content;
-    padding: 0 0.75rem 0.5rem;
-    color: ${({ theme }) => theme.textLight};
-  }
-`;

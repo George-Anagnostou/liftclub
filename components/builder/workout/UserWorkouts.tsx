@@ -45,23 +45,15 @@ const UserWorkouts: React.FC<Props> = ({ setCustomWorkout, customWorkout, clearC
   }, [workouts, user]);
 
   return (
-    <Container>
-      {workoutToDelete && (
-        <DeleteWorkoutModal
-          workout={workoutToDelete}
-          setWorkoutToDelete={setWorkoutToDelete}
-          clearCustomWorkout={clearCustomWorkout}
-        />
-      )}
-
-      <WorkoutsList>
+    <>
+      <WorkoutsList className="tile">
         <h3>Created</h3>
 
         <ul>
-          {Boolean(workouts.created?.length) ? (
-            workouts.created!.map((workout, i) => (
+          {workouts.created?.length ? (
+            workouts.created!.map((workout) => (
               <li
-                key={i}
+                key={"created-workout" + workout._id}
                 onClick={() => displayWorkout(workout)}
                 className={customWorkout._id === workout._id ? "highlight" : ""}
               >
@@ -70,18 +62,19 @@ const UserWorkouts: React.FC<Props> = ({ setCustomWorkout, customWorkout, clearC
               </li>
             ))
           ) : (
-            <p className="fallbackText">None</p>
+            <p className="fallback-text">None</p>
           )}
         </ul>
       </WorkoutsList>
 
-      <WorkoutsList>
+      <WorkoutsList className="tile">
         <h3>Saved</h3>
+
         <ul>
-          {Boolean(workouts.saved?.length) ? (
-            workouts.saved!.map((workout, i) => (
+          {workouts.saved?.length ? (
+            workouts.saved!.map((workout) => (
               <li
-                key={i}
+                key={"saved-workout" + workout._id}
                 onClick={() => displayWorkout(workout)}
                 className={customWorkout._id === workout._id ? "highlight" : ""}
               >
@@ -89,40 +82,24 @@ const UserWorkouts: React.FC<Props> = ({ setCustomWorkout, customWorkout, clearC
               </li>
             ))
           ) : (
-            <p className="fallbackText">None</p>
+            <p className="fallback-text">None</p>
           )}
         </ul>
       </WorkoutsList>
-    </Container>
+
+      {workoutToDelete && (
+        <DeleteWorkoutModal
+          workout={workoutToDelete}
+          setWorkoutToDelete={setWorkoutToDelete}
+          clearCustomWorkout={clearCustomWorkout}
+        />
+      )}
+    </>
   );
 };
 export default UserWorkouts;
 
-const Container = styled.div`
-  width: 100%;
-  margin-bottom: 0.5rem;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
 const WorkoutsList = styled.div`
-  width: 100%;
-  border-radius: 5px;
-  background: ${({ theme }) => theme.background};
-  margin-bottom: 0.5rem;
-
-  h3 {
-    text-align: left;
-    padding-left: 0.75rem;
-    margin: 0.25rem 0;
-    font-size: 1rem;
-    color: ${({ theme }) => theme.textLight};
-    font-weight: 300;
-  }
-
   ul {
     display: flex;
     flex-wrap: wrap;
@@ -164,11 +141,5 @@ const WorkoutsList = styled.div`
         }
       }
     }
-  }
-
-  .fallbackText {
-    width: fit-content;
-    padding: 0 0.75rem 0.5rem;
-    color: ${({ theme }) => theme.textLight};
   }
 `;

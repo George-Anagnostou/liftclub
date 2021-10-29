@@ -94,7 +94,7 @@ const ExerciseItem = styled.li`
   box-shadow: 0 2px 3px ${({ theme }) => theme.boxShadow};
   background: ${({ theme }) => theme.background};
   width: 100%;
-  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
   text-align: center;
   position: relative;
 

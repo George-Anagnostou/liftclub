@@ -52,10 +52,10 @@ const UserRoutines: React.FC<Props> = ({ routine, setRoutine, clearRoutine }) =>
         />
       )}
 
-      <Container>
+      <Container className="tile">
         <h3>Your Routines</h3>
         <ul>
-          {routines.created ? (
+          {routines.created?.length ? (
             routines.created.map((rout) => (
               <li
                 key={rout._id}
@@ -68,7 +68,7 @@ const UserRoutines: React.FC<Props> = ({ routine, setRoutine, clearRoutine }) =>
               </li>
             ))
           ) : (
-            <p className="fallbackText">None</p>
+            <p className="fallback-text">None</p>
           )}
         </ul>
       </Container>
@@ -79,20 +79,6 @@ const UserRoutines: React.FC<Props> = ({ routine, setRoutine, clearRoutine }) =>
 export default UserRoutines;
 
 const Container = styled.div`
-  width: 100%;
-  border-radius: 5px;
-  background: ${({ theme }) => theme.background};
-  margin-bottom: 0.5rem;
-
-  h3 {
-    text-align: left;
-    padding-left: 0.75rem;
-    margin: 0.25rem 0;
-    font-size: 1rem;
-    color: ${({ theme }) => theme.textLight};
-    font-weight: 300;
-  }
-
   ul {
     display: flex;
     flex-wrap: wrap;
@@ -137,7 +123,7 @@ const Container = styled.div`
     }
   }
 
-  .fallbackText {
+  .fallback-text {
     width: fit-content;
     padding: 0 0.75rem 0.5rem;
     color: ${({ theme }) => theme.textLight};

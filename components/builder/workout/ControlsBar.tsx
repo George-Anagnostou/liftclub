@@ -13,7 +13,7 @@ interface Props {
   handlePrivacyChange: () => void;
 }
 
-const CustomWorkoutControls: React.FC<Props> = ({
+const ControlsBar: React.FC<Props> = ({
   customWorkout,
   handleWorkoutNameChange,
   saveCustomWorkout,
@@ -37,7 +37,7 @@ const CustomWorkoutControls: React.FC<Props> = ({
   }, [workoutSavedSuccessfully]);
 
   return (
-    <ControlsBar>
+    <Container className="tile">
       <div className="input-wrapper">
         <input
           type="text"
@@ -78,21 +78,17 @@ const CustomWorkoutControls: React.FC<Props> = ({
           />
         </div>
       </div>
-    </ControlsBar>
+    </Container>
   );
 };
 
-export default CustomWorkoutControls;
+export default ControlsBar;
 
-const ControlsBar = styled.div`
+const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-
-  background: ${({ theme }) => theme.background};
-  border-radius: 5px;
-  width: 100%;
   padding: 0.5rem;
 
   .input-wrapper {

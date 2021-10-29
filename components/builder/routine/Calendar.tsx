@@ -130,6 +130,7 @@ export default Calendar;
 const Container = styled.div`
   border-radius: 5px;
   background: ${({ theme }) => theme.background};
+  margin-bottom: 0.5rem;
 `;
 
 const MonthCtrl = styled.div`
