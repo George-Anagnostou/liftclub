@@ -142,30 +142,26 @@ export default function log() {
 
       {loading ? (
         <LoadingSpinner />
+      ) : currentDayData ? (
+        <WorkoutContainer
+          selectedDate={selectedDate}
+          currentDayData={currentDayData}
+          handleWeightChange={handleWeightChange}
+          handleWorkoutNoteChange={handleWorkoutNoteChange}
+          prevBestData={prevBestData}
+          deleteWorkout={deleteWorkout}
+        />
       ) : (
         <>
-          {currentDayData ? (
-            <WorkoutContainer
-              selectedDate={selectedDate}
-              currentDayData={currentDayData}
-              handleWeightChange={handleWeightChange}
-              handleWorkoutNoteChange={handleWorkoutNoteChange}
-              prevBestData={prevBestData}
-              deleteWorkout={deleteWorkout}
-            />
-          ) : (
-            <>
-              <FallbackText>
-                No workout logged. To start a workout, select a workout from one of the tabs below.
-              </FallbackText>
+          <FallbackText>
+            No workout logged. To start a workout, select a workout from one of the tabs below.
+          </FallbackText>
 
-              {user?.teamsJoined && (
-                <TeamWorkouts selectedDate={selectedDate} displayWorkout={displayWorkout} />
-              )}
-
-              <UserWorkouts displayWorkout={displayWorkout} />
-            </>
+          {user?.teamsJoined && (
+            <TeamWorkouts selectedDate={selectedDate} displayWorkout={displayWorkout} />
           )}
+
+          <UserWorkouts displayWorkout={displayWorkout} />
         </>
       )}
     </MainContainer>
