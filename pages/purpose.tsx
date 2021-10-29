@@ -52,6 +52,7 @@ const purpose: React.FC<Props> = () => {
               width={230}
               quality={100}
               priority
+              alt="Lift Club Mobile Screenshot 1"
             />
           </div>
           <div className={`image ${imgNum === 1 && "show"}`}>
@@ -62,6 +63,7 @@ const purpose: React.FC<Props> = () => {
               width={230}
               quality={100}
               priority
+              alt="Lift Club Mobile Screenshot 2"
             />
           </div>
           <div className={`image ${imgNum === 2 && "show"}`}>
@@ -72,6 +74,7 @@ const purpose: React.FC<Props> = () => {
               width={800}
               quality={100}
               priority
+              alt="Lift Club Desktop Screenshot"
             />
           </div>
         </div>

@@ -5,7 +5,7 @@ const Branding: React.FC = () => {
   return (
     <Brand>
       <div>
-        <Image src="/favicon.png" layout="fixed" height="100" width="100" />
+        <Image src="/favicon.png" layout="fixed" height="100" width="100" alt="Lift Club Logo" />
       </div>
 
       <h1>Lift Club</h1>
