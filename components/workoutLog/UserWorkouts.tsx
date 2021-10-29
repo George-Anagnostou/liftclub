@@ -51,7 +51,7 @@ const UserWorkouts: React.FC<Props> = ({ displayWorkout }) => {
             ))}
           </ul>
         ) : (
-          <p className="fallbackText">None</p>
+          <p className="fallback-text">None</p>
         )}
       </WorkoutsList>
 
@@ -67,7 +67,7 @@ const UserWorkouts: React.FC<Props> = ({ displayWorkout }) => {
             ))}
           </ul>
         ) : (
-          <p className="fallbackText">None</p>
+          <p className="fallback-text">None</p>
         )}
       </WorkoutsList>
     </Container>
@@ -116,7 +116,7 @@ const WorkoutsList = styled.div`
     }
   }
 
-  .fallbackText {
+  .fallback-text {
     width: fit-content;
     padding: 0 0.75rem 0.5rem;
     color: ${({ theme }) => theme.textLight};
