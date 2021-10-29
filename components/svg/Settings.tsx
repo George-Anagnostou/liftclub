@@ -4,8 +4,8 @@ export default function Settings() {
       xmlns="http://www.w3.org/2000/svg"
       x="0px"
       y="0px"
-      height="20px"
-      width="20px"
+      height="17px"
+      width="17px"
       viewBox="0 0 478.703 478.703"
     >
       <g>
