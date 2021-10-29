@@ -115,6 +115,7 @@ const LogoIcon = styled.div`
   height: 0;
   width: 0;
   transform: scale(0.4);
+  cursor: pointer;
 `;
 
 const Text = styled.div`
