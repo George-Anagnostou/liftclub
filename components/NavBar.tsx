@@ -86,6 +86,7 @@ const NavBarContainer = styled.ul`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 
     p {
       font-size: 0.5rem;
@@ -96,6 +97,14 @@ const NavBarContainer = styled.ul`
     }
 
     &.selected {
+      fill: ${({ theme }) => theme.text};
+      stroke-width: 5px;
+      stroke: ${({ theme }) => theme.text};
+      p {
+        color: ${({ theme }) => theme.text};
+      }
+    }
+    &:hover {
       fill: ${({ theme }) => theme.text};
       stroke-width: 5px;
       stroke: ${({ theme }) => theme.text};

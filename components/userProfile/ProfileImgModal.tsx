@@ -114,7 +114,6 @@ const DefaultIcons = styled.form`
     &:disabled {
       color: ${({ theme }) => theme.border};
       background: ${({ theme }) => theme.background};
-      border: 1px solid ${({ theme }) => theme.buttonLight};
     }
   }
 `;

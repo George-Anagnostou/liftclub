@@ -114,6 +114,7 @@ const Tools = styled.div`
     place-items: center;
     font-size: 0.5rem;
     box-shadow: 0 1px 1px ${({ theme }) => theme.boxShadow};
+    cursor: pointer;
 
     p {
       margin-top: 0.15rem;

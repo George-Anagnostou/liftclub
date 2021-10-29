@@ -142,6 +142,7 @@ const MonthCtrl = styled.div`
   div {
     align-items: center;
     margin: 0.5rem 0;
+    cursor: pointer;
 
     .month {
       font-size: 1.3rem;
@@ -161,6 +162,7 @@ const MonthCtrl = styled.div`
     height: 35px;
     width: 55px;
     border-radius: 8px;
+    cursor: pointer;
   }
 `;
 

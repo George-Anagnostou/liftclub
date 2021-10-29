@@ -255,14 +255,12 @@ const Container = styled.div`
       border-radius: 5px;
       padding: 0.25rem 0.5rem;
       margin: 0 0.5rem;
-      border: 1px solid ${({ theme }) => theme.border};
       font-size: 1rem;
       transition: all 0.3s ease;
 
       &:disabled {
         color: ${({ theme }) => theme.border};
         background: ${({ theme }) => theme.background};
-        border: 1px solid ${({ theme }) => theme.buttonLight};
       }
     }
   }

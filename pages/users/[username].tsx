@@ -69,9 +69,9 @@ const User_id: React.FC = () => {
 
           <TeamsTile profileTeamsJoined={profileTeamsJoined} profile_id={profileData._id} />
 
-          <ProgressTile profileData={profileData} />
-
           <CreatedWorkoutsTile createdWorkouts={createdWorkouts} />
+
+          <ProgressTile profileData={profileData} />
         </>
       ) : (
         <div className="loadingContainer">
@@ -97,7 +97,7 @@ const Container = styled.div`
     color: ${({ theme }) => theme.textLight};
     text-align: left;
     margin-bottom: 0.5rem;
-    font-weight: 300;
+    font-weight: 400;
     font-size: 0.9rem;
   }
 

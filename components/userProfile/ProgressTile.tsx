@@ -213,6 +213,7 @@ const SelectContainer = styled.div`
     border: none;
     border-radius: 5px;
     color: ${({ theme }) => theme.text};
+    cursor: pointer;
 
     --BG: ${({ theme }) => theme.buttonMed};
     --arrow: ${({ theme }) => theme.accentSoft};
@@ -234,6 +235,7 @@ const SelectContainer = styled.div`
     &:disabled {
       opacity: 0.5;
       box-shadow: none;
+      cursor: default;
     }
   }
 `;

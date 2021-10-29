@@ -84,6 +84,7 @@ const CalendarDay: React.FC<Props> = ({
     `}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
+      onClick={handleTouchStart}
     >
       <div className="date">{day}</div>
 
@@ -114,6 +115,7 @@ const Container = styled.div`
     height: 40px;
     padding-bottom: 6px;
     font-weight: 300;
+    cursor: pointer;
   }
 
   &.selected {
