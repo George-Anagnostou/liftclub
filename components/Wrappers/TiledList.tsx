@@ -1,16 +1,16 @@
 import styled from "styled-components";
 
-interface Params {
-  items: any[] | undefined;
-  onItemClick: (item: any) => any;
+interface Params<T> {
+  items: T[] | undefined;
+  onItemClick: (item: T) => any;
   displayProp: string;
-  onDeleteClick?: (item: any) => any;
-  isHighlighted: (item: any) => boolean;
+  onDeleteClick?: (item: T) => any;
+  isHighlighted: (item: T) => boolean;
   keyProp: string;
-  isLoading?: (item: any) => boolean;
+  isLoading?: (item: T) => boolean;
 }
 
-export function TiledList({
+export function TiledList<T>({
   items,
   onItemClick,
   displayProp,
@@ -18,7 +18,7 @@ export function TiledList({
   isHighlighted,
   keyProp,
   isLoading,
-}: Params) {
+}: Params<T>) {
   return (
     <List>
       {items?.length ? (
