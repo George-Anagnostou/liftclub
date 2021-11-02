@@ -21,7 +21,6 @@ const DeleteWorkoutModal: React.FC<Props> = ({
   const dispatch = useBuilderDispatch();
 
   const handleDeleteWorkout = async () => {
-    console.log(workout);
     const deleted = await deleteWorkoutFromCreatedWorkouts(dispatch, workout._id);
 
     if (deleted) {
