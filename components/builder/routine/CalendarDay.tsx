@@ -84,7 +84,6 @@ const CalendarDay: React.FC<Props> = ({
     `}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
-      onClick={handleTouchStart}
     >
       <div className="date">{day}</div>
 
