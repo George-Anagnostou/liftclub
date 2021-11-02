@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import styled from "styled-components";
 // Utils
 import { addExerciseDataToWorkout } from "../../../utils";
 // Context
@@ -12,6 +11,7 @@ import {
 import { Workout } from "../../../utils/interfaces";
 // Components
 import DeleteWorkoutModal from "./DeleteWorkoutModal";
+import TiledList from "../../Wrappers/TiledList";
 
 interface Props {
   setCustomWorkout: React.Dispatch<React.SetStateAction<Workout>>;
@@ -46,46 +46,30 @@ const UserWorkouts: React.FC<Props> = ({ setCustomWorkout, customWorkout, clearC
 
   return (
     <>
-      <WorkoutsList className="tile">
+      <div className="tile">
         <h3>Created</h3>
 
-        <ul>
-          {workouts.created?.length ? (
-            workouts.created!.map((workout) => (
-              <li
-                key={"created-workout" + workout._id}
-                onClick={() => displayWorkout(workout)}
-                className={customWorkout._id === workout._id ? "highlight" : ""}
-              >
-                {workout.name}
-                <button onClick={() => setWorkoutToDelete(workout)}>X</button>
-              </li>
-            ))
-          ) : (
-            <p className="fallback-text">None</p>
-          )}
-        </ul>
-      </WorkoutsList>
+        <TiledList
+          items={workouts.created}
+          onItemClick={(workout) => displayWorkout(workout)}
+          displayProp="name"
+          isHighlighted={(workout) => customWorkout._id === workout._id}
+          onDeleteClick={(workout) => setWorkoutToDelete(workout)}
+          keyProp="_id"
+        />
+      </div>
 
-      <WorkoutsList className="tile">
+      <div className="tile">
         <h3>Saved</h3>
 
-        <ul>
-          {workouts.saved?.length ? (
-            workouts.saved!.map((workout) => (
-              <li
-                key={"saved-workout" + workout._id}
-                onClick={() => displayWorkout(workout)}
-                className={customWorkout._id === workout._id ? "highlight" : ""}
-              >
-                {workout.name}
-              </li>
-            ))
-          ) : (
-            <p className="fallback-text">None</p>
-          )}
-        </ul>
-      </WorkoutsList>
+        <TiledList
+          items={workouts.saved}
+          onItemClick={(workout) => displayWorkout(workout)}
+          displayProp="name"
+          isHighlighted={(workout) => customWorkout._id === workout._id}
+          keyProp="_id"
+        />
+      </div>
 
       {workoutToDelete && (
         <DeleteWorkoutModal
@@ -98,48 +82,3 @@ const UserWorkouts: React.FC<Props> = ({ setCustomWorkout, customWorkout, clearC
   );
 };
 export default UserWorkouts;
-
-const WorkoutsList = styled.div`
-  ul {
-    display: flex;
-    flex-wrap: wrap;
-
-    li {
-      background: ${({ theme }) => theme.buttonMed};
-      box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
-      border-radius: 5px;
-      cursor: pointer;
-      padding: 0.25rem 0.5rem;
-      margin: 0 0.25rem 0.5rem;
-      word-wrap: break-word;
-      text-align: left;
-      transition: all 0.25s ease;
-      display: flex;
-      align-items: center;
-      font-weight: 300;
-
-      button {
-        font-size: 0.7rem;
-        font-weight: 600;
-        background: ${({ theme }) => theme.buttonLight};
-        color: ${({ theme }) => theme.textLight};
-        border: none;
-        border-radius: 3px;
-        margin-left: 0.3rem;
-        height: 20px;
-        min-width: 20px;
-        transition: all 0.25s ease;
-      }
-
-      &.highlight {
-        background: ${({ theme }) => theme.accentSoft};
-        color: ${({ theme }) => theme.accentText};
-
-        button {
-          background: ${({ theme }) => theme.accent};
-          color: ${({ theme }) => theme.accentText};
-        }
-      }
-    }
-  }
-`;

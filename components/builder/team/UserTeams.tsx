@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import { useRouter } from "next/router";
 // Context
 import { useBuilderDispatch, useBuilderState, useUserState } from "../../../store";
+import { getUserCreatedTeams } from "../../../store/actions/builderActions";
 // API
 import { getTeamById } from "../../../utils/api";
 // Interfaces
@@ -10,7 +10,7 @@ import { Team } from "../../../utils/interfaces";
 import { EditableTeam } from "./index";
 // Components
 import DeleteTeamModal from "./DeleteTeamModal";
-import { getUserCreatedTeams } from "../../../store/actions/builderActions";
+import TiledList from "../../Wrappers/TiledList";
 
 interface Props {
   team: EditableTeam;
@@ -56,29 +56,19 @@ const UserTeams: React.FC<Props> = ({ team, setTeam, clearTeam }) => {
 
   return (
     <>
-      <Container className="tile">
+      <div className="tile">
         <h3>Your Teams</h3>
 
-        {teams.created?.length ? (
-          <ul>
-            {teams.created.map((userTeam) => (
-              <li
-                key={userTeam._id}
-                onClick={() => handleTeamClick(userTeam)}
-                className={`${team._id === userTeam._id && "highlight"} ${
-                  loading === userTeam._id && "loading"
-                }`}
-              >
-                {userTeam.teamName}
-
-                <button onClick={() => setTeamToDelete(userTeam)}>X</button>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="fallback-text">None</p>
-        )}
-      </Container>
+        <TiledList
+          items={teams.created}
+          onItemClick={(workout) => handleTeamClick(workout)}
+          displayProp="teamName"
+          onDeleteClick={(userTeam) => setTeamToDelete(userTeam)}
+          keyProp="_id"
+          isHighlighted={(userTeam) => team._id === userTeam._id}
+          isLoading={(userTeam) => loading === userTeam._id}
+        />
+      </div>
 
       {teamToDelete && (
         <DeleteTeamModal
@@ -91,69 +81,3 @@ const UserTeams: React.FC<Props> = ({ team, setTeam, clearTeam }) => {
   );
 };
 export default UserTeams;
-
-const Container = styled.div`
-  ul {
-    display: flex;
-    flex-wrap: wrap;
-
-    li {
-      background: ${({ theme }) => theme.buttonMed};
-      box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
-      border-radius: 5px;
-      cursor: pointer;
-      padding: 0.25rem 0.5rem;
-      margin: 0 0.25rem 0.5rem;
-      word-wrap: break-word;
-      text-align: left;
-      transition: all 0.25s ease;
-      display: flex;
-      align-items: center;
-      font-weight: 300;
-
-      button {
-        font-size: 0.7rem;
-        font-weight: 600;
-        background: ${({ theme }) => theme.buttonLight};
-        color: ${({ theme }) => theme.textLight};
-        border: none;
-        border-radius: 3px;
-        margin-left: 0.3rem;
-        height: 20px;
-        width: 20px;
-        padding: 0;
-        transition: all 0.25s ease;
-      }
-
-      &.highlight {
-        background: ${({ theme }) => theme.accentSoft};
-        color: ${({ theme }) => theme.accentText};
-
-        button {
-          background: ${({ theme }) => theme.accent};
-          color: ${({ theme }) => theme.accentText};
-        }
-      }
-
-      &.loading {
-        background: linear-gradient(
-          to left,
-          ${({ theme }) => theme.buttonMed},
-          ${({ theme }) => theme.border}
-        );
-        color: ${({ theme }) => theme.text};
-        background-position: -100%;
-        background-size: 200% 100%;
-
-        animation: ease-in loading 1s infinite;
-
-        @keyframes loading {
-          to {
-            background-position: 100%;
-            background-size: 100% 100%;
-          }
-        }
-      }
-    }
-  }
-`;
