@@ -16,7 +16,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { token } = req.body;
 
   let verified: any;
-  
+
   try {
     verified = jwt.verify(token, JWT_SECRET);
   } catch (e) {

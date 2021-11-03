@@ -3,22 +3,24 @@ import { connectToDatabase } from "../../../utils/mongodb";
 import bcrypt from "bcryptjs";
 import * as jwt from "jsonwebtoken";
 
-const saltRounds = 10;
+const SALT_ROUNDS = 10;
 const JWT_SECRET = process.env.JWT_SECRET || "";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const httpMethod = req.method;
   const { db } = await connectToDatabase();
 
+  // Require that fetch method be POST
   if (httpMethod !== "POST") return res.status(405).end();
 
   // Hash password input
   const { username, password }: { username: string; password: string } = req.body;
-  const hash = bcrypt.hashSync(password, saltRounds);
+  const hash = bcrypt.hashSync(password, SALT_ROUNDS);
 
   const existingUser = await db.collection("users").findOne({ username: username });
 
   if (existingUser) {
+    // Username already exists in DB
     res.status(403).end();
   } else {
     const userData = await db.collection("users").insertOne({
