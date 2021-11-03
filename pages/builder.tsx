@@ -94,12 +94,5 @@ const BuilderSlideContainer = styled.div`
       color: ${({ theme }) => theme.textLight};
       font-weight: 400;
     }
-
-    .fallback-text {
-      width: fit-content;
-      padding: 0 1rem 0.5rem;
-      color: ${({ theme }) => theme.textLight};
-      font-weight: 200;
-    }
   }
 `;

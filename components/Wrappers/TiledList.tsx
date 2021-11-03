@@ -1,22 +1,22 @@
 import styled from "styled-components";
 
 interface Params<T> {
+  keyProp: string;
   items: T[] | undefined;
   onItemClick: (item: T) => any;
   displayProp: string;
   onDeleteClick?: (item: T) => any;
-  isHighlighted: (item: T) => boolean;
-  keyProp: string;
+  isHighlighted?: (item: T) => boolean;
   isLoading?: (item: T) => boolean;
 }
 
 export function TiledList<T>({
+  keyProp,
   items,
   onItemClick,
   displayProp,
   onDeleteClick,
   isHighlighted,
-  keyProp,
   isLoading,
 }: Params<T>) {
   return (
@@ -26,7 +26,7 @@ export function TiledList<T>({
           <li
             key={item[keyProp]}
             onClick={() => onItemClick(item)}
-            className={` ${isHighlighted(item) && "highlight"} ${
+            className={` ${isHighlighted && isHighlighted(item) && "highlight"} ${
               isLoading && isLoading(item) && "loading"
             }`}
           >
@@ -102,5 +102,12 @@ const List = styled.ul`
         }
       }
     }
+  }
+
+  .fallback-text {
+    width: fit-content;
+    padding: 0 1rem 0.5rem;
+    color: ${({ theme }) => theme.textLight};
+    font-weight: 200;
   }
 `;
