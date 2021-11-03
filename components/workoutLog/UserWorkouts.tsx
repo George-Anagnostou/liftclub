@@ -6,6 +6,7 @@ import { useUserState } from "../../store";
 import { getUserMadeWorkouts, getWorkoutsFromIdArray } from "../../utils/api";
 // Interfaces
 import { Workout } from "../../utils/interfaces";
+import TiledList from "../Wrappers/TiledList";
 
 interface Props {
   displayWorkout: (clicked: Workout) => Promise<void>;
@@ -14,18 +15,18 @@ interface Props {
 const UserWorkouts: React.FC<Props> = ({ displayWorkout }) => {
   const { user, isSignedIn } = useUserState();
 
-  const [userMadeWorkouts, setUserMadeWorkouts] = useState<Workout[]>([]);
-  const [userSavedWorkouts, setUserSavedWorkouts] = useState<Workout[]>([]);
+  const [createdWorkouts, setCreatedWorkouts] = useState<Workout[]>([]);
+  const [savedWorkouts, setSavedWorkouts] = useState<Workout[]>([]);
 
   useEffect(() => {
     const loadUserMadeWorkouts = async () => {
       const madeWorkouts = await getUserMadeWorkouts(user!._id);
-      setUserMadeWorkouts(madeWorkouts || []);
+      setCreatedWorkouts(madeWorkouts || []);
     };
 
     const loadUserSavedWorkouts = async () => {
       const savedWorkouts = await getWorkoutsFromIdArray(user!.savedWorkouts || []);
-      setUserSavedWorkouts(savedWorkouts.reverse() || []);
+      setSavedWorkouts(savedWorkouts.reverse() || []);
     };
 
     // workoutLog is used to update DateScroll UI when saving or removing a workout
@@ -42,33 +43,23 @@ const UserWorkouts: React.FC<Props> = ({ displayWorkout }) => {
       <WorkoutsList>
         <h3>Created</h3>
 
-        {Boolean(userMadeWorkouts.length) ? (
-          <ul>
-            {userMadeWorkouts.map((workout) => (
-              <li key={workout._id} onClick={() => displayWorkout(workout)}>
-                {workout.name}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="fallback-text">None</p>
-        )}
+        <TiledList
+          items={createdWorkouts}
+          onItemClick={(workout) => displayWorkout(workout)}
+          displayProp={"name"}
+          keyProp={"_id"}
+        />
       </WorkoutsList>
 
       <WorkoutsList>
         <h3>Saved</h3>
 
-        {Boolean(userSavedWorkouts.length) ? (
-          <ul>
-            {userSavedWorkouts.map((workout) => (
-              <li key={workout._id} onClick={() => displayWorkout(workout)}>
-                {workout.name}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="fallback-text">None</p>
-        )}
+        <TiledList
+          items={savedWorkouts}
+          onItemClick={(workout) => displayWorkout(workout)}
+          displayProp={"name"}
+          keyProp={"_id"}
+        />
       </WorkoutsList>
     </Container>
   );
@@ -96,29 +87,5 @@ const WorkoutsList = styled.div`
     font-size: 1rem;
     color: ${({ theme }) => theme.textLight};
     font-weight: 300;
-  }
-
-  ul {
-    display: flex;
-    flex-wrap: wrap;
-
-    li {
-      font-weight: 300;
-      position: relative;
-      background: ${({ theme }) => theme.buttonMed};
-      box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
-      border-radius: 5px;
-      cursor: pointer;
-      padding: 0.25rem 1rem;
-      margin: 0 0.25rem 0.5rem;
-      word-wrap: break-word;
-      text-align: left;
-    }
-  }
-
-  .fallback-text {
-    width: fit-content;
-    padding: 0 0.75rem 0.5rem;
-    color: ${({ theme }) => theme.textLight};
   }
 `;

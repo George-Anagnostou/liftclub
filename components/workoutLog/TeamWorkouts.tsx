@@ -45,7 +45,7 @@ const TeamWorkouts: React.FC<Props> = ({ selectedDate, displayWorkout }) => {
     if (user && user.teamsJoined) {
       const loadTeamRoutines = async () => {
         const teams = await getTeamsFromIdArray(user.teamsJoined!);
-        setTeamsJoined(teams);
+        if (teams.length) setTeamsJoined(teams);
       };
 
       loadTeamRoutines();
@@ -53,19 +53,23 @@ const TeamWorkouts: React.FC<Props> = ({ selectedDate, displayWorkout }) => {
   }, [user]);
 
   return (
-    <WorkoutsList>
-      <h3>Joined Teams</h3>
+    <>
+      {teamsJoined && (
+        <WorkoutsList>
+          <h3>Joined Teams</h3>
 
-      <ul>
-        {todaysWorkouts?.map(({ teamName, workout }) => (
-          <li key={teamName} onClick={workout ? () => displayWorkout(workout) : () => {}}>
-            <p className="team-name">{teamName}</p>
+          <ul>
+            {todaysWorkouts?.map(({ teamName, workout }) => (
+              <li key={teamName} onClick={workout ? () => displayWorkout(workout) : () => {}}>
+                <p className="team-name">{teamName}</p>
 
-            <p className="workout">{workout?.name || "No workout today"}</p>
-          </li>
-        ))}
-      </ul>
-    </WorkoutsList>
+                <p className="workout">{workout?.name || "No workout today"}</p>
+              </li>
+            ))}
+          </ul>
+        </WorkoutsList>
+      )}
+    </>
   );
 };
 
