@@ -157,9 +157,7 @@ export default function log() {
             No workout logged. To start a workout, select a workout from one of the tabs below.
           </FallbackText>
 
-          {user?.teamsJoined && (
-            <TeamWorkouts selectedDate={selectedDate} displayWorkout={displayWorkout} />
-          )}
+          <TeamWorkouts displayWorkout={displayWorkout} selectedDate={selectedDate} />
 
           <UserWorkouts displayWorkout={displayWorkout} />
         </>
