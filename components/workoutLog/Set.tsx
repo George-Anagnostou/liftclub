@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useCallback } from "react";
 import styled from "styled-components";
-// Interfaces
-import { WorkoutLogItem } from "../../utils/interfaces";
+// Context
+import { useUserState } from "../../store";
+// Utils
+import { hasEnteredWeight, setsAreComplete } from "../../utils/dataMutators";
+import { dateCompare } from "../../utils/dateAndTime";
 
 interface Props {
   setIndex: number;
@@ -14,7 +17,9 @@ interface Props {
     exerciseIndex: number,
     setIndex: number
   ) => void;
-  prevBestData: WorkoutLogItem | null;
+  exercise_id: string;
+  selectedDate: string;
+  exerciseMap: Map<string, { sets: { reps: number; weight: string | number }[]; date: string }[]>;
 }
 
 const Set: React.FC<Props> = ({
@@ -24,8 +29,36 @@ const Set: React.FC<Props> = ({
   reps,
   handleUserInput,
   handleWeightChange,
-  prevBestData,
+  exercise_id,
+  selectedDate,
+  exerciseMap,
 }) => {
+  const { user } = useUserState();
+
+  const getPrevExerciseData = useCallback(() => {
+    const exerciseHistory = exerciseMap
+      .get(exercise_id)
+      ?.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+    if (!exerciseHistory) return null;
+
+    // Filter out all exercises from selected date and forward
+    const beforeSelectedDate = exerciseHistory.filter(({ date }) =>
+      dateCompare(date, selectedDate)
+    );
+
+    // Find the first exercise that has all its sets completed
+    const first = beforeSelectedDate.find(({ sets }) => setsAreComplete(sets));
+
+    if (first) {
+      return first.sets[setIndex]?.weight;
+    } else {
+      return hasEnteredWeight(beforeSelectedDate[0]?.sets[setIndex]?.weight)
+        ? beforeSelectedDate[0].sets[setIndex]?.weight
+        : null;
+    }
+  }, [user?.workoutLog]);
+
   return (
     <SetContainer>
       <div className="reps">
@@ -42,11 +75,7 @@ const Set: React.FC<Props> = ({
       </div>
 
       <div className="prev">
-        {prevBestData && prevBestData.exerciseData[exerciseIndex]?.sets[setIndex]?.weight >= 0 ? (
-          <p>{prevBestData?.exerciseData[exerciseIndex]?.sets[setIndex]?.weight}</p>
-        ) : (
-          <span>None</span>
-        )}
+        <p>{getPrevExerciseData()?.toString() || <span>None</span>}</p>
       </div>
     </SetContainer>
   );
@@ -103,9 +132,9 @@ const SetContainer = styled.li`
   }
 
   .prev {
-    p,
-    span {
+    p span {
       color: ${({ theme }) => theme.textLight};
+      font-size: 1rem;
     }
   }
 `;

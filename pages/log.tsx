@@ -27,7 +27,6 @@ export default function log() {
 
   const [loading, setLoading] = useState(true);
   const [currentDayData, setCurrentDayData] = useState<WorkoutLogItem | null>(null);
-  const [prevBestData, setPrevBestData] = useState<WorkoutLogItem | null>(null);
   const [selectedDate, setSelectedDate] = useState(() =>
     dateToISOWithLocal(new Date()).substring(0, 10)
   );
@@ -42,18 +41,11 @@ export default function log() {
     if (!currentDayData || !user) return;
 
     // If user never saved the workout
-    if (!user.workoutLog[selectedDate]) {
-      setPageState(null);
-      setPrevBestData(null);
-      return;
-    }
+    if (!user.workoutLog[selectedDate]) return setPageState(null);
 
     const deleted = await deleteDayFromWorkoutLog(dispatch, user._id, selectedDate);
 
-    if (deleted) {
-      setPageState(null);
-      setPrevBestData(null);
-    }
+    if (deleted) setPageState(null);
   };
 
   const displayWorkout = async (clicked: Workout) => {
@@ -92,29 +84,6 @@ export default function log() {
     }
   };
 
-  const findPrevBestData = (searchDate: string, searchId: string) => {
-    if (!user) return setPrevBestData(null);
-
-    let keysArr = Object.keys(user.workoutLog);
-    keysArr.push(searchDate);
-    // Remove duplicates
-    keysArr = [...new Set(keysArr)];
-    //Sort into newest to oldest order
-    keysArr.sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
-
-    const index = keysArr.indexOf(searchDate);
-
-    for (let i = index + 1; i < keysArr.length; i++) {
-      if (user.workoutLog[keysArr[i]].workout_id === searchId)
-        return setPrevBestData(user.workoutLog[keysArr[i]]);
-    }
-    setPrevBestData(null);
-  };
-
-  useEffect(() => {
-    if (currentDayData) findPrevBestData(selectedDate, currentDayData.workout_id);
-  }, [selectedDate, currentDayData]);
-
   useEffect(() => {
     const insertWorkoutData = async (logItem: WorkoutLogItem | undefined) => {
       if (logItem) {
@@ -148,7 +117,6 @@ export default function log() {
           currentDayData={currentDayData}
           handleWeightChange={handleWeightChange}
           handleWorkoutNoteChange={handleWorkoutNoteChange}
-          prevBestData={prevBestData}
           deleteWorkout={deleteWorkout}
         />
       ) : (

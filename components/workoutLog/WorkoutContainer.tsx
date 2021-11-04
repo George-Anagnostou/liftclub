@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 // Context
 import { useUserDispatch, useUserState } from "../../store";
 import { addDayToWorkoutLog } from "../../store/actions/userActions";
+import { groupWorkoutLogByExercise } from "../../utils/dataMutators";
 // Interfaces
 import { Exercise, WorkoutLogItem } from "../../utils/interfaces";
 import ExerciseInfoModal from "./ExerciseInfoModal";
@@ -18,7 +19,6 @@ interface Props {
     setIndex: number
   ) => void;
   handleWorkoutNoteChange: ({ target }: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  prevBestData: WorkoutLogItem | null;
   deleteWorkout: () => Promise<void>;
   selectedDate: string;
 }
@@ -27,12 +27,13 @@ const WorkoutContainerClone: React.FC<Props> = ({
   currentDayData,
   handleWeightChange,
   handleWorkoutNoteChange,
-  prevBestData,
   deleteWorkout,
   selectedDate,
 }) => {
   const { user } = useUserState();
   const dispatch = useUserDispatch();
+
+  const exerciseMap = useRef(groupWorkoutLogByExercise(user!.workoutLog));
 
   const [exerciseInfo, setExerciseInfo] = useState<Exercise | null>(null);
   const [saveSuccess, setSaveSuccess] = useState<boolean | null>(null);
@@ -137,7 +138,9 @@ const WorkoutContainerClone: React.FC<Props> = ({
                     exerciseIndex={i}
                     handleUserInput={handleUserInput}
                     handleWeightChange={handleWeightChange}
-                    prevBestData={prevBestData}
+                    exercise_id={exercise_id}
+                    selectedDate={selectedDate}
+                    exerciseMap={exerciseMap.current}
                   />
                 ))}
               </ul>

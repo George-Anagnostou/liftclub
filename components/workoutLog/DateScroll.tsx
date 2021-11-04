@@ -8,8 +8,6 @@ import { addExerciseDataToLoggedWorkout, getCurrYearMonthDay } from "../../utils
 import { getWorkoutFromId } from "../../utils/api";
 // Interfaces
 import { WorkoutLogItem } from "../../utils/interfaces";
-// Hooks
-import useCountRenders from "../hooks/useCountRenders";
 
 interface Props {
   selectedDate: string;
@@ -24,8 +22,6 @@ const DateScrollClone: React.FC<Props> = ({
   setPageState,
   setLoading,
 }) => {
-  useCountRenders();
-
   const { user } = useUserState();
 
   const makeDateString = (numOfDaysToShift: number) => {
