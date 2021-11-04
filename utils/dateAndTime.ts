@@ -76,3 +76,7 @@ export const dateToISOWithLocal = (date: Date) => {
   const isoLocal = iso.slice(0, 19);
   return isoLocal;
 };
+
+export function dateCompare(date1: string, date2: string) {
+  return new Date(date2) > new Date(date1);
+}
