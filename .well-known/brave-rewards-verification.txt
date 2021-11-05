@@ -1,0 +1,4 @@
+This is a Brave Rewards publisher verification file.
+
+Domain: liftclub.app
+Token: de6c99c83777dea84df2ccd32fc14a2d278c66b3dc13114519db30d61296ed5a
