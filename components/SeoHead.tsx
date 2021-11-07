@@ -31,6 +31,11 @@ const SeoHead: React.FC<Props> = ({ title }) => {
 
       <meta name="apple-mobile-web-app-capable" content="yes" />
 
+      <meta
+        name="description"
+        content="Weightlifting app that assists in the process of making you physically superior. Team up and workout with your friends on Lift Club."
+      />
+
       {/* Below is the iOS meta tags content */}
       {themeMode === "dark" ? (
         <>
