@@ -9,12 +9,17 @@ interface Props {}
 
 const purpose: React.FC<Props> = () => {
   const { themeMode } = useThemeState();
-
-  const [imgNum, setImgNum] = useState<undefined | number>(undefined);
+  const [imgNum, setImgNum] = useState<number>(1);
 
   useEffect(() => {
     themeMode === "dark" ? setImgNum(1) : setImgNum(0);
   }, [themeMode]);
+
+  useEffect(() => {
+    const rotateImg = () => setImgNum((prev) => (prev === 2 ? 0 : prev + 1));
+    const interval = setInterval(rotateImg, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <Container>
