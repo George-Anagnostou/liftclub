@@ -28,6 +28,8 @@ const Layout: React.FC<Props> = ({ title = "Lift Club", children }) => {
   const dispatch = useUserDispatch();
   const { user, platform, isUsingPWA, isSignedIn } = useUserState();
 
+  const isOnMarketingPage = Boolean(MarketingPages[router.pathname]);
+
   const getAuthToken = () => {
     const token = localStorage.getItem("authToken");
     return token;
@@ -45,27 +47,21 @@ const Layout: React.FC<Props> = ({ title = "Lift Club", children }) => {
   };
 
   useEffect(() => {
-    if (MarketingPages[router.pathname]) return;
+    if (isOnMarketingPage) return;
 
     if (!isSignedIn) {
       const token = getAuthToken();
-      if (token) {
-        loginWithAuthToken(token);
-      } else {
-        router.push("/");
-      }
+      token ? loginWithAuthToken(token) : router.push("/");
     }
   }, [router.pathname]);
 
   useEffect(() => {
     // Detects if device is on iOS
     const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
-
     // Detects if device is in standalone mode (using downloaded PWA)
     const isPWA = "standalone" in window.navigator && window.navigator["standalone"];
 
-    if (isIos && isPWA) setPlatformToiOS(dispatch);
-
+    if (isIos) setPlatformToiOS(dispatch);
     if (isPWA) setIsUsingPWA(dispatch);
   }, []);
 
@@ -77,7 +73,7 @@ const Layout: React.FC<Props> = ({ title = "Lift Club", children }) => {
 
       <MainContainer
         className={platform === "ios" && isUsingPWA ? "ios-safe-area" : ""}
-        style={{ maxWidth: user ? "700px" : "100%" }}
+        style={{ maxWidth: isOnMarketingPage ? "100%" : "700px" }}
       >
         {children}
 
