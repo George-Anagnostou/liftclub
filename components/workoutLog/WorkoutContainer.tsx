@@ -3,6 +3,7 @@ import styled from "styled-components";
 // Context
 import { useUserDispatch, useUserState } from "../../store";
 import { addDayToWorkoutLog } from "../../store/actions/userActions";
+import { formatIsoDate } from "../../utils";
 import { groupWorkoutLogByExercise } from "../../utils/dataMutators";
 // Interfaces
 import { Exercise, WorkoutLogItem } from "../../utils/interfaces";
@@ -48,10 +49,9 @@ const WorkoutContainerClone: React.FC<Props> = ({
     setSaveLoading(true);
 
     const { workout, ...rest } = currentDayData;
-
     const saved = await addDayToWorkoutLog(dispatch, user._id, rest, selectedDate);
 
-    // Re-trigger animations
+    // Re-trigger save animation
     setSaveSuccess(false);
     setSaveSuccess(saved);
 
@@ -102,16 +102,15 @@ const WorkoutContainerClone: React.FC<Props> = ({
   // Remove Saved notification after 3 seconds
   useEffect(() => {
     let resetTimeout: NodeJS.Timeout;
-
     if (saveSuccess) resetTimeout = setTimeout(() => setSaveSuccess(null), 3000);
-
     return () => clearTimeout(resetTimeout);
   }, [saveSuccess]);
 
   return (
     <>
       <WorkoutName>
-        <h3 className="workout-name">{currentDayData.workout?.name}</h3>
+        <h3>{formatIsoDate(selectedDate, 1)}</h3>
+        <h3>{currentDayData.workout?.name}</h3>
       </WorkoutName>
 
       <Form>
@@ -152,7 +151,7 @@ const WorkoutContainerClone: React.FC<Props> = ({
           <h3>Notes</h3>
           <textarea
             key={"workoutNote"}
-            name="workoutNote"
+            name={"workoutNote"}
             cols={30}
             rows={3}
             value={currentDayData.workoutNote}
@@ -183,12 +182,16 @@ const Form = styled.form`
 const WorkoutName = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-around;
   margin-bottom: 0.5rem;
+  border-radius: 10px;
+  padding: 0.25rem 0;
+  background: ${({ theme }) => theme.background};
 
   h3 {
-    font-size: 1.3em;
-    font-weight: 300;
+    font-size: 1.4em;
+    font-weight: 200;
     text-transform: capitalize;
   }
 `;
