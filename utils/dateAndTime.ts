@@ -49,11 +49,11 @@ export const daysBetween = (iso1: string, iso2: string) => {
   return days;
 };
 
-export const formatIsoDate = (isoDate: string) => {
+export const formatIsoDate = (isoDate: string, offset: number = 0) => {
   const date = new Date(isoDate);
   const year = date.getFullYear();
   const month = date.getMonth();
-  const day = date.getDate();
+  const day = date.getDate() + offset;
 
   return `${MONTHS[month]} ${day}, ${year}`;
 };
