@@ -72,12 +72,15 @@ const DateScrollClone: React.FC<Props> = ({
 
       return (
         <div
-          className={`${dayIsSelected ? "selected" : "notSelected"} ${
+          className={`date-container ${dayIsSelected ? "selected" : "notSelected"} ${
             dayData ? "hasDayData" : "noDayData"
           }`}
         >
+          <div className="small-text">
+            <p className="month">{displayDate.substring(3, 8)}</p>
+            <p className="day">{displayDate.substring(8, 11)}</p>
+          </div>
           <p className="dow">{displayDate.substring(0, 3)}</p>
-          <p className="day">{displayDate.substring(8, 11)}</p>
         </div>
       );
     },
@@ -103,26 +106,23 @@ const Day = styled.li`
   height: fit-content;
   text-align: center;
 
-  div {
-    border-radius: 10px;
-    padding: 0.25rem;
+  .date-container {
+    border-radius: 8px;
+    padding: 0.5rem 0.25rem 0.25rem;
     transition: all 0.2s ease-in-out;
-
-    color: ${({ theme }) => theme.text};
     box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
 
-    p {
-      font-weight: 200;
-      margin: 0.25rem 0;
+    .small-text {
+      font-weight: 300;
+      margin: 0;
+      font-size: 0.6rem;
+      display: flex;
+      justify-content: space-around;
     }
 
-    .month {
-      text-transform: uppercase;
-    }
     .dow {
-      font-weight: 400;
-    }
-    .day {
+      margin-bottom: 0.25rem;
+      font-size: 1.2rem;
     }
 
     &.selected {
@@ -136,6 +136,12 @@ const Day = styled.li`
     &.hasDayData {
       background: ${({ theme }) => theme.accent};
       color: ${({ theme }) => theme.accentText};
+      .small-text {
+        color: ${({ theme }) => theme.accentText};
+      }
+      .dow {
+        color: ${({ theme }) => theme.accentText};
+      }
     }
     &.noDayData {
     }
