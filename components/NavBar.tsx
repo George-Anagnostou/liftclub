@@ -14,7 +14,7 @@ import Builder from "./svg/Builder";
 const NavBar: React.FC = () => {
   const router = useRouter();
 
-  const { platform, user } = useUserState();
+  const { platform, user, isUsingPWA } = useUserState();
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -34,7 +34,7 @@ const NavBar: React.FC = () => {
   return (
     <Nav
       ref={ref}
-      className={platform === "ios" ? "ios-safe-area" : ""}
+      className={platform === "ios" && isUsingPWA ? "ios-safe-area" : ""}
       style={{ maxWidth: user ? "700px" : "100%" }}
     >
       <NavBarContainer>
