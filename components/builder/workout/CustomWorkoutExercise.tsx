@@ -67,10 +67,10 @@ const CustomWorkoutExercise: React.FC<Props> = ({
             </div>
           </div>
 
-          <RepsList className="reps-list">
+          <ul>
             {sets.map(({ reps }, j) => (
-              <RepListItem key={j}>
-                <span>{j + 1}.</span>
+              <RepsInput key={j}>
+                <span className="rep-num">{j + 1}</span>
                 <input
                   type="number"
                   name="reps"
@@ -78,10 +78,10 @@ const CustomWorkoutExercise: React.FC<Props> = ({
                   placeholder={"0"}
                   onChange={(e) => handleRepChange(e, exerciseIndex, j)}
                 />
-                <span>reps</span>
-              </RepListItem>
+                <span className="reps-tag">reps</span>
+              </RepsInput>
             ))}
-          </RepsList>
+          </ul>
         </ExerciseItem>
       )}
     </Draggable>
@@ -196,31 +196,30 @@ const ExerciseItem = styled.li`
   }
 `;
 
-const RepsList = styled.ul`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  width: 100%;
-`;
-
-const RepListItem = styled.li`
-  margin: 0.2rem;
-  flex: 1;
-  min-width: 100px;
-  width: fit-content;
-  background: ${({ theme }) => theme.buttonMed};
+const RepsInput = styled.li`
+  margin: 0.25rem;
   padding: 0.25rem;
+  background: ${({ theme }) => theme.buttonMed};
   border-radius: 5px;
 
   display: flex;
-  align-items: flex-end;
-  justify-content: space-evenly;
+  align-items: center;
+  justify-content: flex-start;
+
+  .rep-num {
+    border: 2px solid ${({ theme }) => theme.border};
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    display: grid;
+    place-items: center;
+  }
 
   input {
     appearance: none;
-    width: 3rem;
+    width: 5rem;
     font-size: 1.25rem;
-    margin: 0 0.25rem 0.25rem;
+    margin: 0 0.75rem 0.2rem;
     background: inherit;
     color: ${({ theme }) => theme.text};
     text-align: center;
@@ -233,9 +232,11 @@ const RepListItem = styled.li`
       border: 2px solid ${({ theme }) => theme.accentSoft};
     }
   }
-  span {
+  .reps-tag {
     color: ${({ theme }) => theme.textLight};
     font-weight: 300;
-    font-size: 0.75rem;
+    margin-bottom: -4px;
+    margin-top: auto;
+    font-size: 0.8rem;
   }
 `;
