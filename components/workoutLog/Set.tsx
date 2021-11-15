@@ -4,22 +4,20 @@ import styled from "styled-components";
 import { useUserState } from "../../store";
 // Utils
 import { hasEnteredWeight, setsAreComplete } from "../../utils/dataMutators";
-import { dateCompare } from "../../utils/dateAndTime";
 
 interface Props {
   setIndex: number;
   exerciseIndex: number;
   weight: number | string;
   reps: number;
-  handleUserInput: (callback: () => void) => void;
   handleWeightChange: (
     { target }: React.ChangeEvent<HTMLInputElement>,
     exerciseIndex: number,
     setIndex: number
   ) => void;
-  exercise_id: string;
-  selectedDate: string;
-  exerciseMap: Map<string, { sets: { reps: number; weight: string | number }[]; date: string }[]>;
+  exerciseHistory:
+    | { sets: { reps: number; weight: string | number }[]; date: string }[]
+    | undefined;
 }
 
 const Set: React.FC<Props> = ({
@@ -27,34 +25,22 @@ const Set: React.FC<Props> = ({
   exerciseIndex,
   weight,
   reps,
-  handleUserInput,
   handleWeightChange,
-  exercise_id,
-  selectedDate,
-  exerciseMap,
+  exerciseHistory,
 }) => {
   const { user } = useUserState();
 
   const getPrevExerciseData = useCallback(() => {
-    const exerciseHistory = exerciseMap
-      .get(exercise_id)
-      ?.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
     if (!exerciseHistory) return null;
 
-    // Filter out all exercises from selected date and forward
-    const beforeSelectedDate = exerciseHistory.filter(({ date }) =>
-      dateCompare(date, selectedDate)
-    );
-
     // Find the first exercise that has all its sets completed
-    const first = beforeSelectedDate.find(({ sets }) => setsAreComplete(sets));
+    const first = exerciseHistory.find(({ sets }) => setsAreComplete(sets));
 
     if (first) {
       return first.sets[setIndex]?.weight;
     } else {
-      return hasEnteredWeight(beforeSelectedDate[0]?.sets[setIndex]?.weight)
-        ? beforeSelectedDate[0].sets[setIndex]?.weight
+      return hasEnteredWeight(exerciseHistory[0]?.sets[setIndex]?.weight)
+        ? exerciseHistory[0].sets[setIndex]?.weight
         : null;
     }
   }, [user?.workoutLog]);
@@ -70,7 +56,7 @@ const Set: React.FC<Props> = ({
           type="number"
           inputMode="decimal"
           defaultValue={weight >= 0 ? weight : ""}
-          onChange={(e) => handleUserInput(() => handleWeightChange(e, exerciseIndex, setIndex))}
+          onChange={(e) => handleWeightChange(e, exerciseIndex, setIndex)}
         />
       </div>
 
