@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { useCallback } from "react";
 import styled from "styled-components";
 // Context
@@ -8,6 +8,8 @@ import { addExerciseDataToLoggedWorkout, getCurrYearMonthDay } from "../../utils
 import { getWorkoutFromId } from "../../utils/api";
 // Interfaces
 import { WorkoutLogItem } from "../../utils/interfaces";
+import useInViewEffect from "../hooks/useInViewEffect";
+import LoadingSpinner from "../LoadingSpinner";
 
 interface Props {
   selectedDate: string;
@@ -23,6 +25,9 @@ const DateScrollClone: React.FC<Props> = ({
   setLoading,
 }) => {
   const { user } = useUserState();
+
+  const [dateCount, setDateCount] = useState(30);
+  const infiniteScrollRef = useInViewEffect(() => setDateCount((prev) => prev + 30));
 
   const makeDateString = (numOfDaysToShift: number) => {
     const { year, month, day } = getCurrYearMonthDay();
@@ -89,11 +94,15 @@ const DateScrollClone: React.FC<Props> = ({
 
   return (
     <DateScrollContainer>
-      {Array.from(Array(90).keys()).map((numDays) => (
+      {Array.from(Array(dateCount).keys()).map((numDays) => (
         <Day onClick={() => handleDateClick(-numDays)} key={-numDays}>
           {renderDate(-numDays)}
         </Day>
       ))}
+
+      <li ref={infiniteScrollRef}>
+        <LoadingSpinner />
+      </li>
     </DateScrollContainer>
   );
 };
@@ -150,7 +159,7 @@ const Day = styled.li`
 
 const DateScrollContainer = styled.ul`
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   flex-direction: row-reverse;
 
   width: calc(100% + 1rem);
