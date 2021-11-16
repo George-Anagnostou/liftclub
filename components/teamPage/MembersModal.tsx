@@ -4,7 +4,7 @@ import styled from "styled-components";
 // Context
 import { useUserState } from "../../store";
 // Interfaces
-import { ShortUser } from "../../utils/interfaces";
+import { ShortUser } from "../../types/interfaces";
 // Components
 import LoadingSpinner from "../LoadingSpinner";
 import Modal from "../Wrappers/Modal";

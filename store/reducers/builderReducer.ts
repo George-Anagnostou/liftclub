@@ -1,4 +1,4 @@
-import { Workout, Routine, Team } from "../../utils/interfaces";
+import { Workout, Routine, Team } from "../../types/interfaces";
 
 interface AppState {
   workouts: { saved: Workout[] | undefined; created: Workout[] | undefined };

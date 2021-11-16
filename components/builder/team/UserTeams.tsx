@@ -6,7 +6,7 @@ import { getUserCreatedTeams } from "../../../store/actions/builderActions";
 // API
 import { getTeamById } from "../../../utils/api";
 // Interfaces
-import { Team } from "../../../utils/interfaces";
+import { Team } from "../../../types/interfaces";
 import { EditableTeam } from "./index";
 // Components
 import DeleteTeamModal from "./DeleteTeamModal";

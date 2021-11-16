@@ -5,7 +5,7 @@ import useTouchSwipe from "../hooks/useTouchSwipe";
 // Components
 import SavedWorkoutTile from "./SavedWorkoutTile";
 // Interfaces
-import { Workout } from "../../utils/interfaces";
+import { Workout } from "../../types/interfaces";
 
 interface Props {
   workouts: Workout[];

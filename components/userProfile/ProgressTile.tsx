@@ -9,7 +9,7 @@ import StatButtons from "./StatButtons";
 import { getWorkoutsFromIdArray } from "../../utils/api";
 import { addExerciseDataToLoggedWorkout, round } from "../../utils";
 // Interfaces
-import { User, Workout, WorkoutLogItem } from "../../utils/interfaces";
+import { User, Workout, WorkoutLogItem } from "../../types/interfaces";
 
 interface Props {
   profileData: User;

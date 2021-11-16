@@ -5,7 +5,7 @@ import { useUserState } from "../../store";
 // API
 import { getUserMadeWorkouts, getWorkoutsFromIdArray } from "../../utils/api";
 // Interfaces
-import { Workout } from "../../utils/interfaces";
+import { Workout } from "../../types/interfaces";
 import TiledList from "../Wrappers/TiledList";
 
 interface Props {

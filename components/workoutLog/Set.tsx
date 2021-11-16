@@ -3,7 +3,7 @@ import styled from "styled-components";
 // Context
 import { useUserState } from "../../store";
 // Utils
-import { hasEnteredWeight, setsAreComplete } from "../../utils/dataMutators";
+import { hasEnteredWeight, setsAreComplete } from "../../utils";
 
 interface Props {
   setIndex: number;

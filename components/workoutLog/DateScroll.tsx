@@ -7,7 +7,7 @@ import { useUserState } from "../../store";
 import { addExerciseDataToLoggedWorkout, getCurrYearMonthDay } from "../../utils";
 import { getWorkoutFromId } from "../../utils/api";
 // Interfaces
-import { WorkoutLogItem } from "../../utils/interfaces";
+import { WorkoutLogItem } from "../../types/interfaces";
 import useInViewEffect from "../hooks/useInViewEffect";
 import LoadingSpinner from "../LoadingSpinner";
 

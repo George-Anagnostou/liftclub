@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Exercise } from "../../utils/interfaces";
+import { Exercise } from "../../types/interfaces";
 import Set from "./Set";
 
 interface Props {

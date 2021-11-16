@@ -9,7 +9,7 @@ import ProfileImg from "./ProfileImg";
 import Settings from "../svg/Settings";
 import FollowsModal from "./FollowsModal";
 // Interfaces
-import { User } from "../../utils/interfaces";
+import { User } from "../../types/interfaces";
 import { timeSince } from "../../utils";
 
 interface Props {

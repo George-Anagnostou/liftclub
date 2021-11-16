@@ -4,7 +4,7 @@ import styled from "styled-components";
 import update from "immutability-helper";
 // Interfaces
 import { EditableTeam } from "./index";
-import { Team } from "../../../utils/interfaces";
+import { Team } from "../../../types/interfaces";
 // Components
 import Magnifying from "../../svg/Magnifying";
 // API

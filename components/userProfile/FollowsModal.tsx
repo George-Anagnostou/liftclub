@@ -6,7 +6,7 @@ import { useUserDispatch, useUserState } from "../../store";
 import { addUserFollow, removeUserFollow } from "../../store/actions/userActions";
 import { getUsersFromIdArr } from "../../utils/api";
 // Interfaces
-import { ShortUser } from "../../utils/interfaces";
+import { ShortUser } from "../../types/interfaces";
 // Components
 import LoadingSpinner from "../LoadingSpinner";
 import Modal from "../Wrappers/Modal";

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Workout } from "../../../utils/interfaces";
+import { Workout } from "../../../types/interfaces";
 
 interface Props {
   dayData: { workout_id: string; workout: Workout };

@@ -7,7 +7,7 @@ import {
   updateExistingCreatedTeam,
 } from "../../../store/actions/builderActions";
 // Interfaces
-import { Team } from "../../../utils/interfaces";
+import { Team } from "../../../types/interfaces";
 // Components
 import ControlsBar from "./ControlsBar";
 import UserTeams from "./UserTeams";

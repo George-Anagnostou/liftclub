@@ -3,10 +3,10 @@ import styled from "styled-components";
 // Context
 import { useUserDispatch, useUserState } from "../../store";
 import { addDayToWorkoutLog } from "../../store/actions/userActions";
-import { groupWorkoutLogByExercise } from "../../utils/dataMutators";
-import { dateCompare } from "../../utils/dateAndTime";
+// Utils
+import { groupWorkoutLogByExercise, dateCompare } from "../../utils";
 // Interfaces
-import { Exercise, WorkoutLogItem } from "../../utils/interfaces";
+import { Exercise, WorkoutLogItem } from "../../types/interfaces";
 // Components
 import ExerciseInfoModal from "./ExerciseInfoModal";
 import { SaveNotification } from "./SaveNotification";

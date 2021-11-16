@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { User } from "../../utils/interfaces";
+import { User } from "../../types/interfaces";
 
 interface Props {
   profileData: User;

@@ -7,7 +7,7 @@ import CustomWorkout from "./CustomWorkout";
 // Context
 import { useBuilderDispatch, useUserState } from "../../../store";
 // Interfaces
-import { Exercise, Workout } from "../../../utils/interfaces";
+import { Exercise, Workout } from "../../../types/interfaces";
 import { moveItemInArray } from "../../../utils/";
 import ControlsBar from "./ControlsBar";
 import {

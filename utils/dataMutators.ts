@@ -5,7 +5,7 @@ import {
   Workout,
   WorkoutLog,
   WorkoutLogItem,
-} from "./interfaces";
+} from "../types/interfaces";
 
 export const addExerciseDataToLoggedWorkout = async (workout: WorkoutLogItem) => {
   // Grab all exercise_ids from the workout

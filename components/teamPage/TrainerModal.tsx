@@ -3,7 +3,7 @@ import styled from "styled-components";
 // Components
 import Modal from "../Wrappers/Modal";
 import LoadingSpinner from "../LoadingSpinner";
-import { Team, User, ShortUser } from "../../utils/interfaces";
+import { Team, User, ShortUser } from "../../types/interfaces";
 
 interface Props {
   setShowTrainerModal: React.Dispatch<React.SetStateAction<boolean>>;

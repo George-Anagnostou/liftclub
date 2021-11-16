@@ -5,7 +5,7 @@ import Modal from "../Wrappers/Modal";
 // Interfaces
 import UploadImgToS3 from "./UploadImgToS3";
 // Interfaces
-import { User } from "../../utils/interfaces";
+import { User } from "../../types/interfaces";
 import { saveProfileImgUrl } from "../../utils/api";
 import { useUserState } from "../../store";
 

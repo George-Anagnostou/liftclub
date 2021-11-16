@@ -1,7 +1,7 @@
 // Context
 import { useBuilderState } from "../../../store";
 // Interfaces
-import { Workout, Routine } from "../../../utils/interfaces";
+import { Workout, Routine } from "../../../types/interfaces";
 // Components
 import TiledList from "../../Wrappers/TiledList";
 

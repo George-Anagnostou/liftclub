@@ -6,7 +6,7 @@ import { useUserDispatch, useUserState } from "../../store";
 import { addSavedWorkout, removeSavedWorkout } from "../../store/actions/userActions";
 // Utils
 import { getWorkoutsFromIdArray } from "../../utils/api";
-import { Routine, Team, Workout } from "../../utils/interfaces";
+import { Routine, Team, Workout } from "../../types/interfaces";
 // Components
 import LoadingSpinner from "../LoadingSpinner";
 import CalendarContainer from "./CalendarContainer";

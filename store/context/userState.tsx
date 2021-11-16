@@ -1,6 +1,6 @@
 import { createContext, useContext, useReducer } from "react";
 import userReducer from "../reducers/userReducer";
-import { User } from "../../utils/interfaces";
+import { User } from "../../types/interfaces";
 
 interface StoreContextState {
   user: User | undefined;

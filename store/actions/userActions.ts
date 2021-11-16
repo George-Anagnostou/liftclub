@@ -1,4 +1,4 @@
-import { WorkoutLogItem } from "../../utils/interfaces";
+import { WorkoutLogItem } from "../../types/interfaces";
 
 /**
  *

@@ -1,4 +1,4 @@
-import { User } from "../../utils/interfaces";
+import { User } from "../../types/interfaces";
 
 type AppState = {
   user: User | undefined;

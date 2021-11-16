@@ -3,7 +3,7 @@ import styled from "styled-components";
 // Components
 import WorkoutTile from "./WorkoutTile";
 // Interfaces
-import { Workout } from "../../utils/interfaces";
+import { Workout } from "../../types/interfaces";
 // API
 import { addSavedWorkout, removeSavedWorkout } from "../../store/actions/userActions";
 import { getPublicWorkouts } from "../../utils/api";

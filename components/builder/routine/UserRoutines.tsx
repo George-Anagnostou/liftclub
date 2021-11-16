@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useBuilderDispatch, useBuilderState, useUserState } from "../../../store";
 import { getUserCreatedRoutines } from "../../../store/actions/builderActions";
 // Interfaces
-import { Routine } from "../../../utils/interfaces";
+import { Routine } from "../../../types/interfaces";
 // Components
 import DeleteRoutineModal from "./DeleteRoutineModal";
 import TiledList from "../../Wrappers/TiledList";

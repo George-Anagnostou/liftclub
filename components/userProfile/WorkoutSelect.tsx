@@ -1,5 +1,5 @@
 // Interfaces
-import { Workout } from "../../utils/interfaces";
+import { Workout } from "../../types/interfaces";
 
 interface Props {
   handleWorkoutOptionChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;

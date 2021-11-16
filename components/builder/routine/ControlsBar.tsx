@@ -7,7 +7,7 @@ import {
   updateExistingCreatedRoutine,
 } from "../../../store/actions/builderActions";
 // Interfaces
-import { Routine } from "../../../utils/interfaces";
+import { Routine } from "../../../types/interfaces";
 // Components
 import Checkmark from "../../Checkmark";
 

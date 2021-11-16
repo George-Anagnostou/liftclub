@@ -14,7 +14,7 @@ import TeamsTile from "../../components/userProfile/TeamsTile";
 import CreatedWorkoutsTile from "../../components/userProfile/CreatedWorkoutsTile";
 import ProgressTile from "../../components/userProfile/ProgressTile";
 // Interfaces
-import { User, Workout, Team } from "../../utils/interfaces";
+import { User, Workout, Team } from "../../types/interfaces";
 
 const User_id: React.FC = () => {
   const router = useRouter();

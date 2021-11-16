@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Droppable } from "react-beautiful-dnd";
 import update from "immutability-helper";
 // Interfaces
-import { Workout } from "../../../utils/interfaces";
+import { Workout } from "../../../types/interfaces";
 // Components
 import CustomWorkoutExercise from "./CustomWorkoutExercise";
 

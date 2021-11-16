@@ -14,7 +14,7 @@ import {
   postNewTeam,
   updateTeam,
 } from "../../utils/api";
-import { NewRoutine, NewWorkout, Routine, User, Workout } from "../../utils/interfaces";
+import { NewRoutine, NewWorkout, Routine, User, Workout } from "../../types/interfaces";
 
 export const getUserCreatedWorkouts = async (dispatch, user_id: string) => {
   const workouts = await getUserMadeWorkouts(user_id);

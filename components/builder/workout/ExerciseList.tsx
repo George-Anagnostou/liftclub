@@ -4,7 +4,7 @@ import useSWR from "swr";
 // Context
 import { useUserState } from "../../../store";
 // Interfaces
-import { Exercise } from "../../../utils/interfaces";
+import { Exercise } from "../../../types/interfaces";
 // Components
 import CreateExerciseModal from "./CreateExerciseModal";
 import ExerciseListItem from "./ExerciseListItem";

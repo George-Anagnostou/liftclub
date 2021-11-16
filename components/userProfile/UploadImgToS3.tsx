@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { useUserState } from "../../store";
 import { saveProfileImgUrl } from "../../utils/api";
 // Interface
-import { User } from "../../utils/interfaces";
+import { User } from "../../types/interfaces";
 
 // AWS
 config.update({

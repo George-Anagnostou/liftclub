@@ -19,7 +19,7 @@ import { deleteDayFromWorkoutLog } from "../store/actions/userActions";
 // API
 import { getWorkoutFromId } from "../utils/api";
 // Interfaces
-import { Workout, WorkoutLogItem } from "../utils/interfaces";
+import { Workout, WorkoutLogItem } from "../types/interfaces";
 
 export default function log() {
   const { user, isSignedIn } = useUserState();

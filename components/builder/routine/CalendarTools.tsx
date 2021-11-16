@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 // Interface
-import { Routine } from "../../../utils/interfaces";
+import { Routine } from "../../../types/interfaces";
 // Icons
 import Garbage from "../../svg/Garbage";
 import Stack from "../../svg/Stack";

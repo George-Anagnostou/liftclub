@@ -1,6 +1,6 @@
 import { createContext, useContext, useReducer } from "react";
 import builderReducer from "../reducers/builderReducer";
-import { Workout, Routine, Team } from "../../utils/interfaces";
+import { Workout, Routine, Team } from "../../types/interfaces";
 
 interface StoreContextState {
   workouts: { saved: Workout[] | undefined; created: Workout[] | undefined };

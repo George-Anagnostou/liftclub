@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom/extend-expect";
 
 import WorkoutControls from "../../../../components/builder/workout/ControlsBar";
-import { Workout } from "../../../../utils/interfaces";
+import { Workout } from "../../../../types/interfaces";
 
 const MockNewCustomWorkout: Workout = {
   _id: "",

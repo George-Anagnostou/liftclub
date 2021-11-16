@@ -2,7 +2,7 @@ import React from "react";
 // Context
 import { useBuilderState } from "../../../store";
 // Interfaces
-import { Routine } from "../../../utils/interfaces";
+import { Routine } from "../../../types/interfaces";
 import { EditableTeam } from "./index";
 // Components
 import TiledList from "../../Wrappers/TiledList";

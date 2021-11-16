@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useBuilderDispatch } from "../../../store";
 import { deleteTeamFromCreatedTeams } from "../../../store/actions/builderActions";
 // Interface
-import { Team } from "../../../utils/interfaces";
+import { Team } from "../../../types/interfaces";
 // Components
 import Modal from "../../Wrappers/Modal";
 

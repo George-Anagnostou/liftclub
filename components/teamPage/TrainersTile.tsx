@@ -8,7 +8,7 @@ import { addTrainerToTeam, getUsersFromIdArr, removeTrainerFromTeam } from "../.
 // Context
 import { useUserState } from "../../store";
 // Interfaces
-import { Team, ShortUser } from "../../utils/interfaces";
+import { Team, ShortUser } from "../../types/interfaces";
 import TrainerModal from "./TrainerModal";
 
 interface Props {

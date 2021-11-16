@@ -6,7 +6,7 @@ import LoadingSpinner from "../LoadingSpinner";
 // Utils
 import { addExerciseDataToWorkout, timeSince } from "../../utils";
 // Interfaces
-import { Workout } from "../../utils/interfaces";
+import { Workout } from "../../types/interfaces";
 // Context
 import { useUserState } from "../../store";
 

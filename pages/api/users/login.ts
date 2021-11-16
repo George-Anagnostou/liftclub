@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { User } from "../../../utils/interfaces";
+import { User } from "../../../types/interfaces";
 import { connectToDatabase } from "../../../utils/mongodb";
 import { ObjectId } from "mongodb";
 import bcrypt from "bcryptjs";

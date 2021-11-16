@@ -3,7 +3,7 @@ import Link from "next/link";
 import styled from "styled-components";
 // API
 import { getAllTeamsByMemberCount } from "../../utils/api";
-import { Team } from "../../utils/interfaces";
+import { Team } from "../../types/interfaces";
 
 interface Props {
   searchInput: string;

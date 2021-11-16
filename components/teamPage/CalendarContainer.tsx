@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 // Utils
-import { formatRoutineWorkoutPlanForCalendar } from "../../utils/dataMutators";
+import { formatRoutineWorkoutPlanForCalendar } from "../../utils";
+import { getRoutineFromId } from "../../utils/api";
 // Components
 import Calendar from "../builder/routine/Calendar";
 // Interface
-import { Routine } from "../../utils/interfaces";
-import { getRoutineFromId } from "../../utils/api";
+import { Routine } from "../../types/interfaces";
 
 interface Props {
   routine: Routine;

@@ -4,7 +4,7 @@ import { useUserState } from "../../store";
 // API
 import { getTeamsFromIdArray, getWorkoutFromId } from "../../utils/api";
 // Interfaces
-import { Team, Workout } from "../../utils/interfaces";
+import { Team, Workout } from "../../types/interfaces";
 
 interface Props {
   selectedDate: string;

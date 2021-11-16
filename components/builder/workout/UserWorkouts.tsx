@@ -8,7 +8,7 @@ import {
   getUserSavedWorkouts,
 } from "../../../store/actions/builderActions";
 // Interfaces
-import { Workout } from "../../../utils/interfaces";
+import { Workout } from "../../../types/interfaces";
 // Components
 import DeleteWorkoutModal from "./DeleteWorkoutModal";
 import TiledList from "../../Wrappers/TiledList";

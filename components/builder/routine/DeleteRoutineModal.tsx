@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useBuilderDispatch } from "../../../store";
 import { deleteRoutineFromCreatedRoutines } from "../../../store/actions/builderActions";
 // Interfaces
-import { Routine } from "../../../utils/interfaces";
+import { Routine } from "../../../types/interfaces";
 // Components
 import Modal from "../../Wrappers/Modal";
 

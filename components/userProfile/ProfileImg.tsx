@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import styled from "styled-components";
 // Interfaces
-import { User } from "../../utils/interfaces";
+import { User } from "../../types/interfaces";
 import ProfileImgModal from "./ProfileImgModal";
 
 interface Props {

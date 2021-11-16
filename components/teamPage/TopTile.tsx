@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { getUsersFromIdArr } from "../../utils/api";
 // Context
 import { useUserDispatch, useUserState } from "../../store";
-import { Team, ShortUser } from "../../utils/interfaces";
+import { Team, ShortUser } from "../../types/interfaces";
 // Components
 import MembersModal from "./MembersModal";
 import {

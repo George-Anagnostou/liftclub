@@ -4,7 +4,7 @@ import Link from "next/link";
 // Utils
 import { timeSince } from "../../utils";
 // Interfaces
-import { Workout } from "../../utils/interfaces";
+import { Workout } from "../../types/interfaces";
 
 interface Props {
   createdWorkouts: Workout[];

@@ -10,7 +10,7 @@ import { addToRecentlyViewedUsers } from "../../store/actions/userActions";
 // Hooks
 import { useDebouncedState } from "../hooks/useDebouncedState";
 // Interfaces
-import { ShortUser } from "../../utils/interfaces";
+import { ShortUser } from "../../types/interfaces";
 
 interface Props {
   searchInput: string;

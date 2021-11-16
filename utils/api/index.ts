@@ -9,7 +9,7 @@ import {
   User,
   ShortUser,
   Workout,
-} from "../interfaces";
+} from "../../types/interfaces";
 
 /*
  *

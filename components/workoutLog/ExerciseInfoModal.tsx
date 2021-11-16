@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Image from "next/image";
 
-import { Exercise } from "../../utils/interfaces";
+import { Exercise } from "../../types/interfaces";
 import Modal from "../Wrappers/Modal";
 
 const MuscleIcons = {

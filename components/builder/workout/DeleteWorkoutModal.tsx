@@ -5,7 +5,7 @@ import Modal from "../../Wrappers/Modal";
 import { deleteWorkoutFromCreatedWorkouts } from "../../../store/actions/builderActions";
 import { useBuilderDispatch } from "../../../store";
 // Interfaces
-import { Workout } from "../../../utils/interfaces";
+import { Workout } from "../../../types/interfaces";
 
 interface Props {
   workout: Workout;

@@ -4,7 +4,7 @@ import styled from "styled-components";
 // API
 import { saveUserBio } from "../../utils/api";
 // Interfaces
-import { User } from "../../utils/interfaces";
+import { User } from "../../types/interfaces";
 
 interface Props {
   profileData: User;

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { daysBetween } from "../../../utils";
 // Utils
-import { formatRoutineWorkoutPlanForCalendar } from "../../../utils/dataMutators";
+import { formatRoutineWorkoutPlanForCalendar, daysBetween} from "../../../utils";
 // Interfaces
-import { Routine, Workout } from "../../../utils/interfaces";
+import { Routine, Workout } from "../../../types/interfaces";
 // Components
 import Calendar from "./Calendar";
 import ControlsBar from "./ControlsBar";

@@ -11,7 +11,7 @@ import RoutineTile from "../../components/teamPage/RoutineTile";
 // Context
 import { useUserState } from "../../store";
 // Interfaces
-import { ShortUser, Team } from "../../utils/interfaces";
+import { ShortUser, Team } from "../../types/interfaces";
 
 const Team_id: React.FC = () => {
   const router = useRouter();

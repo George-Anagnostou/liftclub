@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import styled from "styled-components";
 // Interfaces
-import { Team } from "../../utils/interfaces";
+import { Team } from "../../types/interfaces";
 // Context
 import { useUserState } from "../../store";
 

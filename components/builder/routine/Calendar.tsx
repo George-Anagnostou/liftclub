@@ -4,7 +4,7 @@ import styled from "styled-components";
 // Utils
 import { getCurrYearMonthDay } from "../../../utils";
 // Interfaces
-import { RoutineWorkoutPlanForCalendar, Routine } from "../../../utils/interfaces";
+import { RoutineWorkoutPlanForCalendar, Routine } from "../../../types/interfaces";
 // Components
 import CalendarDay from "./CalendarDay";
 import CalendarTools from "./CalendarTools";

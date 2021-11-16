@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
 // Interfaces
-import { Exercise } from "../../../utils/interfaces";
+import { Exercise } from "../../../types/interfaces";
 // Icons
 import Garbage from "../../svg/Garbage";
 

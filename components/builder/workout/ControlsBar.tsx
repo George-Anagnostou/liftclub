@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useUserState } from "../../../store";
-import { Workout } from "../../../utils/interfaces";
+import { Workout } from "../../../types/interfaces";
 // Components
 import Checkmark from "../../Checkmark";
 

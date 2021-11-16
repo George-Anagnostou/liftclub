@@ -112,4 +112,5 @@ export interface NewExercise {
   equipment: string;
   muscleGroup: string;
   muscleWorked: string;
+  metric: string;
 }

@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { connectToDatabase } from "../../../utils/mongodb";
 import { ObjectId } from "mongodb";
 // Interfaces
-import { Team } from "../../../utils/interfaces";
+import { Team } from "../../../types/interfaces";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const httpMethod = req.method;
