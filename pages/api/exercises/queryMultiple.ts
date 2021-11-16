@@ -6,24 +6,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const httpMethod = req.method;
   const { db } = await connectToDatabase();
 
-  switch (httpMethod) {
-    case "GET":
-      break;
-    case "POST":
-      const idArr: string[] = JSON.parse(req.body);
+  if (httpMethod !== "POST") return res.status(405).end();
 
-      const foundExercises = await db
-        .collection("exercises")
-        .find({
-          _id: { $in: idArr.map((_id) => new ObjectId(_id)) },
-        })
-        .toArray();
+  const idArr: string[] = JSON.parse(req.body);
 
-      res.json(foundExercises);
-      break;
-    case "PUT":
-      break;
-    case "DELETE":
-      break;
-  }
+  const exercises = await db
+    .collection("exercises")
+    .find({
+      _id: { $in: idArr.map((_id) => new ObjectId(_id)) },
+    })
+    .toArray();
+
+  res.json(exercises);
 };
