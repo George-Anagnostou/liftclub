@@ -4,7 +4,7 @@ import { useState } from "react";
 import { createExercise } from "../../../utils/api";
 // Components
 import Modal from "../../Wrappers/Modal";
-import { NewExercise } from "../../../utils/interfaces";
+import { NewExercise } from "../../../types/interfaces";
 
 const muscleGroups = [
   "upper back",
@@ -19,29 +19,37 @@ const muscleGroups = [
   "core",
 ];
 
-const InitialNewState = { name: "", equipment: "", muscleGroup: "", muscleWorked: "" };
+const InitialNewState = {
+  name: "",
+  equipment: "",
+  muscleGroup: "",
+  muscleWorked: "",
+  metric: "weight",
+};
 
 export default function CreateExerciseModal({ setShowModal, showModal }) {
   const [formState, setFormState] = useState<NewExercise>(InitialNewState);
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const saved = await createExercise({ ...formState });
     if (saved) setFormState(InitialNewState);
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setFormState((prev) => ({ ...prev, name: e.target.value }));
+    setFormState({ ...formState, name: e.target.value });
 
   const handleEquipmentChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setFormState((prev) => ({ ...prev, equipment: e.target.value }));
+    setFormState({ ...formState, equipment: e.target.value });
 
   const handleMuscleGroupChange = (e: React.ChangeEvent<HTMLSelectElement>) =>
-    setFormState((prev) => ({ ...prev, muscleGroup: e.target.value }));
+    setFormState({ ...formState, muscleGroup: e.target.value });
 
   const handleMuscleWorkedChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setFormState((prev) => ({ ...prev, muscleWorked: e.target.value }));
+    setFormState({ ...formState, muscleWorked: e.target.value });
+
+  const handleMetricChange = (metric: "weight" | "time" | "distance") =>
+    setFormState({ ...formState, metric: metric });
 
   return (
     <Modal isOpen={showModal} removeModal={() => setShowModal(false)}>
@@ -106,6 +114,20 @@ export default function CreateExerciseModal({ setShowModal, showModal }) {
             />
           </div>
 
+          <div>
+            <label htmlFor="metric">Metric:</label>
+            <ul className="metric-select">
+              {["weight", "time", "distance"].map((metric: "weight" | "time" | "distance") => (
+                <li
+                  onClick={() => handleMetricChange(metric)}
+                  className={formState.metric === metric ? "selected" : ""}
+                >
+                  {metric}
+                </li>
+              ))}
+            </ul>
+          </div>
+
           <button type="submit">Add Exercise</button>
         </form>
       </Container>
@@ -115,7 +137,7 @@ export default function CreateExerciseModal({ setShowModal, showModal }) {
 
 const Container = styled.div`
   width: 95%;
-  margin: 20vh auto 0;
+  margin: 10vh auto 0;
   max-width: 350px;
   border-radius: 10px;
   background: ${({ theme }) => theme.buttonLight};
@@ -186,16 +208,38 @@ const Container = styled.div`
         color: ${({ theme }) => theme.text};
         background: ${({ theme }) => theme.buttonMed};
       }
+
+      .metric-select {
+        display: flex;
+        justify-content: space-evenly;
+        width: 100%;
+
+        li {
+          text-transform: capitalize;
+          margin: 0.5rem 0;
+          padding: 0.25rem 0.5rem;
+          border: 1px solid ${({ theme }) => theme.buttonMed};
+          border-radius: 5px;
+          transition: all 0.25s ease;
+          cursor: pointer;
+          background: ${({ theme }) => theme.border};
+
+          &.selected {
+            background: ${({ theme }) => theme.buttonMed};
+            border: 1px solid ${({ theme }) => theme.accentSoft};
+          }
+        }
+      }
     }
 
     button {
-      background: ${({ theme }) => theme.buttonMed};
+      background: ${({ theme }) => theme.background};
       box-shadow: 0 1px 2px ${({ theme }) => theme.boxShadow};
       color: inherit;
       border: none;
       border-radius: 5px;
-      margin: auto;
-      padding: 0.5rem 1rem;
+      margin: 1rem auto 0;
+      padding: 0.25rem 1rem;
       font-size: 1.1rem;
     }
   }
