@@ -8,7 +8,7 @@ import { Team } from "../../../types/interfaces";
 // Components
 import Magnifying from "../../svg/Magnifying";
 // API
-import { queryUsersByUsername } from "../../../utils/api";
+import { queryUsersByUsername } from "../../../api-lib/fetchers";
 // Hooks
 import { useDebouncedState } from "../../hooks/useDebouncedState";
 

@@ -1,4 +1,4 @@
-import { getExercisesFromIdArray } from "./api";
+import { getExercisesFromIdArray } from "../api-lib/fetchers";
 import {
   Routine,
   RoutineWorkoutPlanForCalendar,

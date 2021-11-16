@@ -83,7 +83,7 @@ const ExerciseList: React.FC<Props> = ({
         style={{ bottom: exerciseListBottom + "vh" }}
         className={exerciseListBottom === 0 || exerciseListBottom === -80 ? "transition" : ""}
       >
-        <header>
+        <Header>
           <div className="thumb-line" onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
             <span />
           </div>
@@ -101,9 +101,9 @@ const ExerciseList: React.FC<Props> = ({
               <button onClick={() => setShowCreateExerciseModal(true)}>Create</button>
             )}
 
-            <button onClick={() => setExerciseListBottom(-80)}>Close</button>
+            <button onClick={() => setExerciseListBottom(-80)}>X</button>
           </SearchInput>
-        </header>
+        </Header>
 
         <ul>
           {displayedExercises.map((exercise) => (
@@ -144,36 +144,6 @@ const ExercisesContainer = styled.div`
 
   &.transition {
     transition: bottom 0.25s ease-out;
-  }
-
-  header {
-    box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
-    position: sticky;
-    top: 0;
-    border-top: 2px solid ${({ theme }) => theme.border};
-    border-left: 2px solid ${({ theme }) => theme.border};
-    border-right: 2px solid ${({ theme }) => theme.border};
-    background: ${({ theme }) => theme.background};
-    border-radius: 25px 25px 2px 2px;
-    width: 100%;
-
-    padding-right: 0.15rem;
-
-    .thumb-line {
-      width: 100%;
-      padding: 0.5rem 0 1rem;
-      touch-action: none;
-
-      span {
-        width: 40%;
-        height: 7px;
-        border-radius: 5px;
-        background: ${({ theme }) => theme.buttonLight};
-        display: block;
-        margin: auto;
-        touch-action: none;
-      }
-    }
   }
 
   ul {
@@ -225,5 +195,35 @@ const SearchInput = styled.div`
     margin: 0.25rem 0.1rem 0.5rem 0.25rem;
     border-radius: 5px;
     padding: 0.5rem;
+  }
+`;
+
+const Header = styled.header`
+  box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
+  position: sticky;
+  top: 0;
+  border-top: 2px solid ${({ theme }) => theme.border};
+  border-left: 2px solid ${({ theme }) => theme.border};
+  border-right: 2px solid ${({ theme }) => theme.border};
+  background: ${({ theme }) => theme.background};
+  border-radius: 25px 25px 2px 2px;
+  width: 100%;
+
+  padding-right: 0.15rem;
+
+  .thumb-line {
+    width: 100%;
+    padding: 0.5rem 0 1rem;
+    touch-action: none;
+
+    span {
+      width: 40%;
+      height: 7px;
+      border-radius: 5px;
+      background: ${({ theme }) => theme.buttonLight};
+      display: block;
+      margin: auto;
+      touch-action: none;
+    }
   }
 `;

@@ -6,7 +6,7 @@ import WorkoutTile from "./WorkoutTile";
 import { Workout } from "../../types/interfaces";
 // API
 import { addSavedWorkout, removeSavedWorkout } from "../../store/actions/userActions";
-import { getPublicWorkouts } from "../../utils/api";
+import { getPublicWorkouts } from "../../api-lib/fetchers";
 import { useUserDispatch, useUserState } from "../../store";
 
 interface Props {

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useUserState } from "../../store";
 
 // API
-import { saveUserWeight } from "../../utils/api";
+import { saveUserWeight } from "../../api-lib/fetchers";
 
 const WeightInput: React.FC = () => {
   const { user } = useUserState();

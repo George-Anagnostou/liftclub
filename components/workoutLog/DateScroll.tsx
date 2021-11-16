@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { useUserState } from "../../store";
 // Utils
 import { addExerciseDataToLoggedWorkout, getCurrYearMonthDay } from "../../utils";
-import { getWorkoutFromId } from "../../utils/api";
+import { getWorkoutFromId } from "../../api-lib/fetchers";
 // Interfaces
 import { WorkoutLogItem } from "../../types/interfaces";
 import useInViewEffect from "../hooks/useInViewEffect";

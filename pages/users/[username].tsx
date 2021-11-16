@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 // Utils
-import { getTeamsFromIdArray, getUserFromUsername, getUserMadeWorkouts } from "../../utils/api";
+import { getTeamsFromIdArray, getUserFromUsername, getUserMadeWorkouts } from "../../api-lib/fetchers";
 // Context
 import { useUserState } from "../../store";
 // Components

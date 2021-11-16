@@ -4,7 +4,7 @@ import styled from "styled-components";
 // Context
 import { useUserDispatch, useUserState } from "../../store";
 import { addUserFollow, removeUserFollow } from "../../store/actions/userActions";
-import { getUsersFromIdArr } from "../../utils/api";
+import { getUsersFromIdArr } from "../../api-lib/fetchers";
 // Interfaces
 import { ShortUser } from "../../types/interfaces";
 // Components

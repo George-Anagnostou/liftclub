@@ -1,9 +1,6 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
-// Components
-import SeoHead from "./SeoHead";
-import NavBar from "./NavBar";
 // Context
 import {
   useUserDispatch,
@@ -12,8 +9,13 @@ import {
   setIsUsingPWA,
   setPlatformToiOS,
 } from "../store";
+// Components
+import SeoHead from "./SeoHead";
+import NavBar from "./NavBar";
 // Styles
 import { GlobalStyles } from "./GlobalStyles";
+// API
+import { removeAuthToken, getAuthToken } from "../api-lib/auth/token";
 
 const MarketingPages = { "/purpose": 1 };
 
@@ -30,19 +32,14 @@ const Layout: React.FC<Props> = ({ title = "Lift Club", children }) => {
 
   const isOnMarketingPage = Boolean(MarketingPages[router.pathname]);
 
-  const getAuthToken = () => {
-    const token = localStorage.getItem("authToken");
-    return token;
-  };
-
   const loginWithAuthToken = async (token: string) => {
     const loginSuccess = await loginWithToken(dispatch, token);
 
     if (loginSuccess) {
-      router.pathname === "/" && router.push("/log");
+      if (router.pathname === "/") router.push("/log");
     } else {
       router.push("/");
-      localStorage.removeItem("authToken");
+      removeAuthToken();
     }
   };
 

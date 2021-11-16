@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import styled from "styled-components";
 // API
-import { getUsersFromIdArr } from "../../utils/api";
+import { getUsersFromIdArr } from "../../api-lib/fetchers";
 // Context
 import { useUserDispatch, useUserState } from "../../store";
 import { Team, ShortUser } from "../../types/interfaces";

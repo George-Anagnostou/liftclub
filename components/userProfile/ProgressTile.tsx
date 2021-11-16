@@ -6,7 +6,7 @@ import ExerciseSelect from "./ExerciseSelect";
 import Chart from "./Chart";
 import StatButtons from "./StatButtons";
 // Utils
-import { getWorkoutsFromIdArray } from "../../utils/api";
+import { getWorkoutsFromIdArray } from "../../api-lib/fetchers";
 import { addExerciseDataToLoggedWorkout, round } from "../../utils";
 // Interfaces
 import { User, Workout, WorkoutLogItem } from "../../types/interfaces";

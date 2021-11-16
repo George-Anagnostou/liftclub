@@ -17,7 +17,7 @@ import {
 import { useUserDispatch, useUserState } from "../store";
 import { deleteDayFromWorkoutLog } from "../store/actions/userActions";
 // API
-import { getWorkoutFromId } from "../utils/api";
+import { getWorkoutFromId } from "../api-lib/fetchers";
 // Interfaces
 import { Workout, WorkoutLogItem } from "../types/interfaces";
 

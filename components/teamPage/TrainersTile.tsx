@@ -4,7 +4,7 @@ import styled from "styled-components";
 // Components
 import Checkmark from "../Checkmark";
 // Utils
-import { addTrainerToTeam, getUsersFromIdArr, removeTrainerFromTeam } from "../../utils/api";
+import { addTrainerToTeam, getUsersFromIdArr, removeTrainerFromTeam } from "../../api-lib/fetchers";
 // Context
 import { useUserState } from "../../store";
 // Interfaces

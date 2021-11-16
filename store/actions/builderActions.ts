@@ -13,7 +13,7 @@ import {
   deleteTeam,
   postNewTeam,
   updateTeam,
-} from "../../utils/api";
+} from "../../api-lib/fetchers";
 import { NewRoutine, NewWorkout, Routine, User, Workout } from "../../types/interfaces";
 
 export const getUserCreatedWorkouts = async (dispatch, user_id: string) => {

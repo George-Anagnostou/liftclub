@@ -3,7 +3,7 @@ import styled from "styled-components";
 // Context
 import { useUserState } from "../../store";
 // API
-import { getUserMadeWorkouts, getWorkoutsFromIdArray } from "../../utils/api";
+import { getUserMadeWorkouts, getWorkoutsFromIdArray } from "../../api-lib/fetchers";
 // Interfaces
 import { Workout } from "../../types/interfaces";
 import TiledList from "../Wrappers/TiledList";

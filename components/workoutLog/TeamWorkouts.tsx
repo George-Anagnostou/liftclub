@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useUserState } from "../../store";
 // API
-import { getTeamsFromIdArray, getWorkoutFromId } from "../../utils/api";
+import { getTeamsFromIdArray, getWorkoutFromId } from "../../api-lib/fetchers";
 // Interfaces
 import { Team, Workout } from "../../types/interfaces";
 

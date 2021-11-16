@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useUserDispatch, useUserState } from "../../store";
 import { addSavedWorkout, removeSavedWorkout } from "../../store/actions/userActions";
 // Utils
-import { getWorkoutsFromIdArray } from "../../utils/api";
+import { getWorkoutsFromIdArray } from "../../api-lib/fetchers";
 import { Routine, Team, Workout } from "../../types/interfaces";
 // Components
 import LoadingSpinner from "../LoadingSpinner";

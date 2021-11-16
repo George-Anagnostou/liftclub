@@ -6,7 +6,7 @@ import Modal from "../Wrappers/Modal";
 import UploadImgToS3 from "./UploadImgToS3";
 // Interfaces
 import { User } from "../../types/interfaces";
-import { saveProfileImgUrl } from "../../utils/api";
+import { saveProfileImgUrl } from "../../api-lib/fetchers";
 import { useUserState } from "../../store";
 
 const icons = ["default-man", "default-woman"];

@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useBuilderDispatch, useBuilderState, useUserState } from "../../../store";
 import { getUserCreatedTeams } from "../../../store/actions/builderActions";
 // API
-import { getTeamById } from "../../../utils/api";
+import { getTeamById } from "../../../api-lib/fetchers";
 // Interfaces
 import { Team } from "../../../types/interfaces";
 import { EditableTeam } from "./index";

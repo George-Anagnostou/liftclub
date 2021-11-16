@@ -1,3 +1,4 @@
+import { removeAuthToken, setAuthToken } from "../../api-lib/auth/token";
 import { WorkoutLogItem } from "../../types/interfaces";
 
 /**
@@ -33,9 +34,7 @@ export const loginWithToken = async (dispatch: any, token: string) => {
 
 export const logoutUser = async (userDispatch: any) => {
   userDispatch({ type: "LOGOUT" });
-
-  localStorage.removeItem("workoutID");
-  localStorage.removeItem("authToken");
+  removeAuthToken();
 };
 
 /**
@@ -57,10 +56,8 @@ export const authLogin = async (dispatch: any, username: string, password: strin
     });
     const { userData, token } = await res.json();
 
-    localStorage.setItem("authToken", token);
-
+    setAuthToken(token);
     dispatch({ type: "SET_USER", payload: { userData } });
-
     return userData;
   } catch (e) {
     console.log(e);
@@ -343,6 +340,13 @@ export const removeSavedWorkout = async (dispatch, user_id: string, workout_id: 
   }
 };
 
+/**
+ * 
+ * @param dispatch Dispatch function from useUserDispatch()
+ * @param user_id User id string
+ * @param viewed_id User if string
+ * @returns Boolean for the success of api call
+ */
 export const addToRecentlyViewedUsers = async (dispatch, user_id: string, viewed_id: string) => {
   try {
     dispatch({ type: "ADD_ID_TO_RECENTLY_VIEWED_USERS", payload: { id: viewed_id } });

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
 // Utils
-import { createExercise } from "../../../utils/api";
+import { createExercise } from "../../../api-lib/fetchers";
 // Components
 import Modal from "../../Wrappers/Modal";
 import { NewExercise } from "../../../types/interfaces";

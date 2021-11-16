@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import styled from "styled-components";
 // API
-import { getAllTeamsByMemberCount } from "../../utils/api";
+import { getAllTeamsByMemberCount } from "../../api-lib/fetchers";
 import { Team } from "../../types/interfaces";
 
 interface Props {

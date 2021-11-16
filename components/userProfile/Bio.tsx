@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import styled from "styled-components";
 // API
-import { saveUserBio } from "../../utils/api";
+import { saveUserBio } from "../../api-lib/fetchers";
 // Interfaces
 import { User } from "../../types/interfaces";
 

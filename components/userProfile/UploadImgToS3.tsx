@@ -3,7 +3,7 @@ import { config, S3 } from "aws-sdk";
 import styled from "styled-components";
 // Utils
 import { useUserState } from "../../store";
-import { saveProfileImgUrl } from "../../utils/api";
+import { saveProfileImgUrl } from "../../api-lib/fetchers";
 // Interface
 import { User } from "../../types/interfaces";
 

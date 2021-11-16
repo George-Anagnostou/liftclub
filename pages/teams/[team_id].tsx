@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 // API
-import { getTeamById } from "../../utils/api";
+import { getTeamById } from "../../api-lib/fetchers";
 // Components
 import LoadingSpinner from "../../components/LoadingSpinner";
 import TopTile from "../../components/teamPage/TopTile";

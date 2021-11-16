@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 // Utils
 import { formatRoutineWorkoutPlanForCalendar } from "../../utils";
-import { getRoutineFromId } from "../../utils/api";
+import { getRoutineFromId } from "../../api-lib/fetchers";
 // Components
 import Calendar from "../builder/routine/Calendar";
 // Interface
