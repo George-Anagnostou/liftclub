@@ -1,3 +1,5 @@
+import { ObjectId } from "bson";
+
 export type User = {
   readonly _id: string;
   readonly username: string;
@@ -71,46 +73,55 @@ export interface RoutineWorkoutPlanForCalendar {
   [isoDate: string]: { workout_id: string; workout: Workout };
 }
 
-export interface Workout {
-  readonly _id: string;
-  creator_id: string;
+//  Workout
+interface BaseWorkout {
   creatorName: string;
   name: string;
-  exercises: {
-    exercise_id: string;
-    sets: { reps: number; weight: number }[];
-    exercise?: Exercise;
-  }[];
   isPublic: boolean;
   date_created: string;
   numLogged: number;
 }
-
-export interface NewWorkout {
+export interface Workout extends BaseWorkout {
+  readonly _id: string;
   creator_id: string;
-  creatorName: string;
-  name: string;
   exercises: {
     exercise_id: string;
     sets: { reps: number; weight: number }[];
     exercise?: Exercise;
   }[];
-  isPublic: boolean;
-  date_created: string;
+}
+export interface NewWorkout extends BaseWorkout {
+  creator_id: string;
+  exercises: {
+    exercise_id: string;
+    sets: { reps: number; weight: number }[];
+    exercise?: Exercise;
+  }[];
+}
+export interface dbWorkout extends BaseWorkout {
+  _id?: ObjectId;
+  creator_id: ObjectId;
+  exercises: {
+    exercise_id: ObjectId;
+    sets: { reps: number; weight: number }[];
+    exercise?: Exercise;
+  }[];
 }
 
-export interface Exercise {
-  readonly _id: string;
-  name: string;
-  equipment: string;
-  muscleGroup: string;
-  muscleWorked: string;
-}
-
-export interface NewExercise {
+// Exercise
+interface BaseExercise {
   name: string;
   equipment: string;
   muscleGroup: string;
   muscleWorked: string;
   metric: string;
+}
+export interface Exercise extends BaseExercise {
+  readonly _id: string;
+}
+export interface NewExercise extends BaseExercise {
+  creator_id: string;
+}
+export interface dbExercise extends BaseExercise {
+  creator_id: ObjectId;
 }
