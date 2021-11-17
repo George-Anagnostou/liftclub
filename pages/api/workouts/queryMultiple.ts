@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connectToDatabase } from "../../../utils/mongodb";
-import { ObjectId } from "mongodb";
-import { Workout } from "../../../types/interfaces";
+import { queryWorkoutsByIdArr } from "../../../api-lib/mongo/db";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const httpMethod = req.method;
@@ -11,16 +10,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     case "GET":
       break;
     case "POST":
-      const idArr = JSON.parse(req.body);
-
-      const foundWorkouts: Workout[] = await db
-        .collection("workouts")
-        .find({
-          _id: { $in: idArr.map((_id) => new ObjectId(_id)) },
-        })
-        .toArray();
-
-      res.json(foundWorkouts);
+      const idArr: string[] = JSON.parse(req.body);
+      const workouts = await queryWorkoutsByIdArr(db, idArr);
+      res.json(workouts);
       break;
     case "PUT":
       break;
