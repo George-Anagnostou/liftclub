@@ -24,7 +24,7 @@ const TrainersTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMemb
   const [showTrainerModal, setShowTrainerModal] = useState(false);
 
   const handleRemoveTrainer = async (trainer: ShortUser) => {
-    const removed = await removeTrainerFromTeam(team._id, trainer._id);
+    const removed = await removeTrainerFromTeam(team._id, trainer._id, team.creator_id);
     if (removed)
       setTeam(
         (prev) =>
@@ -36,7 +36,7 @@ const TrainersTile: React.FC<Props> = ({ team, setTeam, teamMembers, setTeamMemb
   };
 
   const handleAddTrainer = async ({ _id, username, profileImgUrl }: ShortUser) => {
-    const added = await addTrainerToTeam(team._id, _id);
+    const added = await addTrainerToTeam(team._id, _id, team.creator_id);
     if (added)
       setTeam(
         (prev) =>
