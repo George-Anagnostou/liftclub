@@ -59,7 +59,6 @@ export const updateRoutine = async (updatedRoutine: Routine) => {
   }
 };
 
-// *************** TODO ***************
 export const deleteRoutine = async (routine_id: string) => {
   try {
     const res = await fetch(`/api/routines/${routine_id}`, {
