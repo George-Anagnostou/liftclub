@@ -1,9 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connectToDatabase } from "../../../utils/mongodb";
-import { ObjectId } from "mongodb";
-import * as jwt from "jsonwebtoken";
-
-const JWT_SECRET = process.env.JWT_SECRET || "";
+import { verifyAuthToken } from "../../../api-lib/auth/middleware";
+import { getUser, updateUserLastLoggedIn } from "../../../api-lib/mongo/db";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const httpMethod = req.method;
@@ -12,31 +10,18 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (httpMethod !== "POST") return res.status(405).end();
 
   // Get a specific user from authToken
+  let validId = verifyAuthToken(req);
+  if (!validId) return res.status(401).end();
 
-  const { token } = req.body;
-
-  let verified: any;
-
-  try {
-    verified = jwt.verify(token, JWT_SECRET);
-  } catch (e) {
-    res.status(400).end();
-    return;
-  }
-
-  const userData = await db.collection("users").findOne({ _id: new ObjectId(verified.id) });
+  const userData = await getUser(db, validId);
 
   if (userData) {
-    db.collection("users").findOneAndUpdate(
-      { _id: new ObjectId(userData._id) },
-      { $set: { lastLoggedIn: new Date().toISOString() } }
-    );
+    updateUserLastLoggedIn(db, userData._id);
     userData.lastLoggedIn = new Date().toISOString();
     delete userData.password;
 
     res.status(201).json(userData);
   } else {
-    // Status 400 for bad password
     res.status(400).end();
     return;
   }

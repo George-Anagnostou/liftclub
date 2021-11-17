@@ -12,8 +12,7 @@ export const loginWithToken = async (dispatch: any, token: string) => {
   try {
     const res = await fetch(`/api/users/loginWithToken`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token }),
+      headers: { token },
     });
     const userData = await res.json();
 
@@ -341,7 +340,7 @@ export const removeSavedWorkout = async (dispatch, user_id: string, workout_id: 
 };
 
 /**
- * 
+ *
  * @param dispatch Dispatch function from useUserDispatch()
  * @param user_id User id string
  * @param viewed_id User if string
