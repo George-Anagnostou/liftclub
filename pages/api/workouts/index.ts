@@ -17,26 +17,19 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     case "GET":
       let workouts: Workout[] = [];
 
-      let QUERY = "";
-
       const creator_id = req.query.creator_id as string;
-      if (creator_id) QUERY = "CREATOR_ID";
+      if (creator_id) {
+        workouts = await queryWorkoutsByCreatorId(db, creator_id as string);
+        res.json(workouts);
+      }
 
       const isPublic = req.query.isPublic as string;
-      if (isPublic) QUERY = "IS_PUBLIC";
-
-      switch (QUERY) {
-        case "CREATOR_ID":
-          workouts = await queryWorkoutsByCreatorId(db, creator_id as string);
-          break;
-        case "IS_PUBLIC":
-          workouts = await findPublicWorkouts(db);
-          break;
-        default:
-          throw new Error("Invalid query to workouts GET api");
+      if (isPublic) {
+        workouts = await findPublicWorkouts(db);
+        res.json(workouts);
       }
-      res.json(workouts);
 
+      res.status(401).end();
       break;
     case "POST":
       const newWorkout = JSON.parse(req.body);
