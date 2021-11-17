@@ -3,7 +3,6 @@ import Image from "next/image";
 import styled from "styled-components";
 import update from "immutability-helper";
 // Interfaces
-import { EditableTeam } from "./index";
 import { Team } from "../../../types/interfaces";
 // Components
 import Magnifying from "../../svg/Magnifying";
@@ -13,8 +12,8 @@ import { queryUsersByUsername } from "../../../api-lib/fetchers";
 import { useDebouncedState } from "../../hooks/useDebouncedState";
 
 interface Props {
-  team: EditableTeam;
-  setTeam: React.Dispatch<React.SetStateAction<EditableTeam>>;
+  team: Team;
+  setTeam: React.Dispatch<React.SetStateAction<Team>>;
 }
 
 const TrainersTile: React.FC<Props> = ({ team, setTeam }) => {
@@ -202,6 +201,8 @@ const SearchResults = styled.ul`
 const SearchBar = styled.div`
   display: flex;
   align-items: center;
+  width: calc(100% + 0.5rem);
+  margin-left: -0.25rem;
 
   .icon {
     display: grid;
@@ -308,5 +309,11 @@ const Trainers = styled.div`
       padding: 0;
       transition: all 0.25s ease;
     }
+  }
+  .fallback-text {
+    width: fit-content;
+    padding: 0 1rem;
+    color: ${({ theme }) => theme.textLight};
+    font-weight: 200;
   }
 `;

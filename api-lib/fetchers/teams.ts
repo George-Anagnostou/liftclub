@@ -1,10 +1,9 @@
-import { EditableTeam } from "../../components/builder/team";
-import { Team } from "../../types/interfaces";
+import { NewTeam, Team } from "../../types/interfaces";
+import { getHeaderToken } from "../auth/token";
 
 export const getTeamById = async (team_id: string): Promise<Team | false> => {
   try {
     const res = await fetch(`/api/teams/${team_id}`);
-
     const team = await res.json();
     return team;
   } catch (e) {
@@ -17,7 +16,6 @@ export const getUserMadeTeams = async (user_id: string): Promise<Team[] | false>
   try {
     const res = await fetch(`/api/teams?creator_id=${user_id}`);
     const teams = await res.json();
-
     return teams;
   } catch (e) {
     console.log(e);
@@ -25,24 +23,30 @@ export const getUserMadeTeams = async (user_id: string): Promise<Team[] | false>
   }
 };
 
-// *************** TODO ***************
-export const addTrainerToTeam = async (team_id: string, trainer_id: string) => {
+export const addTrainerToTeam = async (team_id: string, trainer_id: string, creator_id: string) => {
   try {
-    const res = await fetch(`/api/teams/${team_id}?addTrainer=${trainer_id}`, { method: "PUT" });
-
-    return true;
+    const res = await fetch(
+      `/api/teams/${team_id}?addTrainer=${trainer_id}&creator_id=${creator_id}`,
+      { method: "PUT", headers: { token: getHeaderToken() } }
+    );
+    return res.status === 204;
   } catch (e) {
     console.log(e);
     return false;
   }
 };
 
-// *************** TODO ***************
-export const removeTrainerFromTeam = async (team_id: string, trainer_id: string) => {
+export const removeTrainerFromTeam = async (
+  team_id: string,
+  trainer_id: string,
+  creator_id: string
+) => {
   try {
-    const res = await fetch(`/api/teams/${team_id}?removeTrainer=${trainer_id}`, { method: "PUT" });
-
-    return true;
+    const res = await fetch(
+      `/api/teams/${team_id}?removeTrainer=${trainer_id}&creator_id=${creator_id}`,
+      { method: "PUT", headers: { token: getHeaderToken() } }
+    );
+    return res.status === 204;
   } catch (e) {
     console.log(e);
     return false;
@@ -58,7 +62,6 @@ export const getTeamsFromIdArray = async (idArr: string[]): Promise<Team[]> => {
       method: "POST",
       body: JSON.stringify(idArr),
     });
-
     const teams = await res.json();
 
     // Sort teams to be in the same order that the irArr requests them
@@ -73,8 +76,7 @@ export const getTeamsFromIdArray = async (idArr: string[]): Promise<Team[]> => {
   }
 };
 
-// *************** TODO ***************
-export const postNewTeam = async (team: EditableTeam): Promise<Team["_id"] | false> => {
+export const postNewTeam = async (team: NewTeam): Promise<Team["_id"] | false> => {
   try {
     const dbTeam = {
       teamName: team.teamName,
@@ -98,8 +100,8 @@ export const postNewTeam = async (team: EditableTeam): Promise<Team["_id"] | fal
     return false;
   }
 };
-// *************** TODO ***************
-export const updateTeam = async (team: EditableTeam) => {
+
+export const updateTeam = async (team: Team) => {
   try {
     const dbTeam = {
       _id: team._id,
@@ -112,9 +114,10 @@ export const updateTeam = async (team: EditableTeam) => {
       routine_id: team.routine_id,
     };
 
-    const res = await fetch(`/api/teams/${dbTeam._id}?updateTeam=true`, {
+    const res = await fetch(`/api/teams/${dbTeam._id}?wholeTeam=true`, {
       method: "PUT",
       body: JSON.stringify(dbTeam),
+      headers: { token: getHeaderToken() },
     });
 
     return res.status === 204;
@@ -124,11 +127,11 @@ export const updateTeam = async (team: EditableTeam) => {
   }
 };
 
-// *************** TODO ***************
 export const deleteTeam = async (team_id: string) => {
   try {
     const res = await fetch(`/api/teams/${team_id}`, {
       method: "DELETE",
+      headers: { token: getHeaderToken() },
     });
 
     return res.status === 204;

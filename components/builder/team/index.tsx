@@ -7,18 +7,14 @@ import {
   updateExistingCreatedTeam,
 } from "../../../store/actions/builderActions";
 // Interfaces
-import { Team } from "../../../types/interfaces";
+import { Routine, Team } from "../../../types/interfaces";
 // Components
 import ControlsBar from "./ControlsBar";
 import UserTeams from "./UserTeams";
 import TrainersTile from "./TrainersTile";
 import RoutinesTile from "./RoutinesTile";
 
-type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
-
-export type EditableTeam = Optional<Team, "_id" | "routine">;
-
-const initialTeam: EditableTeam = {
+const initialTeam: Team = {
   _id: "",
   teamName: "",
   members: [],
@@ -27,7 +23,7 @@ const initialTeam: EditableTeam = {
   creator_id: "",
   trainers: [],
   routine_id: "",
-  routine: undefined,
+  routine: {} as Routine,
 };
 
 const TeamBuilder: React.FC = () => {
@@ -35,7 +31,7 @@ const TeamBuilder: React.FC = () => {
   const userDispatch = useUserDispatch();
   const builderDispatch = useBuilderDispatch();
 
-  const [team, setTeam] = useState<EditableTeam>(initialTeam);
+  const [team, setTeam] = useState<Team>(initialTeam);
   const [teamSaved, setTeamSaved] = useState<boolean | null>(null);
 
   const saveTeam = async () => {

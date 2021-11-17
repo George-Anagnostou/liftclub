@@ -2,20 +2,19 @@ import React from "react";
 // Context
 import { useBuilderState } from "../../../store";
 // Interfaces
-import { Routine } from "../../../types/interfaces";
-import { EditableTeam } from "./index";
+import { Team, Routine } from "../../../types/interfaces";
 // Components
 import TiledList from "../../Wrappers/TiledList";
 
 interface Props {
-  team: EditableTeam;
-  setTeam: React.Dispatch<React.SetStateAction<EditableTeam>>;
+  team: Team;
+  setTeam: React.Dispatch<React.SetStateAction<Team>>;
 }
 const RoutinesTile: React.FC<Props> = ({ team, setTeam }) => {
   const { routines } = useBuilderState();
 
   const handleRoutineClick = (routine: Routine) => {
-    setTeam({ ...team, routine: routine, routine_id: routine._id });
+    setTeam({ ...team, routine_id: routine._id });
   };
 
   return (
@@ -26,7 +25,7 @@ const RoutinesTile: React.FC<Props> = ({ team, setTeam }) => {
         items={routines.created}
         onItemClick={(routine) => handleRoutineClick(routine)}
         displayProp="name"
-        isHighlighted={(routineItem) => team.routine?._id === routineItem._id}
+        isHighlighted={(routineItem) => team.routine_id === routineItem._id}
         keyProp="_id"
       />
     </div>

@@ -42,8 +42,8 @@ export interface WorkoutLogItem {
   isoDate?: string;
 }
 
-export interface Team {
-  _id: string;
+// Team
+export interface NewTeam {
   teamName: string;
   members: string[];
   dateCreated: string;
@@ -51,22 +51,22 @@ export interface Team {
   creator_id: string;
   trainers: ShortUser[];
   routine_id: string;
+}
+export interface Team extends NewTeam {
+  readonly _id: string;
   routine: Routine;
 }
 
-export interface Routine {
-  _id: string;
-  creator_id: string;
-  creatorName: string;
-  name: string;
-  workoutPlan: { isoDate: string; workout_id: string; workout: Workout }[];
-}
-
+// Routine
 export interface NewRoutine {
-  creator_id: string;
   creatorName: string;
   name: string;
+  creator_id: string;
   workoutPlan: { isoDate: string; workout_id: string }[];
+}
+export interface Routine extends NewRoutine {
+  readonly _id: string;
+  workoutPlan: { isoDate: string; workout_id: string; workout: Workout }[];
 }
 
 export interface RoutineWorkoutPlanForCalendar {
@@ -74,54 +74,32 @@ export interface RoutineWorkoutPlanForCalendar {
 }
 
 //  Workout
-interface BaseWorkout {
+export interface NewWorkout {
   creatorName: string;
   name: string;
   isPublic: boolean;
-  date_created: string;
   numLogged: number;
+  creator_id: string;
+  exercises: {
+    exercise_id: string;
+    sets: { reps: number; weight: number }[];
+    exercise?: Exercise;
+  }[];
+  date_created: string;
 }
-export interface Workout extends BaseWorkout {
+export interface Workout extends NewWorkout {
   readonly _id: string;
-  creator_id: string;
-  exercises: {
-    exercise_id: string;
-    sets: { reps: number; weight: number }[];
-    exercise?: Exercise;
-  }[];
-}
-export interface NewWorkout extends BaseWorkout {
-  creator_id: string;
-  exercises: {
-    exercise_id: string;
-    sets: { reps: number; weight: number }[];
-    exercise?: Exercise;
-  }[];
-}
-export interface dbWorkout extends BaseWorkout {
-  _id?: ObjectId;
-  creator_id: ObjectId;
-  exercises: {
-    exercise_id: ObjectId;
-    sets: { reps: number; weight: number }[];
-    exercise?: Exercise;
-  }[];
 }
 
 // Exercise
-interface BaseExercise {
+export interface NewExercise {
   name: string;
   equipment: string;
   muscleGroup: string;
   muscleWorked: string;
   metric: string;
-}
-export interface Exercise extends BaseExercise {
-  readonly _id: string;
-}
-export interface NewExercise extends BaseExercise {
   creator_id: string;
 }
-export interface dbExercise extends BaseExercise {
-  creator_id: ObjectId;
+export interface Exercise extends NewExercise {
+  readonly _id: string;
 }

@@ -3,11 +3,11 @@ import styled from "styled-components";
 // Components
 import Checkmark from "../../Checkmark";
 // Interfaces
-import { EditableTeam } from "./index";
+import { Team } from "../../../types/interfaces";
 
 interface Props {
-  team: EditableTeam;
-  setTeam: React.Dispatch<React.SetStateAction<EditableTeam>>;
+  team: Team;
+  setTeam: React.Dispatch<React.SetStateAction<Team>>;
   clearTeam: () => void;
   saveTeam: () => void;
   teamSaved: boolean | null;

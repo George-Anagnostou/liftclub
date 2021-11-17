@@ -7,14 +7,13 @@ import { getUserCreatedTeams } from "../../../store/actions/builderActions";
 import { getTeamById } from "../../../api-lib/fetchers";
 // Interfaces
 import { Team } from "../../../types/interfaces";
-import { EditableTeam } from "./index";
 // Components
 import DeleteTeamModal from "./DeleteTeamModal";
 import TiledList from "../../Wrappers/TiledList";
 
 interface Props {
-  team: EditableTeam;
-  setTeam: React.Dispatch<React.SetStateAction<EditableTeam>>;
+  team: Team;
+  setTeam: React.Dispatch<React.SetStateAction<Team>>;
   clearTeam: () => void;
 }
 
