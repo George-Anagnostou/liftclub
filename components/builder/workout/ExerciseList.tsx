@@ -50,17 +50,14 @@ const ExerciseList: React.FC<Props> = ({
 
   const filterExercisesBy = (term: string) => {
     if (term) {
-      const filtered = data.filter((exercise: Exercise) => {
-        const { _id, ...no_id } = exercise;
-        return Object.values(no_id).some((val) => val.toLowerCase().includes(term.toLowerCase()));
-      });
-
+      const filtered = data.filter(({ _id, ...no_id }: Exercise) =>
+        Object.values(no_id).some((val) => val.toLowerCase().includes(term.toLowerCase()))
+      );
       setDisplayedExercises(filtered);
     } else {
       const alphabetical = data.sort((a: Exercise, b: Exercise) =>
         a.name.toLowerCase().localeCompare(b.name.toLowerCase())
       );
-
       setDisplayedExercises(alphabetical);
     }
   };
@@ -101,7 +98,9 @@ const ExerciseList: React.FC<Props> = ({
               <button onClick={() => setShowCreateExerciseModal(true)}>Create</button>
             )}
 
-            <button onClick={() => setExerciseListBottom(-80)}>X</button>
+            <button className="close-btn" onClick={() => setExerciseListBottom(-80)}>
+              X
+            </button>
           </SearchInput>
         </Header>
 
@@ -195,6 +194,15 @@ const SearchInput = styled.div`
     margin: 0.25rem 0.1rem 0.5rem 0.25rem;
     border-radius: 5px;
     padding: 0.5rem;
+  }
+
+  .close-btn {
+    max-width: fit-content;
+    flex: 0;
+    padding: 0.5rem 0.75rem;
+    text-align: center;
+    line-height: 1.15rem;
+    font-size: 1rem;
   }
 `;
 
