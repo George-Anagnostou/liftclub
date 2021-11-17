@@ -1,3 +1,4 @@
+import { NewWorkout, dbExercise, dbWorkout, Exercise } from "../../types/interfaces";
 import { ObjectId } from "mongodb";
 
 // Workouts
@@ -15,12 +16,12 @@ export async function findPublicWorkouts(db: any) {
   return workouts;
 }
 
-export async function postNewWorkout(db: any, newWorkout) {
-  const { insertedId } = await db.collection("workouts").insertOne(newWorkout);
+export async function postNewWorkout(db: any, workout: NewWorkout) {
+  const { insertedId } = await db.collection("workouts").insertOne(workout);
   return insertedId;
 }
 
-export async function updateWorkout(db: any, workout) {
+export async function updateWorkout(db: any, workout: dbWorkout) {
   const updated = await db.collection("workouts").replaceOne({ _id: workout._id }, workout);
   return updated;
 }
@@ -47,4 +48,26 @@ export async function updateUserLastLoggedIn(db: any, id: string) {
     { _id: new ObjectId(id) },
     { $set: { lastLoggedIn: new Date().toISOString() } }
   );
+}
+
+// Exercises
+
+export async function queryExercises(db: any, query) {
+  const exercises = await db.collection("exercises").find(query).toArray();
+  return exercises;
+}
+
+export async function postNewExercise(db: any, exercise: dbExercise) {
+  const { insertedId } = await db.collection("exercises").insertOne(exercise);
+  return insertedId as string;
+}
+
+export async function queryExercisesByIdArr(db: any, idArr: string[]) {
+  const exercises: Exercise[] = await db
+    .collection("exercises")
+    .find({
+      _id: { $in: idArr.map((_id) => new ObjectId(_id)) },
+    })
+    .toArray();
+  return exercises;
 }
