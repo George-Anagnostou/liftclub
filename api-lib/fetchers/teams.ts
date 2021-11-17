@@ -115,7 +115,7 @@ export const updateTeam = async (team: Team) => {
     };
 
     const res = await fetch(`/api/teams/${dbTeam._id}?wholeTeam=true`, {
-      method: "PUT",
+      method: "POST",
       body: JSON.stringify(dbTeam),
       headers: { token: getHeaderToken() },
     });
