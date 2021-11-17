@@ -3,7 +3,7 @@ import { ObjectId } from "mongodb";
 
 // Workouts
 
-export async function findWorkoutsWithCreatorId(db: any, creator_id: string) {
+export async function queryWorkoutsByCreatorId(db: any, creator_id: string) {
   const workouts = await db
     .collection("workouts")
     .find({ creator_id: new ObjectId(creator_id.toString()) })

@@ -5,7 +5,7 @@ import { Workout } from "../../../types/interfaces";
 import { verifyAuthToken } from "../../../api-lib/auth/middleware";
 import {
   findPublicWorkouts,
-  findWorkoutsWithCreatorId,
+  queryWorkoutsByCreatorId,
   postNewWorkout,
 } from "../../../api-lib/mongo/db";
 
@@ -27,7 +27,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
       switch (QUERY) {
         case "CREATOR_ID":
-          workouts = await findWorkoutsWithCreatorId(db, creator_id as string);
+          workouts = await queryWorkoutsByCreatorId(db, creator_id as string);
           break;
         case "IS_PUBLIC":
           workouts = await findPublicWorkouts(db);
