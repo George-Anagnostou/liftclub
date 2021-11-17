@@ -10,6 +10,7 @@ import {
   ShortUser,
   Workout,
 } from "../../types/interfaces";
+import { getHeaderToken } from "../auth/token";
 
 /*
  *
@@ -31,6 +32,7 @@ export const getUserFromUsername = async (username: string): Promise<User | fals
   }
 };
 
+// *************** TODO ***************
 export const saveProfileImgUrl = async (user_id: string, username: string) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
@@ -45,6 +47,7 @@ export const saveProfileImgUrl = async (user_id: string, username: string) => {
   }
 };
 
+// *************** TODO ***************
 export const saveUserWeight = async (weight: number, user_id: string) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
@@ -59,6 +62,7 @@ export const saveUserWeight = async (weight: number, user_id: string) => {
   }
 };
 
+// *************** TODO ***************
 export const saveUserBio = async (user_id: string, bio: string) => {
   try {
     const res = await fetch(`/api/users/${user_id}`, {
@@ -128,6 +132,7 @@ export const getExercisesFromIdArray = async (idArr: string[]): Promise<Exercise
   }
 };
 
+// *************** TODO ***************
 export const createExercise = async (exercise: NewExercise) => {
   try {
     const res = await fetch("/api/exercises", {
@@ -156,6 +161,7 @@ export const postNewWorkout = async (workout: NewWorkout) => {
     const res = await fetch(`/api/workouts`, {
       method: "POST",
       body: JSON.stringify(workout),
+      headers: { token: getHeaderToken() },
     });
 
     const workout_id = await res.json();
@@ -172,6 +178,7 @@ export const updateExistingWorkout = async (workout: Workout) => {
     const res = await fetch(`/api/workouts/${workout._id}`, {
       method: "PUT",
       body: JSON.stringify(workout),
+      headers: { token: getHeaderToken() },
     });
 
     return res.status === 204;
@@ -185,6 +192,7 @@ export const deleteWorkout = async (workout_id: string) => {
   try {
     const res = await fetch(`/api/workouts/${workout_id}`, {
       method: "DELETE",
+      headers: { token: getHeaderToken() },
     });
 
     return res.status === 204;
@@ -193,6 +201,8 @@ export const deleteWorkout = async (workout_id: string) => {
     return false;
   }
 };
+
+// ----------------------------------------------------------------------------
 
 export const getWorkoutFromId = async (workout_id: string): Promise<Workout | false> => {
   try {
@@ -294,6 +304,8 @@ export const getRoutineFromId = async (routine_id: string): Promise<Routine | fa
     return false;
   }
 };
+
+// *************** TODO ***************
 export const postNewRoutine = async (newRoutine: NewRoutine): Promise<string | false> => {
   try {
     const res = await fetch(`/api/routines`, {
@@ -309,6 +321,7 @@ export const postNewRoutine = async (newRoutine: NewRoutine): Promise<string | f
   }
 };
 
+// *************** TODO ***************
 export const updateRoutine = async (updatedRoutine: Routine) => {
   try {
     const res = await fetch(`/api/routines/${updatedRoutine._id}`, {
@@ -323,6 +336,7 @@ export const updateRoutine = async (updatedRoutine: Routine) => {
   }
 };
 
+// *************** TODO ***************
 export const deleteRoutine = async (routine_id: string) => {
   try {
     const res = await fetch(`/api/routines/${routine_id}`, {
@@ -369,6 +383,7 @@ export const getUserMadeTeams = async (user_id: string): Promise<Team[] | false>
   }
 };
 
+// *************** TODO ***************
 export const addTrainerToTeam = async (team_id: string, trainer_id: string) => {
   try {
     const res = await fetch(`/api/teams/${team_id}?addTrainer=${trainer_id}`, { method: "PUT" });
@@ -380,6 +395,7 @@ export const addTrainerToTeam = async (team_id: string, trainer_id: string) => {
   }
 };
 
+// *************** TODO ***************
 export const removeTrainerFromTeam = async (team_id: string, trainer_id: string) => {
   try {
     const res = await fetch(`/api/teams/${team_id}?removeTrainer=${trainer_id}`, { method: "PUT" });
@@ -415,6 +431,7 @@ export const getTeamsFromIdArray = async (idArr: string[]): Promise<Team[]> => {
   }
 };
 
+// *************** TODO ***************
 export const postNewTeam = async (team: EditableTeam): Promise<Team["_id"] | false> => {
   try {
     const dbTeam = {
@@ -439,7 +456,7 @@ export const postNewTeam = async (team: EditableTeam): Promise<Team["_id"] | fal
     return false;
   }
 };
-
+// *************** TODO ***************
 export const updateTeam = async (team: EditableTeam) => {
   try {
     const dbTeam = {
@@ -463,8 +480,10 @@ export const updateTeam = async (team: EditableTeam) => {
     console.log(e);
     return false;
   }
+
 };
 
+// *************** TODO ***************
 export const deleteTeam = async (team_id: string) => {
   try {
     const res = await fetch(`/api/teams/${team_id}`, {
