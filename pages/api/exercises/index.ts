@@ -3,7 +3,6 @@ import { ObjectId } from "mongodb";
 
 import { connectToDatabase } from "../../../utils/mongodb";
 import { postNewExercise, queryExercises } from "../../../api-lib/mongo/db";
-import { dbExercise } from "../../../types/interfaces";
 import { verifyAuthToken } from "../../../api-lib/auth/middleware";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -16,7 +15,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       res.json(exercises);
       break;
     case "POST":
-      const exercise: dbExercise = JSON.parse(req.body);
+      const exercise = JSON.parse(req.body); // no type
       exercise.creator_id = new ObjectId(exercise.creator_id);
 
       const validId = verifyAuthToken(req, exercise.creator_id);

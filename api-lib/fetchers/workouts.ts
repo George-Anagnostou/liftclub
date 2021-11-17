@@ -47,8 +47,6 @@ export const deleteWorkout = async (workout_id: string) => {
   }
 };
 
-// ----------------------------------------------------------------------------
-
 export const getWorkoutFromId = async (workout_id: string): Promise<Workout | false> => {
   try {
     const res = await fetch(`/api/workouts/${workout_id}`);

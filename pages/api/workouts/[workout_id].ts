@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { ObjectId } from "mongodb";
 import { connectToDatabase } from "../../../utils/mongodb";
-import { dbWorkout, Workout } from "../../../types/interfaces";
+import { Workout } from "../../../types/interfaces";
 import { verifyAuthToken } from "../../../api-lib/auth/middleware";
 import { deleteWorkout, getWorkout, updateWorkout } from "../../../api-lib/mongo/db";
 
@@ -19,7 +19,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     case "POST":
       break;
     case "PUT":
-      const updatedWorkout: dbWorkout = JSON.parse(req.body);
+      const updatedWorkout = JSON.parse(req.body); // no type
       validId = verifyAuthToken(req, updatedWorkout.creator_id);
       if (!validId) return res.redirect(401, "/");
 

@@ -32,7 +32,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       res.status(401).end();
       break;
     case "POST":
-      const newWorkout = JSON.parse(req.body);
+      const newWorkout = JSON.parse(req.body); // no type
 
       const validId = verifyAuthToken(req, newWorkout.creator_id);
       if (!validId) return res.redirect(401, "/");
