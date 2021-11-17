@@ -15,7 +15,7 @@ import {
   updateExistingCreatedWorkout,
 } from "../../../store/actions/builderActions";
 
-const InitialCustomWorkout = {
+const InitialCustomWorkout: Workout = {
   _id: "",
   name: "",
   creator_id: "",
