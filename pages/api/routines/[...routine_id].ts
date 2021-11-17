@@ -1,68 +1,52 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { connectToDatabase } from "../../../utils/mongodb";
 import { ObjectId } from "mongodb";
+import { connectToDatabase } from "../../../utils/mongodb";
+import {
+  deleteRoutine,
+  getAggregatedRoutinesById,
+  getRoutine,
+  updateRoutine,
+} from "../../../api-lib/mongo/db";
+import { verifyAuthToken } from "../../../api-lib/auth/middleware";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const httpMethod = req.method;
   const { db } = await connectToDatabase();
-
-  const routine_id = req.query.routine_id[0];
+  const { routine_id } = req.query;
+  let validId: string | false;
 
   switch (httpMethod) {
     case "GET":
-      const routineData = await db
-        .collection("routines")
-        .aggregate([
-          { $match: { _id: new ObjectId(routine_id) } },
-          { $unwind: { path: "$workoutPlan" } },
-          {
-            $lookup: {
-              from: "workouts",
-              localField: "workoutPlan.workout_id",
-              foreignField: "_id",
-              as: "workoutPlan.workout",
-            },
-          },
-          { $unwind: { path: "$workoutPlan.workout" } },
-          {
-            $group: {
-              _id: "$_id",
-              root: { $mergeObjects: "$$ROOT" },
-              workoutPlan: { $push: "$workoutPlan" },
-            },
-          },
-          { $replaceRoot: { newRoot: { $mergeObjects: ["$root", "$$ROOT"] } } },
-          { $project: { root: 0 } },
-        ])
-        .toArray();
-
-      res.json(routineData[0]);
+      const routines = await getAggregatedRoutinesById(db, routine_id.toString());
+      res.json(routines[0]);
       break;
     case "POST":
       break;
     case "PUT":
-      const { updatedRoutine } = JSON.parse(req.body);
+      const { updatedRoutine } = JSON.parse(req.body); // no type
 
-      updatedRoutine.workoutPlan.map((entry) => {
-        entry.workout_id = new ObjectId(entry.workout_id);
-        entry.isoDate = new Date(entry.isoDate);
-      });
+      validId = verifyAuthToken(req, updatedRoutine.creator_id);
+      if (!validId) return res.redirect(401, "/");
+
+      updatedRoutine.workoutPlan = updatedRoutine.workoutPlan.map((entry) => ({
+        workout_id: new ObjectId(entry.workout_id),
+        isoDate: new Date(entry.isoDate),
+      }));
       updatedRoutine.creator_id = new ObjectId(updatedRoutine.creator_id);
       updatedRoutine._id = new ObjectId(updatedRoutine._id);
 
-      const updated = await db
-        .collection("routines")
-        .replaceOne({ _id: new ObjectId(routine_id) }, updatedRoutine);
-
+      const updated = await updateRoutine(db, updatedRoutine);
       updated ? res.status(204).end() : res.status(404).end();
 
       break;
     case "DELETE":
-      const deleted = await db
-        .collection("routines")
-        .deleteOne({ _id: new ObjectId(routine_id.toString()) });
+      const routine = await getRoutine(db, routine_id.toString());
 
-      deleted.deletedCount ? res.status(204).end() : res.status(400).end();
+      validId = verifyAuthToken(req, routine.creator_id);
+      if (!validId) return res.redirect(401, "/");
+
+      const deleted = await deleteRoutine(db, routine_id.toString());
+      deleted ? res.status(204).end() : res.status(400).end();
       break;
   }
 };
