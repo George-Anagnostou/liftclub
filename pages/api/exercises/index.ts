@@ -1,5 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { ObjectId } from "mongodb";
+
 import { connectToDatabase } from "../../../utils/mongodb";
+import { postNewExercise, queryExercises } from "../../../api-lib/mongo/db";
+import { dbExercise } from "../../../types/interfaces";
+import { verifyAuthToken } from "../../../api-lib/auth/middleware";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const httpMethod = req.method;
@@ -7,15 +12,18 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   switch (httpMethod) {
     case "GET":
-      const exercises = await db.collection("exercises").find(req.query).toArray();
+      const exercises = await queryExercises(db, req.query);
       res.json(exercises);
       break;
     case "POST":
-      const exercise = JSON.parse(req.body);
+      const exercise: dbExercise = JSON.parse(req.body);
+      exercise.creator_id = new ObjectId(exercise.creator_id);
 
-      const added = await db.collection("exercises").insertOne(exercise);
+      const validId = verifyAuthToken(req, exercise.creator_id);
+      if (!validId) return res.redirect(401, "/");
 
-      added.insertedId ? res.status(201).end() : res.status(404).end();
+      const insertedId = await postNewExercise(db, exercise);
+      insertedId ? res.status(201).end() : res.status(404).end();
 
       break;
     case "PUT":

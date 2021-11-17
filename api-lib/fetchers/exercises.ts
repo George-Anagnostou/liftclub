@@ -16,7 +16,6 @@ export const getExercisesFromIdArray = async (idArr: string[]): Promise<Exercise
   }
 };
 
-// *************** TODO ***************
 export const createExercise = async (exercise: NewExercise) => {
   try {
     const res = await fetch("/api/exercises", {

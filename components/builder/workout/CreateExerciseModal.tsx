@@ -4,7 +4,10 @@ import { useState } from "react";
 import { createExercise } from "../../../api-lib/fetchers";
 // Components
 import Modal from "../../Wrappers/Modal";
+// Interfaces
 import { NewExercise } from "../../../types/interfaces";
+// Context
+import { useUserState } from "./../../../store";
 
 const muscleGroups = [
   "upper back",
@@ -25,14 +28,17 @@ const InitialNewState = {
   muscleGroup: "",
   muscleWorked: "",
   metric: "weight",
+  creator_id: "",
 };
 
 export default function CreateExerciseModal({ setShowModal, showModal }) {
   const [formState, setFormState] = useState<NewExercise>(InitialNewState);
 
+  const { user } = useUserState();
+
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const saved = await createExercise({ ...formState });
+    const saved = await createExercise({ ...formState, creator_id: user!._id });
     if (saved) setFormState(InitialNewState);
   };
 
