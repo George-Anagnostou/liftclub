@@ -19,7 +19,7 @@ describe("LoginWithID route", () => {
 
   test("should return test user data if token is valid.", async () => {
     req.method = "POST";
-    req.body = { token: testToken };
+    req.headers = new Headers({ token: testToken });
 
     await loginWithToken(req, res);
 
@@ -29,7 +29,7 @@ describe("LoginWithID route", () => {
 
   test("should return a 400 if token is invalid.", async () => {
     req.method = "POST";
-    req.body = { token: "101010101010101010101010" };
+    req.headers = new Headers({ token: "101010101010101010101010" });
 
     await loginWithToken(req, res);
 
