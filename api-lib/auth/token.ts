@@ -1,12 +1,15 @@
-export const getAuthToken = () => {
-  const token = localStorage.getItem("authToken");
-  return token;
-};
+export function getAuthToken() {
+  return localStorage.getItem("authToken");
+}
 
-export const removeAuthToken = () => {
+export function removeAuthToken() {
   localStorage.removeItem("authToken");
-};
+}
 
-export const setAuthToken = (token: string) => {
+export function setAuthToken(token: string) {
   localStorage.setItem("authToken", token);
-};
+}
+
+export function getHeaderToken() {
+  return getAuthToken() || "";
+}
