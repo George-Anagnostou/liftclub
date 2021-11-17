@@ -169,8 +169,8 @@ const SearchResults = styled.ul`
     font-size: 1rem;
 
     img {
-      height: 20px;
-      width: 20px;
+      height: 30px;
+      width: 30px;
       border-radius: 50%;
     }
 
