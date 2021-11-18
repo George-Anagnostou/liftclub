@@ -1,13 +1,18 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { deleteExercise } from "../../../api-lib/fetchers";
 // Interfaces
 import { Exercise } from "../../../types/interfaces";
+// SVG
+import Garbage from "../../svg/Garbage";
 
 interface Props {
   exercise: Exercise;
   isExerciseInCustomWorkout: (exercise_id: string) => boolean;
   removeExercise: (exercise_id: string) => void;
   addExercise: (exercise: Exercise) => void;
+  deletable: boolean;
+  setExercises?: React.Dispatch<React.SetStateAction<Exercise[]>>;
 }
 
 const ExerciseListItem: React.FC<Props> = ({
@@ -15,11 +20,21 @@ const ExerciseListItem: React.FC<Props> = ({
   isExerciseInCustomWorkout,
   removeExercise,
   addExercise,
+  deletable,
+  setExercises,
 }) => {
   const [showInfo, setShowInfo] = useState(false);
 
+  const handleDeleteExercise = async () => {
+    const deleted = await deleteExercise(exercise._id);
+    if (deleted) {
+      removeExercise(exercise._id);
+      if (setExercises) setExercises((prev) => prev.filter((ex) => ex._id !== exercise._id));
+    }
+  };
+
   return (
-    <Item key={exercise._id} className={isExerciseInCustomWorkout(exercise._id) ? "highlight" : ""}>
+    <Item className={isExerciseInCustomWorkout(exercise._id) ? "highlight" : ""}>
       <div className="heading">
         <h3
           onClick={
@@ -31,7 +46,13 @@ const ExerciseListItem: React.FC<Props> = ({
           {exercise.name}
         </h3>
 
-        <button className="infoBtn" onClick={() => setShowInfo(!showInfo)}>
+        {deletable && (
+          <button className="info-btn" onClick={handleDeleteExercise}>
+            <Garbage />
+          </button>
+        )}
+
+        <button className="info-btn" onClick={() => setShowInfo(!showInfo)}>
           <p>i</p>
         </button>
       </div>
@@ -82,12 +103,13 @@ const Item = styled.li`
       font-weight: 300;
     }
 
-    .infoBtn {
+    .info-btn {
       background: ${({ theme }) => theme.buttonLight};
-      padding: 0.25rem;
+      fill: ${({ theme }) => theme.textLight};
+      padding: 0.5rem;
       border-radius: 5px;
       border: none;
-      margin: 0 0.5rem;
+      margin: 0 0.5rem 0 0.25rem;
       display: grid;
       place-items: center;
 
