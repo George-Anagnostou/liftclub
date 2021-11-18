@@ -1,4 +1,4 @@
-import { removeAuthToken, setAuthToken } from "../../api-lib/auth/token";
+import { getHeaderToken, removeAuthToken, setAuthToken } from "../../api-lib/auth/token";
 import { WorkoutLogItem } from "../../types/interfaces";
 
 /**
@@ -135,6 +135,7 @@ export const addDayToWorkoutLog = async (
       {
         method: "PUT",
         body: JSON.stringify(logValue),
+        headers: { token: getHeaderToken() },
       }
     );
 
@@ -159,7 +160,7 @@ export const deleteDayFromWorkoutLog = async (dispatch: any, user_id: string, lo
   try {
     const res = await fetch(
       `/api/users/${user_id}?workoutLogKey=${logKey}&fieldToUpdate=DELETE_WORKOUT_FROM_WORKOUT_LOG`,
-      { method: "DELETE" }
+      { method: "DELETE", headers: { token: getHeaderToken() } }
     );
 
     dispatch({ type: "DELETE_DAY_FROM_WORKOUT_LOG", payload: { key: logKey } });
@@ -186,6 +187,7 @@ export const addUserFollow = async (dispatch, user_id: string, target_id: string
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
       body: JSON.stringify({ follow: target_id }),
+      headers: { token: getHeaderToken() },
     });
 
     if (res.status !== 201) {
@@ -214,6 +216,7 @@ export const removeUserFollow = async (dispatch, user_id: string, target_id: str
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
       body: JSON.stringify({ unfollow: target_id }),
+      headers: { token: getHeaderToken() },
     });
 
     if (res.status !== 201) {
@@ -242,6 +245,7 @@ export const userJoiningTeam = async (dispatch, user_id: string, team_id: string
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
       body: JSON.stringify({ joinTeam: team_id }),
+      headers: { token: getHeaderToken() },
     });
 
     if (res.status !== 201) {
@@ -270,6 +274,7 @@ export const userLeavingTeam = async (dispatch, user_id: string, team_id: string
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
       body: JSON.stringify({ leaveTeam: team_id }),
+      headers: { token: getHeaderToken() },
     });
 
     if (res.status !== 201) {
@@ -298,6 +303,7 @@ export const addSavedWorkout = async (dispatch, user_id: string, workout_id: str
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
       body: JSON.stringify({ addSavedWorkout: workout_id }),
+      headers: { token: getHeaderToken() },
     });
 
     if (res.status !== 201) {
@@ -326,6 +332,7 @@ export const removeSavedWorkout = async (dispatch, user_id: string, workout_id: 
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
       body: JSON.stringify({ removeSavedWorkout: workout_id }),
+      headers: { token: getHeaderToken() },
     });
 
     if (res.status !== 201) {
@@ -353,6 +360,7 @@ export const addToRecentlyViewedUsers = async (dispatch, user_id: string, viewed
     const res = await fetch(`/api/users/${user_id}`, {
       method: "PUT",
       body: JSON.stringify({ addToRecentlyViewedUsers: viewed_id }),
+      headers: { token: getHeaderToken() },
     });
 
     return res.status === 201;
