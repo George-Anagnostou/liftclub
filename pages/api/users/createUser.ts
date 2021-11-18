@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import * as jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { connectToDatabase } from "../../../utils/mongodb";
-import { getUserByUsername, postNewUser } from "../../../api-lib/mongo/db";
+import { getUserByUsername, postNewUser } from "../../../api-lib/mongo";
 
 const SALT_ROUNDS = 10;
 const JWT_SECRET = process.env.JWT_SECRET || "";

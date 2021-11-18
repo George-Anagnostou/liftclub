@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connectToDatabase } from "../../../utils/mongodb";
-import { getShortUsersFromIdArr } from "../../../api-lib/mongo/db";
+import { getShortUsersFromIdArr } from "../../../api-lib/mongo";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const httpMethod = req.method;

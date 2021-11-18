@@ -3,7 +3,7 @@ import * as jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { User } from "../../../types/interfaces";
 import { connectToDatabase } from "../../../utils/mongodb";
-import { getUserByUsername, updateUserLastLoggedIn } from "../../../api-lib/mongo/db";
+import { getUserByUsername, updateUserLastLoggedIn } from "../../../api-lib/mongo";
 
 const JWT_SECRET = process.env.JWT_SECRET || "";
 

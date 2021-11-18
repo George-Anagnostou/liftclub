@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { ObjectId } from "mongodb";
 import { connectToDatabase } from "../../../utils/mongodb";
-import { getTeamsByCreatorId, postTeam } from "../../../api-lib/mongo/db";
+import { getTeamsByCreatorId, postTeam } from "../../../api-lib/mongo";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const httpMethod = req.method;

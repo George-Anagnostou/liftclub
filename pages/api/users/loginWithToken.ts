@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connectToDatabase } from "../../../utils/mongodb";
 import { verifyAuthToken } from "../../../api-lib/auth/middleware";
-import { getUserById, updateUserLastLoggedIn } from "../../../api-lib/mongo/db";
+import { getUserById, updateUserLastLoggedIn } from "../../../api-lib/mongo";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const httpMethod = req.method;

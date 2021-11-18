@@ -3,7 +3,7 @@ import { connectToDatabase } from "../../../utils/mongodb";
 import {
   getAllTeamsWithRoutineDataByTeamIdArr,
   queryAllTeamsByMemberCount,
-} from "../../../api-lib/mongo/db";
+} from "../../../api-lib/mongo";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const httpMethod = req.method;

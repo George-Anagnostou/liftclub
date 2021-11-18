@@ -6,7 +6,7 @@ import {
   getAggregatedRoutinesById,
   getRoutine,
   updateRoutine,
-} from "../../../api-lib/mongo/db";
+} from "../../../api-lib/mongo";
 import { verifyAuthToken } from "../../../api-lib/auth/middleware";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {

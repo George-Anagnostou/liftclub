@@ -7,7 +7,7 @@ import {
   findPublicWorkouts,
   queryWorkoutsByCreatorId,
   postNewWorkout,
-} from "../../../api-lib/mongo/db";
+} from "../../../api-lib/mongo";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const httpMethod = req.method;

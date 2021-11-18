@@ -3,7 +3,7 @@ import { ObjectId } from "mongodb";
 import { connectToDatabase } from "../../../utils/mongodb";
 import { Workout } from "../../../types/interfaces";
 import { verifyAuthToken } from "../../../api-lib/auth/middleware";
-import { deleteWorkout, getWorkout, updateWorkout } from "../../../api-lib/mongo/db";
+import { deleteWorkout, getWorkout, updateWorkout } from "../../../api-lib/mongo";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const httpMethod = req.method;

@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { ObjectId } from "mongodb";
 
 import { connectToDatabase } from "../../../utils/mongodb";
-import { postNewExercise, queryExercises } from "../../../api-lib/mongo/db";
+import { postNewExercise, queryExercises } from "../../../api-lib/mongo";
 import { verifyAuthToken } from "../../../api-lib/auth/middleware";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
