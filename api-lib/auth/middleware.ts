@@ -9,9 +9,10 @@ export function verifyAuthToken(req: NextApiRequest, match?: string | ObjectId) 
 
   const token = req.headers.token as string;
   const JWT_SECRET = process.env.JWT_SECRET || "";
-  
+
   try {
-    if (!JWT_SECRET || !token) throw new Error("A system error has occured.");
+    if (!JWT_SECRET) throw new Error("A system error has occured.");
+    if (!token) throw new Error("No token attached to headers.");
 
     const verified = jwt.verify(token, JWT_SECRET) as { id: string; iat: number };
 
