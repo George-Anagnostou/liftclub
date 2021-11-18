@@ -283,7 +283,6 @@ const Trainers = styled.div`
     background: ${({ theme }) => theme.buttonMed};
     border-radius: 5px;
     width: fit-content;
-    box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
 
     img {
       height: 30px;
