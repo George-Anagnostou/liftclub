@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connectToDatabase } from "../../../utils/mongodb";
 import { verifyAuthToken } from "../../../api-lib/auth/middleware";
-import { getUser, updateUserLastLoggedIn } from "../../../api-lib/mongo/db";
+import { getUserById, updateUserLastLoggedIn } from "../../../api-lib/mongo/db";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const httpMethod = req.method;
@@ -13,7 +13,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   let validId = verifyAuthToken(req);
   if (!validId) return res.status(401).end();
 
-  const userData = await getUser(db, validId);
+  const userData = await getUserById(db, validId);
 
   if (userData) {
     updateUserLastLoggedIn(db, userData._id);

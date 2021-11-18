@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
 // API
-import { getUsersFromIdArr, queryUsersByUsername } from "../../api-lib/fetchers";
+import { getUsersFromIdArr, queryShortUsersByUsername } from "../../api-lib/fetchers";
 // Context
 import { useUserDispatch, useUserState } from "../../store";
 import { addToRecentlyViewedUsers } from "../../store/actions/userActions";
@@ -27,7 +27,7 @@ const UsersResults: React.FC<Props> = ({ searchInput, limit }) => {
 
   useEffect(() => {
     const search = async () => {
-      const users = await queryUsersByUsername(debouncedInput);
+      const users = await queryShortUsersByUsername(debouncedInput);
       if (users && debouncedInput) setSearchResults(users);
     };
 

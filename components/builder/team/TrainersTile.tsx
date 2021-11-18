@@ -7,7 +7,7 @@ import { Team } from "../../../types/interfaces";
 // Components
 import Magnifying from "../../svg/Magnifying";
 // API
-import { queryUsersByUsername } from "../../../api-lib/fetchers";
+import { queryShortUsersByUsername } from "../../../api-lib/fetchers";
 // Hooks
 import { useDebouncedState } from "../../hooks/useDebouncedState";
 
@@ -36,7 +36,7 @@ const TrainersTile: React.FC<Props> = ({ team, setTeam }) => {
 
   useEffect(() => {
     const search = async () => {
-      const users = await queryUsersByUsername(debouncedInput);
+      const users = await queryShortUsersByUsername(debouncedInput);
       if (users && debouncedInput) setSearchResults(users);
     };
 
