@@ -29,6 +29,7 @@ const InitialNewState = {
   muscleWorked: "",
   metric: "weight",
   creator_id: "",
+  isDefault: false,
 };
 
 export default function CreateExerciseModal({ setShowModal, showModal }) {
@@ -61,7 +62,7 @@ export default function CreateExerciseModal({ setShowModal, showModal }) {
     <Modal isOpen={showModal} removeModal={() => setShowModal(false)}>
       <Container>
         <button className="close-btn" onClick={() => setShowModal(false)}>
-          X
+          ✕
         </button>
 
         <form action="POST" onSubmit={handleFormSubmit}>
@@ -125,6 +126,7 @@ export default function CreateExerciseModal({ setShowModal, showModal }) {
             <ul className="metric-select">
               {["weight", "time", "distance"].map((metric: "weight" | "time" | "distance") => (
                 <li
+                  key={metric}
                   onClick={() => handleMetricChange(metric)}
                   className={formState.metric === metric ? "selected" : ""}
                 >
@@ -161,8 +163,8 @@ const Container = styled.div`
     position: absolute;
     top: 5px;
     right: 5px;
-    padding: 5px 8px;
-    font-size: 10px;
+    height: 25px;
+    width: 25px;
   }
 
   form {
@@ -217,12 +219,11 @@ const Container = styled.div`
 
       .metric-select {
         display: flex;
-        justify-content: space-evenly;
         width: 100%;
 
         li {
           text-transform: capitalize;
-          margin: 0.5rem 0;
+          margin: 0.5rem 0.5rem 0.5rem 0;
           padding: 0.25rem 0.5rem;
           border: 1px solid ${({ theme }) => theme.buttonMed};
           border-radius: 5px;

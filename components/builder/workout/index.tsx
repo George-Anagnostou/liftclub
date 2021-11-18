@@ -120,7 +120,7 @@ const WorkoutBuilder: React.FC = () => {
     });
   };
 
-  const handleDragEnd = (result: any) => {
+  const handleDragDropEnd = (result: any) => {
     const startIndex: number = result.source?.index;
     const endIndex: number = result.destination?.index > -1 ? result.destination.index : startIndex;
 
@@ -142,7 +142,7 @@ const WorkoutBuilder: React.FC = () => {
         handlePrivacyChange={handlePrivacyChange}
       />
 
-      <DragDropContext onDragEnd={handleDragEnd}>
+      <DragDropContext onDragEnd={handleDragDropEnd}>
         <CustomWorkout
           customWorkout={customWorkout}
           setCustomWorkout={setCustomWorkout}

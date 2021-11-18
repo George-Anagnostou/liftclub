@@ -87,8 +87,10 @@ const CustomWorkout: React.FC<Props> = ({
         )}
       </Droppable>
 
-      <AddExerciseBtn onClick={() => setExerciseListBottom(0)}>
-        <p>Add Exercise</p>
+      <AddExerciseBtn onClick={() => setExerciseListBottom((prev) => (prev === 0 ? -80 : 0))}>
+        <p>
+          Add Exercise <span>＋</span>
+        </p>
       </AddExerciseBtn>
     </>
   );
@@ -113,10 +115,13 @@ const AddExerciseBtn = styled.button`
   box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
   border: none;
   width: fit-content;
-  margin: 0.5rem auto 0.5rem;
+  margin: 0.5rem auto 1rem;
   padding: 0.25rem 2rem;
   font-weight: 300;
-
   border-radius: 5px;
   font-size: 1.1rem;
+
+  span {
+    font-weight: 200;
+  }
 `;

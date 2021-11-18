@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import useSWR from "swr";
+import { getExercisesByUserId } from "../../../api-lib/fetchers";
 // Context
 import { useUserState } from "../../../store";
 // Interfaces
 import { Exercise } from "../../../types/interfaces";
+// Hooks
+import { useDebouncedState } from "../../hooks/useDebouncedState";
 // Components
 import CreateExerciseModal from "./CreateExerciseModal";
 import ExerciseListItem from "./ExerciseListItem";
@@ -29,42 +32,58 @@ const ExerciseList: React.FC<Props> = ({
 }) => {
   const { user } = useUserState();
 
-  const { data, error } = useSWR("/api/exercises", fetcher);
+  const { data, error } = useSWR("/api/exercises", fetcher) as { data: Exercise[]; error: any };
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const [displayedExercises, setDisplayedExercises] = useState<Exercise[]>([]);
+  const [defaultExercises, setDefaultExercises] = useState<Exercise[]>([]);
   const [showCreateExerciseModal, setShowCreateExerciseModal] = useState(false);
+  const [userExercises, setUserExercises] = useState<Exercise[]>([]);
+  const [displayedList, setDisplayedList] = useState<"default" | "created">("default");
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const handleTouchMove = (e) => {
+  const debouncedTerm = useDebouncedState(searchTerm, 200);
+
+  const dragList = (e) => {
     const screenHeight = e.view.innerHeight;
     const thumbY = e.touches[0].clientY;
     const thumbVH = ((screenHeight - thumbY) / screenHeight) * 100 - 80;
     if (thumbVH <= 0) setExerciseListBottom(thumbVH);
   };
 
-  const handleTouchEnd = () => {
+  const checkToCloseList = () => {
     exerciseListBottom <= -20 ? setExerciseListBottom(-80) : setExerciseListBottom(0);
   };
 
   const handleSearchTermChange = (e) => setSearchTerm(e.target.value);
 
-  const filterExercisesBy = (term: string) => {
+  const filterExercisesBy = (term: string, exercises: Exercise[]) => {
     if (term) {
-      const filtered = data.filter(({ _id, ...no_id }: Exercise) =>
+      // Return any Exercise with search term in any data
+      return exercises.filter(({ _id, creator_id, isDefault, ...no_id }: Exercise) =>
         Object.values(no_id).some((val) => val.toLowerCase().includes(term.toLowerCase()))
       );
-      setDisplayedExercises(filtered);
     } else {
-      const alphabetical = data.sort((a: Exercise, b: Exercise) =>
+      // Sort alphabetically by name
+      return exercises.sort((a: Exercise, b: Exercise) =>
         a.name.toLowerCase().localeCompare(b.name.toLowerCase())
       );
-      setDisplayedExercises(alphabetical);
     }
   };
 
   useEffect(() => {
-    if (data) filterExercisesBy(searchTerm);
-  }, [searchTerm, data]);
+    if (data) {
+      const filtededDefault = filterExercisesBy(debouncedTerm, data);
+      setDefaultExercises(filtededDefault);
+    }
+  }, [debouncedTerm, data]);
+
+  useEffect(() => {
+    async function getUserExercises() {
+      const userExercises = await getExercisesByUserId(user!._id);
+      const filteredUserExercises = filterExercisesBy(debouncedTerm, userExercises);
+      setUserExercises(filteredUserExercises);
+    }
+    if (user) getUserExercises();
+  }, [debouncedTerm, user]);
 
   useEffect(() => {
     if (exerciseListBottom === -80) document.body.style.overflow = "auto";
@@ -72,7 +91,7 @@ const ExerciseList: React.FC<Props> = ({
   }, [exerciseListBottom]);
 
   // Error catch for SWR
-  if (error) return <h1>failed to load</h1>;
+  if (error) return <h1>Failed to load.</h1>;
 
   return (
     <>
@@ -81,7 +100,7 @@ const ExerciseList: React.FC<Props> = ({
         className={exerciseListBottom === 0 || exerciseListBottom === -80 ? "transition" : ""}
       >
         <Header>
-          <div className="thumb-line" onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
+          <div className="thumb-line" onTouchMove={dragList} onTouchEnd={checkToCloseList}>
             <span />
           </div>
 
@@ -94,26 +113,53 @@ const ExerciseList: React.FC<Props> = ({
               placeholder="Search"
             />
 
-            {user?.isTrainer && (
-              <button onClick={() => setShowCreateExerciseModal(true)}>Create</button>
-            )}
+            <button onClick={() => setShowCreateExerciseModal(true)}>Create</button>
 
             <button className="close-btn" onClick={() => setExerciseListBottom(-80)}>
-              X
+              ✕
             </button>
           </SearchInput>
+
+          <div className="list-options">
+            <p
+              onClick={() => setDisplayedList("default")}
+              className={displayedList === "default" ? "selected" : ""}
+            >
+              Explore
+            </p>
+            <p
+              onClick={() => setDisplayedList("created")}
+              className={displayedList === "created" ? "selected" : ""}
+            >
+              My Exercises
+            </p>
+          </div>
         </Header>
 
         <ul>
-          {displayedExercises.map((exercise) => (
-            <ExerciseListItem
-              key={exercise._id}
-              exercise={exercise}
-              isExerciseInCustomWorkout={isExerciseInCustomWorkout}
-              removeExercise={removeExercise}
-              addExercise={addExercise}
-            />
-          ))}
+          {displayedList === "default" &&
+            defaultExercises.map((exercise) => (
+              <ExerciseListItem
+                key={`defualt-${exercise._id}`}
+                exercise={exercise}
+                isExerciseInCustomWorkout={isExerciseInCustomWorkout}
+                removeExercise={removeExercise}
+                addExercise={addExercise}
+                deletable={false}
+              />
+            ))}
+          {displayedList === "created" &&
+            userExercises.map((exercise) => (
+              <ExerciseListItem
+                key={`created-${exercise._id}`}
+                exercise={exercise}
+                isExerciseInCustomWorkout={isExerciseInCustomWorkout}
+                removeExercise={removeExercise}
+                addExercise={addExercise}
+                deletable={true}
+                setExercises={setUserExercises}
+              />
+            ))}
         </ul>
       </ExercisesContainer>
 
@@ -156,15 +202,11 @@ const ExercisesContainer = styled.div`
     justify-content: flex-start;
     align-items: center;
   }
-
-  .loadingContainer {
-    margin-top: 2rem;
-  }
 `;
 
 const SearchInput = styled.div`
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
 
   input {
@@ -187,27 +229,27 @@ const SearchInput = styled.div`
 
   button {
     flex: 1;
-    font-size: 0.7rem;
+    font-size: 0.85rem;
+    font-weight: 300;
     color: ${({ theme }) => theme.textLight};
     background: ${({ theme }) => theme.buttonMed};
     border: none;
     margin: 0.25rem 0.1rem 0.5rem 0.25rem;
     border-radius: 5px;
-    padding: 0.5rem;
+    padding: 0.25rem 0.5rem;
   }
 
   .close-btn {
-    max-width: fit-content;
     flex: 0;
-    padding: 0.5rem 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.75rem;
     text-align: center;
-    line-height: 1.15rem;
-    font-size: 1rem;
+    margin-right: 0.25rem;
   }
 `;
 
 const Header = styled.header`
-  box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
+  box-shadow: 0 3px 6px ${({ theme }) => theme.boxShadow};
   position: sticky;
   top: 0;
   border-top: 2px solid ${({ theme }) => theme.border};
@@ -216,8 +258,6 @@ const Header = styled.header`
   background: ${({ theme }) => theme.background};
   border-radius: 25px 25px 2px 2px;
   width: 100%;
-
-  padding-right: 0.15rem;
 
   .thumb-line {
     width: 100%;
@@ -232,6 +272,28 @@ const Header = styled.header`
       display: block;
       margin: auto;
       touch-action: none;
+    }
+  }
+  .list-options {
+    display: flex;
+    justify-content: space-around;
+
+    p {
+      border-top: 1px solid ${({ theme }) => theme.border};
+      border-bottom: 2px solid ${({ theme }) => theme.border};
+      flex: 1;
+      padding: 0.5rem 0;
+      font-weight: 300;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      color: ${({ theme }) => theme.textLight};
+      background: ${({ theme }) => theme.background};
+      transition: all 0.3s ease;
+
+      &.selected {
+        border-bottom: 2px solid ${({ theme }) => theme.accent};
+        color: ${({ theme }) => theme.text};
+      }
     }
   }
 `;

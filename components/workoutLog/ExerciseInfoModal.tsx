@@ -39,7 +39,7 @@ const ExerciseInfoModal: React.FC<Props> = ({ exerciseInfo, setExerciseInfo }) =
     <Modal isOpen={exerciseInfo} removeModal={() => setExerciseInfo(null)}>
       <ExerciseInfo>
         <button className="close-btn" onClick={() => setExerciseInfo(null)}>
-          X
+          ✕
         </button>
 
         <h3>{exerciseInfo.name}</h3>
@@ -84,11 +84,10 @@ const ExerciseInfo = styled.div`
     border: none;
     border-radius: 3px;
     position: absolute;
-    top: 2px;
-    right: 2px;
-    height: 15px;
-    width: 15px;
-    font-size: 10px;
+    top: 5px;
+    right: 5px;
+    height: 25px;
+    width: 25px;
   }
 
   h3 {

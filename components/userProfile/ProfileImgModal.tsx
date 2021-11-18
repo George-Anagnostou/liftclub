@@ -47,7 +47,7 @@ const ProfileImgModal: React.FC<Props> = ({
     <Modal removeModal={() => setShowProfileImgModal(false)} isOpen={showProfileImgModal}>
       <Box>
         <button className="close-btn" onClick={() => setShowProfileImgModal(false)}>
-          X
+          ✕
         </button>
 
         <UploadImgToS3 setProfileData={setProfileData} />
@@ -87,15 +87,15 @@ const Box = styled.div`
   margin: 10vh auto 0;
 
   .close-btn {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
     background: ${({ theme }) => theme.buttonMed};
     color: ${({ theme }) => theme.textLight};
     border: none;
     border-radius: 3px;
-    font-size: 10px;
-    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    height: 25px;
+    width: 25px;
   }
 `;
 

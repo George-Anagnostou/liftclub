@@ -71,11 +71,11 @@ const NameTile: React.FC<Props> = ({ profileData, setProfileData, isProfileOwner
 
         {!isProfileOwner &&
           (user!.following?.includes(profileData._id) || false ? (
-            <button className={"unfollowBtn"} onClick={handleUnfollowClick}>
+            <button className={"btn unfollowBtn"} onClick={handleUnfollowClick}>
               Following
             </button>
           ) : (
-            <button className={"followBtn"} onClick={handleFollowClick}>
+            <button className={"btn followBtn"} onClick={handleFollowClick}>
               Follow
             </button>
           ))}
@@ -87,11 +87,6 @@ const NameTile: React.FC<Props> = ({ profileData, setProfileData, isProfileOwner
         <p>
           <span>Logged</span> {Object.keys(profileData.workoutLog).length} <span>days</span>
         </p>
-
-        {/* <p>
-          <span>Joined</span> {daysBetween(profileData.accountCreated, new Date().toISOString())}{" "}
-          <span>days ago</span>
-        </p> */}
 
         <p>
           <span>Last logged in</span>{" "}
@@ -134,7 +129,7 @@ const TileContainer = styled.header`
   border-radius: 10px;
 
   .left {
-    button {
+    .btn {
       margin-top: 0.5rem;
       padding: 0.25rem 0.75rem;
       font-size: 0.75rem;

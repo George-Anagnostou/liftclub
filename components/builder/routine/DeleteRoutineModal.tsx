@@ -29,7 +29,7 @@ const DeleteRoutineModal: React.FC<Props> = ({ routine, setRoutineToDelete, clea
     <Modal isOpen={Boolean(routine)} removeModal={() => setRoutineToDelete(null)}>
       <Container>
         <button className="close-btn" onClick={() => setRoutineToDelete(null)}>
-          X
+          ✕
         </button>
 
         <h3>
@@ -69,9 +69,8 @@ const Container = styled.div`
     position: absolute;
     top: 2px;
     right: 2px;
-    height: 15px;
-    width: 15px;
-    font-size: 10px;
+    height: 25px;
+    width: 25px;
   }
 
   h3 {

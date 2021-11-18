@@ -33,7 +33,7 @@ const DeleteWorkoutModal: React.FC<Props> = ({
     <Modal isOpen={Boolean(workout)} removeModal={() => setWorkoutToDelete(null)}>
       <Container>
         <button className="close-btn" onClick={() => setWorkoutToDelete(null)}>
-          X
+          ✕
         </button>
 
         <h3>
@@ -72,9 +72,8 @@ const Container = styled.div`
     position: absolute;
     top: 2px;
     right: 2px;
-    height: 15px;
-    width: 15px;
-    font-size: 10px;
+    height: 25px;
+    width: 25px;
   }
 
   h3 {

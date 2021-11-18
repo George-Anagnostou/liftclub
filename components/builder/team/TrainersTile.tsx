@@ -59,7 +59,7 @@ const TrainersTile: React.FC<Props> = ({ team, setTeam }) => {
 
               <p className="username">{trainer.username}</p>
 
-              <button onClick={() => removeTrainer(i)}>X</button>
+              <button onClick={() => removeTrainer(i)}>✕</button>
             </li>
           ))
         ) : (

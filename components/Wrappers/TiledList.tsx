@@ -31,7 +31,7 @@ export function TiledList<T>({
             }`}
           >
             {item[displayProp]}
-            {onDeleteClick && <button onClick={() => onDeleteClick(item)}>X</button>}
+            {onDeleteClick && <button onClick={() => onDeleteClick(item)}>✕</button>}
           </li>
         ))
       ) : (
@@ -61,15 +61,17 @@ const List = styled.ul`
     font-weight: 300;
 
     button {
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       font-weight: 600;
       background: ${({ theme }) => theme.buttonLight};
       color: ${({ theme }) => theme.textLight};
       border: none;
       border-radius: 3px;
-      margin-left: 0.3rem;
-      height: 20px;
-      min-width: 20px;
+      margin-left: 0.75rem;
+      height: 25px;
+      width: 25px;
+      display: grid;
+      place-items: center;
       transition: all 0.25s ease;
     }
 
