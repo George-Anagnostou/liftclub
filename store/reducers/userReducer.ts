@@ -87,6 +87,16 @@ export default function userReducer(state: AppState, action) {
           recentlyViewedUsers: [payload.id, ...(state.user?.recentlyViewedUsers || [])],
         },
       };
+    case "UPDATE_PROFILE_IMG_URL":
+      return { ...state, user: { ...state.user, profileImgUrl: payload.profileImgUrl } };
+
+    case "ADD_NEW_WEIGHT":
+      return {
+        ...state,
+        user: { ...state.user, weight: [payload.weight, ...(state.user?.weight || [])] },
+      };
+    case "UPDATE_BIO":
+      return { ...state, user: { ...state.user, bio: payload.bio } };
     default:
       throw new Error();
   }

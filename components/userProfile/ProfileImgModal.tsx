@@ -6,8 +6,8 @@ import Modal from "../Wrappers/Modal";
 import UploadImgToS3 from "./UploadImgToS3";
 // Interfaces
 import { User } from "../../types/interfaces";
-import { saveProfileImgUrl } from "../../api-lib/fetchers";
-import { useUserState } from "../../store";
+// Context
+import { useUserDispatch, useUserState, saveProfileImgUrl } from "../../store";
 
 const icons = ["default-man", "default-woman"];
 
@@ -23,6 +23,7 @@ const ProfileImgModal: React.FC<Props> = ({
   setProfileData,
 }) => {
   const { user } = useUserState();
+  const userDispatch = useUserDispatch();
 
   const [selectedDefaultIcon, setSelectedDefaultIcon] = useState("");
 
@@ -31,10 +32,11 @@ const ProfileImgModal: React.FC<Props> = ({
 
   const handleIconFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!selectedDefaultIcon) return;
 
     const profileImgUrl = `https://lift-club-profile-imgs.s3.us-west-1.amazonaws.com/${selectedDefaultIcon}.jpg`;
 
-    const saved = await saveProfileImgUrl(user!._id, profileImgUrl);
+    const saved = await saveProfileImgUrl(userDispatch, user!._id, profileImgUrl);
     if (saved) {
       setProfileData((prev) => prev && { ...prev, profileImgUrl: "" });
       setProfileData((prev) => prev && { ...prev, profileImgUrl });

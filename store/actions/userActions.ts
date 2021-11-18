@@ -369,3 +369,74 @@ export const addToRecentlyViewedUsers = async (dispatch, user_id: string, viewed
     return false;
   }
 };
+
+/**
+ *
+ * @param dispatch Dispatch function from useUserDispatch()
+ * @param user_id User id string
+ * @param profileImgUrl full url string for source of user img in aws s3 bucket
+ * @returns Boolean for the success of api call
+ */
+export const saveProfileImgUrl = async (dispatch, user_id: string, profileImgUrl: string) => {
+  try {
+    const res = await fetch(`/api/users/${user_id}`, {
+      method: "PUT",
+      body: JSON.stringify({ profileImgUrl }),
+      headers: { token: getHeaderToken() },
+    });
+
+    dispatch({ type: "UPDATE_PROFILE_IMG_URL", payload: { profileImgUrl } });
+
+    return res.status === 201;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
+/**
+ *
+ * @param dispatch Dispatch function from useUserDispatch()
+ * @param user_id User id string
+ * @param weight any number
+ * @returns Boolean for the success of the api call
+ */
+export const saveUserWeight = async (dispatch, user_id: string, weight: number) => {
+  try {
+    const res = await fetch(`/api/users/${user_id}`, {
+      method: "PUT",
+      body: JSON.stringify({ weight }),
+      headers: { token: getHeaderToken() },
+    });
+
+    dispatch({ type: "ADD_NEW_WEIGHT", payload: { weight } });
+
+    return res.status === 201;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+/**
+ *
+ * @param dispatch Dispatch function from userDispatch()
+ * @param user_id User id string
+ * @param bio String user bio
+ * @returns Boolean for the success of the api call
+ */
+export const saveUserBio = async (dispatch, user_id: string, bio: string) => {
+  try {
+    const res = await fetch(`/api/users/${user_id}`, {
+      method: "PUT",
+      body: JSON.stringify({ bio }),
+      headers: { token: getHeaderToken() },
+    });
+
+    dispatch({ type: "UPDATE_BIO", payload: { bio } });
+
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};

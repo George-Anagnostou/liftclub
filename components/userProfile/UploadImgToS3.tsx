@@ -2,8 +2,7 @@ import React, { useState, useRef } from "react";
 import { config, S3 } from "aws-sdk";
 import styled from "styled-components";
 // Utils
-import { useUserState } from "../../store";
-import { saveProfileImgUrl } from "../../api-lib/fetchers";
+import { saveProfileImgUrl, useUserDispatch, useUserState } from "../../store";
 // Interface
 import { User } from "../../types/interfaces";
 
@@ -33,6 +32,7 @@ interface Props {
 
 const UploadImgToS3: React.FC<Props> = ({ setProfileData }) => {
   const { user } = useUserState();
+  const userDispatch = useUserDispatch();
 
   const savingCircle = useRef<SVGCircleElement>(null);
 
@@ -103,7 +103,7 @@ const UploadImgToS3: React.FC<Props> = ({ setProfileData }) => {
             user!.username
           }.${fileType}`;
 
-          const saved = await saveProfileImgUrl(user!._id, profileImgUrl);
+          const saved = await saveProfileImgUrl(userDispatch, user!._id, profileImgUrl);
           if (saved) {
             setProfileData((prev) => prev && { ...prev, profileImgUrl: "" });
             setProfileData((prev) => prev && { ...prev, profileImgUrl });

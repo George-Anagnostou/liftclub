@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useUserState } from "../../store";
-
-// API
-import { saveUserWeight } from "../../api-lib/fetchers";
+import { useUserState, saveUserWeight, useUserDispatch } from "../../store";
 
 const WeightInput: React.FC = () => {
   const { user } = useUserState();
+  const userDispatch = useUserDispatch();
 
   const [inputWeight, setInputWeight] = useState("");
   const [displayWeight, setDisplayWeight] = useState(0);
@@ -22,7 +20,7 @@ const WeightInput: React.FC = () => {
     const weight = Number(inputWeight);
 
     // send POST req
-    const isSaved = await saveUserWeight(weight, user!._id);
+    const isSaved = await saveUserWeight(userDispatch, user!._id, weight);
 
     if (isSaved) {
       // update weightDiff only if user has weight defined
@@ -50,7 +48,7 @@ const WeightInput: React.FC = () => {
 
       <div className="innerInfo">
         <form method="post" onSubmit={handleSave}>
-          <p>Current •</p>
+          <p>Current - </p>
           <input type="number" name="weight" onChange={handleWeightChange} value={inputWeight} />
           <button type="submit" disabled={!inputWeight}>
             save
@@ -59,18 +57,18 @@ const WeightInput: React.FC = () => {
 
         <div className="displayWeight">
           <p>
-            Previous • <span>{displayWeight}</span> lbs
+            Previous - <span>{displayWeight}</span> lbs
           </p>
         </div>
 
         <div className="weightDiff">
           {weightDiff > 0 ? (
             <p>
-              Total gain • <span>{weightDiff}</span> lbs
+              Total gain - <span>{weightDiff}</span> lbs
             </p>
           ) : (
             <p>
-              Total loss • <span>{Math.abs(weightDiff)}</span> lbs
+              Total loss - <span>{Math.abs(weightDiff)}</span> lbs
             </p>
           )}
         </div>

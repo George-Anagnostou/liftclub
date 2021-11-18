@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import styled from "styled-components";
-// API
-import { saveUserBio } from "../../api-lib/fetchers";
+// Context
+import { saveUserBio, useUserDispatch } from "../../store";
 // Interfaces
 import { User } from "../../types/interfaces";
 
@@ -13,6 +13,8 @@ interface Props {
   user_id: string;
 }
 const Bio: React.FC<Props> = ({ profileData, isProfileOwner, setProfileData, user_id }) => {
+  const userDispatch = useUserDispatch();
+
   const [editing, setEditing] = useState(false);
   const [bioEdits, setBioEdits] = useState(profileData.bio || "");
 
@@ -24,7 +26,7 @@ const Bio: React.FC<Props> = ({ profileData, isProfileOwner, setProfileData, use
   };
 
   const handleSaveClick = async () => {
-    const saved = await saveUserBio(user_id, bioEdits);
+    const saved = await saveUserBio(userDispatch, user_id, bioEdits);
     if (saved) {
       setProfileData((prev: User) => ({ ...prev, bio: bioEdits }));
       setEditing(false);
@@ -59,7 +61,7 @@ const Bio: React.FC<Props> = ({ profileData, isProfileOwner, setProfileData, use
             target.value = "";
             target.value = val;
           }}
-        ></textarea>
+        />
       ) : (
         <p>{profileData.bio || "None"}</p>
       )}
