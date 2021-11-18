@@ -1,5 +1,3 @@
-import { ObjectId } from "bson";
-
 export type User = {
   readonly _id: string;
   readonly username: string;
@@ -99,6 +97,7 @@ export interface NewExercise {
   muscleWorked: string;
   metric: string;
   creator_id: string;
+  isDefault: boolean;
 }
 export interface Exercise extends NewExercise {
   readonly _id: string;
