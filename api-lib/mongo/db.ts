@@ -9,6 +9,7 @@ import {
   Team,
   NewTeam,
   WorkoutLogItem,
+  ShortUser,
 } from "../../types/interfaces";
 import { ObjectId } from "mongodb";
 
@@ -246,6 +247,60 @@ export async function removeEntryFromWorkoutLog(db: any, user_id: string, date: 
   const removedWorkout_id = data.value.workoutLog[date].workout_id;
   const saved = Boolean(data.ok);
   return [removedWorkout_id, saved];
+}
+
+export async function postNewUser(db: any, username: string, passwordHash: string) {
+  const data = await db.collection("users").insertOne({
+    username: username,
+    password: passwordHash,
+    savedWorkouts: [],
+    workoutLog: {},
+    accountCreated: new Date().toISOString(),
+    lastLoggedIn: new Date().toISOString(),
+  });
+  const user: User = data.ops[0];
+  delete user.password;
+  return user;
+}
+
+export async function getShortUsersFromIdArr(db: any, idArr: string[]) {
+  const users: ShortUser[] = await db
+    .collection("users")
+    .find({ _id: { $in: idArr.map((_id) => new ObjectId(_id)) } })
+    .project({ username: 1, profileImgUrl: 1 })
+    .toArray();
+  return users;
+}
+
+export async function searchUsernameQuery(db: any, query: string) {
+  const foundUsers: ShortUser[] = await db
+    .collection("users")
+    .aggregate([
+      { $match: { username: { $regex: query, $options: "i" } } },
+      {
+        $project: {
+          _id: 1,
+          username: 1,
+          profileImgUrl: 1,
+          w: {
+            $cond: [
+              {
+                $eq: [
+                  { $substr: [{ $toLower: "$username" }, 0, query.length] },
+                  query.toLocaleLowerCase(),
+                ],
+              },
+              1,
+              0,
+            ],
+          },
+        },
+      },
+      { $sort: { w: -1 } },
+    ])
+    .toArray();
+
+  return foundUsers;
 }
 
 // Exercises

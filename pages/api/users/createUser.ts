@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { connectToDatabase } from "../../../utils/mongodb";
-import bcrypt from "bcryptjs";
 import * as jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import { connectToDatabase } from "../../../utils/mongodb";
+import { getUserByUsername, postNewUser } from "../../../api-lib/mongo/db";
 
 const SALT_ROUNDS = 10;
 const JWT_SECRET = process.env.JWT_SECRET || "";
@@ -17,25 +18,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { username, password }: { username: string; password: string } = req.body;
   const hash = bcrypt.hashSync(password, SALT_ROUNDS);
 
-  const existingUser = await db.collection("users").findOne({ username: username });
+  const existingUser = await getUserByUsername(db, username);
 
   if (existingUser) {
     // Username already exists in DB
     res.status(403).end();
   } else {
-    const userData = await db.collection("users").insertOne({
-      username: username,
-      password: hash,
-      savedWorkouts: [],
-      workoutLog: {},
-      accountCreated: new Date().toISOString(),
-      lastLoggedIn: new Date().toISOString(),
-    });
-
-    delete userData.ops[0].password;
-
+    const userData = await postNewUser(db, username, hash);
     const token = jwt.sign({ id: userData._id }, JWT_SECRET);
-
-    res.status(201).json({ userData: userData.ops[0], token: token });
+    res.status(201).json({ userData, token });
   }
 };
