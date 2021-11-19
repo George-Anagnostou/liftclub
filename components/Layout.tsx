@@ -74,7 +74,7 @@ const Layout: React.FC<Props> = ({ title = "Lift Club", children }) => {
       >
         {children}
 
-        {user && <NavBar />}
+        {user && router.pathname !== "/" && <NavBar />}
       </MainContainer>
     </>
   );
