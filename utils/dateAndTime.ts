@@ -49,6 +49,12 @@ export const daysBetween = (iso1: string, iso2: string) => {
   return days;
 };
 
+/**
+ *
+ * @param isoDate ISO date string
+ * @param offset Positive or negative number signifying how many days you want the date to be offset from the isoDate parameter
+ * @returns a string Eg: "May 21, 2021"
+ */
 export const formatIsoDate = (isoDate: string, offset: number = 0) => {
   const date = new Date(isoDate);
   const year = date.getFullYear();
