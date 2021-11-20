@@ -10,15 +10,9 @@ interface Props {
   customWorkout: Workout;
   setCustomWorkout: React.Dispatch<React.SetStateAction<Workout>>;
   removeExercise: (exercise_id: string) => void;
-  setExerciseListBottom: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const CustomWorkout: React.FC<Props> = ({
-  customWorkout,
-  setCustomWorkout,
-  removeExercise,
-  setExerciseListBottom,
-}) => {
+const CustomWorkout: React.FC<Props> = ({ customWorkout, setCustomWorkout, removeExercise }) => {
   // Update the reps for specified set
   const handleRepChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -35,9 +29,11 @@ const CustomWorkout: React.FC<Props> = ({
   };
 
   const handleSetChange = (method: "add" | "remove", exerciseIndex: number) => {
+    const exerciseSetsLength = customWorkout.exercises[exerciseIndex].sets.length;
+
     switch (method) {
       case "add":
-        if (customWorkout.exercises[exerciseIndex].sets.length >= 100) break;
+        if (exerciseSetsLength >= 100) break;
 
         // Add empty set to spedified exercise
         setCustomWorkout(
@@ -47,14 +43,11 @@ const CustomWorkout: React.FC<Props> = ({
         );
         break;
       case "remove":
+        if (exerciseSetsLength === 1) break;
         // Remove last set from spedified exercise
         setCustomWorkout(
           update(customWorkout, {
-            exercises: {
-              [exerciseIndex]: {
-                sets: { $splice: [[customWorkout.exercises[exerciseIndex].sets.length - 1, 1]] },
-              },
-            },
+            exercises: { [exerciseIndex]: { sets: { $splice: [[exerciseSetsLength - 1, 1]] } } },
           })
         );
         break;
@@ -67,7 +60,7 @@ const CustomWorkout: React.FC<Props> = ({
     <>
       <Droppable droppableId={"workout"}>
         {(provided) => (
-          <ExerciseList {...provided.droppableProps} ref={provided.innerRef}>
+          <CustomWorkoutList {...provided.droppableProps} ref={provided.innerRef}>
             {customWorkout.exercises.map(
               ({ exercise, sets }, i) =>
                 exercise && (
@@ -83,45 +76,20 @@ const CustomWorkout: React.FC<Props> = ({
                 )
             )}
             {provided.placeholder}
-          </ExerciseList>
+          </CustomWorkoutList>
         )}
       </Droppable>
-
-      <AddExerciseBtn onClick={() => setExerciseListBottom((prev) => (prev === 0 ? -80 : 0))}>
-        <p>
-          Add Exercise <span>＋</span>
-        </p>
-      </AddExerciseBtn>
     </>
   );
 };
 export default CustomWorkout;
 
-const ExerciseList = styled.ul`
+const CustomWorkoutList = styled.ul`
   width: 100%;
-
   display: flex;
   justify-content: flex-start;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-
   position: relative;
-`;
-
-const AddExerciseBtn = styled.button`
-  background: ${({ theme }) => theme.accent};
-  color: ${({ theme }) => theme.accentText};
-  box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
-  border: none;
-  width: fit-content;
-  margin: 0.5rem auto 1rem;
-  padding: 0.25rem 2rem;
-  font-weight: 300;
-  border-radius: 5px;
-  font-size: 1.1rem;
-
-  span {
-    font-weight: 200;
-  }
 `;

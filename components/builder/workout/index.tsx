@@ -14,6 +14,7 @@ import {
   addWorkoutToCreatedWorkouts,
   updateExistingCreatedWorkout,
 } from "../../../store/actions/builderActions";
+import styled from "styled-components";
 
 const InitialCustomWorkout: Workout = {
   _id: "",
@@ -48,7 +49,7 @@ const WorkoutBuilder: React.FC = () => {
           ...prev,
           exercises: [
             ...prev.exercises,
-            { exercise: exercise, exercise_id: exercise._id, sets: [] },
+            { exercise: exercise, exercise_id: exercise._id, sets: [{ reps: 0, weight: -1 }] },
           ],
         };
       });
@@ -147,9 +148,14 @@ const WorkoutBuilder: React.FC = () => {
           customWorkout={customWorkout}
           setCustomWorkout={setCustomWorkout}
           removeExercise={removeExercise}
-          setExerciseListBottom={setExerciseListBottom}
         />
       </DragDropContext>
+
+      <AddExerciseBtn onClick={() => setExerciseListBottom((prev) => (prev === 0 ? -80 : 0))}>
+        <p>
+          Add Exercise <span>＋</span>
+        </p>
+      </AddExerciseBtn>
 
       <UserWorkouts
         customWorkout={customWorkout}
@@ -168,3 +174,20 @@ const WorkoutBuilder: React.FC = () => {
   );
 };
 export default WorkoutBuilder;
+
+const AddExerciseBtn = styled.button`
+  background: ${({ theme }) => theme.accent};
+  color: ${({ theme }) => theme.accentText};
+  box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
+  border: none;
+  width: fit-content;
+  margin: 0.5rem auto 1rem;
+  padding: 0.25rem 2rem;
+  font-weight: 300;
+  border-radius: 5px;
+  font-size: 1.1rem;
+
+  span {
+    font-weight: 200;
+  }
+`;

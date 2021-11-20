@@ -52,7 +52,7 @@ const CustomWorkoutExercise: React.FC<Props> = ({
 
                 <button
                   onClick={() => handleSetChange("remove", exerciseIndex)}
-                  disabled={!Boolean(sets.length)}
+                  disabled={sets.length <= 1}
                 >
                   -
                 </button>

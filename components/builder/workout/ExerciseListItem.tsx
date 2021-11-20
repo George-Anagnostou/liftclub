@@ -9,7 +9,7 @@ import Garbage from "../../svg/Garbage";
 interface Props {
   exercise: Exercise;
   isExerciseInCustomWorkout: (exercise_id: string) => boolean;
-  removeExercise: (exercise_id: string) => void;
+  removeExercise?: (exercise_id: string) => void;
   addExercise: (exercise: Exercise) => void;
   deletable: boolean;
   setExercises?: React.Dispatch<React.SetStateAction<Exercise[]>>;
@@ -28,7 +28,7 @@ const ExerciseListItem: React.FC<Props> = ({
   const handleDeleteExercise = async () => {
     const deleted = await deleteExercise(exercise._id);
     if (deleted) {
-      removeExercise(exercise._id);
+      removeExercise && removeExercise(exercise._id);
       if (setExercises) setExercises((prev) => prev.filter((ex) => ex._id !== exercise._id));
     }
   };
@@ -39,7 +39,7 @@ const ExerciseListItem: React.FC<Props> = ({
         <h3
           onClick={
             isExerciseInCustomWorkout(exercise._id)
-              ? () => removeExercise(exercise._id)
+              ? () => removeExercise && removeExercise(exercise._id)
               : () => addExercise(exercise)
           }
         >

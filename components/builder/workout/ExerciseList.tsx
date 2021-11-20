@@ -15,7 +15,7 @@ import ExerciseListItem from "./ExerciseListItem";
 interface Props {
   isExerciseInCustomWorkout: (exercise_id: string) => boolean;
   addExercise: (exercise: Exercise) => void;
-  removeExercise: (exercise_id: string) => void;
+  removeExercise?: (exercise_id: string) => void;
   setExerciseListBottom: React.Dispatch<React.SetStateAction<number>>;
   exerciseListBottom: number;
 }
@@ -176,16 +176,16 @@ export default ExerciseList;
 
 const ExercisesContainer = styled.div`
   height: 75vh;
-  width: 100%;
+  width: 100vw;
   max-width: 700px;
-  margin-left: -0.5rem;
   overflow-y: auto;
   border-radius: 20px 20px 0 0;
   position: fixed;
+  left: 0;
   display: flex;
   flex-direction: column;
   z-index: 990;
-  transition: bottom 0.05s ease-out;
+  transition: bottom 0.05s ease-in-out;
 
   &.transition {
     transition: bottom 0.25s ease-out;
