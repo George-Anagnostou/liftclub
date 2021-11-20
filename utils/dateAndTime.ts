@@ -74,6 +74,11 @@ export const areTheSameDate = (date1: string, date2: string): boolean => {
   return date1.substring(0, 10) === date2.substring(0, 10);
 };
 
+/**
+ *
+ * @param date Date Object
+ * @returns local ISO date string
+ */
 export const dateToISOWithLocal = (date: Date) => {
   const offsetMs = date.getTimezoneOffset() * 60 * 1000;
   const msLocal = date.getTime() - offsetMs;
@@ -83,6 +88,28 @@ export const dateToISOWithLocal = (date: Date) => {
   return isoLocal;
 };
 
+/**
+ *
+ * @param date1
+ * @param date2
+ * @returns
+ */
 export function dateCompare(date1: string, date2: string) {
   return new Date(date2) > new Date(date1);
 }
+
+/**
+ *
+ * @param numOfDaysToShift optional parameter for how many days to shift the returned date (positive is future, negative is past)
+ * @returns the first 10 characters of an ISO date string. Eg: "2021-05-10"
+ */
+export const formatWorkoutLogKeyString = (numOfDaysToShift: number = 0) => {
+  const { year, month, day } = getCurrYearMonthDay();
+  // Current date
+  const date = new Date(year, month, day);
+  // Shifted date
+  date.setDate(date.getDate() + numOfDaysToShift);
+
+  const newDate = date.toISOString().substring(0, 10);
+  return newDate;
+};
