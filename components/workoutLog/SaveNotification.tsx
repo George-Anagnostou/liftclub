@@ -6,7 +6,7 @@ interface Props {
   saveLoading: boolean;
 }
 
-export const SaveNotification: React.FC<Props> = ({ saveLoading }) => {
+const SaveNotification: React.FC<Props> = ({ saveLoading }) => {
   return (
     <Circle className={saveLoading ? "" : "saved"}>
       {saveLoading ? (
@@ -19,6 +19,7 @@ export const SaveNotification: React.FC<Props> = ({ saveLoading }) => {
     </Circle>
   );
 };
+export default SaveNotification;
 
 const Circle = styled.div`
   width: 65px;

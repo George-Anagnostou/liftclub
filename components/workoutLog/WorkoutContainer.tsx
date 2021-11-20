@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import update from "immutability-helper";
 // Context
 import { useUserDispatch, useUserState } from "../../store";
 import { addDayToWorkoutLog } from "../../store/actions/userActions";
@@ -9,25 +10,20 @@ import { groupWorkoutLogByExercise, dateCompare } from "../../utils";
 import { Exercise, WorkoutLogItem } from "../../types/interfaces";
 // Components
 import ExerciseInfoModal from "./ExerciseInfoModal";
-import { SaveNotification } from "./SaveNotification";
+import SaveNotification from "./SaveNotification";
 import ExerciseBox from "./Exercise";
+import ExerciseList from "../builder/workout/ExerciseList";
 
 interface Props {
-  currentDayData: WorkoutLogItem;
-  handleWeightChange: (
-    { target }: React.ChangeEvent<HTMLInputElement>,
-    exerciseIndex: number,
-    setIndex: number
-  ) => void;
-  handleWorkoutNoteChange: ({ target }: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  currentWorkoutLogItem: WorkoutLogItem;
+  setCurrentWorkoutLogItem: React.Dispatch<React.SetStateAction<WorkoutLogItem | null>>;
   deleteWorkout: () => Promise<void>;
   selectedDate: string;
 }
 
 const WorkoutContainerClone: React.FC<Props> = ({
-  currentDayData,
-  handleWeightChange,
-  handleWorkoutNoteChange,
+  currentWorkoutLogItem,
+  setCurrentWorkoutLogItem,
   deleteWorkout,
   selectedDate,
 }) => {
@@ -39,15 +35,91 @@ const WorkoutContainerClone: React.FC<Props> = ({
   const [exerciseInfo, setExerciseInfo] = useState<Exercise | null>(null);
   const [saveSuccess, setSaveSuccess] = useState<boolean | null>(null);
   const [saveLoading, setSaveLoading] = useState(false);
+
+  const [exerciseListBottom, setExerciseListBottom] = useState(-80); // number ranging from -80 to 0
+
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const [timer, setTimer] = useState(0);
 
+  const handleSetChangeInCurrentWorkoutLogItem = (
+    method: "add" | "remove",
+    exerciseIndex: number
+  ) => {
+    const exerciseSetsLength = currentWorkoutLogItem.exerciseData[exerciseIndex].sets.length;
+
+    switch (method) {
+      case "add":
+        if (exerciseSetsLength >= 100) break;
+
+        // Add empty set to spedified exercise
+        setCurrentWorkoutLogItem(
+          update(currentWorkoutLogItem, {
+            exerciseData: { [exerciseIndex]: { sets: { $push: [{ reps: 0, weight: -1 }] } } },
+          })
+        );
+        break;
+      case "remove":
+        if (exerciseSetsLength === 1) break;
+        // Remove last set from spedified exercise
+        setCurrentWorkoutLogItem(
+          update(currentWorkoutLogItem, {
+            exerciseData: { [exerciseIndex]: { sets: { $splice: [[exerciseSetsLength - 1, 1]] } } },
+          })
+        );
+        break;
+      default:
+        break;
+    }
+  };
+
+  const addExerciseToCurrentWorkoutLogItem = (exercise: Exercise) => {
+    setCurrentWorkoutLogItem({
+      ...currentWorkoutLogItem,
+      exerciseData: [
+        ...currentWorkoutLogItem.exerciseData,
+        { exercise, exercise_id: exercise._id, sets: [{ reps: 0, weight: -1 }] },
+      ],
+    });
+  };
+
+  const removeExerciseFromCurrentWorkoutLogItem = (exercise_id: string) => {
+    setCurrentWorkoutLogItem({
+      ...currentWorkoutLogItem,
+      exerciseData: [
+        ...currentWorkoutLogItem.exerciseData.filter((each) => each.exercise_id !== exercise_id),
+      ],
+    });
+  };
+
+  const handleWorkoutNoteChange = ({ target }: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (currentWorkoutLogItem)
+      setCurrentWorkoutLogItem({ ...currentWorkoutLogItem, workoutNote: target.value });
+  };
+
+  // Sets weight for a specific workout. Takes the event value and exercise name
+  const handleWeightChange = (
+    { target }: React.ChangeEvent<HTMLInputElement>,
+    exerciseIndex: number,
+    setIndex: number
+  ) => {
+    // Cast value to number or use empty str
+    const value = target.value === "" ? "" : Number(target.value);
+
+    if (currentWorkoutLogItem?.exerciseData) {
+      setCurrentWorkoutLogItem((prev) =>
+        update(prev, {
+          exerciseData: { [exerciseIndex]: { sets: { [setIndex]: { weight: { $set: value } } } } },
+        })
+      );
+    }
+  };
+
   // Posts currentDayData to DB
   const saveWorkout = async () => {
-    if (!currentDayData || !user) return;
+    if (!currentWorkoutLogItem || !user) return;
     setSaveLoading(true);
 
-    const { workout, ...rest } = currentDayData;
+    const { workout, ...rest } = currentWorkoutLogItem;
     const saved = await addDayToWorkoutLog(dispatch, user._id, rest, selectedDate);
 
     setSaveSuccess(false); // Re-trigger save animation
@@ -73,13 +145,20 @@ const WorkoutContainerClone: React.FC<Props> = ({
     return () => clearInterval(interval);
   }, [isTyping]);
 
-  // Save workout if timer reaches 3 (seconds)
+  // Save workout if timer reaches 2 (seconds)
   useEffect(() => {
-    if (timer === 3) {
+    if (timer === 2) {
       saveWorkout();
       setIsTyping(false);
     }
   }, [timer]);
+
+  // Remove Saved notification after 3 seconds
+  useEffect(() => {
+    let resetTimeout: NodeJS.Timeout;
+    if (saveSuccess) resetTimeout = setTimeout(() => setSaveSuccess(null), 3000);
+    return () => clearTimeout(resetTimeout);
+  }, [saveSuccess]);
 
   // Enable user to use "Enter" key to go down the list of inputs
   useEffect(() => {
@@ -96,22 +175,19 @@ const WorkoutContainerClone: React.FC<Props> = ({
     return () => document.removeEventListener("keydown", useEnterAsTab);
   }, []);
 
-  // Remove Saved notification after 3 seconds
-  useEffect(() => {
-    let resetTimeout: NodeJS.Timeout;
-    if (saveSuccess) resetTimeout = setTimeout(() => setSaveSuccess(null), 3000);
-    return () => clearTimeout(resetTimeout);
-  }, [saveSuccess]);
-
   return (
     <>
       <WorkoutName>
-        <h3>{currentDayData.workout?.name}</h3>
+        {currentWorkoutLogItem.workout ? (
+          <h3>{currentWorkoutLogItem.workout.name}</h3>
+        ) : (
+          <h3>On the Fly - {selectedDate}</h3>
+        )}
       </WorkoutName>
 
       <Form>
         <WorkoutList>
-          {currentDayData.exerciseData.map(({ exercise, exercise_id, sets }, i) => (
+          {currentWorkoutLogItem.exerciseData.map(({ exercise, exercise_id, sets }, i) => (
             <ExerciseBox
               key={exercise_id}
               exercise={exercise}
@@ -126,9 +202,16 @@ const WorkoutContainerClone: React.FC<Props> = ({
                 handleUserInput(() => handleWeightChange(e, exerciseIndex, setIndex))
               }
               setExerciseInfo={setExerciseInfo}
+              handleSetChangeInCurrentWorkoutLogItem={handleSetChangeInCurrentWorkoutLogItem}
             />
           ))}
         </WorkoutList>
+
+        <AddExercise onClick={() => setExerciseListBottom((prev) => (prev === 0 ? -80 : 0))}>
+          <p>
+            Add Exercise <span>＋</span>
+          </p>
+        </AddExercise>
 
         <WorkoutNote>
           <h3>Notes</h3>
@@ -137,7 +220,7 @@ const WorkoutContainerClone: React.FC<Props> = ({
             name={"workoutNote"}
             cols={30}
             rows={3}
-            value={currentDayData.workoutNote}
+            value={currentWorkoutLogItem.workoutNote}
             onChange={(e) => handleUserInput(() => handleWorkoutNoteChange(e))}
           ></textarea>
         </WorkoutNote>
@@ -145,9 +228,17 @@ const WorkoutContainerClone: React.FC<Props> = ({
 
       <DeleteBtn onClick={deleteWorkout}>Delete Workout</DeleteBtn>
 
-      {currentDayData && (saveSuccess || saveLoading) && (
-        <SaveNotification saveLoading={saveLoading} />
-      )}
+      <ExerciseList
+        isExerciseInCustomWorkout={(exercise_id) =>
+          currentWorkoutLogItem.exerciseData.some((elem) => elem.exercise_id === exercise_id)
+        }
+        addExercise={addExerciseToCurrentWorkoutLogItem}
+        removeExercise={removeExerciseFromCurrentWorkoutLogItem}
+        setExerciseListBottom={setExerciseListBottom}
+        exerciseListBottom={exerciseListBottom}
+      />
+
+      {(saveSuccess || saveLoading) && <SaveNotification saveLoading={saveLoading} />}
 
       {exerciseInfo && (
         <ExerciseInfoModal exerciseInfo={exerciseInfo} setExerciseInfo={setExerciseInfo} />
@@ -185,6 +276,22 @@ const WorkoutList = styled.ul`
   justify-content: center;
   align-items: center;
   flex-direction: column;
+`;
+
+const AddExercise = styled.div`
+  background: ${({ theme }) => theme.buttonMed};
+  color: ${({ theme }) => theme.accentText};
+  box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
+  width: fit-content;
+  margin: 0.5rem auto;
+  padding: 0.25rem 2rem;
+  font-weight: 300;
+  border-radius: 5px;
+  font-size: 1.1rem;
+
+  span {
+    font-weight: 200;
+  }
 `;
 
 const WorkoutNote = styled.div`

@@ -8,10 +8,10 @@ import { Team, Workout } from "../../types/interfaces";
 
 interface Props {
   selectedDate: string;
-  displayWorkout: (clicked: Workout) => Promise<void>;
+  displayPremadeWorkout: (clicked: Workout) => Promise<void>;
 }
 
-const TeamWorkouts: React.FC<Props> = ({ selectedDate, displayWorkout }) => {
+const TeamWorkouts: React.FC<Props> = ({ selectedDate, displayPremadeWorkout }) => {
   const { user } = useUserState();
 
   const [teamsJoined, setTeamsJoined] = useState<Team[] | null>(null);
@@ -60,7 +60,10 @@ const TeamWorkouts: React.FC<Props> = ({ selectedDate, displayWorkout }) => {
 
           <ul>
             {todaysWorkouts?.map(({ teamName, workout }) => (
-              <li key={teamName} onClick={workout ? () => displayWorkout(workout) : () => {}}>
+              <li
+                key={teamName}
+                onClick={workout ? () => displayPremadeWorkout(workout) : () => {}}
+              >
                 <p className="team-name">{teamName}</p>
 
                 <p className="workout">{workout?.name || "No workout today"}</p>

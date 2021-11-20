@@ -9,10 +9,10 @@ import { Workout } from "../../types/interfaces";
 import TiledList from "../Wrappers/TiledList";
 
 interface Props {
-  displayWorkout: (clicked: Workout) => Promise<void>;
+  displayPremadeWorkout: (clicked: Workout) => Promise<void>;
 }
 
-const UserWorkouts: React.FC<Props> = ({ displayWorkout }) => {
+const UserWorkouts: React.FC<Props> = ({ displayPremadeWorkout }) => {
   const { user, isSignedIn } = useUserState();
 
   const [createdWorkouts, setCreatedWorkouts] = useState<Workout[]>([]);
@@ -45,7 +45,7 @@ const UserWorkouts: React.FC<Props> = ({ displayWorkout }) => {
 
         <TiledList
           items={createdWorkouts}
-          onItemClick={(workout) => displayWorkout(workout)}
+          onItemClick={(workout) => displayPremadeWorkout(workout)}
           displayProp={"name"}
           keyProp={"_id"}
         />
@@ -56,7 +56,7 @@ const UserWorkouts: React.FC<Props> = ({ displayWorkout }) => {
 
         <TiledList
           items={savedWorkouts}
-          onItemClick={(workout) => displayWorkout(workout)}
+          onItemClick={(workout) => displayPremadeWorkout(workout)}
           displayProp={"name"}
           keyProp={"_id"}
         />

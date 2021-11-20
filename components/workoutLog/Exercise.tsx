@@ -17,6 +17,7 @@ interface Props {
     setIndex: number
   ) => void;
   setExerciseInfo: React.Dispatch<React.SetStateAction<Exercise | null>>;
+  handleSetChangeInCurrentWorkoutLogItem: (method: "add" | "remove", exerciseIndex: number) => void;
 }
 
 const ExerciseBox: React.FC<Props> = ({
@@ -27,12 +28,24 @@ const ExerciseBox: React.FC<Props> = ({
   exerciseHistory,
   handleWeightChange,
   setExerciseInfo,
+  handleSetChangeInCurrentWorkoutLogItem,
 }) => {
   return (
     <Container>
-      <h3 className="exercise-name">
-        {exercise?.name} <span onClick={() => setExerciseInfo(exercise!)}>i</span>
-      </h3>
+      <Header>
+        <h3 className="exercise-name">
+          {exercise?.name} <span onClick={() => setExerciseInfo(exercise!)}>i</span>
+        </h3>
+        <div className="set-ctrl">
+          <span onClick={() => handleSetChangeInCurrentWorkoutLogItem("remove", exerciseIndex)}>
+            -
+          </span>
+          <p>SET</p>{" "}
+          <span onClick={() => handleSetChangeInCurrentWorkoutLogItem("add", exerciseIndex)}>
+            +
+          </span>
+        </div>
+      </Header>
 
       <ul>
         <li className="set-title">
@@ -62,38 +75,10 @@ export default ExerciseBox;
 const Container = styled.li`
   width: 100%;
   border-radius: 10px;
-  padding: 0.5rem 0;
+  padding: 0.25rem 0 0.5rem;
   margin: 0 auto 0.5rem;
   text-align: center;
   background: ${({ theme }) => theme.background};
-
-  h3 {
-    text-transform: uppercase;
-    margin-bottom: 0.5rem;
-    font-weight: 300;
-    font-size: 1.1rem;
-    letter-spacing: 1px;
-    background: ${({ theme }) => theme.body};
-    margin: 0 0.5rem;
-    border-radius: 8px;
-    padding: 0.25rem 2rem;
-    position: relative;
-
-    span {
-      text-transform: lowercase;
-      position: absolute;
-      right: 0.5rem;
-      top: 0.4rem;
-      padding: 0;
-      font-size: 0.7rem;
-      font-weight: 600;
-      height: 1.3rem;
-      width: 1.3rem;
-      color: ${({ theme }) => theme.buttonLight};
-      border: 2px solid ${({ theme }) => theme.buttonLight};
-      border-radius: 50%;
-    }
-  }
 
   ul {
     width: 100%;
@@ -113,6 +98,70 @@ const Container = styled.li`
         flex: 1;
         text-align: center;
       }
+    }
+  }
+`;
+
+const Header = styled.div`
+  background: ${({ theme }) => theme.body};
+  margin: 0 0.25rem;
+  border-radius: 8px;
+  padding: 0.5rem 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .exercise-name {
+    flex: 2;
+    font-weight: 300;
+    font-size: 1.1rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-transform: uppercase;
+    text-align: left;
+    letter-spacing: 1px;
+
+    span {
+      text-align: center;
+      text-transform: lowercase;
+      display: block;
+      padding: 0;
+      font-size: 0.7rem;
+      font-weight: 600;
+      height: 1.3rem;
+      min-width: 1.3rem;
+      color: ${({ theme }) => theme.buttonLight};
+      border: 2px solid ${({ theme }) => theme.buttonLight};
+      border-radius: 50%;
+      margin-left: 0.5rem;
+    }
+  }
+
+  .set-ctrl {
+    min-width: max-content;
+    display: flex;
+    align-items: center;
+
+    p {
+      font-weight: 200;
+      margin-left: 0.5rem;
+    }
+
+    span {
+      color: ${({ theme }) => theme.textLight};
+      margin-left: 0.5rem;
+      font-size: 1.5rem;
+      font-weight: 300;
+      line-height: 2.1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 2rem;
+      width: 2rem;
+      border-radius: 50%;
+      box-shadow: 0 0 3px ${({ theme }) => theme.accent};
     }
   }
 `;

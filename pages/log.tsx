@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import update from "immutability-helper";
 // Components
-import TeamWorkouts from "../components/workoutLog/TeamWorkouts";
-import UserWorkouts from "../components/workoutLog/UserWorkouts";
+import DateScroll from "../components/workoutLog/DateScroll";
 import LoadingSpinner from "../components/LoadingSpinner";
 import WorkoutContainer from "../components/workoutLog/WorkoutContainer";
-import DateScroll from "../components/workoutLog/DateScroll";
+import QuickStart from "../components/workoutLog/QuickStart";
+import TeamWorkouts from "../components/workoutLog/TeamWorkouts";
+import UserWorkouts from "../components/workoutLog/UserWorkouts";
 // Utils
 import {
   addExerciseDataToLoggedWorkout,
@@ -26,77 +27,69 @@ export default function log() {
   const dispatch = useUserDispatch();
 
   const [loading, setLoading] = useState(true);
-  const [currentDayData, setCurrentDayData] = useState<WorkoutLogItem | null>(null);
+  const [currentWorkoutLogItem, setCurrentWorkoutLogItem] = useState<WorkoutLogItem | null>(null);
   const [selectedDate, setSelectedDate] = useState(() =>
     dateToISOWithLocal(new Date()).substring(0, 10)
   );
 
+  const createNewWorkoutLogItem = (): WorkoutLogItem => {
+    return {
+      completed: false,
+      exerciseData: [],
+      workoutNote: "",
+    };
+  };
+
   // Accepts a workout from user's workoutLog and sets page state
   const setPageState = (dayData: WorkoutLogItem | null) => {
-    setCurrentDayData(dayData);
+    setCurrentWorkoutLogItem(dayData);
     setLoading(false);
   };
 
   const deleteWorkout = async () => {
-    if (!currentDayData || !user) return;
-
+    if (!currentWorkoutLogItem || !user) return;
     // If user never saved the workout
     if (!user.workoutLog[selectedDate]) return setPageState(null);
 
     const deleted = await deleteDayFromWorkoutLog(dispatch, user._id, selectedDate);
-
     if (deleted) setPageState(null);
   };
 
-  const displayWorkout = async (clicked: Workout) => {
-    const mergedData = await addExerciseDataToWorkout(clicked);
+  const displayPremadeWorkout = async (clicked: Workout) => {
+    const newLogItem = createNewWorkoutLogItem();
+    const workout = await addExerciseDataToWorkout(clicked);
 
-    const composedData: WorkoutLogItem = {
-      exerciseData: mergedData.exercises,
-      workout_id: mergedData._id,
-      workoutNote: "",
-      completed: false,
-      workout: mergedData,
+    const newWorkoutLogItem: WorkoutLogItem = {
+      ...newLogItem,
+      exerciseData: workout.exercises,
+      workout_id: workout._id,
+      workout: workout,
     };
 
-    setPageState(composedData);
+    setPageState(newWorkoutLogItem);
   };
 
-  const handleWorkoutNoteChange = ({ target }: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (currentDayData) setCurrentDayData({ ...currentDayData, workoutNote: target.value });
+  const displayOnTheFlyWorkout = () => {
+    const newLogItem = createNewWorkoutLogItem();
+    setPageState(newLogItem);
   };
 
-  // Sets weight for a specific workout. Takes the event value and exercise name
-  const handleWeightChange = (
-    { target }: React.ChangeEvent<HTMLInputElement>,
-    exerciseIndex: number,
-    setIndex: number
-  ) => {
-    // Cast value to number or use empty str
-    const value = target.value === "" ? "" : Number(target.value);
+  const displayWorkoutLogItem = async (logItem: WorkoutLogItem) => {
+    logItem = await addExerciseDataToLoggedWorkout(logItem);
 
-    if (currentDayData?.exerciseData) {
-      setCurrentDayData((prev) =>
-        update(prev, {
-          exerciseData: { [exerciseIndex]: { sets: { [setIndex]: { weight: { $set: value } } } } },
-        })
-      );
+    if (logItem.workout_id) {
+      // Get premade workout from workout_id
+      const workoutData = await getWorkoutFromId(logItem.workout_id);
+      logItem.workout = workoutData || undefined;
     }
+
+    setPageState(logItem);
   };
 
   useEffect(() => {
     const insertWorkoutData = async (logItem: WorkoutLogItem | undefined) => {
-      if (logItem) {
-        const workoutData = await getWorkoutFromId(logItem.workout_id);
-        const mergedData = await addExerciseDataToLoggedWorkout(logItem);
-
-        mergedData.workout = workoutData || undefined;
-        setPageState(mergedData);
-      } else {
-        setPageState(null);
-      }
+      logItem ? displayWorkoutLogItem(logItem) : setPageState(null);
     };
-
     if (isSignedIn && user) insertWorkoutData(user.workoutLog[selectedDate]);
   }, [isSignedIn]);
 
@@ -107,27 +100,27 @@ export default function log() {
         setSelectedDate={setSelectedDate}
         setPageState={setPageState}
         setLoading={setLoading}
+        displayWorkoutLogItem={displayWorkoutLogItem}
       />
 
       {loading ? (
         <LoadingSpinner />
-      ) : currentDayData ? (
+      ) : currentWorkoutLogItem ? (
         <WorkoutContainer
           selectedDate={selectedDate}
-          currentDayData={currentDayData}
-          handleWeightChange={handleWeightChange}
-          handleWorkoutNoteChange={handleWorkoutNoteChange}
+          currentWorkoutLogItem={currentWorkoutLogItem}
+          setCurrentWorkoutLogItem={setCurrentWorkoutLogItem}
           deleteWorkout={deleteWorkout}
         />
       ) : (
         <>
-          <FallbackText>
-            No workout logged. To start a workout, select a workout from one of the tabs below.
-          </FallbackText>
+          <QuickStart displayOnTheFlyWorkout={displayOnTheFlyWorkout} />
 
-          <TeamWorkouts displayWorkout={displayWorkout} selectedDate={selectedDate} />
+          <TeamWorkouts displayPremadeWorkout={displayPremadeWorkout} selectedDate={selectedDate} />
 
-          <UserWorkouts displayWorkout={displayWorkout} />
+          <UserWorkouts displayPremadeWorkout={displayPremadeWorkout} />
+
+          {/* FOR YOU WORKOUTS*/}
         </>
       )}
     </MainContainer>
@@ -141,15 +134,4 @@ const MainContainer = styled.section`
   align-items: center;
   min-height: 30vh;
   padding: 0 0.5rem 1rem;
-`;
-
-const FallbackText = styled.h3`
-  font-weight: 300;
-  max-width: 100%;
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem;
-  background: ${({ theme }) => theme.background};
-  color: ${({ theme }) => theme.textLight};
-  border-radius: 10px;
-  margin: 0 0 0.5rem;
 `;

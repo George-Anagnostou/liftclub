@@ -1,11 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useCallback } from "react";
 import styled from "styled-components";
 // Context
 import { useUserState } from "../../store";
 // Utils
-import { addExerciseDataToLoggedWorkout, getCurrYearMonthDay } from "../../utils";
-import { getWorkoutFromId } from "../../api-lib/fetchers";
+import { formatWorkoutLogKeyString } from "../../utils";
 // Interfaces
 import { WorkoutLogItem } from "../../types/interfaces";
 import useInViewEffect from "../hooks/useInViewEffect";
@@ -16,6 +15,7 @@ interface Props {
   setSelectedDate: React.Dispatch<React.SetStateAction<string>>;
   setPageState: (dayData: WorkoutLogItem | null | undefined) => void;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  displayWorkoutLogItem: (logItem: WorkoutLogItem) => Promise<void>;
 }
 
 const DateScrollClone: React.FC<Props> = ({
@@ -23,56 +23,30 @@ const DateScrollClone: React.FC<Props> = ({
   setSelectedDate,
   setPageState,
   setLoading,
+  displayWorkoutLogItem,
 }) => {
   const { user } = useUserState();
 
   const [dateCount, setDateCount] = useState(30);
   const infiniteScrollRef = useInViewEffect(() => setDateCount((prev) => prev + 30));
 
-  const makeDateString = (numOfDaysToShift: number) => {
-    const { year, month, day } = getCurrYearMonthDay();
-    // Current date
-    const date = new Date(year, month, day);
-
-    // Shifted date
-    date.setDate(date.getDate() + numOfDaysToShift);
-
-    const newDate = date.toISOString().substring(0, 10);
-
-    return newDate;
-  };
-
   const handleDateClick = async (numberOfDaysToShift: number) => {
-    const newDate = makeDateString(numberOfDaysToShift);
-
+    const newDate = formatWorkoutLogKeyString(numberOfDaysToShift);
     if (newDate !== selectedDate) {
       setLoading(true);
-
       setSelectedDate(newDate);
-
-      // Find the workout for the new date
+      // Find the log item for the new date and display it
       const logItem = user?.workoutLog[newDate];
-
-      if (logItem) {
-        const workoutData = await getWorkoutFromId(logItem.workout_id);
-        logItem.workout = workoutData || undefined;
-        const composedWorkout = await addExerciseDataToLoggedWorkout(logItem);
-        setPageState(composedWorkout);
-      } else {
-        setPageState(null);
-      }
+      logItem ? displayWorkoutLogItem(logItem) : setPageState(null);
     }
   };
 
   // Format the date for the DateBar
   const renderDate = useCallback(
     (numOfDaysToShift: number) => {
-      const newDate = makeDateString(numOfDaysToShift);
-
+      const newDate = formatWorkoutLogKeyString(numOfDaysToShift);
       const dayData = user?.workoutLog[newDate];
-
       const dayIsSelected = selectedDate === newDate;
-
       const displayDate = new Date(newDate + "T08:00:00.000Z").toDateString();
 
       return (
@@ -83,7 +57,7 @@ const DateScrollClone: React.FC<Props> = ({
         >
           <div className="small-text">
             <p className="month">{displayDate.substring(3, 8)}</p>
-            <p className="day">{displayDate.substring(8, 11)}</p>
+            <p className="day">{displayDate.substring(8, 10)}</p>
           </div>
           <p className="dow">{displayDate.substring(0, 3)}</p>
         </div>
