@@ -35,7 +35,7 @@ export interface WorkoutLogItem {
     exercise?: Exercise;
   }[];
   workoutNote: string;
-  workout_id: string;
+  workout_id?: string;
   workout?: Workout;
   isoDate?: string;
 }

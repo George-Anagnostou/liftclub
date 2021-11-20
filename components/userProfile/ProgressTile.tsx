@@ -47,7 +47,7 @@ const ProgressTile: React.FC<Props> = ({ profileData }) => {
 
   const getWorkoutOptions = async () => {
     const keyArr = Object.keys(profileData.workoutLog);
-    const idArr = keyArr.map((key) => profileData.workoutLog[key].workout_id);
+    const idArr = keyArr.map((key) => profileData.workoutLog[key].workout_id || "");
     // Returns all unique workouts
     const workouts = await getWorkoutsFromIdArray(idArr);
     setWorkoutOptions(workouts);
