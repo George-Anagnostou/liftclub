@@ -16,8 +16,13 @@ interface Props {
     exerciseIndex: number,
     setIndex: number
   ) => void;
+  handleRepChange: (
+    { target }: React.ChangeEvent<HTMLInputElement>,
+    exerciseIndex: number,
+    setIndex: number
+  ) => void;
   setExerciseInfo: React.Dispatch<React.SetStateAction<Exercise | null>>;
-  handleSetChangeInCurrentWorkoutLogItem: (method: "add" | "remove", exerciseIndex: number) => void;
+  handleSetLengthChange: (method: "add" | "remove", exerciseIndex: number) => void;
 }
 
 const ExerciseBox: React.FC<Props> = ({
@@ -27,8 +32,9 @@ const ExerciseBox: React.FC<Props> = ({
   exerciseIndex,
   exerciseHistory,
   handleWeightChange,
+  handleRepChange,
   setExerciseInfo,
-  handleSetChangeInCurrentWorkoutLogItem,
+  handleSetLengthChange,
 }) => {
   return (
     <Container>
@@ -37,13 +43,9 @@ const ExerciseBox: React.FC<Props> = ({
           {exercise?.name} <span onClick={() => setExerciseInfo(exercise!)}>i</span>
         </h3>
         <div className="set-ctrl">
-          <span onClick={() => handleSetChangeInCurrentWorkoutLogItem("remove", exerciseIndex)}>
-            -
-          </span>
-          <p>SET</p>{" "}
-          <span onClick={() => handleSetChangeInCurrentWorkoutLogItem("add", exerciseIndex)}>
-            +
-          </span>
+          <span onClick={() => handleSetLengthChange("remove", exerciseIndex)}>-</span>
+          <p>SET</p>
+          <span onClick={() => handleSetLengthChange("add", exerciseIndex)}>+</span>
         </div>
       </Header>
 
@@ -62,6 +64,7 @@ const ExerciseBox: React.FC<Props> = ({
             setIndex={j}
             exerciseIndex={exerciseIndex}
             handleWeightChange={handleWeightChange}
+            handleRepChange={handleRepChange}
             exerciseHistory={exerciseHistory}
           />
         ))}

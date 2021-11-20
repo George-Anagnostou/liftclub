@@ -41,10 +41,7 @@ const WorkoutContainerClone: React.FC<Props> = ({
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const [timer, setTimer] = useState(0);
 
-  const handleSetChangeInCurrentWorkoutLogItem = (
-    method: "add" | "remove",
-    exerciseIndex: number
-  ) => {
+  const handleSetLengthChange = (method: "add" | "remove", exerciseIndex: number) => {
     const exerciseSetsLength = currentWorkoutLogItem.exerciseData[exerciseIndex].sets.length;
 
     switch (method) {
@@ -109,6 +106,23 @@ const WorkoutContainerClone: React.FC<Props> = ({
       setCurrentWorkoutLogItem((prev) =>
         update(prev, {
           exerciseData: { [exerciseIndex]: { sets: { [setIndex]: { weight: { $set: value } } } } },
+        })
+      );
+    }
+  };
+
+  const handleRepChange = (
+    { target }: React.ChangeEvent<HTMLInputElement>,
+    exerciseIndex: number,
+    setIndex: number
+  ) => {
+    const value = Number(target.value) - 0;
+    console.log(value);
+
+    if (currentWorkoutLogItem?.exerciseData) {
+      setCurrentWorkoutLogItem((prev) =>
+        update(prev, {
+          exerciseData: { [exerciseIndex]: { sets: { [setIndex]: { reps: { $set: value } } } } },
         })
       );
     }
@@ -201,8 +215,11 @@ const WorkoutContainerClone: React.FC<Props> = ({
               handleWeightChange={(e, exerciseIndex, setIndex) =>
                 handleUserInput(() => handleWeightChange(e, exerciseIndex, setIndex))
               }
+              handleRepChange={(e, exerciseIndex, setIndex) =>
+                handleUserInput(() => handleRepChange(e, exerciseIndex, setIndex))
+              }
               setExerciseInfo={setExerciseInfo}
-              handleSetChangeInCurrentWorkoutLogItem={handleSetChangeInCurrentWorkoutLogItem}
+              handleSetLengthChange={handleSetLengthChange}
             />
           ))}
         </WorkoutList>

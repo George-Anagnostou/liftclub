@@ -15,6 +15,11 @@ interface Props {
     exerciseIndex: number,
     setIndex: number
   ) => void;
+  handleRepChange: (
+    { target }: React.ChangeEvent<HTMLInputElement>,
+    exerciseIndex: number,
+    setIndex: number
+  ) => void;
   exerciseHistory:
     | { sets: { reps: number; weight: string | number }[]; date: string }[]
     | undefined;
@@ -26,6 +31,7 @@ const Set: React.FC<Props> = ({
   weight,
   reps,
   handleWeightChange,
+  handleRepChange,
   exerciseHistory,
 }) => {
   const { user } = useUserState();
@@ -48,7 +54,12 @@ const Set: React.FC<Props> = ({
   return (
     <SetContainer>
       <div className="reps">
-        <p>{reps}</p>
+        <input
+          type="number"
+          inputMode="decimal"
+          value={+reps}
+          onChange={(e) => handleRepChange(e, exerciseIndex, setIndex)}
+        />
       </div>
 
       <div className="weight">
@@ -89,7 +100,8 @@ const SetContainer = styled.li`
     font-size: 1.3rem;
   }
 
-  .weight {
+  .weight,
+  .reps {
     input {
       text-align: center;
       box-shadow: none;
