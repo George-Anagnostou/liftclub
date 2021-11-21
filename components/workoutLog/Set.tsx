@@ -55,9 +55,10 @@ const Set: React.FC<Props> = ({
     <SetContainer>
       <div className="reps">
         <input
-          type="number"
-          inputMode="decimal"
-          value={+reps}
+          type="text"
+          pattern="[0-9]*"
+          inputMode="numeric"
+          value={reps}
           onChange={(e) => handleRepChange(e, exerciseIndex, setIndex)}
         />
       </div>

@@ -126,7 +126,6 @@ const WorkoutContainerClone: React.FC<Props> = ({
     setIndex: number
   ) => {
     const value = Number(target.value) - 0;
-    console.log(value);
 
     if (currentWorkoutLogItem?.exerciseData) {
       setCurrentWorkoutLogItem((prev) =>
@@ -321,11 +320,10 @@ const AddExercise = styled.div`
   &:active {
     transform: scale(0.98);
   }
-  
+
   span {
     font-weight: 200;
   }
-
 `;
 
 const WorkoutNote = styled.div`
