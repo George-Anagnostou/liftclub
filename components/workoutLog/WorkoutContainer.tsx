@@ -5,7 +5,7 @@ import update from "immutability-helper";
 import { useUserDispatch, useUserState } from "../../store";
 import { addDayToWorkoutLog } from "../../store/actions/userActions";
 // Utils
-import { groupWorkoutLogByExercise, dateCompare } from "../../utils";
+import { groupWorkoutLogByExercise, dateCompare, formatIsoDate } from "../../utils";
 // Interfaces
 import { Exercise, WorkoutLogItem } from "../../types/interfaces";
 // Components
@@ -203,7 +203,7 @@ const WorkoutContainerClone: React.FC<Props> = ({
         {currentWorkoutLogItem.workout ? (
           <h3>{currentWorkoutLogItem.workout.name}</h3>
         ) : (
-          <h3>On the Fly - {selectedDate}</h3>
+          <h3>On the Fly - {formatIsoDate(selectedDate, 1)}</h3>
         )}
       </WorkoutName>
 
@@ -292,7 +292,7 @@ const WorkoutName = styled.div`
 
   h3 {
     font-size: 1.4em;
-    font-weight: 200;
+    font-weight: 300;
     text-transform: capitalize;
   }
 `;

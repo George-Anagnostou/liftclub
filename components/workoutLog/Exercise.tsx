@@ -40,7 +40,8 @@ const ExerciseBox: React.FC<Props> = ({
     <Container>
       <Header>
         <h3 className="exercise-name">
-          {exercise?.name} <span onClick={() => setExerciseInfo(exercise!)}>i</span>
+          {exercise?.name}
+          {/* <span onClick={() => setExerciseInfo(exercise!)}>i</span> */}
         </h3>
         <div className="set-ctrl">
           <span onClick={() => handleSetLengthChange("remove", exerciseIndex)}>—</span>
@@ -51,9 +52,10 @@ const ExerciseBox: React.FC<Props> = ({
 
       <ul>
         <li className="set-title">
-          <p>Reps</p>
-          <p>Weight</p>
-          <p>Previous</p>
+          <p style={{ flex: 0.25 }} />
+          <p style={{ flex: 1.25 }}>Reps</p>
+          <p style={{ flex: 1.25 }}>Weight</p>
+          <p style={{ flex: 0.25 }}>Prev</p>
         </li>
 
         {sets.map(({ weight, reps }, j) => (
@@ -88,19 +90,14 @@ const Container = styled.li`
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding: 0.5rem;
 
     .set-title {
-      color: ${({ theme }) => theme.textLight};
+      color: ${({ theme }) => theme.border};
       font-size: 0.6rem;
       display: flex;
-      justify-content: space-evenly;
-      align-items: flex-end;
-      width: 100%;
-      margin: 0.5rem 0;
-      p {
-        flex: 1;
-        text-align: center;
-      }
+      text-transform: uppercase;
+      text-align: center;
     }
   }
 `;
@@ -115,8 +112,8 @@ const Header = styled.div`
   justify-content: space-between;
 
   .exercise-name {
-    flex: 2;
-    font-weight: 300;
+    flex: 1;
+    font-weight: 400;
     font-size: 1.1rem;
     position: relative;
     display: flex;
@@ -163,11 +160,11 @@ const Header = styled.div`
       height: 2rem;
       width: 2rem;
       border-radius: 50%;
-      box-shadow: 0 0 2px ${({ theme }) => theme.accentSoft};
+      box-shadow: 0 0 3px ${({ theme }) => theme.accentSoft};
       transition: all 0.1s ease;
 
       &:active {
-        transform: scale(0.85);
+        box-shadow: 0 0 15px ${({ theme }) => theme.accentSoft};
       }
     }
   }
