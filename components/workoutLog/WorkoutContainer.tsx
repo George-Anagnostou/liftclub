@@ -47,11 +47,20 @@ const WorkoutContainerClone: React.FC<Props> = ({
     switch (method) {
       case "add":
         if (exerciseSetsLength >= 100) break;
+        const currentLengthOfSets = currentWorkoutLogItem.exerciseData[exerciseIndex].sets.length;
+        const previousSet =
+          currentWorkoutLogItem.exerciseData[exerciseIndex].sets[currentLengthOfSets - 1];
 
         // Add empty set to spedified exercise
         setCurrentWorkoutLogItem(
           update(currentWorkoutLogItem, {
-            exerciseData: { [exerciseIndex]: { sets: { $push: [{ reps: 0, weight: -1 }] } } },
+            exerciseData: {
+              [exerciseIndex]: {
+                sets: {
+                  $push: [{ reps: previousSet?.reps || 0, weight: previousSet?.weight || -1 }],
+                },
+              },
+            },
           })
         );
         break;
@@ -74,7 +83,7 @@ const WorkoutContainerClone: React.FC<Props> = ({
       ...currentWorkoutLogItem,
       exerciseData: [
         ...currentWorkoutLogItem.exerciseData,
-        { exercise, exercise_id: exercise._id, sets: [{ reps: 0, weight: -1 }] },
+        { exercise, exercise_id: exercise._id, sets: [{ reps: 10, weight: -1 }] },
       ],
     });
   };
@@ -218,8 +227,10 @@ const WorkoutContainerClone: React.FC<Props> = ({
               handleRepChange={(e, exerciseIndex, setIndex) =>
                 handleUserInput(() => handleRepChange(e, exerciseIndex, setIndex))
               }
+              handleSetLengthChange={(method, exerciseIndex) =>
+                handleUserInput(() => handleSetLengthChange(method, exerciseIndex))
+              }
               setExerciseInfo={setExerciseInfo}
-              handleSetLengthChange={handleSetLengthChange}
             />
           ))}
         </WorkoutList>
@@ -306,9 +317,15 @@ const AddExercise = styled.div`
   border-radius: 5px;
   font-size: 1.1rem;
 
+  transition: all 0.1s ease;
+  &:active {
+    transform: scale(0.98);
+  }
+  
   span {
     font-weight: 200;
   }
+
 `;
 
 const WorkoutNote = styled.div`
