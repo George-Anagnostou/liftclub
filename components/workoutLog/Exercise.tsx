@@ -43,9 +43,9 @@ const ExerciseBox: React.FC<Props> = ({
           {exercise?.name} <span onClick={() => setExerciseInfo(exercise!)}>i</span>
         </h3>
         <div className="set-ctrl">
-          <span onClick={() => handleSetLengthChange("remove", exerciseIndex)}>-</span>
+          <span onClick={() => handleSetLengthChange("remove", exerciseIndex)}>—</span>
           <p>SET</p>
-          <span onClick={() => handleSetLengthChange("add", exerciseIndex)}>+</span>
+          <span onClick={() => handleSetLengthChange("add", exerciseIndex)}>＋</span>
         </div>
       </Header>
 
@@ -155,16 +155,20 @@ const Header = styled.div`
     span {
       color: ${({ theme }) => theme.textLight};
       margin-left: 0.5rem;
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       font-weight: 300;
-      line-height: 2.1rem;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 2rem;
       width: 2rem;
       border-radius: 50%;
-      box-shadow: 0 0 3px ${({ theme }) => theme.accent};
+      box-shadow: 0 0 2px ${({ theme }) => theme.accentSoft};
+      transition: all 0.1s ease;
+
+      &:active {
+        transform: scale(0.85);
+      }
     }
   }
 `;

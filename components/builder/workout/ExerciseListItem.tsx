@@ -82,18 +82,22 @@ const Item = styled.li`
   box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
   background: ${({ theme }) => theme.background};
   width: 100%;
-  margin: 0 1rem 0.5rem;
+  margin: 0 1rem 0.75rem;
   text-transform: capitalize;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 
   display: flex;
   flex-direction: column;
+
+  &:active {
+    transform: scale(0.98);
+  }
 
   .heading {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.25rem 0;
+    padding: 0.45rem 0;
 
     h3 {
       flex: 1;
