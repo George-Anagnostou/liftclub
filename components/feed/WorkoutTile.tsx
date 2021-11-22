@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Link from "next/link";
 // Components
 import LoadingSpinner from "../LoadingSpinner";
+import SkeletonBox from "../SkeletonBox";
 // Utils
 import { addExerciseDataToWorkout, timeSince } from "../../utils";
 // Interfaces
@@ -209,40 +210,6 @@ const TitleBar = styled.div`
     .add {
       color: ${({ theme }) => theme.accentText};
       background: ${({ theme }) => theme.accentSoft};
-    }
-  }
-`;
-
-const SkeletonBox = styled.span`
-  display: inline-block;
-  height: 1em;
-  border-radius: 3px;
-  position: relative;
-  overflow: hidden;
-  background-color: ${({ theme }) => theme.body};
-
-  &::after {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    transform: translateX(-100%);
-    background-position: center;
-    background-image: linear-gradient(
-      90deg,
-      ${({ theme }) => theme.body} 0,
-      ${({ theme }) => theme.buttonMed} 20%,
-      ${({ theme }) => theme.buttonMed} 60%,
-      ${({ theme }) => theme.body}
-    );
-    animation: 2s shimmer infinite;
-    animation-delay: inherit;
-    content: "";
-  }
-  @keyframes shimmer {
-    100% {
-      transform: translateX(100%);
     }
   }
 `;
