@@ -48,10 +48,10 @@ const List = styled.ul`
 
   li {
     background: ${({ theme }) => theme.buttonMed};
-    box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
+    box-shadow: 0 2px 5px ${({ theme }) => theme.boxShadow};
     border-radius: 5px;
     cursor: pointer;
-    padding: 0.25rem 0.5rem;
+    padding: 0.35rem 0.75rem;
     margin: 0 0.25rem 0.5rem;
     word-wrap: break-word;
     text-align: left;
@@ -59,6 +59,8 @@ const List = styled.ul`
     display: flex;
     align-items: center;
     font-weight: 300;
+    position: relative;
+    overflow: hidden;
 
     button {
       font-size: 0.75rem;
@@ -70,6 +72,7 @@ const List = styled.ul`
       margin-left: 0.75rem;
       height: 25px;
       width: 25px;
+      min-width: 25px;
       display: grid;
       place-items: center;
       transition: all 0.25s ease;
@@ -85,22 +88,39 @@ const List = styled.ul`
       }
     }
 
+    &:active {
+      transform: scale(0.95);
+    }
+
     &.loading {
-      background: linear-gradient(
-        to left,
-        ${({ theme }) => theme.buttonMed},
-        ${({ theme }) => theme.border}
-      );
-      color: ${({ theme }) => theme.text};
-      background-position: -100%;
-      background-size: 200% 100%;
+      background: ${({ theme }) => theme.body};
+      button {
+        background: transparent;
+      }
 
-      animation: ease-in loading 1s infinite;
-
-      @keyframes loading {
-        to {
-          background-position: 100%;
-          background-size: 100% 100%;
+      &::after {
+        position: absolute;
+        z-index: -1;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        transform: translateX(-100%);
+        background-position: center;
+        background-image: linear-gradient(
+          90deg,
+          ${({ theme }) => theme.body} 0,
+          ${({ theme }) => theme.buttonMed} 20%,
+          ${({ theme }) => theme.buttonMed} 60%
+        );
+        animation-name: shimmer;
+        animation-duration: 1.5s;
+        animation-iteration-count: infinite;
+        content: "";
+      }
+      @keyframes shimmer {
+        100% {
+          transform: translateX(100%);
         }
       }
     }
