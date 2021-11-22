@@ -6,7 +6,7 @@ export default function Magnifying() {
       xmlns="http://www.w3.org/2000/svg"
       x="0px"
       y="0px"
-      height="25px"
+      height="23px"
       width="25px"
       viewBox="0 0 488.4 488.4"
     >

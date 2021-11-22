@@ -6,7 +6,7 @@ export default function Builder() {
       xmlns="http://www.w3.org/2000/svg"
       x="0px"
       y="0px"
-      width="25px"
+      width="23px"
       height="25px"
       viewBox="0 0 512 512"
     >
