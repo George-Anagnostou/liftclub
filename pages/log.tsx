@@ -4,8 +4,6 @@ import styled from "styled-components";
 import DateScroll from "../components/workoutLog/DateScroll";
 import WorkoutContainer from "../components/workoutLog/WorkoutContainer";
 import QuickStart from "../components/workoutLog/QuickStart";
-import TeamWorkouts from "../components/workoutLog/TeamWorkouts";
-import UserWorkouts from "../components/workoutLog/UserWorkouts";
 // Utils
 import {
   addExerciseDataToLoggedWorkout,
@@ -111,13 +109,11 @@ export default function log() {
       )}
 
       <div style={currentWorkoutLogItem ? { display: "none" } : {}}>
-        <QuickStart displayOnTheFlyWorkout={displayOnTheFlyWorkout} />
-
-        <TeamWorkouts displayPremadeWorkout={displayPremadeWorkout} selectedDate={selectedDate} />
-
-        <UserWorkouts displayPremadeWorkout={displayPremadeWorkout} />
-
-        {/* FOR YOU WORKOUTS*/}
+        <QuickStart
+          displayOnTheFlyWorkout={displayOnTheFlyWorkout}
+          displayPremadeWorkout={displayPremadeWorkout}
+          selectedDate={selectedDate}
+        />
       </div>
     </MainContainer>
   );

@@ -5,6 +5,8 @@ import { useUserState } from "../../store";
 import { getTeamsFromIdArray, getWorkoutFromId } from "../../api-lib/fetchers";
 // Interfaces
 import { Team, Workout } from "../../types/interfaces";
+// Utils
+import { areTheSameDate } from "../../utils";
 
 interface Props {
   selectedDate: string;
@@ -24,11 +26,10 @@ const TeamWorkouts: React.FC<Props> = ({ selectedDate, displayPremadeWorkout }) 
       const data = await Promise.all(
         teamsJoined!.map(async (team) => {
           const plan = team.routine?.workoutPlan;
-
           let workout: Workout | false = false;
 
           if (plan) {
-            const day = plan.find((day) => day.isoDate.substring(0, 10) === selectedDate);
+            const day = plan.find((day) => areTheSameDate(day.isoDate, selectedDate));
             if (day) workout = await getWorkoutFromId(day?.workout_id);
           }
           return { teamName: team.teamName, workout: workout || null };
@@ -56,18 +57,27 @@ const TeamWorkouts: React.FC<Props> = ({ selectedDate, displayPremadeWorkout }) 
     <>
       {teamsJoined && (
         <WorkoutsList>
-          <h3>Joined Teams</h3>
+          <h3 className="section-title">Joined Teams</h3>
 
           <ul>
             {todaysWorkouts?.map(({ teamName, workout }) => (
-              <li
+              <JoinedTeam
                 key={teamName}
                 onClick={workout ? () => displayPremadeWorkout(workout) : () => {}}
+                className={workout ? "has-workout" : ""}
               >
                 <p className="team-name">{teamName}</p>
 
-                <p className="workout">{workout?.name || "No workout today"}</p>
-              </li>
+                <hr />
+
+                {workout?.name ? (
+                  <p className="workout-name">
+                    ◦ Today's workout is <span>{workout.name}</span>
+                  </p>
+                ) : (
+                  <p className="workout-name">◦ Today is a rest day</p>
+                )}
+              </JoinedTeam>
             ))}
           </ul>
         </WorkoutsList>
@@ -80,44 +90,54 @@ export default TeamWorkouts;
 
 const WorkoutsList = styled.div`
   width: 100%;
-  border-radius: 5px;
-  background: ${({ theme }) => theme.background};
-  margin-bottom: 0.5rem;
+`;
 
-  h3 {
-    text-align: left;
-    padding-left: 0.75rem;
-    margin: 0.25rem 0;
+const JoinedTeam = styled.li`
+  background: ${({ theme }) => theme.buttonMed};
+  margin: 0 0.25rem 0.75rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+
+  .team-name {
     font-size: 1rem;
-    color: ${({ theme }) => theme.textLight};
     font-weight: 300;
   }
 
-  ul {
-    li {
-      width: fit-content;
-      display: flex;
-      align-items: center;
-      background: ${({ theme }) => theme.buttonMed};
-      margin: 0 0.25rem 0.5rem;
-      padding: 0.2rem 0.2rem 0.2rem 0.5rem;
-      border-radius: 5px;
-      box-shadow: 0 2px 2px ${({ theme }) => theme.boxShadow};
-      cursor: pointer;
-      font-weight: 300;
-    }
+  hr {
+    margin: 0.25rem 0 0.5rem;
+    padding: 0;
+    border: none;
+    border-top: medium double ${({ theme }) => theme.buttonLight};
+    color: ${({ theme }) => theme.buttonLight};
+    text-align: center;
+  }
 
-    .team-name {
-    }
+  .workout-name {
+    font-size: 0.8rem;
+    font-weight: 200;
+    letter-spacing: 1px;
+    padding: 0.25rem 0.5rem;
+    word-wrap: break-word;
 
-    .workout {
-      font-weight: 300;
+    span {
+      padding: 0.15rem 0.5rem;
+      font-weight: 400;
+      font-size: 1rem;
       background: ${({ theme }) => theme.buttonLight};
       border-radius: 5px;
-      padding: 0.15rem 1rem;
-      margin: 0 0 0 0.75rem;
-      word-wrap: break-word;
-      text-align: left;
+      box-shadow: inset 0 0 2px ${({ theme }) => theme.boxShadow};
+    }
+  }
+
+  &.has-workout {
+    background: ${({ theme }) => theme.buttonMedGradient};
+    box-shadow: 0 2px 5px ${({ theme }) => theme.boxShadow},
+      inset 0 0 3px ${({ theme }) => theme.accent};
+
+    .workout-name {
+      padding: 0.5px 0.5rem;
     }
   }
 `;

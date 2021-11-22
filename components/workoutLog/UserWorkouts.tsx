@@ -39,9 +39,9 @@ const UserWorkouts: React.FC<Props> = ({ displayPremadeWorkout }) => {
   }, [isSignedIn]);
 
   return (
-    <Container>
+    <>
       <WorkoutsList>
-        <h3>Created</h3>
+        <h3 className="section-title">My Workouts</h3>
 
         <TiledList
           items={createdWorkouts}
@@ -52,7 +52,7 @@ const UserWorkouts: React.FC<Props> = ({ displayPremadeWorkout }) => {
       </WorkoutsList>
 
       <WorkoutsList>
-        <h3>Saved</h3>
+        <h3 className="section-title">Saved Workouts</h3>
 
         <TiledList
           items={savedWorkouts}
@@ -61,31 +61,14 @@ const UserWorkouts: React.FC<Props> = ({ displayPremadeWorkout }) => {
           keyProp={"_id"}
         />
       </WorkoutsList>
-    </Container>
+    </>
   );
 };
 export default UserWorkouts;
-
-const Container = styled.section`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
 
 const WorkoutsList = styled.div`
   width: 100%;
   border-radius: 5px;
   background: ${({ theme }) => theme.background};
   margin-bottom: 0.5rem;
-
-  h3 {
-    text-align: left;
-    padding-left: 0.75rem;
-    margin: 0.25rem 0;
-    font-size: 1rem;
-    color: ${({ theme }) => theme.textLight};
-    font-weight: 300;
-  }
 `;
