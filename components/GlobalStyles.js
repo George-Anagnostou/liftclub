@@ -54,4 +54,13 @@ export const GlobalStyles = createGlobalStyle`
   ::-webkit-scrollbar-thumb:hover {
     background-color: #a7a7a7;
   }
+
+  @keyframes fadein {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 `;
