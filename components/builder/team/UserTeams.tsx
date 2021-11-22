@@ -56,7 +56,7 @@ const UserTeams: React.FC<Props> = ({ team, setTeam, clearTeam }) => {
   return (
     <>
       <div className="tile">
-        <h3>Your Teams</h3>
+        <h3>My Teams</h3>
 
         <TiledList
           items={teams.created}

@@ -53,7 +53,7 @@ const UserRoutines: React.FC<Props> = ({ routine, setRoutine, clearRoutine }) =>
       )}
 
       <div className="tile">
-        <h3>Your Routines</h3>
+        <h3>My Routines</h3>
 
         <TiledList
           items={routines.created}
