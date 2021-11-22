@@ -55,13 +55,14 @@ const SearchResults = styled.ul`
   flex-direction: column;
 
   .recent-title {
-    text-align: left;
     margin-left: 1rem;
     font-size: 0.85rem;
     font-weight: 200;
+    text-align: left;
   }
-
+  
   .result {
+    text-align: left;
     background: ${({ theme }) => theme.background};
     box-shadow: 0 0.5px 2px ${({ theme }) => theme.boxShadow};
     margin: 0.25rem 0.5rem;
