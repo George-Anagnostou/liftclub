@@ -137,7 +137,7 @@ const JoinedTeam = styled.li`
       inset 0 0 3px ${({ theme }) => theme.accent};
 
     .workout-name {
-      padding: 0.5px 0.5rem;
+      padding: 0px 0.5rem 0.25rem;
     }
   }
 `;
