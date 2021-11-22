@@ -131,7 +131,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
           // Format workoutData correctly for DB
           delete workoutData.workout;
-          workoutData.workout_id = new ObjectId(workoutData.workout_id);
+          if(workoutData.workout_id) workoutData.workout_id = new ObjectId(workoutData.workout_id);
           workoutData.exerciseData.map((each) => {
             delete each.exercise;
             each.exercise_id = new ObjectId(each.exercise_id);
