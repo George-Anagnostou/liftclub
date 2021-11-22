@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import update from "immutability-helper";
 // Components
 import DateScroll from "../components/workoutLog/DateScroll";
-import LoadingSpinner from "../components/LoadingSpinner";
 import WorkoutContainer from "../components/workoutLog/WorkoutContainer";
 import QuickStart from "../components/workoutLog/QuickStart";
 import TeamWorkouts from "../components/workoutLog/TeamWorkouts";
@@ -26,7 +24,6 @@ export default function log() {
   const { user, isSignedIn } = useUserState();
   const dispatch = useUserDispatch();
 
-  const [loading, setLoading] = useState(true);
   const [currentWorkoutLogItem, setCurrentWorkoutLogItem] = useState<WorkoutLogItem | null>(null);
   const [selectedDate, setSelectedDate] = useState(() =>
     dateToISOWithLocal(new Date()).substring(0, 10)
@@ -40,55 +37,57 @@ export default function log() {
     };
   };
 
-  // Accepts a workout from user's workoutLog and sets page state
-  const setPageState = (dayData: WorkoutLogItem | null) => {
-    setCurrentWorkoutLogItem(dayData);
-    setLoading(false);
-  };
-
   const deleteWorkout = async () => {
     if (!currentWorkoutLogItem || !user) return;
     // If user never saved the workout
-    if (!user.workoutLog[selectedDate]) return setPageState(null);
+    if (!user.workoutLog[selectedDate]) return setCurrentWorkoutLogItem(null);
 
     const deleted = await deleteDayFromWorkoutLog(dispatch, user._id, selectedDate);
-    if (deleted) setPageState(null);
-  };
-
-  const displayPremadeWorkout = async (clicked: Workout) => {
-    const newLogItem = createNewWorkoutLogItem();
-    const workout = await addExerciseDataToWorkout(clicked);
-
-    const newWorkoutLogItem: WorkoutLogItem = {
-      ...newLogItem,
-      exerciseData: workout.exercises,
-      workout_id: workout._id,
-      workout: workout,
-    };
-
-    setPageState(newWorkoutLogItem);
+    if (deleted) setCurrentWorkoutLogItem(null);
   };
 
   const displayOnTheFlyWorkout = () => {
     const newLogItem = createNewWorkoutLogItem();
-    setPageState(newLogItem);
+    setCurrentWorkoutLogItem(newLogItem);
+  };
+
+  const displayPremadeWorkout = async (workout: Workout) => {
+    const newLogItem = {
+      ...createNewWorkoutLogItem(),
+      exerciseData: workout.exercises,
+      workout_id: workout._id,
+      workout: workout,
+    };
+    // Set page state without exercise names or workout name
+    setCurrentWorkoutLogItem(newLogItem);
+
+    const workoutData = await addExerciseDataToWorkout(workout);
+
+    // Set page state again with exercise names and workout name
+    setCurrentWorkoutLogItem({
+      ...newLogItem,
+      exerciseData: workoutData.exercises,
+      // workout: workoutData, Only uncomment this if more than the workout name is needed
+    });
   };
 
   const displayWorkoutLogItem = async (logItem: WorkoutLogItem) => {
-    logItem = await addExerciseDataToLoggedWorkout(logItem);
+    // Set page state without exercise names or workout name
+    setCurrentWorkoutLogItem(logItem);
 
     if (logItem.workout_id) {
       // Get premade workout from workout_id
       const workoutData = await getWorkoutFromId(logItem.workout_id);
       logItem.workout = workoutData || undefined;
     }
-
-    setPageState(logItem);
+    logItem = await addExerciseDataToLoggedWorkout(logItem);
+    // Set page state again with exercise names and workout name
+    setCurrentWorkoutLogItem(logItem);
   };
 
   useEffect(() => {
     const insertWorkoutData = async (logItem: WorkoutLogItem | undefined) => {
-      logItem ? displayWorkoutLogItem(logItem) : setPageState(null);
+      logItem ? displayWorkoutLogItem(logItem) : setCurrentWorkoutLogItem(null);
     };
     if (isSignedIn && user) insertWorkoutData(user.workoutLog[selectedDate]);
   }, [isSignedIn]);
@@ -98,31 +97,28 @@ export default function log() {
       <DateScroll
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
-        setPageState={setPageState}
-        setLoading={setLoading}
+        setCurrentWorkoutLogItem={setCurrentWorkoutLogItem}
         displayWorkoutLogItem={displayWorkoutLogItem}
       />
 
-      {loading ? (
-        <LoadingSpinner />
-      ) : currentWorkoutLogItem ? (
+      {currentWorkoutLogItem && (
         <WorkoutContainer
           selectedDate={selectedDate}
           currentWorkoutLogItem={currentWorkoutLogItem}
           setCurrentWorkoutLogItem={setCurrentWorkoutLogItem}
           deleteWorkout={deleteWorkout}
         />
-      ) : (
-        <>
-          <QuickStart displayOnTheFlyWorkout={displayOnTheFlyWorkout} />
-
-          <TeamWorkouts displayPremadeWorkout={displayPremadeWorkout} selectedDate={selectedDate} />
-
-          <UserWorkouts displayPremadeWorkout={displayPremadeWorkout} />
-
-          {/* FOR YOU WORKOUTS*/}
-        </>
       )}
+
+      <div style={currentWorkoutLogItem ? { display: "none" } : {}}>
+        <QuickStart displayOnTheFlyWorkout={displayOnTheFlyWorkout} />
+
+        <TeamWorkouts displayPremadeWorkout={displayPremadeWorkout} selectedDate={selectedDate} />
+
+        <UserWorkouts displayPremadeWorkout={displayPremadeWorkout} />
+
+        {/* FOR YOU WORKOUTS*/}
+      </div>
     </MainContainer>
   );
 }

@@ -13,16 +13,14 @@ import LoadingSpinner from "../LoadingSpinner";
 interface Props {
   selectedDate: string;
   setSelectedDate: React.Dispatch<React.SetStateAction<string>>;
-  setPageState: (dayData: WorkoutLogItem | null | undefined) => void;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setCurrentWorkoutLogItem: React.Dispatch<React.SetStateAction<WorkoutLogItem | null>>;
   displayWorkoutLogItem: (logItem: WorkoutLogItem) => Promise<void>;
 }
 
 const DateScrollClone: React.FC<Props> = ({
   selectedDate,
   setSelectedDate,
-  setPageState,
-  setLoading,
+  setCurrentWorkoutLogItem,
   displayWorkoutLogItem,
 }) => {
   const { user } = useUserState();
@@ -33,11 +31,10 @@ const DateScrollClone: React.FC<Props> = ({
   const handleDateClick = async (numberOfDaysToShift: number) => {
     const newDate = formatWorkoutLogKeyString(numberOfDaysToShift);
     if (newDate !== selectedDate) {
-      setLoading(true);
       setSelectedDate(newDate);
       // Find the log item for the new date and display it
       const logItem = user?.workoutLog[newDate];
-      logItem ? displayWorkoutLogItem(logItem) : setPageState(null);
+      logItem ? displayWorkoutLogItem(logItem) : setCurrentWorkoutLogItem(null);
     }
   };
 

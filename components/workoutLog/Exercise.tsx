@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Exercise } from "../../types/interfaces";
+import SkeletonBox from "../SkeletonBox";
 import Set from "./Set";
 
 interface Props {
@@ -40,9 +41,18 @@ const ExerciseBox: React.FC<Props> = ({
     <Container>
       <Header>
         <h3 className="exercise-name">
-          {exercise?.name}
-          {/* <span onClick={() => setExerciseInfo(exercise!)}>i</span> */}
+          {exercise?.name ? (
+            <>
+              <p>{exercise.name}</p>
+              <span className="info-icon" onClick={() => setExerciseInfo(exercise!)}>
+                i
+              </span>
+            </>
+          ) : (
+            <SkeletonBox style={{ width: "100%", height: "1.75rem" }} />
+          )}
         </h3>
+
         <div className="set-ctrl">
           <span onClick={() => handleSetLengthChange("remove", exerciseIndex)}>—</span>
           <p>SET</p>
@@ -113,18 +123,21 @@ const Header = styled.div`
 
   .exercise-name {
     flex: 1;
-    font-weight: 400;
-    font-size: 1.1rem;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    text-transform: uppercase;
-    text-align: left;
-    letter-spacing: 1px;
 
-    span {
-      text-align: center;
+    p {
+      text-transform: uppercase;
+      font-weight: 400;
+      font-size: 1.1rem;
+      text-align: left;
+      letter-spacing: 1px;
+      animation: fadein 0.5s;
+    }
+
+    .info-icon {
       text-transform: lowercase;
       display: block;
       padding: 0;
@@ -136,6 +149,7 @@ const Header = styled.div`
       border: 2px solid ${({ theme }) => theme.buttonLight};
       border-radius: 50%;
       margin-left: 0.5rem;
+      animation: fadein 0.5s;
     }
   }
 

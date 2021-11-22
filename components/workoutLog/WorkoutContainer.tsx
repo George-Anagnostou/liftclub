@@ -13,6 +13,7 @@ import ExerciseInfoModal from "./ExerciseInfoModal";
 import SaveNotification from "./SaveNotification";
 import ExerciseBox from "./Exercise";
 import ExerciseList from "../builder/workout/ExerciseList";
+import SkeletonBox from "../SkeletonBox";
 
 interface Props {
   currentWorkoutLogItem: WorkoutLogItem;
@@ -200,10 +201,14 @@ const WorkoutContainerClone: React.FC<Props> = ({
   return (
     <>
       <WorkoutName>
-        {currentWorkoutLogItem.workout ? (
-          <h3>{currentWorkoutLogItem.workout.name}</h3>
+        {currentWorkoutLogItem.workout_id ? (
+          currentWorkoutLogItem.workout ? (
+            <h3>{currentWorkoutLogItem.workout.name}</h3>
+          ) : (
+            <SkeletonBox style={{ width: "70%", height: "2.15rem", borderRadius: "10px" }} />
+          )
         ) : (
-          <h3>On the Fly - {formatIsoDate(selectedDate, 1)}</h3>
+          <h3>On the Fly</h3>
         )}
       </WorkoutName>
 
@@ -294,6 +299,7 @@ const WorkoutName = styled.div`
     font-size: 1.4em;
     font-weight: 300;
     text-transform: capitalize;
+    animation: fadein 0.5s;
   }
 `;
 
