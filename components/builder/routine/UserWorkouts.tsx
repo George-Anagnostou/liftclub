@@ -16,7 +16,7 @@ const UserWorkouts: React.FC<Props> = ({ selectedDaysFromPlan, addWorkoutToDates
   return (
     <>
       <div className="tile">
-        <h3>Created</h3>
+        <h3>My Workouts</h3>
 
         <TiledList
           items={workouts.created}
@@ -30,7 +30,7 @@ const UserWorkouts: React.FC<Props> = ({ selectedDaysFromPlan, addWorkoutToDates
       </div>
 
       <div className="tile">
-        <h3>Saved</h3>
+        <h3>Saved Workouts</h3>
 
         <TiledList
           items={workouts.saved}
