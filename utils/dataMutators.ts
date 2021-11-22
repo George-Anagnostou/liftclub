@@ -8,6 +8,7 @@ import {
 } from "../types/interfaces";
 
 export const addExerciseDataToLoggedWorkout = async (logItem: WorkoutLogItem) => {
+  logItem = JSON.parse(JSON.stringify(logItem));
   // Grab all exercise_ids from the workout
   const idArr = logItem.exerciseData.map((each) => each.exercise_id);
   // Get all exercise information
@@ -18,6 +19,7 @@ export const addExerciseDataToLoggedWorkout = async (logItem: WorkoutLogItem) =>
 };
 
 export const addExerciseDataToWorkout = async (workout: Workout) => {
+  workout = JSON.parse(JSON.stringify(workout));
   // Grab all the exercise_ids from the workout
   const idArr = workout.exercises.map((each) => each.exercise_id);
   // Query for exercise data using the idArr
