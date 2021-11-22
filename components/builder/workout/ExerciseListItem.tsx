@@ -156,10 +156,12 @@ const Item = styled.li`
     box-shadow: none;
     background: ${({ theme }) => theme.accentSoft};
     color: ${({ theme }) => theme.accentText} !important;
+    box-shadow: inset 0 5px 10px ${({ theme }) => theme.accent};
 
     button {
       background: ${({ theme }) => theme.accent} !important;
       color: ${({ theme }) => theme.accentText} !important;
+      fill: ${({ theme }) => theme.accentText} !important;
 
       p {
         color: ${({ theme }) => theme.accentText} !important;
@@ -169,6 +171,7 @@ const Item = styled.li`
 
     .info p {
       background: ${({ theme }) => theme.accent} !important;
+
       span {
         color: ${({ theme }) => theme.accentText} !important;
       }
