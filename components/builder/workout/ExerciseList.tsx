@@ -96,7 +96,7 @@ const ExerciseList: React.FC<Props> = ({
   return (
     <>
       <ExercisesContainer
-        style={{ bottom: exerciseListBottom + "vh" }}
+        bottomVh={exerciseListBottom + "vh"}
         className={exerciseListBottom === 0 || exerciseListBottom === -80 ? "transition" : ""}
       >
         <Header>
@@ -174,7 +174,7 @@ const ExerciseList: React.FC<Props> = ({
 };
 export default ExerciseList;
 
-const ExercisesContainer = styled.div`
+const ExercisesContainer = styled.div<{ bottomVh: string }>`
   height: 75vh;
   width: 100vw;
   max-width: 700px;
@@ -186,6 +186,7 @@ const ExercisesContainer = styled.div`
   flex-direction: column;
   z-index: 990;
   transition: bottom 0.05s ease-in-out;
+  bottom: ${({ bottomVh }) => bottomVh};
 
   &.transition {
     transition: bottom 0.25s ease-out;
