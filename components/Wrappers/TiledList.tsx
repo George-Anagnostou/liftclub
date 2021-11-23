@@ -47,7 +47,7 @@ const List = styled.ul`
   flex-wrap: wrap;
 
   li {
-    background: ${({ theme }) => theme.buttonMed};
+    background: ${({ theme }) => theme.buttonMedGradient};
     box-shadow: 0 2px 5px ${({ theme }) => theme.boxShadow};
     border-radius: 5px;
     cursor: pointer;

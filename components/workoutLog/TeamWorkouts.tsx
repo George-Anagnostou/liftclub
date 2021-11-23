@@ -75,7 +75,9 @@ const TeamWorkouts: React.FC<Props> = ({ selectedDate, displayPremadeWorkout }) 
                     ◦ Today's workout is <span>{workout.name}</span>
                   </p>
                 ) : (
-                  <p className="workout-name">◦ Today is a rest day</p>
+                  <p className="workout-name">
+                    ◦ Today is a rest day <span />
+                  </p>
                 )}
               </JoinedTeam>
             ))}
@@ -93,12 +95,14 @@ const WorkoutsList = styled.div`
 `;
 
 const JoinedTeam = styled.li`
-  background: ${({ theme }) => theme.buttonMed};
+  background: ${({ theme }) => theme.buttonMedGradient};
   margin: 0 0.25rem 0.75rem;
   padding: 0.5rem;
   border-radius: 8px;
   cursor: pointer;
   text-align: left;
+  color: ${({ theme }) => theme.textLight};
+  transition: all 0.25s ease;
 
   .team-name {
     font-size: 1rem;
@@ -110,34 +114,34 @@ const JoinedTeam = styled.li`
     padding: 0;
     border: none;
     border-top: medium double ${({ theme }) => theme.buttonLight};
-    color: ${({ theme }) => theme.buttonLight};
-    text-align: center;
   }
 
   .workout-name {
     font-size: 0.8rem;
     font-weight: 200;
     letter-spacing: 1px;
-    padding: 0.25rem 0.5rem;
+    padding: 0 0.5rem;
     word-wrap: break-word;
 
     span {
+      opacity: 0;
+      transition: opacity 0.25s ease-in-out;
       padding: 0.15rem 0.5rem;
       font-weight: 400;
       font-size: 1rem;
-      background: ${({ theme }) => theme.buttonLight};
-      border-radius: 5px;
-      box-shadow: inset 0 0 2px ${({ theme }) => theme.boxShadow};
     }
   }
 
   &.has-workout {
-    background: ${({ theme }) => theme.buttonMedGradient};
     box-shadow: 0 2px 5px ${({ theme }) => theme.boxShadow},
       inset 0 0 3px ${({ theme }) => theme.accent};
+    color: ${({ theme }) => theme.text};
 
-    .workout-name {
-      padding: 0px 0.5rem 0.25rem;
+    .workout-name span {
+      opacity: 1;
+      background: ${({ theme }) => theme.buttonLight};
+      border-radius: 5px;
+      box-shadow: inset 0 0 2px ${({ theme }) => theme.boxShadow};
     }
   }
 `;
