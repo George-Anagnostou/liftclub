@@ -34,21 +34,22 @@ const Bar = styled.div`
 
   ul {
     display: flex;
+    background: ${({ theme }) => theme.background};
 
     li {
-      text-transform: capitalize;
+      text-transform: uppercase;
+      letter-spacing: 1px;
       flex: 1;
+      font-weight: 200;
       padding: 0.5rem 0 0.25rem;
       color: ${({ theme }) => theme.textLight};
-      border-bottom: 2px solid ${({ theme }) => theme.border};
-      background: ${({ theme }) => theme.background};
+      border-bottom: 3px solid ${({ theme }) => theme.buttonMed};
       cursor: pointer;
       transition: all 0.5s ease;
 
       &.selected {
         color: ${({ theme }) => theme.text};
-        border-bottom: 2px solid ${({ theme }) => theme.accentSoft};
-        background: ${({ theme }) => theme.buttonMed};
+        border-bottom: 3px solid ${({ theme }) => theme.accentSoft};
       }
     }
   }
