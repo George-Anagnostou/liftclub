@@ -68,7 +68,5 @@ export default UserWorkouts;
 
 const WorkoutsList = styled.div`
   width: 100%;
-  border-radius: 5px;
-  background: ${({ theme }) => theme.background};
   margin-bottom: 0.5rem;
 `;
