@@ -38,8 +38,9 @@ const TeamWorkouts: React.FC<Props> = ({ selectedDate, displayPremadeWorkout }) 
       setTodaysWorkouts(data);
     };
 
-    if (teamsJoined) getTodaysWorkouts();
-  }, [teamsJoined, selectedDate]);
+    // Only get workouts for today when user has joined a team and there is no workout logged for selected date
+    if (teamsJoined && !user?.workoutLog[selectedDate]) getTodaysWorkouts();
+  }, [teamsJoined, selectedDate, user?.workoutLog]);
 
   useEffect(() => {
     // If user is in a team, get its routine workout
