@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 const options = [
-  { value: "avgWeight", text: "Average" },
-  { value: "totalWeight", text: "Total" },
+  { value: "avgWeight", text: "Rep Avg" },
+  { value: "totalWeight", text: "Volume" },
   { value: "maxWeight", text: "Max" },
 ];
 
@@ -11,7 +11,7 @@ interface Props {
   statOption: "avgWeight" | "totalWeight" | "maxWeight";
 }
 
-const StatButtons: React.FC<Props> = ({ setStatOption, statOption }) => {
+const ChartStatButtons: React.FC<Props> = ({ setStatOption, statOption }) => {
   const handleButtonClick = (e) => {
     setStatOption(e.target.value);
   };
@@ -31,7 +31,7 @@ const StatButtons: React.FC<Props> = ({ setStatOption, statOption }) => {
     </Buttons>
   );
 };
-export default StatButtons;
+export default ChartStatButtons;
 
 const Buttons = styled.div`
   height: 30px;
