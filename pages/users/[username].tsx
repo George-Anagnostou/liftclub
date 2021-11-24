@@ -19,6 +19,7 @@ import CreatedWorkoutsTile from "../../components/userProfile/CreatedWorkoutsTil
 import ProgressTile from "../../components/userProfile/ProgressTile";
 // Interfaces
 import { User, Workout, Team } from "../../types/interfaces";
+import SeoHead from "../../components/SeoHead";
 
 const User_id: React.FC = () => {
   const router = useRouter();
@@ -56,6 +57,8 @@ const User_id: React.FC = () => {
     <Container>
       {!loadingPage && profileData && user ? (
         <>
+          <SeoHead title={`${profileData.username}'s profile - Lift Club`} />
+
           <NameTile
             profileData={profileData}
             setProfileData={setProfileData}
@@ -71,11 +74,11 @@ const User_id: React.FC = () => {
             user_id={user._id}
           />
 
+          <ProgressTile profileData={profileData} />
+
           <TeamsTile profileTeamsJoined={profileTeamsJoined} profile_id={profileData._id} />
 
           <CreatedWorkoutsTile createdWorkouts={createdWorkouts} />
-
-          <ProgressTile profileData={profileData} />
         </>
       ) : (
         <div className="loadingContainer">
