@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import useSWR from "swr";
+import { matchSorter } from "match-sorter";
 import { getExercisesByUserId } from "../../../api-lib/fetchers";
 // Context
 import { useUserState } from "../../../store";
@@ -58,13 +59,21 @@ const ExerciseList: React.FC<Props> = ({
   const filterExercisesBy = (term: string, exercises: Exercise[]) => {
     if (term) {
       // Return any Exercise with search term in any data
-      return exercises.filter(({ _id, creator_id, isDefault, ...no_id }: Exercise) =>
-        Object.values(no_id).some((val) => val.toLowerCase().includes(term.toLowerCase()))
+      return matchSorter(
+        exercises.filter(({ _id, creator_id, isDefault, ...no_id }: Exercise) =>
+          Object.values(no_id).some((val) => val.toLowerCase().includes(term.toLowerCase()))
+        ),
+        searchTerm,
+        { keys: ["name", "equipment", "muscleGroup", "muscleWorked", "metric"] }
       );
     } else {
       // Sort alphabetically by name
-      return exercises.sort((a: Exercise, b: Exercise) =>
-        a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+      return matchSorter(
+        exercises.sort((a: Exercise, b: Exercise) =>
+          a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+        ),
+        searchTerm,
+        { keys: ["name"] }
       );
     }
   };
