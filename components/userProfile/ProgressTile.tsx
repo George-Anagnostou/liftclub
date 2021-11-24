@@ -20,9 +20,7 @@ interface Props {
 
 export type ChartData = {
   date: string;
-  avg?: number | undefined;
-  total?: number | undefined;
-  max?: number | undefined;
+  lbs: number;
 }[];
 
 const ProgressTile: React.FC<Props> = ({ profileData }) => {
@@ -102,13 +100,13 @@ const ProgressTile: React.FC<Props> = ({ profileData }) => {
       }
       switch (statOption) {
         case "avgWeight":
-          data.unshift({ date: formatDate(date), avg: getAvgWeight(sets) });
+          data.unshift({ date: formatDate(date), lbs: getAvgWeight(sets) });
           break;
         case "totalWeight":
-          data.unshift({ date: formatDate(date), total: getTotalWeight(sets) });
+          data.unshift({ date: formatDate(date), lbs: getTotalWeight(sets) });
           break;
         case "maxWeight":
-          data.unshift({ date: formatDate(date), max: getMaxWeight(sets) });
+          data.unshift({ date: formatDate(date), lbs: getMaxWeight(sets) });
           break;
       }
     });

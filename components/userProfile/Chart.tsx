@@ -9,17 +9,6 @@ interface Props {
 }
 
 const Chart: React.FC<Props> = ({ data, statOption }) => {
-  const dataKey = () => {
-    switch (statOption) {
-      case "avgWeight":
-        return "avg";
-      case "maxWeight":
-        return "max";
-      case "totalWeight":
-        return "total";
-    }
-  };
-
   return (
     <ChartContainer
       className={` ${statOption === "maxWeight" && "bottom-right"} ${
@@ -39,7 +28,7 @@ const Chart: React.FC<Props> = ({ data, statOption }) => {
           <Tooltip />
           <Area
             type="monotone"
-            dataKey={dataKey()}
+            dataKey="lbs"
             stroke="#4361ee"
             fillOpacity={1}
             fill="url(#colorUv)"
