@@ -7,11 +7,16 @@ interface Props {
     date: string;
     value: number;
   }[];
+  statOption: "avgWeight" | "totalWeight" | "maxWeight";
 }
 
-const Chart: React.FC<Props> = ({ data }) => {
+const Chart: React.FC<Props> = ({ data, statOption }) => {
   return (
-    <ChartContainer style={data.length ? { height: "200px" } : { height: "0px" }}>
+    <ChartContainer
+      className={` ${statOption === "maxWeight" && "bottom-right"} ${
+        statOption === "avgWeight" && "bottom-left"
+      }`}
+    >
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart data={data} margin={{ top: 20, right: 20, left: -30, bottom: 0 }}>
           <defs>
@@ -42,9 +47,14 @@ const ChartContainer = styled.div`
   overflow: hidden;
   background: ${({ theme }) => theme.medOpacity};
   width: 100%;
+  height: 200px;
   border-radius: 5px;
-  transition: height 0.15s ease-in;
-  transform-origin: top;
+  &.bottom-left {
+    border-bottom-left-radius: 0;
+  }
+  &.bottom-right {
+    border-bottom-right-radius: 0;
+  }
 
   line,
   text {

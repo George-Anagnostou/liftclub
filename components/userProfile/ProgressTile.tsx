@@ -116,16 +116,20 @@ const ProgressTile: React.FC<Props> = ({ profileData }) => {
     <Container>
       <h3 className="title">Progression</h3>
 
-      <Chart data={chartData} />
+      <Collapsable style={chartData.length ? { height: "450px" } : { height: "0px" }}>
+        <h3 className="name">{selectedExercise?.name}</h3>
 
-      <StatButtons setStatOption={setStatOption} statOption={statOption} />
+        <Chart data={chartData} statOption={statOption} />
 
-      {selectedExercise && (
-        <ExerciseStats
-          exercise={selectedExercise}
-          exerciseHistory={exerciseMap.get(selectedExercise._id)!}
-        />
-      )}
+        <StatButtons setStatOption={setStatOption} statOption={statOption} />
+
+        {selectedExercise && (
+          <ExerciseStats
+            exercise={selectedExercise}
+            exerciseHistory={exerciseMap.get(selectedExercise._id)!}
+          />
+        )}
+      </Collapsable>
 
       <ChartSearchBox searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
@@ -150,6 +154,20 @@ const ProgressTile: React.FC<Props> = ({ profileData }) => {
   );
 };
 export default ProgressTile;
+
+const Collapsable = styled.section`
+  width: 100%;
+  overflow: hidden;
+  transition: height 0.25s ease-out;
+  transform-origin: top;
+
+  .name {
+    height: 40px;
+    text-transform: capitalize;
+    font-weight: 300;
+    font-size: 1.4rem;
+  }
+`;
 
 const SearchResults = styled.ul`
   margin-top: 0.25rem;
@@ -181,6 +199,7 @@ const SearchResults = styled.ul`
 
     &.highlight p {
       background: ${({ theme }) => theme.accentSoft} !important;
+      color: ${({ theme }) => theme.accentText} !important;
       border-radius: 5px;
       padding: 0.25rem 1rem;
     }
