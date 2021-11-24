@@ -6,6 +6,15 @@ export async function queryExercises(db: any, query) {
   return exercises;
 }
 
+export async function queryExerciseNamesByIdArr(db: any, idArr: string[]) {
+  const workouts: { _id: string; name: string }[] = await db
+    .collection("exercises")
+    .find({ _id: { $in: idArr.map((_id) => new ObjectId(_id)) } })
+    .project({ name: 1 })
+    .toArray();
+  return workouts;
+}
+
 export async function getDefaultExercises(db: any) {
   return await queryExercises(db, { isDefault: true });
 }

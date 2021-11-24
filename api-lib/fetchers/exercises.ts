@@ -2,6 +2,8 @@ import { Exercise, NewExercise } from "../../types/interfaces";
 import { getHeaderToken } from "../auth/token";
 
 export const getExercisesFromIdArray = async (idArr: string[]) => {
+  if (!Boolean(idArr.length)) return [];
+
   try {
     const res = await fetch("/api/exercises/queryMultiple", {
       method: "POST",
@@ -10,6 +12,27 @@ export const getExercisesFromIdArray = async (idArr: string[]) => {
 
     const exercises: Exercise[] = await res.json();
     return exercises;
+  } catch (e) {
+    console.log(e);
+    return [];
+  }
+};
+
+export const getExerciseNamesFromIdArray = async (idArr: string[]) => {
+  if (!Boolean(idArr.length)) return [];
+
+  try {
+    const res = await fetch("/api/exercises/names", {
+      method: "POST",
+      body: JSON.stringify(idArr),
+    });
+
+    const workouts: { _id: string; name: string }[] = await res.json();
+
+    // Sort workouts to be in the same order that the irArr requests them
+    workouts.sort((a, b) => idArr.indexOf(a._id.toString()) - idArr.indexOf(b._id.toString()));
+
+    return workouts;
   } catch (e) {
     console.log(e);
     return [];
