@@ -58,7 +58,12 @@ const WorkoutContainerClone: React.FC<Props> = ({
             exerciseData: {
               [exerciseIndex]: {
                 sets: {
-                  $push: [{ reps: previousSet?.reps || 0, weight: previousSet?.weight || -1 }],
+                  $push: [
+                    {
+                      reps: previousSet?.reps || 0,
+                      weight: previousSet.weight >= 0 ? previousSet.weight : -1,
+                    },
+                  ],
                 },
               },
             },
@@ -205,7 +210,14 @@ const WorkoutContainerClone: React.FC<Props> = ({
           currentWorkoutLogItem.workout ? (
             <h3>{currentWorkoutLogItem.workout.name}</h3>
           ) : (
-            <SkeletonBox style={{ width: "70%", height: "2.15rem", borderRadius: "10px" }} />
+            <SkeletonBox
+              style={{
+                width: "50%",
+                height: "2rem",
+                borderRadius: "10px",
+                margin: ".075rem auto",
+              }}
+            />
           )
         ) : (
           <h3>On the Fly</h3>

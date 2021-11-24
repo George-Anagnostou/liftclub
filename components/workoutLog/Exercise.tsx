@@ -49,7 +49,7 @@ const ExerciseBox: React.FC<Props> = ({
               </span>
             </>
           ) : (
-            <SkeletonBox style={{ width: "100%", height: "1.75rem" }} />
+            <SkeletonBox style={{ width: "70%", height: "1.75rem" }} />
           )}
         </h3>
 
