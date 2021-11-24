@@ -1,96 +1,84 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 // Components
-import WorkoutSelect from "./WorkoutSelect";
-import ExerciseSelect from "./ExerciseSelect";
 import Chart from "./Chart";
 import StatButtons from "./StatButtons";
+import ExerciseStats from "./ExerciseStats";
+import ChartSearchBox from "./ChartSearchBox";
+import ChartExerciseOptions from "./ChartExerciseOptions";
+import ChartWorkoutOptions from "./ChartWorkoutOptions";
 // Utils
-import { getWorkoutsFromIdArray } from "../../api-lib/fetchers";
-import { addExerciseDataToLoggedWorkout, round } from "../../utils";
+import { round, groupWorkoutLogByExercise } from "../../utils";
 // Interfaces
-import { User, Workout, WorkoutLogItem } from "../../types/interfaces";
+import { Exercise, Set, User, Workout } from "../../types/interfaces";
+
+export type ExerciseHistoryMap = Map<string, { sets: Set[]; date: string; exercise_id: string }[]>;
 
 interface Props {
   profileData: User;
 }
 
 const ProgressTile: React.FC<Props> = ({ profileData }) => {
-  const [workoutOptions, setWorkoutOptions] = useState<Workout[]>([]); // Used in WorkoutSelect
-  const [exerciseOptions, setExerciseOptions] = useState<
-    { exercise_id: string; exerciseName: string }[]
-  >([]); // Used in ExerciseSelect
-  const [filteredWorkouts, setFilteredWorkouts] = useState<WorkoutLogItem[]>([]); // Workouts from profileData.workoutLog that match workout selected
+  const [exerciseMap, setExerciseMap] = useState<ExerciseHistoryMap>(new Map());
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedExercise, setSelectedExercise] = useState<Exercise>();
+  const [selectedExerciseId, setSelectedExerciseId] = useState<string>("");
+  const [selectedWorkoutId, setSelectedWorkoutId] = useState("");
+  const [chartData, setChartData] = useState<{ date: string; value: number }[]>([]);
   const [statOption, setStatOption] = useState<"avgWeight" | "totalWeight" | "maxWeight">(
     "avgWeight"
-  ); // Stat to chart
-  const [selectedExerciseId, setSelectedExerciseId] = useState<string | null>(null);
-  const [chartData, setChartData] = useState<{ date: string; value: number }[]>([]);
+  );
 
   const resetTileState = () => {
+    setSearchTerm("");
+    setSelectedExercise(undefined);
+    setSelectedExerciseId("");
+    setSelectedWorkoutId("");
     setChartData([]);
-    setSelectedExerciseId(null);
     setStatOption("avgWeight");
-    setFilteredWorkouts([]);
-    setExerciseOptions([]);
   };
 
-  /**
-   * 1. Set workout options to workouts that the profile has logged
-   */
   useEffect(() => {
-    if (profileData) {
+    if (profileData.workoutLog) {
       resetTileState();
-      getWorkoutOptions();
+      setExerciseMap(groupWorkoutLogByExercise(profileData.workoutLog));
     }
-  }, [profileData]);
+  }, [profileData.workoutLog]);
 
-  const getWorkoutOptions = async () => {
-    const keyArr = Object.keys(profileData.workoutLog);
-    const idArr = keyArr.map((key) => profileData.workoutLog[key].workout_id || "");
-    // Returns all unique workouts
-    const workouts = await getWorkoutsFromIdArray(idArr);
-    setWorkoutOptions(workouts);
-  };
+  // Days without weight added by user (-1 weight) is replaced by 0
+  const formatWeight = (item: Set) => (item.weight >= 0 ? Number(item.weight) : 0);
 
-  /**
-   * 2. Once user selects a workout, get the exercise options from that workout
-   */
+  const getAvgWeight = useMemo(
+    () => (sets: Set[]) =>
+      round(sets.reduce((a, b) => a + formatWeight(b) || 0, 0) / sets.length, 1),
+    []
+  );
+
+  const getTotalWeight = useMemo(
+    () => (sets: Set[]) => sets.reduce((a, b) => a + formatWeight(b) || 0, 0),
+    []
+  );
+
+  const getMaxWeight = useMemo(
+    () => (sets: Set[]) => Math.max(...sets.map((a) => formatWeight(a))),
+    []
+  );
+
+  // Trigger if the selected exercise changes or a stat option is selected
   useEffect(() => {
-    if (filteredWorkouts.length) getExerciseOptions();
-  }, [filteredWorkouts]);
+    if (selectedExerciseId) chartExercise(selectedExerciseId, selectedWorkoutId);
+  }, [statOption]);
 
-  const getExerciseOptions = async () => {
-    // Only need to use one workout to get the exercise ids and names
-    const workout = await addExerciseDataToLoggedWorkout(filteredWorkouts[0]);
+  const chartExercise = (exercise_id: string, workout_id?: string) => {
+    const exerciseHistory = exerciseMap.get(exercise_id);
+    if (!exerciseHistory) return;
 
-    // exerciseOptions is an arr of {exercise_id, exerciseName}
-    const options = workout.exerciseData.map(({ exercise }) => ({
-      exercise_id: exercise!._id,
-      exerciseName: exercise!.name,
-    }));
-
-    setExerciseOptions(options);
-    setSelectedExerciseId(options[0].exercise_id);
-  };
-
-  /**
-   *
-   * @param {string} targetExId for exercise to chart
-   * @param {string} stat to chart
-   */
-  const chartExercise = (targetExId: string, stat: "avgWeight" | "totalWeight" | "maxWeight") => {
-    // Define Sets type
-    type Set = {
-      reps: number;
-      weight: string | number;
-    };
+    setSelectedWorkoutId(workout_id || "");
+    setSelectedExerciseId(exerciseHistory[0].exercise_id);
 
     // Data to send as prop to chart component
     const data: { date: string; value: number }[] = [];
-
-    // Days without weight added by user (-1 weight) is replaced by 0
-    const formatWeight = (item: Set) => (item.weight >= 0 ? Number(item.weight) : 0);
 
     // Format date for X axis labels
     const formatDate = (isoDate: string) => {
@@ -98,95 +86,111 @@ const ProgressTile: React.FC<Props> = ({ profileData }) => {
       return date.getMonth() + 1 + "/" + date.getDate();
     };
 
-    const avgWeight = (sets: Set[]) =>
-      round(sets.reduce((a, b) => a + formatWeight(b) || 0, 0) / sets.length, 1);
-
-    const totalWeight = (sets: Set[]) => sets.reduce((a, b) => a + formatWeight(b) || 0, 0);
-
-    const maxWeight = (sets: Set[]) => Math.max(...sets.map((a) => formatWeight(a)));
-
-    filteredWorkouts.map(({ exerciseData, isoDate }) => {
-      return exerciseData.map(({ exercise_id, sets }) => {
-        if (exercise_id === targetExId && isoDate) {
-          switch (stat) {
-            case "avgWeight":
-              data.push({ date: formatDate(isoDate), value: avgWeight(sets) });
-              break;
-            case "totalWeight":
-              data.push({ date: formatDate(isoDate), value: totalWeight(sets) });
-              break;
-            case "maxWeight":
-              data.push({ date: formatDate(isoDate), value: maxWeight(sets) });
-              break;
-          }
-        }
-      });
+    exerciseHistory.forEach(({ date, sets }) => {
+      if (workout_id) {
+        const isQueriedWorkout = profileData.workoutLog[date].workout_id === workout_id;
+        if (!isQueriedWorkout) return;
+      }
+      switch (statOption) {
+        case "avgWeight":
+          data.unshift({ date: formatDate(date), value: getAvgWeight(sets) });
+          break;
+        case "totalWeight":
+          data.unshift({ date: formatDate(date), value: getTotalWeight(sets) });
+          break;
+        case "maxWeight":
+          data.unshift({ date: formatDate(date), value: getMaxWeight(sets) });
+          break;
+      }
     });
 
     setChartData(data);
   };
 
-  // Trigger if the selected exercise changes or a stat option is selected
-  useEffect(() => {
-    selectedExerciseId ? chartExercise(selectedExerciseId, statOption) : setChartData([]);
-  }, [selectedExerciseId, statOption]);
-
-  /**
-   * Input handlers
-   */
-  const handleWorkoutOptionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const targetWorkout_id = e.target.value;
-
-    setExerciseOptions([]);
-    setSelectedExerciseId(null);
-
-    // Filter all workouts that match the id selected
-    const keyArr = Object.keys(profileData.workoutLog);
-    let filtered = keyArr
-      .filter((key) => profileData.workoutLog[key].workout_id === targetWorkout_id)
-      .sort((a, b) => new Date(a).getTime() - new Date(b).getTime())
-      .map((key) => {
-        profileData.workoutLog[key].isoDate = key;
-        return profileData.workoutLog[key];
-      });
-
-    if (filtered && filtered.length) {
-      setFilteredWorkouts(filtered);
-    }
-  };
-
-  const handleExerciseOptionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedExerciseId(e.target.value);
+  const handleExerciseClick = (exercise: Exercise, workout?: Workout) => {
+    chartExercise(exercise._id, workout?._id);
+    setSelectedExercise(exercise);
   };
 
   return (
     <Container>
       <h3 className="title">Progression</h3>
 
-      <StatButtons setStatOption={setStatOption} statOption={statOption} />
-
       <Chart data={chartData} />
 
-      <SelectContainer>
-        <WorkoutSelect
-          workoutOptions={workoutOptions}
-          handleWorkoutOptionChange={handleWorkoutOptionChange}
+      <StatButtons setStatOption={setStatOption} statOption={statOption} />
+
+      {selectedExercise && (
+        <ExerciseStats
+          exercise={selectedExercise}
+          exerciseHistory={exerciseMap.get(selectedExercise._id)!}
+        />
+      )}
+
+      <ChartSearchBox searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+
+      <SearchResults style={searchTerm ? {} : { display: "none" }}>
+        <ChartExerciseOptions
+          exerciseMap={exerciseMap}
+          searchTerm={searchTerm}
+          selectedExerciseId={selectedExerciseId}
+          handleExerciseClick={handleExerciseClick}
         />
 
-        <ExerciseSelect
-          exerciseOptions={exerciseOptions}
-          handleExerciseOptionChange={handleExerciseOptionChange}
+        <ChartWorkoutOptions
+          profileData={profileData}
+          searchTerm={searchTerm}
+          selectedExerciseId={selectedExerciseId}
+          selectedWorkoutId={selectedWorkoutId}
+          setSelectedWorkoutId={setSelectedWorkoutId}
+          handleExerciseClick={handleExerciseClick}
         />
-      </SelectContainer>
+      </SearchResults>
     </Container>
   );
 };
 export default ProgressTile;
 
+const SearchResults = styled.ul`
+  margin-top: 0.25rem;
+  max-height: 40vh;
+  width: 100%;
+  border-radius: 5px;
+  background: ${({ theme }) => theme.buttonMed};
+  border: 1px solid ${({ theme }) => theme.border};
+  box-shadow: 0 8px 15px ${({ theme }) => theme.boxShadow};
+  z-index: 9999;
+  overflow-x: hidden;
+  overflow-y: scroll;
+
+  p {
+    text-transform: capitalize;
+    font-weight: 200;
+    transition: all 0.5s ease;
+    width: fit-content;
+    padding: 0.25rem 0;
+  }
+
+  .option {
+    margin: 0.5rem 1rem;
+
+    &:not(:last-child) {
+      padding: 0 0 0.5rem;
+      border-bottom: 1px solid ${({ theme }) => theme.buttonLight};
+    }
+
+    &.highlight p {
+      background: ${({ theme }) => theme.accentSoft} !important;
+      border-radius: 5px;
+      padding: 0.25rem 1rem;
+    }
+  }
+`;
+
 const Container = styled.section`
   position: relative;
-  width: 100%;
   background: ${({ theme }) => theme.background};
+  width: 100%;
   padding: 0.5rem;
   border-radius: 10px;
   text-align: left;
@@ -195,47 +199,4 @@ const Container = styled.section`
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-`;
-
-const SelectContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 0.5rem;
-
-  select {
-    width: 90%;
-    text-transform: capitalize;
-    margin: 0.25rem 0;
-    padding: 0.25rem 0.5rem;
-    font-size: 0.85rem;
-    border: none;
-    border-radius: 5px;
-    color: ${({ theme }) => theme.text};
-    cursor: pointer;
-
-    --BG: ${({ theme }) => theme.buttonMed};
-    --arrow: ${({ theme }) => theme.accentSoft};
-    --arrowBG: ${({ theme }) => theme.buttonLight};
-
-    width: 100%;
-    -webkit-appearance: none;
-    appearance: none;
-
-    background-color: ${({ theme }) => theme.buttonMed};
-    background-image: linear-gradient(var(--BG), var(--BG)),
-      linear-gradient(-135deg, transparent 50%, var(--arrowBG) 50%),
-      linear-gradient(-225deg, transparent 50%, var(--arrowBG) 50%),
-      linear-gradient(var(--arrowBG) 42%, var(--arrow) 42%);
-    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
-    background-size: 1px 100%, 20px 22px, 20px 22px, 20px 100%;
-    background-position: right 20px center, right bottom, right bottom, right bottom;
-
-    &:disabled {
-      opacity: 0.5;
-      box-shadow: none;
-      cursor: default;
-    }
-  }
 `;

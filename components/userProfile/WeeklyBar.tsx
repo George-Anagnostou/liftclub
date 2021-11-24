@@ -18,15 +18,18 @@ const WeeklyBar: React.FC<Props> = ({ profileData }) => {
 
     return (
       <div className={dayData ? "hasDayData" : "noDayData"}>
-        <p>{String(date).substring(0, 3)}</p>
-        <p>{String(date).substring(8, 11)}</p>
+        <div className="small-text">
+          <p className="month">{String(date).substring(3, 8)}</p>
+          <p className="day">{String(date).substring(8, 10)}</p>
+        </div>
+        <p className="dow">{String(date).substring(0, 3)}</p>
       </div>
     );
   };
 
   return (
     <DateScrollContainer>
-      {[...Array(90).keys()].map((numDays) => (
+      {[...Array(7).keys()].map((numDays) => (
         <li className="date" key={-numDays}>
           {renderDate(-numDays)}
         </li>
@@ -45,22 +48,26 @@ const DateScrollContainer = styled.ul`
 
   .date {
     flex: 1;
-    min-width: 45px;
-    height: fit-content;
     text-align: center;
     margin: 0 0.15rem;
-    font-size: 0.75rem;
 
-    &:last-child {
-      margin: 0 0.15rem 0 0;
+    .small-text {
+      font-weight: 300;
+      margin: 0;
+      font-size: 0.5rem;
+      display: flex;
+      justify-content: space-around;
     }
-    &:first-child {
-      margin: 0 0 0 0.15rem;
+
+    .dow {
+      margin-bottom: 0.05rem;
+      font-size: 0.9rem;
+      font-weight: 300;
     }
 
     div {
       border-radius: 8px;
-      padding: 0.25rem 0rem;
+      padding: 0.25rem 0.25rem;
       transition: all 0.2s ease-in-out;
 
       &.noDayData {
@@ -68,7 +75,7 @@ const DateScrollContainer = styled.ul`
         color: ${({ theme }) => theme.textLight};
       }
       &.hasDayData {
-        background: ${({ theme }) => theme.accentSoft};
+        background: ${({ theme }) => theme.accent};
         color: ${({ theme }) => theme.accentText};
       }
     }
