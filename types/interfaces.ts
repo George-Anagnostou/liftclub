@@ -31,7 +31,7 @@ export interface WorkoutLogItem {
   completed: boolean;
   exerciseData: {
     exercise_id: string;
-    sets: { reps: number; weight: number | string }[];
+    sets: Set[];
     exercise?: Exercise;
   }[];
   workoutNote: string;
@@ -88,6 +88,12 @@ export interface NewWorkout {
 export interface Workout extends NewWorkout {
   readonly _id: string;
 }
+
+// Set
+export type Set = {
+  reps: number;
+  weight: string | number;
+};
 
 // Exercise
 export interface NewExercise {
