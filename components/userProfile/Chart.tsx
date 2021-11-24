@@ -1,16 +1,25 @@
 import React from "react";
 import styled from "styled-components";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { ChartData } from "./ProgressTile";
 
 interface Props {
-  data: {
-    date: string;
-    value: number;
-  }[];
+  data: ChartData;
   statOption: "avgWeight" | "totalWeight" | "maxWeight";
 }
 
 const Chart: React.FC<Props> = ({ data, statOption }) => {
+  const dataKey = () => {
+    switch (statOption) {
+      case "avgWeight":
+        return "avg";
+      case "maxWeight":
+        return "max";
+      case "totalWeight":
+        return "total";
+    }
+  };
+
   return (
     <ChartContainer
       className={` ${statOption === "maxWeight" && "bottom-right"} ${
@@ -30,7 +39,7 @@ const Chart: React.FC<Props> = ({ data, statOption }) => {
           <Tooltip />
           <Area
             type="monotone"
-            dataKey="value"
+            dataKey={dataKey()}
             stroke="#4361ee"
             fillOpacity={1}
             fill="url(#colorUv)"

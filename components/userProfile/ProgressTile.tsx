@@ -2,13 +2,13 @@ import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 // Components
 import Chart from "./Chart";
-import StatButtons from "./StatButtons";
+import ChartStatButtons from "./ChartStatButtons";
 import ExerciseStats from "./ExerciseStats";
 import ChartSearchBox from "./ChartSearchBox";
 import ChartExerciseOptions from "./ChartExerciseOptions";
 import ChartWorkoutOptions from "./ChartWorkoutOptions";
 // Utils
-import { round, groupWorkoutLogByExercise } from "../../utils";
+import { round, groupWorkoutLogByExercise, formatSetWeight } from "../../utils";
 // Interfaces
 import { Exercise, Set, User, Workout } from "../../types/interfaces";
 
@@ -18,6 +18,13 @@ interface Props {
   profileData: User;
 }
 
+export type ChartData = {
+  date: string;
+  avg?: number | undefined;
+  total?: number | undefined;
+  max?: number | undefined;
+}[];
+
 const ProgressTile: React.FC<Props> = ({ profileData }) => {
   const [exerciseMap, setExerciseMap] = useState<ExerciseHistoryMap>(new Map());
 
@@ -25,7 +32,7 @@ const ProgressTile: React.FC<Props> = ({ profileData }) => {
   const [selectedExercise, setSelectedExercise] = useState<Exercise>();
   const [selectedExerciseId, setSelectedExerciseId] = useState<string>("");
   const [selectedWorkoutId, setSelectedWorkoutId] = useState("");
-  const [chartData, setChartData] = useState<{ date: string; value: number }[]>([]);
+  const [chartData, setChartData] = useState<ChartData>([]);
   const [statOption, setStatOption] = useState<"avgWeight" | "totalWeight" | "maxWeight">(
     "avgWeight"
   );
@@ -46,22 +53,23 @@ const ProgressTile: React.FC<Props> = ({ profileData }) => {
     }
   }, [profileData.workoutLog]);
 
-  // Days without weight added by user (-1 weight) is replaced by 0
-  const formatWeight = (item: Set) => (item.weight >= 0 ? Number(item.weight) : 0);
-
   const getAvgWeight = useMemo(
     () => (sets: Set[]) =>
-      round(sets.reduce((a, b) => a + formatWeight(b) || 0, 0) / sets.length, 1),
+      round(
+        sets.reduce((a, curr) => a + formatSetWeight(curr.weight) * curr.reps, 0) /
+          sets.reduce((a, curr) => a + curr.reps, 0),
+        1 // rounding precision
+      ) || 0, // default
     []
   );
 
   const getTotalWeight = useMemo(
-    () => (sets: Set[]) => sets.reduce((a, b) => a + formatWeight(b) || 0, 0),
+    () => (sets: Set[]) => sets.reduce((a, b) => a + formatSetWeight(b.weight) * b.reps || 0, 0),
     []
   );
 
   const getMaxWeight = useMemo(
-    () => (sets: Set[]) => Math.max(...sets.map((a) => formatWeight(a))),
+    () => (sets: Set[]) => Math.max(0, ...sets.map((a) => formatSetWeight(a.weight))), // The 0 after .max is to prevent -Infinity
     []
   );
 
@@ -71,6 +79,7 @@ const ProgressTile: React.FC<Props> = ({ profileData }) => {
   }, [statOption]);
 
   const chartExercise = (exercise_id: string, workout_id?: string) => {
+    console.log("here");
     const exerciseHistory = exerciseMap.get(exercise_id);
     if (!exerciseHistory) return;
 
@@ -78,12 +87,12 @@ const ProgressTile: React.FC<Props> = ({ profileData }) => {
     setSelectedExerciseId(exerciseHistory[0].exercise_id);
 
     // Data to send as prop to chart component
-    const data: { date: string; value: number }[] = [];
+    const data: ChartData = [];
 
     // Format date for X axis labels
     const formatDate = (isoDate: string) => {
       const date = new Date(isoDate);
-      return date.getMonth() + 1 + "/" + date.getDate();
+      return date.getMonth() + 1 + "/" + (date.getDate() + 1);
     };
 
     exerciseHistory.forEach(({ date, sets }) => {
@@ -93,13 +102,13 @@ const ProgressTile: React.FC<Props> = ({ profileData }) => {
       }
       switch (statOption) {
         case "avgWeight":
-          data.unshift({ date: formatDate(date), value: getAvgWeight(sets) });
+          data.unshift({ date: formatDate(date), avg: getAvgWeight(sets) });
           break;
         case "totalWeight":
-          data.unshift({ date: formatDate(date), value: getTotalWeight(sets) });
+          data.unshift({ date: formatDate(date), total: getTotalWeight(sets) });
           break;
         case "maxWeight":
-          data.unshift({ date: formatDate(date), value: getMaxWeight(sets) });
+          data.unshift({ date: formatDate(date), max: getMaxWeight(sets) });
           break;
       }
     });
@@ -116,12 +125,12 @@ const ProgressTile: React.FC<Props> = ({ profileData }) => {
     <Container>
       <h3 className="title">Progression</h3>
 
-      <Collapsable style={chartData.length ? { height: "450px" } : { height: "0px" }}>
+      <Collapsable style={chartData.length ? { height: "455px" } : { height: "0px" }}>
         <h3 className="name">{selectedExercise?.name}</h3>
 
         <Chart data={chartData} statOption={statOption} />
 
-        <StatButtons setStatOption={setStatOption} statOption={statOption} />
+        <ChartStatButtons setStatOption={setStatOption} statOption={statOption} />
 
         {selectedExercise && (
           <ExerciseStats
@@ -162,7 +171,8 @@ const Collapsable = styled.section`
   transform-origin: top;
 
   .name {
-    height: 40px;
+    min-height: 40px;
+    max-height: 65px;
     text-transform: capitalize;
     font-weight: 300;
     font-size: 1.4rem;

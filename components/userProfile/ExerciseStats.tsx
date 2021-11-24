@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Exercise, Set } from "../../types/interfaces";
-import { formatIsoDate } from "../../utils";
+import { formatIsoDate, formatSetWeight } from "../../utils";
 
 interface Props {
   exercise: Exercise;
@@ -9,19 +9,16 @@ interface Props {
 }
 
 const ExerciseStats: React.FC<Props> = ({ exercise, exerciseHistory }) => {
-  const formatWeight = (weight: string | number) =>
-    typeof weight === "string" || weight === -1 ? 0 : weight;
-
   const getMaxNumber = (arr: number[]) => Math.max(...arr);
   const getMinNumber = (arr: number[]) => Math.min(...arr);
-  const getWeightsFromSets = (sets: Set[]) => sets.flatMap(({ weight }) => formatWeight(weight));
+  const getWeightsFromSets = (sets: Set[]) => sets.flatMap(({ weight }) => formatSetWeight(weight));
 
   const allSets = exerciseHistory.map(({ sets }) => sets).flat();
-  const weights = allSets.map(({ weight }) => formatWeight(weight));
-  const maxWeight = Math.max(...weights);
+  const allWeights = getWeightsFromSets(allSets);
+  const maxWeight = getMaxNumber(allWeights);
 
   let volume = 0;
-  allSets.map((set) => (volume += formatWeight(set.weight) * set.reps));
+  allSets.map((set) => (volume += formatSetWeight(set.weight) * set.reps));
 
   const getMaxWeightFromSets = (sets: Set[]) => getMaxNumber(getWeightsFromSets(sets));
   const getMinWeightFromSets = (sets: Set[]) => getMinNumber(getWeightsFromSets(sets));
