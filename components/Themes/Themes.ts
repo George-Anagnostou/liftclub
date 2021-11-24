@@ -7,11 +7,12 @@ export const lightTheme = {
   background: "linear-gradient(to bottom, #eeeeee 20%, #edecf3 100%)",
   buttonLight: "#ffffff",
   buttonMed: "#e2e4ee",
-  buttonMedGradient: "linear-gradient(180deg, rgba(226,228,238,1) 0%, rgba(200,206,235,1) 100%)",
+  buttonMedGradient: "linear-gradient(180deg, rgba(226,228,238,1) 0%, rgba(212,217,242,1) 100%)",
   accent: "#4361ee",
   accentSoft: "#5d78ee",
   accentText: "#fafafa",
   opacityBackground: "rgba(150, 150, 150, 0.5)",
+  medOpacity: "rgba(150, 150, 150, 0.2)",
 
   shades: {
     1: "#FFFFFF",
@@ -33,14 +34,15 @@ export const darkTheme = {
   textLight: "#c4c4c4",
   border: "#666666",
   boxShadow: "#111111",
-  background: "linear-gradient(to bottom, #2b2b32 20%, #2d2d31 100%)",
+  background: "linear-gradient(to top, #2b2b32 20%, #2d2d31 100%)",
   buttonLight: "#4b4b4b",
-  buttonMed: "#3f3f3f",
+  buttonMed: "#3F4248",
   buttonMedGradient: "linear-gradient(180deg, rgba(63,63,63,1) 0%, rgba(55,61,77,1) 100%)",
   accent: "#4361ee",
   accentSoft: "#5d78ee",
   accentText: "#fafafa",
   opacityBackground: "rgba(0, 0, 0, 0.5)",
+  medOpacity: "rgba(0, 0, 0, 0.2)",
 
   shades: {
     1: "#FFFFFF",
