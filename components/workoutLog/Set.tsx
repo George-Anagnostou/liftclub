@@ -73,7 +73,7 @@ const Set: React.FC<Props> = ({
         <input
           type="number"
           inputMode="decimal"
-          defaultValue={weight >= 0 ? weight : ""}
+          value={weight >= 0 ? weight : ""}
           onChange={(e) => handleWeightChange(e, exerciseIndex, setIndex)}
         />
       </div>
