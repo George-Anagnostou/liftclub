@@ -7,6 +7,7 @@ export const GlobalStyles = createGlobalStyle`
     box-sizing: border-box;
     letter-spacing: .5px;
     font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {
