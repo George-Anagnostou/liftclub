@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
@@ -10,7 +11,7 @@ interface Props {
 
 const Chart: React.FC<Props> = ({ data }) => {
   return (
-    <ChartContainer>
+    <ChartContainer style={data.length ? { height: "200px" } : { height: "0px" }}>
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart data={data} margin={{ top: 20, right: 20, left: -30, bottom: 0 }}>
           <defs>
@@ -38,13 +39,16 @@ const Chart: React.FC<Props> = ({ data }) => {
 export default Chart;
 
 const ChartContainer = styled.div`
-  height: 175px;
-  width: 100%;
   overflow: hidden;
+  background: ${({ theme }) => theme.medOpacity};
+  width: 100%;
+  border-radius: 5px;
+  transition: height 0.15s ease-in;
+  transform-origin: top;
 
   line,
   text {
-    fill: ${({ theme }) => theme.border} !important;
+    fill: ${({ theme }) => theme.textLight} !important;
     stroke: ${({ theme }) => theme.border} !important;
   }
   text {
