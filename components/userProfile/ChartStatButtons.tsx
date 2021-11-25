@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const options = [
   { value: "avgWeight", text: "Rep Avg" },
@@ -17,7 +17,7 @@ const ChartStatButtons: React.FC<Props> = ({ setStatOption, statOption }) => {
   };
 
   return (
-    <Buttons>
+    <Buttons xPos={options.findIndex(({ value }) => value === statOption) * 33.33}>
       {options.map(({ value, text }) => (
         <button
           key={value}
@@ -33,28 +33,39 @@ const ChartStatButtons: React.FC<Props> = ({ setStatOption, statOption }) => {
 };
 export default ChartStatButtons;
 
-const Buttons = styled.div`
+const Buttons = styled.div<{ xPos: number }>`
   height: 30px;
   display: flex;
   width: 100%;
   margin: 0 auto 0.5rem;
+  position: relative;
 
   button {
+    background: transparent;
     flex: 1;
     font-weight: 300;
     font-size: 0.8rem;
     padding: 0.25rem;
     color: ${({ theme }) => theme.textLight};
-    background: inherit;
     border: none;
-    /* border-top: 0.5px solid ${({ theme }) => theme.medOpacity}; */
-    border-radius: 0 0 5px 5px;
+    text-shadow: 0 0 3px ${({ theme }) => theme.boxShadow};
     transition: all 0.2s ease;
 
     &.highlight {
-      background: ${({ theme }) => theme.medOpacity};
       color: ${({ theme }) => theme.text};
-      /* border-top: 0.5px solid ${({ theme }) => theme.accentSoft}; */
     }
   }
+  ${({ xPos }) => css`
+    &::after {
+      pointer-events: none;
+      transition: all 0.2s ease;
+      border-radius: 0 0 5px 5px;
+      content: "";
+      left: ${xPos}%;
+      position: absolute;
+      height: 100%;
+      width: 33.33%;
+      background-color: ${({ theme }) => theme.medOpacity};
+    }
+  `}
 `;
