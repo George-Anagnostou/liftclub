@@ -8,13 +8,13 @@ export const GlobalStyles = createGlobalStyle`
     letter-spacing: .5px;
     font-family: inherit;
     -webkit-tap-highlight-color: transparent;
+    /* transition: all 0s linear !important; */ // REMOVES ALL ANIMATION
   }
 
   body {
     background: ${({ theme }) => theme.body};
     color: ${({ theme }) => theme.text};
     font-family: Poppins ,Tahoma, Helvetica, Arial, Roboto, sans-serif;
-    /* transition: all 0.25s linear; */
     scroll-behavior: smooth
   }
 
