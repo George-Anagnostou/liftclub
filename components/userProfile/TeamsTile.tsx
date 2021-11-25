@@ -40,6 +40,9 @@ const TeamsTile: React.FC<Props> = ({ profileTeamsJoined, profile_id }) => {
 
                     <span>{team.teamName}</span>
                   </p>
+
+                  <hr />
+
                   <p className="members">
                     {team.members.length} {team.members.length === 1 ? "member" : "members"}
                   </p>
@@ -113,8 +116,15 @@ const TeamItem = styled.li`
 
       span {
         font-weight: 300;
-        font-size: 0.95rem;
+        font-size: 1rem;
       }
+    }
+
+    hr {
+      flex: 1;
+      border: none;
+      margin: 0.5rem;
+      border-top: 0.5px dotted ${({ theme }) => theme.border};
     }
 
     .members {

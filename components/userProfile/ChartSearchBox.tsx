@@ -15,9 +15,9 @@ const ChartSearchBox: React.FC<Props> = ({ searchTerm, setSearchTerm }) => {
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          name="Workout and Exercise Search"
+          name="Search an Exercise"
           className="text-input"
-          placeholder=""
+          placeholder="squat, bicep, bench press... "
           autoComplete="off"
         />
         <span onClick={() => setSearchTerm("")}>✕</span>
@@ -31,7 +31,7 @@ export default ChartSearchBox;
 const SearchBox = styled.div`
   width: 100%;
   position: relative;
-
+  padding: 0.25rem;
   label {
     font-weight: 200;
     font-size: 0.8rem;
@@ -49,14 +49,18 @@ const SearchBox = styled.div`
       width: 100%;
       background: inherit;
       border: none;
-      padding: 0.15rem 0.5rem;
+      padding: 0.25rem 0.5rem;
       color: inherit;
-      border-radius: 3px;
+      border-radius: 5px;
       border: 1px solid ${({ theme }) => theme.border};
+      box-shadow: none;
 
       &:focus {
         outline: none;
         border: 1px solid ${({ theme }) => theme.accent};
+      }
+      &::placeholder {
+        color: ${({ theme }) => theme.border};
       }
     }
     span {

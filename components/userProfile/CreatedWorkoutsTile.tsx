@@ -26,6 +26,9 @@ const CreatedWorkoutsTile: React.FC<Props> = ({ createdWorkouts }) => {
           createdWorkouts.map((workout: Workout) => (
             <li key={workout._id}>
               <p>{workout.name}</p>
+
+              <hr />
+
               <span>{timeSince(new Date(workout.date_created).getTime())}</span>
             </li>
           ))
@@ -72,15 +75,22 @@ const WorkoutsList = styled.ul`
     justify-content: space-between;
     margin: 0.25rem 0;
     padding: 0.25rem 0.5rem;
-
+    /*     
     &:not(:last-child) {
       border-bottom: 1px solid ${({ theme }) => theme.buttonMed};
-    }
+    } */
 
     p {
       text-transform: capitalize;
-      font-size: 0.9rem;
+      font-size: 1rem;
       font-weight: 200;
+    }
+
+    hr {
+      flex: 1;
+      border: none;
+      margin: 0.5rem;
+      border-top: 0.5px dotted ${({ theme }) => theme.border};
     }
 
     span {

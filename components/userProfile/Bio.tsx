@@ -86,19 +86,20 @@ const BioContainer = styled.section`
     align-items: flex-start;
 
     button {
-      border-radius: 5px;
-      padding: 0.1rem 0.5rem;
+      border-radius: 3px;
+      padding: 0.05rem 0.5rem;
       border: none;
       background: ${({ theme }) => theme.buttonMed};
       color: ${({ theme }) => theme.textLight};
-      font-size: 0.8rem;
+      font-size: 0.7rem;
+      font-weight: 300;
     }
   }
 
   textarea {
     line-height: 1.2rem;
     font-family: inherit;
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 200;
     width: 100%;
     min-height: 75px;
@@ -119,7 +120,7 @@ const BioContainer = styled.section`
 
   p {
     line-height: 1.2rem;
-    font-size: 0.9rem;
+    font-size: 1rem;
     padding: calc(0.25rem + 2px);
     margin: 0;
     font-weight: 200;

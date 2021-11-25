@@ -61,7 +61,9 @@ const ExerciseStats: React.FC<Props> = ({ exercise, exerciseHistory }) => {
 
       <div className="tile logged">
         <span className="title">Logged</span>
-        <p className="small-num">{exerciseHistory.length.toLocaleString()}</p>
+        <p className="small-num">
+          {exerciseHistory.length.toLocaleString()} <span> times</span>
+        </p>
       </div>
     </Container>
   );
@@ -99,6 +101,7 @@ const Container = styled.div`
     .large-num {
       font-size: 2.25rem;
       font-weight: 200;
+      min-width: max-content;
 
       span {
         font-weight: 200;
@@ -109,6 +112,7 @@ const Container = styled.div`
     .small-num {
       font-size: 1.5rem;
       font-weight: 200;
+      min-width: max-content;
 
       span {
         font-weight: 200;

@@ -169,11 +169,16 @@ const Collapsable = styled.section`
   transform-origin: top;
 
   .name {
-    min-height: 40px;
+    min-height: 30px;
     max-height: 65px;
     text-transform: capitalize;
     font-weight: 300;
-    font-size: 1.4rem;
+    margin-left: 0.5rem;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    display: block;
   }
 `;
 

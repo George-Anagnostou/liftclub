@@ -103,9 +103,9 @@ const Container = styled.div`
   .title {
     color: ${({ theme }) => theme.textLight};
     text-align: left;
-    margin-bottom: 0.5rem;
-    font-weight: 400;
-    font-size: 0.9rem;
+    margin-bottom: 0.5rem 0.25rem 0.75rem;
+    font-weight: 200;
+    font-size: 1rem;
   }
 
   .loadingContainer {
