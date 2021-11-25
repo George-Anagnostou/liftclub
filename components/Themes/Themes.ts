@@ -12,7 +12,7 @@ export const lightTheme = {
   accentSoft: "#5d78ee",
   accentText: "#fafafa",
   opacityBackground: "rgba(150, 150, 150, 0.5)",
-  medOpacity: "rgba(150, 150, 150, 0.2)",
+  medOpacity: "rgba(200, 200, 250, 0.2)",
 
   shades: {
     1: "#FFFFFF",
@@ -42,7 +42,7 @@ export const darkTheme = {
   accentSoft: "#5d78ee",
   accentText: "#fafafa",
   opacityBackground: "rgba(0, 0, 0, 0.5)",
-  medOpacity: "rgba(0, 0, 0, 0.2)",
+  medOpacity: "rgba(0, 0, 25, 0.2)",
 
   shades: {
     1: "#FFFFFF",
