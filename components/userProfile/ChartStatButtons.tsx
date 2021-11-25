@@ -48,7 +48,6 @@ const Buttons = styled.div<{ xPos: number }>`
     padding: 0.25rem;
     color: ${({ theme }) => theme.textLight};
     border: none;
-    text-shadow: 0 0 3px ${({ theme }) => theme.boxShadow};
     transition: all 0.2s ease;
 
     &.highlight {
