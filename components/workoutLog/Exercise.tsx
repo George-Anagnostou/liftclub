@@ -164,6 +164,7 @@ const Header = styled.div`
     }
 
     span {
+      background: ${({ theme }) => theme.buttonMedGradient};
       color: ${({ theme }) => theme.textLight};
       margin-left: 0.5rem;
       font-size: 1.4rem;
@@ -174,11 +175,11 @@ const Header = styled.div`
       height: 2rem;
       width: 2rem;
       border-radius: 50%;
-      box-shadow: 0 0 3px ${({ theme }) => theme.accentSoft};
+      box-shadow: inset 0 0 3px ${({ theme }) => theme.accentSoft};
       transition: all 0.1s ease;
 
       &:active {
-        box-shadow: 0 0 15px ${({ theme }) => theme.accentSoft};
+        box-shadow: inset 0 0 15px ${({ theme }) => theme.accentSoft};
       }
     }
   }
