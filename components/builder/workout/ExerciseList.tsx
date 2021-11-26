@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import useSWR from "swr";
 import { matchSorter } from "match-sorter";
 import { getExercisesByUserId } from "../../../api-lib/fetchers";
@@ -63,7 +63,7 @@ const ExerciseList: React.FC<Props> = ({
         exercises.filter(({ _id, creator_id, isDefault, ...no_id }: Exercise) =>
           Object.values(no_id).some((val) => val.toLowerCase().includes(term.toLowerCase()))
         ),
-        searchTerm,
+        term,
         { keys: ["name", "equipment", "muscleGroup", "muscleWorked", "metric"] }
       );
     } else {
@@ -72,7 +72,7 @@ const ExerciseList: React.FC<Props> = ({
         exercises.sort((a: Exercise, b: Exercise) =>
           a.name.toLowerCase().localeCompare(b.name.toLowerCase())
         ),
-        searchTerm,
+        term,
         { keys: ["name"] }
       );
     }
@@ -108,7 +108,7 @@ const ExerciseList: React.FC<Props> = ({
         bottomVh={exerciseListBottom + "vh"}
         className={exerciseListBottom === 0 || exerciseListBottom === -80 ? "transition" : ""}
       >
-        <Header>
+        <Header xPos={displayedList === "default" ? 0 : 50}>
           <div className="thumb-line" onTouchMove={dragList} onTouchEnd={checkToCloseList}>
             <span />
           </div>
@@ -198,7 +198,7 @@ const ExercisesContainer = styled.div<{ bottomVh: string }>`
   bottom: ${({ bottomVh }) => bottomVh};
 
   &.transition {
-    transition: bottom 0.25s ease-out;
+    transition: bottom 0.2s ease-in-out;
   }
 
   ul {
@@ -240,7 +240,7 @@ const SearchInput = styled.div`
   button {
     flex: 1;
     font-size: 0.85rem;
-    font-weight: 300;
+    font-weight: 400;
     color: ${({ theme }) => theme.textLight};
     background: ${({ theme }) => theme.buttonMed};
     border: none;
@@ -258,7 +258,7 @@ const SearchInput = styled.div`
   }
 `;
 
-const Header = styled.header`
+const Header = styled.header<{ xPos: number }>`
   box-shadow: 0 3px 6px ${({ theme }) => theme.boxShadow};
   position: sticky;
   top: 0;
@@ -266,7 +266,7 @@ const Header = styled.header`
   border-left: 2px solid ${({ theme }) => theme.border};
   border-right: 2px solid ${({ theme }) => theme.border};
   background: ${({ theme }) => theme.background};
-  border-radius: 25px 25px 2px 2px;
+  border-radius: 30px 30px 2px 2px;
   width: 100%;
 
   .thumb-line {
@@ -287,23 +287,38 @@ const Header = styled.header`
   .list-options {
     display: flex;
     justify-content: space-around;
+    height: fit-content;
 
     p {
-      border-top: 1px solid ${({ theme }) => theme.border};
-      border-bottom: 2px solid ${({ theme }) => theme.border};
       flex: 1;
       padding: 0.5rem 0;
-      font-weight: 300;
+      font-weight: 400;
       font-size: 0.85rem;
       text-transform: uppercase;
       color: ${({ theme }) => theme.textLight};
       background: ${({ theme }) => theme.background};
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
+      height: 2.5rem;
 
       &.selected {
-        border-bottom: 2px solid ${({ theme }) => theme.accent};
         color: ${({ theme }) => theme.text};
       }
     }
+
+    ${({ xPos }) => css`
+      &::after {
+        pointer-events: none;
+        transition: all 0.2s ease;
+        content: "";
+        left: ${xPos}%;
+        position: absolute;
+        height: 2.5rem;
+        width: 50%;
+        border-radius: 5px 5px 0 0;
+        background-color: ${({ theme }) => theme.medOpacity};
+        box-shadow: inset 0 0 3px ${({ theme }) => theme.accent},
+          0 4px 4px ${({ theme }) => theme.boxShadow};
+      }
+    `}
   }
 `;

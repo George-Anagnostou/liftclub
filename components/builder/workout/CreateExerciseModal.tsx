@@ -207,14 +207,30 @@ const Container = styled.div`
       }
 
       select {
-        width: 50%;
-        margin: 0.5rem 0;
-        padding: 0.5rem;
+        width: 100%;
+        text-transform: capitalize;
+        margin: 0.25rem 0;
+        padding: 0.5rem 0.5rem;
         font-size: 1rem;
         border: none;
         border-radius: 5px;
         color: ${({ theme }) => theme.text};
-        background: ${({ theme }) => theme.buttonMed};
+        cursor: pointer;
+
+        --BG: ${({ theme }) => theme.buttonMed};
+        --arrow: ${({ theme }) => theme.accentSoft};
+        --arrowBG: ${({ theme }) => theme.buttonMed};
+
+        -webkit-appearance: none;
+        appearance: none;
+        background-color: ${({ theme }) => theme.buttonMed};
+        background-image: linear-gradient(var(--BG), var(--BG)),
+          linear-gradient(-135deg, transparent 50%, var(--arrowBG) 50%),
+          linear-gradient(-225deg, transparent 50%, var(--arrowBG) 50%),
+          linear-gradient(var(--arrowBG) 42%, var(--arrow) 42%);
+        background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+        background-size: 1px 100%, 30px 30px, 30px 30px, 30px 100%;
+        background-position: right 30px center, right bottom, right bottom, right bottom;
       }
 
       .metric-select {
@@ -229,9 +245,11 @@ const Container = styled.div`
           border-radius: 5px;
           transition: all 0.25s ease;
           cursor: pointer;
-          background: ${({ theme }) => theme.border};
+          background: ${({ theme }) => theme.buttonMed};
+          color: ${({ theme }) => theme.textLight};
 
           &.selected {
+            color: ${({ theme }) => theme.text};
             background: ${({ theme }) => theme.buttonMed};
             border: 1px solid ${({ theme }) => theme.accentSoft};
           }
@@ -240,8 +258,9 @@ const Container = styled.div`
     }
 
     button {
-      background: ${({ theme }) => theme.background};
-      box-shadow: 0 1px 2px ${({ theme }) => theme.boxShadow};
+      background: ${({ theme }) => theme.medOpacity};
+      box-shadow: inset 0 0 3px ${({ theme }) => theme.accent},
+        0 2px 2px ${({ theme }) => theme.boxShadow};
       color: inherit;
       border: none;
       border-radius: 5px;
