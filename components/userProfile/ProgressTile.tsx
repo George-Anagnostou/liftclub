@@ -77,7 +77,6 @@ const ProgressTile: React.FC<Props> = ({ profileData }) => {
   }, [statOption]);
 
   const chartExercise = (exercise_id: string, workout_id?: string) => {
-    console.log("here");
     const exerciseHistory = exerciseMap.get(exercise_id);
     if (!exerciseHistory) return;
 
@@ -85,7 +84,7 @@ const ProgressTile: React.FC<Props> = ({ profileData }) => {
     setSelectedExerciseId(exerciseHistory[0].exercise_id);
 
     // Data to send as prop to chart component
-    const data: ChartData = [];
+    const exerciseChartData: ChartData = [];
 
     // Format date for X axis labels
     const formatDate = (isoDate: string) => {
@@ -100,18 +99,18 @@ const ProgressTile: React.FC<Props> = ({ profileData }) => {
       }
       switch (statOption) {
         case "avgWeight":
-          data.unshift({ date: formatDate(date), lbs: getAvgWeight(sets) });
+          exerciseChartData.unshift({ date: formatDate(date), lbs: getAvgWeight(sets) });
           break;
         case "totalWeight":
-          data.unshift({ date: formatDate(date), lbs: getTotalWeight(sets) });
+          exerciseChartData.unshift({ date: formatDate(date), lbs: getTotalWeight(sets) });
           break;
         case "maxWeight":
-          data.unshift({ date: formatDate(date), lbs: getMaxWeight(sets) });
+          exerciseChartData.unshift({ date: formatDate(date), lbs: getMaxWeight(sets) });
           break;
       }
     });
 
-    setChartData(data);
+    setChartData(exerciseChartData);
   };
 
   const handleExerciseClick = (exercise: Exercise, workout?: Workout) => {
