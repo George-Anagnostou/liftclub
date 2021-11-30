@@ -34,6 +34,7 @@ const ProgressTile: React.FC<Props> = ({ profileData }) => {
   const [statOption, setStatOption] = useState<"avgWeight" | "totalWeight" | "maxWeight">(
     "avgWeight"
   );
+  const [ignore0InChart, setIgnore0InChart] = useState(false);
 
   const resetTileState = () => {
     setSearchTerm("");
@@ -57,7 +58,7 @@ const ProgressTile: React.FC<Props> = ({ profileData }) => {
         sets.reduce((a, curr) => a + formatSetWeight(curr.weight) * curr.reps, 0) /
           sets.reduce((a, curr) => a + curr.reps, 0),
         1 // rounding precision
-      ) || 0, // default
+      ) || 0, // default weight if no weight has been entered
     []
   );
 
@@ -74,7 +75,7 @@ const ProgressTile: React.FC<Props> = ({ profileData }) => {
   // Trigger if the selected exercise changes or a stat option is selected
   useEffect(() => {
     if (selectedExerciseId) chartExercise(selectedExerciseId, selectedWorkoutId);
-  }, [statOption]);
+  }, [statOption, ignore0InChart]);
 
   const chartExercise = (exercise_id: string, workout_id?: string) => {
     const exerciseHistory = exerciseMap.get(exercise_id);
@@ -110,7 +111,9 @@ const ProgressTile: React.FC<Props> = ({ profileData }) => {
       }
     });
 
-    setChartData(exerciseChartData);
+    ignore0InChart
+      ? setChartData(exerciseChartData.filter(({ lbs }) => lbs > 0))
+      : setChartData(exerciseChartData);
   };
 
   const handleExerciseClick = (exercise: Exercise, workout?: Workout) => {
@@ -123,17 +126,20 @@ const ProgressTile: React.FC<Props> = ({ profileData }) => {
       <h3 className="title">Progression</h3>
 
       <Collapsable style={chartData.length ? { height: "450px" } : { height: "0px" }}>
-        <h3 className="name">{selectedExercise?.name}</h3>
+        <ChartHeading>
+          <h3 className="name">{selectedExercise?.name}</h3>
+
+          <span className="ignore" onClick={() => setIgnore0InChart(!ignore0InChart)}>
+            Ignore 0's <input type="checkbox" name="ignore 0's" checked={ignore0InChart} />
+          </span>
+        </ChartHeading>
 
         <Chart data={chartData} statOption={statOption} />
 
         <ChartStatButtons setStatOption={setStatOption} statOption={statOption} />
 
         {selectedExercise && (
-          <ExerciseStats
-            exercise={selectedExercise}
-            exerciseHistory={exerciseMap.get(selectedExercise._id)!}
-          />
+          <ExerciseStats exerciseHistory={exerciseMap.get(selectedExercise._id)!} />
         )}
       </Collapsable>
 
@@ -172,18 +178,39 @@ const Collapsable = styled.section`
   overflow: hidden;
   transition: height 0.25s ease-out;
   transform-origin: top;
+`;
+
+const ChartHeading = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1rem 0 0.5rem 0.5rem;
 
   .name {
-    min-width: max-content;
+    max-width: 90%;
     text-transform: capitalize;
     font-weight: 300;
-    margin: 1rem 0 0.5rem 0.5rem;
     font-size: 1.1rem;
 
-    overflow: hidden;
     text-overflow: ellipsis;
-    word-wrap: break-word;
     display: block;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .ignore {
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    color: ${({ theme }) => theme.textLight};
+    background: ${({ theme }) => theme.buttonMedGradient};
+    border-radius: 5px;
+    padding: 0.1rem 0.25rem;
+    min-width: max-content;
+
+    input {
+      margin-left: 0.25rem;
+      transform: scale(0.7);
+    }
   }
 `;
 
