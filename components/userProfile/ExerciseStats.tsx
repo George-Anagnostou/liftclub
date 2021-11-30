@@ -1,14 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import { Exercise, Set } from "../../types/interfaces";
+import { Set } from "../../types/interfaces";
 import { formatIsoDate, formatSetWeight } from "../../utils";
 
 interface Props {
-  exercise: Exercise;
   exerciseHistory: { sets: Set[]; date: string; exercise_id: string }[];
 }
 
-const ExerciseStats: React.FC<Props> = ({ exercise, exerciseHistory }) => {
+const ExerciseStats: React.FC<Props> = ({ exerciseHistory }) => {
   const getMaxNumber = (arr: number[]) => Math.max(...arr);
   const getMinNumber = (arr: number[]) => Math.min(...arr);
   const getWeightsFromSets = (sets: Set[]) => sets.flatMap(({ weight }) => formatSetWeight(weight));
@@ -26,6 +25,7 @@ const ExerciseStats: React.FC<Props> = ({ exercise, exerciseHistory }) => {
   const diffInMaxWeight =
     getMaxWeightFromSets(exerciseHistory[0].sets) -
     getMaxWeightFromSets(exerciseHistory[exerciseHistory.length - 1].sets);
+
   return (
     <Container>
       <div className="tile max">
