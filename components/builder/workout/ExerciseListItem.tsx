@@ -85,6 +85,7 @@ const Item = styled.li`
   margin: 0 1rem 0.75rem;
   text-transform: capitalize;
   transition: all 0.15s ease;
+  z-index: 1;
 
   display: flex;
   flex-direction: column;

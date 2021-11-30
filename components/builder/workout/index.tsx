@@ -175,19 +175,25 @@ const WorkoutBuilder: React.FC = () => {
 };
 export default WorkoutBuilder;
 
-const AddExerciseBtn = styled.button`
-  background: ${({ theme }) => theme.accent};
-  color: ${({ theme }) => theme.accentText};
-  box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow};
-  border: none;
+const AddExerciseBtn = styled.div`
+  background: ${({ theme }) => theme.background};
+  color: ${({ theme }) => theme.text};
+  box-shadow: 0 2px 3px ${({ theme }) => theme.boxShadow},
+    inset 0 0 2px ${({ theme }) => theme.accent};
   width: fit-content;
-  margin: 0.5rem auto 1rem;
-  padding: 0.25rem 2rem;
+  margin: 0.5rem auto;
+  padding: 0.5rem 2rem;
   font-weight: 300;
   border-radius: 5px;
   font-size: 1.1rem;
+  transition: all 0.2s ease;
 
   span {
     font-weight: 200;
+  }
+
+  &:active {
+    box-shadow: inset 0 2px 4px ${({ theme }) => theme.boxShadow},
+      inset 0 0 1px ${({ theme }) => theme.accent};
   }
 `;

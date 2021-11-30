@@ -7,11 +7,10 @@ import { getExercisesByUserId } from "../../../api-lib/fetchers";
 import { useUserState } from "../../../store";
 // Interfaces
 import { Exercise } from "../../../types/interfaces";
-// Hooks
-import { useDebouncedState } from "../../hooks/useDebouncedState";
 // Components
 import CreateExerciseModal from "./CreateExerciseModal";
 import ExerciseListItem from "./ExerciseListItem";
+import TextInput from "../../Wrappers/TextInput";
 
 interface Props {
   isExerciseInCustomWorkout: (exercise_id: string) => boolean;
@@ -41,7 +40,7 @@ const ExerciseList: React.FC<Props> = ({
   const [displayedList, setDisplayedList] = useState<"default" | "created">("default");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const debouncedTerm = useDebouncedState(searchTerm, 200);
+  const handleSearchTermChange = (term: string) => setSearchTerm(term);
 
   const dragList = (e) => {
     const screenHeight = e.view.innerHeight;
@@ -53,8 +52,6 @@ const ExerciseList: React.FC<Props> = ({
   const checkToCloseList = () => {
     exerciseListBottom <= -20 ? setExerciseListBottom(-80) : setExerciseListBottom(0);
   };
-
-  const handleSearchTermChange = (e) => setSearchTerm(e.target.value);
 
   const filterExercisesBy = (term: string, exercises: Exercise[]) => {
     if (term) {
@@ -80,19 +77,19 @@ const ExerciseList: React.FC<Props> = ({
 
   useEffect(() => {
     if (data) {
-      const filtededDefault = filterExercisesBy(debouncedTerm, data);
+      const filtededDefault = filterExercisesBy(searchTerm, data);
       setDefaultExercises(filtededDefault);
     }
-  }, [debouncedTerm, data]);
+  }, [searchTerm, data]);
 
   useEffect(() => {
     async function getUserExercises() {
       const userExercises = await getExercisesByUserId(user!._id);
-      const filteredUserExercises = filterExercisesBy(debouncedTerm, userExercises);
+      const filteredUserExercises = filterExercisesBy(searchTerm, userExercises);
       setUserExercises(filteredUserExercises);
     }
     if (user) getUserExercises();
-  }, [debouncedTerm, user]);
+  }, [searchTerm, user]);
 
   useEffect(() => {
     if (exerciseListBottom === -80) document.body.style.overflow = "auto";
@@ -114,18 +111,16 @@ const ExerciseList: React.FC<Props> = ({
           </div>
 
           <SearchInput>
-            <input
-              type="text"
-              name="searchTerm"
-              value={searchTerm}
-              onChange={handleSearchTermChange}
-              placeholder="Search"
+            <TextInput
+              onChange={(term) => handleSearchTermChange(term)}
+              inputName={"Search Term"}
+              placeholder={"Search an exercise"}
             />
 
-            <button onClick={() => setShowCreateExerciseModal(true)}>Create</button>
+            <button onClick={() => setShowCreateExerciseModal(true)}>New Exercise</button>
 
             <button className="close-btn" onClick={() => setExerciseListBottom(-80)}>
-              ✕
+              Close
             </button>
           </SearchInput>
 
@@ -188,7 +183,7 @@ const ExercisesContainer = styled.div<{ bottomVh: string }>`
   width: 100vw;
   max-width: 700px;
   overflow-y: auto;
-  border-radius: 20px 20px 0 0;
+  border-radius: 30px 30px 0 0;
   position: fixed;
   left: 0;
   display: flex;
@@ -196,6 +191,7 @@ const ExercisesContainer = styled.div<{ bottomVh: string }>`
   z-index: 990;
   transition: bottom 0.05s ease-in-out;
   bottom: ${({ bottomVh }) => bottomVh};
+  box-shadow: ${({ bottomVh }) => (bottomVh === "0vh" ? "0 -50vh 100vh black;" : "none")};
 
   &.transition {
     transition: bottom 0.2s ease-in-out;
@@ -214,50 +210,6 @@ const ExercisesContainer = styled.div<{ bottomVh: string }>`
   }
 `;
 
-const SearchInput = styled.div`
-  display: flex;
-  align-items: stretch;
-  justify-content: center;
-
-  input {
-    flex: 4;
-    width: 100%;
-    font-size: 1rem;
-    margin: 0.25rem 0.1rem 0.5rem 0.25rem;
-    padding: 0.25rem 0.5rem;
-    border: none;
-    border-radius: 5px;
-    color: ${({ theme }) => theme.text};
-    background: ${({ theme }) => theme.buttonMed};
-    border: 1px solid ${({ theme }) => theme.buttonMed};
-    appearance: none;
-    &:focus {
-      outline: none;
-      border: 1px solid ${({ theme }) => theme.accentSoft};
-    }
-  }
-
-  button {
-    flex: 1;
-    font-size: 0.85rem;
-    font-weight: 400;
-    color: ${({ theme }) => theme.textLight};
-    background: ${({ theme }) => theme.buttonMed};
-    border: none;
-    margin: 0.25rem 0.1rem 0.5rem 0.25rem;
-    border-radius: 5px;
-    padding: 0.25rem 0.5rem;
-  }
-
-  .close-btn {
-    flex: 0;
-    font-weight: 600;
-    padding: 0.25rem 0.75rem;
-    text-align: center;
-    margin-right: 0.25rem;
-  }
-`;
-
 const Header = styled.header<{ xPos: number }>`
   box-shadow: 0 3px 6px ${({ theme }) => theme.boxShadow};
   position: sticky;
@@ -268,6 +220,7 @@ const Header = styled.header<{ xPos: number }>`
   background: ${({ theme }) => theme.background};
   border-radius: 30px 30px 2px 2px;
   width: 100%;
+  z-index: 2;
 
   .thumb-line {
     width: 100%;
@@ -320,5 +273,27 @@ const Header = styled.header<{ xPos: number }>`
           0 4px 4px ${({ theme }) => theme.boxShadow};
       }
     `}
+  }
+`;
+
+const SearchInput = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0.25rem 0 0.5rem;
+
+  button {
+    font-weight: 400;
+    color: ${({ theme }) => theme.textLight};
+    background: ${({ theme }) => theme.buttonMed};
+    border: none;
+    margin: 0 0.1rem 0 0.25rem;
+    border-radius: 5px;
+    padding: 0.5rem 0.5rem;
+    min-width: max-content;
+  }
+
+  .close-btn {
+    margin-right: 0.25rem;
   }
 `;
