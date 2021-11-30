@@ -4,13 +4,13 @@ import styled from "styled-components";
 import Chart from "./Chart";
 import ChartStatButtons from "./ChartStatButtons";
 import ExerciseStats from "./ExerciseStats";
-import ChartSearchBox from "./ChartSearchBox";
 import ChartExerciseOptions from "./ChartExerciseOptions";
 import ChartWorkoutOptions from "./ChartWorkoutOptions";
 // Utils
 import { round, groupWorkoutLogByExercise, formatSetWeight } from "../../utils";
 // Interfaces
 import { Exercise, Set, User, Workout } from "../../types/interfaces";
+import TextInput from "../Wrappers/TextInput";
 
 export type ExerciseHistoryMap = Map<string, { sets: Set[]; date: string; exercise_id: string }[]>;
 
@@ -122,7 +122,7 @@ const ProgressTile: React.FC<Props> = ({ profileData }) => {
     <Container>
       <h3 className="title">Progression</h3>
 
-      <Collapsable style={chartData.length ? { height: "455px" } : { height: "0px" }}>
+      <Collapsable style={chartData.length ? { height: "450px" } : { height: "0px" }}>
         <h3 className="name">{selectedExercise?.name}</h3>
 
         <Chart data={chartData} statOption={statOption} />
@@ -137,7 +137,13 @@ const ProgressTile: React.FC<Props> = ({ profileData }) => {
         )}
       </Collapsable>
 
-      <ChartSearchBox searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <TextInput
+        onChange={(inputText) => setSearchTerm(inputText)}
+        inputName={"exercise search"}
+        labelText={"Search for exercise or workout"}
+        placeholder={"Search..."}
+        autoComplete={false}
+      />
 
       <SearchResults style={searchTerm ? {} : { display: "none" }}>
         <ChartExerciseOptions
@@ -168,11 +174,11 @@ const Collapsable = styled.section`
   transform-origin: top;
 
   .name {
-    min-height: 30px;
-    max-height: 65px;
+    min-width: max-content;
     text-transform: capitalize;
     font-weight: 300;
-    margin-left: 0.5rem;
+    margin: 1rem 0 0.5rem 0.5rem;
+    font-size: 1.1rem;
 
     overflow: hidden;
     text-overflow: ellipsis;
@@ -189,7 +195,7 @@ const SearchResults = styled.ul`
   background: ${({ theme }) => theme.buttonMed};
   border: 1px solid ${({ theme }) => theme.border};
   box-shadow: 0 8px 15px ${({ theme }) => theme.boxShadow};
-  z-index: 9999;
+  z-index: 5;
   overflow-x: hidden;
   overflow-y: scroll;
 
