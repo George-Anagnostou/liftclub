@@ -381,7 +381,7 @@ const WorkoutNote = styled.div`
     color: inherit;
 
     &:focus {
-      box-shadow: 0 0 1px 2px ${({ theme }) => theme.accentSoft};
+      border: 1px solid ${({ theme }) => theme.accentSoft};
       outline: none;
     }
   }
