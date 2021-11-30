@@ -3,23 +3,56 @@ import styled from "styled-components";
 import Link from "next/link";
 import Image from "next/image";
 import Branding from "../components/homepage/Branding";
-import { useThemeState } from "../components/Themes/useThemeState";
 
 interface Props {}
 
+const images = [
+  {
+    src: "/app-screenshots/user-profile.png",
+    height: 500,
+    width: 230,
+    alt: "Lift Club user profile",
+  },
+  {
+    src: "/app-screenshots/workout-log-1.png",
+    height: 500,
+    width: 230,
+    alt: "Lift Club workout log 1",
+  },
+  {
+    src: "/app-screenshots/workout-log-2.png",
+    height: 500,
+    width: 230,
+    alt: "Lift Club workout log 2",
+  },
+  {
+    src: "/app-screenshots/routine-builder.png",
+    height: 500,
+    width: 230,
+    alt: "Lift Club workout routine builder",
+  },
+  {
+    src: "/app-screenshots/team-page.png",
+    height: 500,
+    width: 230,
+    alt: "Lift Club team page",
+  },
+  {
+    src: "/app-screenshots/feed.png",
+    height: 500,
+    width: 230,
+    alt: "Lift Club feed page",
+  },
+];
+
 const purpose: React.FC<Props> = () => {
-  const { themeMode } = useThemeState();
-  const [imgNum, setImgNum] = useState<number>(1);
+  const [imgNum, setImgNum] = useState<number>(0);
 
   useEffect(() => {
-    themeMode === "dark" ? setImgNum(1) : setImgNum(0);
-  }, [themeMode]);
-
-  useEffect(() => {
-    const rotateImg = () => setImgNum((prev) => (prev === 2 ? 0 : prev + 1));
+    const rotateImg = () => setImgNum((prev) => (prev === images.length - 1 ? 0 : prev + 1));
     const interval = setInterval(rotateImg, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [imgNum]);
 
   return (
     <Container>
@@ -46,50 +79,29 @@ const purpose: React.FC<Props> = () => {
           </Link>
         </Buttons>
       </Text>
-
       <Images>
         <div className="slider" style={{ marginLeft: `${(imgNum || 0) * -100}%` }}>
-          <div className={`image ${imgNum === 0 && "show"}`}>
-            <Image
-              src="/app-screenshots/liftclub-mobile2.jpg"
-              layout="intrinsic"
-              height={500}
-              width={230}
-              quality={100}
-              priority
-              alt="Lift Club Mobile Screenshot 1"
-            />
-          </div>
-          <div className={`image ${imgNum === 1 && "show"}`}>
-            <Image
-              src="/app-screenshots/liftclub-mobile1.jpg"
-              layout="intrinsic"
-              height={500}
-              width={230}
-              quality={100}
-              priority
-              alt="Lift Club Mobile Screenshot 2"
-            />
-          </div>
-          <div className={`image ${imgNum === 2 && "show"}`}>
-            <Image
-              src="/app-screenshots/liftclub-main.jpg"
-              layout="intrinsic"
-              height={450}
-              width={800}
-              quality={100}
-              priority
-              alt="Lift Club Desktop Screenshot"
-            />
-          </div>
+          {images.map((image, i) => (
+            <div className={`image ${imgNum === i && "show"}`} key={image.alt}>
+              <Image
+                src={image.src}
+                layout="intrinsic"
+                height={image.height}
+                width={image.width}
+                quality={100}
+                priority
+                alt={image.alt}
+              />
+            </div>
+          ))}
         </div>
 
         <div className="img-btns">
-          {[0, 1, 2].map((num) => (
+          {[...new Array(images.length)].map((num, i) => (
             <span
-              onClick={() => setImgNum(num)}
-              className={imgNum === num ? "highlight" : ""}
-              key={num}
+              onClick={() => setImgNum(i)}
+              className={imgNum === i ? "highlight" : ""}
+              key={i}
             />
           ))}
         </div>
