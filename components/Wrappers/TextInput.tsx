@@ -20,10 +20,10 @@ const TextInput: React.FC<Props> = ({
   placeholder,
   autoComplete = true,
 }) => {
+  const router = useRouter();
+
   const [text, setText] = useState("");
   const debouncedText = useDebouncedState(text, debounceTime);
-
-  const router = useRouter();
 
   const handleTermChange = ({ target }) => {
     setText(target.value);
@@ -35,7 +35,7 @@ const TextInput: React.FC<Props> = ({
 
   useEffect(() => {
     setText("");
-  }, [router.pathname]);
+  }, [router]);
 
   return (
     <InputContainer>
