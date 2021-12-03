@@ -1,22 +1,18 @@
-# Lift Club Documentation
-
 # Welcome!
 
-Welcome to the Lift Club...
-
-# How to Use
+Welcome to the Lift Club. It is a PWA (Progressive Web App).
 
 # Installation
 
 ## iOS
 
-1. On Safari, navigate to [liftclub.app]{https://liftclub.app}
+1. On Safari, navigate to [liftclub.app](https://liftclub.app)
 2. Click the "Share" button (box with up arrow at the bottom of the browser).
 3. In the opening pop-up, click "Add to Home Screen." Then, click "Add" in the upper right.
 
 ## Android
 
-1. Navigate to [liftclub.app]{https://liftclub.app}
+1. Navigate to [liftclub.app](https://liftclub.app)
 
 ### Brave / DuckDuckGo
 
@@ -41,6 +37,8 @@ Welcome to the Lift Club...
 
 1. Enter your Username and Password into their respective fields.
 2. Click the "Login" button.
+
+# Using Lift Club
 
 ## Log Page
 
