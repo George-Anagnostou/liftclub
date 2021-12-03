@@ -174,10 +174,11 @@ export async function removeEntryFromWorkoutLog(db: any, user_id: string, date: 
   return [removedWorkout_id, saved];
 }
 
-export async function postNewUser(db: any, username: string, passwordHash: string) {
+export async function postNewUser(db: any, username: string, passwordHash: string, email: string) {
   const data = await db.collection("users").insertOne({
     username: username,
     password: passwordHash,
+    email: email,
     savedWorkouts: [],
     workoutLog: {},
     accountCreated: new Date().toISOString(),
