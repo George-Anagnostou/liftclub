@@ -67,44 +67,50 @@ const Login: React.FC<Props> = ({ changeFormType, handleAuthSuccess }) => {
 };
 export default Login;
 
-const LoginContainer = styled.div`
+export const LoginContainer = styled.div`
   text-align: center;
   width: 90%;
 
   form {
-    margin: 1rem 0.5rem;
+    margin: 2rem 0.5rem;
     input {
       width: 90%;
       margin: 0.5rem 0;
-      padding: 0.5rem 0 0.5rem 0.5rem;
+      padding: 0.5rem 0 0.25rem 0.5rem;
       font-size: 1rem;
       border: none;
       background: inherit;
       border-radius: 0;
       border: 1px solid transparent;
-      border-bottom: 1px solid ${({ theme }) => theme.text};
+      border-bottom: 1px solid ${({ theme }) => theme.accentSoft};
       color: inherit;
 
       &:focus {
-        border: 1px solid ${({ theme }) => theme.text};
+        border: 1px solid ${({ theme }) => theme.accentSoft};
         outline: none;
         border-radius: 5px;
       }
     }
     button {
       margin-top: 1rem;
-      padding: 0.5rem;
+      padding: 0.35rem;
       width: 90%;
-      color: ${({ theme }) => theme.accentSoft};
+      font-weight: 300;
+      letter-spacing: 1px;
+      color: ${({ theme }) => theme.text};
       border: 1px solid ${({ theme }) => theme.accentSoft};
       background: inherit;
+      background: ${({ theme }) => theme.buttonMedGradient};
+      box-shadow: inset 0 0px 4px ${({ theme }) => theme.accent},
+        0 3px 5px ${({ theme }) => theme.boxShadow};
       font-size: 1rem;
       border-radius: 5px;
+      transition: all 0.3s ease;
 
-      &:focus,
       &:active {
         background: ${({ theme }) => theme.background};
         outline: none;
+        transform: scale(0.98);
       }
     }
   }
