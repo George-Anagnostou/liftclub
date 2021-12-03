@@ -6,7 +6,7 @@ describe("LoginWithID route", () => {
   let res;
   const test_id = "60ee1a6a45c7b811a0a9fad8";
   const JWT_SECRET = process.env.JWT_SECRET || "";
-  const testToken = jwt.sign({ id: test_id }, JWT_SECRET);
+  const test_token = jwt.sign({ id: test_id }, JWT_SECRET);
 
   beforeEach(() => {
     req = {};
@@ -19,7 +19,7 @@ describe("LoginWithID route", () => {
 
   test("should return test user data if token is valid.", async () => {
     req.method = "POST";
-    req.headers = new Headers({ token: testToken });
+    req.headers = { token: test_token };
 
     await loginWithToken(req, res);
 
@@ -27,13 +27,13 @@ describe("LoginWithID route", () => {
     expect(res.json).toHaveBeenCalledTimes(1);
   });
 
-  test("should return a 400 if token is invalid.", async () => {
+  test("should return a 401 if token is invalid.", async () => {
     req.method = "POST";
-    req.headers = new Headers({ token: "101010101010101010101010" });
+    req.headers = { token: "101010101010101010101010" };
 
     await loginWithToken(req, res);
 
-    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.status).toHaveBeenCalledWith(401);
     expect(res.end).toHaveBeenCalledTimes(1);
   });
 

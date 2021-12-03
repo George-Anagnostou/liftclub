@@ -18,7 +18,7 @@ describe("Login route", () => {
 
   test("should return test user data if creds are correct.", async () => {
     req.method = "POST";
-    req.body = { username: "testbot0123456789", password: "123" };
+    req.body = { username: "testbot0123456789", password: "123", email: "test@test.com" };
 
     await createUser(req, res);
 
@@ -30,7 +30,7 @@ describe("Login route", () => {
     // if (!userCreated) fail();
 
     req.method = "POST";
-    req.body = { username: "testbot0123456789", password: "123" };
+    req.body = { username: "testbot0123456789", password: "123", email: "test@test.com" };
 
     await createUser(req, res);
 
