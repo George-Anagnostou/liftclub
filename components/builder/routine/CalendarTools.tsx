@@ -57,7 +57,7 @@ const CalendarTools: React.FC<Props> = ({
         className={Object.keys(datesSelected).length ? "highlight" : ""}
       >
         <Reset />
-        <p>reset</p>
+        <p>Deselect</p>
       </div>
 
       <div
