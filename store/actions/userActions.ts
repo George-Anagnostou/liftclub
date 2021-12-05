@@ -69,15 +69,21 @@ export const authLogin = async (dispatch: any, username: string, password: strin
  * @param dispatch Dispatch function from useUserDispatch()
  * @param username Username from create account form
  * @param password Password from create account from
+ * @param email Email from create account form
  * @returns If successful account creation, returns user data, else returns false
  */
 
-export const createAccount = async (dispatch: any, username: string, password: string) => {
+export const createAccount = async (
+  dispatch: any,
+  username: string,
+  password: string,
+  email: string
+) => {
   try {
     const res = await fetch("/api/users/createUser", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ username, password, email }),
     });
 
     // Response status if username is already taken

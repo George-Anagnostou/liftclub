@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 // Context
 import { useUserDispatch, createAccount } from "../../store";
+import { LoginContainer } from "./Login";
 
 interface Props {
   changeFormType: () => void;
@@ -12,14 +13,20 @@ const CreateAcc: React.FC<Props> = ({ changeFormType, handleAuthSuccess }) => {
   const dispatch = useUserDispatch();
 
   const [usernameExists, setUsernameExists] = useState(false);
-  const [accCreds, setAccCreds] = useState<{ username: string; password: string }>({
+  const [accCreds, setAccCreds] = useState<{ username: string; password: string; email: string }>({
     username: "",
     password: "",
+    email: "",
   });
 
   const handleCreateAccount = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const userData = await createAccount(dispatch, accCreds.username, accCreds.password);
+    const userData = await createAccount(
+      dispatch,
+      accCreds.username,
+      accCreds.password,
+      accCreds.email
+    );
     userData ? handleAuthSuccess() : setUsernameExists(true);
   };
 
@@ -33,6 +40,10 @@ const CreateAcc: React.FC<Props> = ({ changeFormType, handleAuthSuccess }) => {
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAccCreds((prev) => ({ ...prev, password: e.target.value }));
+  };
+
+  const handleEmailChange = (e) => {
+    setAccCreds((prev) => ({ ...prev, email: e.target.value }));
   };
 
   return (
@@ -58,7 +69,18 @@ const CreateAcc: React.FC<Props> = ({ changeFormType, handleAuthSuccess }) => {
             placeholder="Password"
             required
           />
+
+          <input
+            type="email"
+            name="email"
+            id="email"
+            value={accCreds.email}
+            onChange={handleEmailChange}
+            placeholder="Email"
+            required
+          />
         </div>
+
         <button type="submit">Create Account</button>
       </form>
 
@@ -72,61 +94,4 @@ const CreateAcc: React.FC<Props> = ({ changeFormType, handleAuthSuccess }) => {
 };
 export default CreateAcc;
 
-const CreateContainer = styled.div`
-  text-align: center;
-  width: 90%;
-
-  form {
-    margin: 1rem 0.5rem;
-
-    input {
-      width: 90%;
-      min-width: 90%;
-      margin: 0.5rem 0;
-      padding: 0.5rem 0 0.5rem 0.5rem;
-      font-size: 1rem;
-      border: none;
-      background: inherit;
-      border-radius: 0;
-      border: 1px solid transparent;
-      border-bottom: 1px solid ${({ theme }) => theme.text};
-      color: inherit;
-
-      &:focus {
-        border: 1px solid ${({ theme }) => theme.text};
-        outline: none;
-        border-radius: 5px;
-      }
-    }
-    button {
-      margin-top: 1rem;
-      padding: 0.5rem;
-      width: 90%;
-      color: ${({ theme }) => theme.accentSoft};
-      border: 1px solid ${({ theme }) => theme.accentSoft};
-      background: inherit;
-      font-size: 1rem;
-      border-radius: 5px;
-
-      &:focus,
-      &:active {
-        background: ${({ theme }) => theme.background};
-        outline: none;
-      }
-    }
-  }
-
-  a {
-    display: block;
-    font-size: 0.8rem;
-    margin-top: 2rem;
-    font-style: italic;
-    color: ${({ theme }) => theme.textLight};
-    text-decoration: none;
-
-    &:active,
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-`;
+const CreateContainer = styled(LoginContainer)``;

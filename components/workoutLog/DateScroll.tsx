@@ -54,7 +54,7 @@ const DateScrollClone: React.FC<Props> = ({
         >
           <div className="small-text">
             <p className="month">{displayDate.substring(3, 8)}</p>
-            <p className="day">{displayDate.substring(8, 10)}</p>
+            <p className="day">{parseInt(displayDate.substring(8, 10))}</p>{" "}
           </div>
           <p className="dow">{displayDate.substring(0, 3)}</p>
         </div>
@@ -97,16 +97,22 @@ const Day = styled.li`
       margin: 0;
       font-size: 0.6rem;
       display: flex;
-      justify-content: space-around;
+      justify-content: space-evenly;
+      p {
+        letter-spacing: 1px;
+      }
     }
 
     .dow {
       margin-bottom: 0.25rem;
       font-size: 1.2rem;
+      letter-spacing: 1px;
     }
 
     &.selected {
       background: ${({ theme }) => theme.background};
+      box-shadow: 0 2px 4px ${({ theme }) => theme.boxShadow},
+        inset 0 0 2px ${({ theme }) => theme.accent};
     }
     &.notSelected {
       transform: scale(0.8);
