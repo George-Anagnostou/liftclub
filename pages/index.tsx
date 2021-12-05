@@ -40,9 +40,9 @@ const HomeContainer = styled.div`
   /* font-family: Tahoma, Helvetica; */
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  height: 70vh;
+  height: fit-content;
   max-width: 500px;
   margin: auto;
 `;
@@ -53,8 +53,9 @@ const LinkContainer = styled.div`
   right: 1rem;
   font-size: 0.8rem;
   color: inherit;
-  border: 1px solid ${({ theme }) => theme.textLight};
-  box-shadow: 0 2px 10px ${({ theme }) => theme.boxShadow};
+  border: 0.5px solid ${({ theme }) => theme.accentSoft};
+  box-shadow: inset 0 0px 3px ${({ theme }) => theme.accentSoft},
+    0 2px 5px ${({ theme }) => theme.boxShadow};
   padding: 0.25rem 0.5rem;
   border-radius: 5px;
 `;

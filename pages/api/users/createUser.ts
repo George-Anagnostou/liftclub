@@ -15,7 +15,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (httpMethod !== "POST") return res.status(405).end();
 
   // Hash password input
-  const { username, password }: { username: string; password: string } = req.body;
+  const { username, password, email }: { username: string; password: string; email: string } =
+    req.body;
+
   const hash = bcrypt.hashSync(password, SALT_ROUNDS);
 
   const existingUser = await getUserByUsername(db, username);
@@ -24,7 +26,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     // Username already exists in DB
     res.status(403).end();
   } else {
-    const userData = await postNewUser(db, username, hash);
+    const userData = await postNewUser(db, username, hash, email);
     const token = jwt.sign({ id: userData._id }, JWT_SECRET);
     res.status(201).json({ userData, token });
   }

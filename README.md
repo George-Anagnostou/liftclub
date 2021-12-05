@@ -40,7 +40,7 @@ LiftClub is a PWA, so installing it on your phone will allow you to use it as if
 1. Enter your Username and Password into their respective fields.
 2. Click the "Login" button.
 
-# How to Use
+# Using LiftClub
 
 ## Log Page
 

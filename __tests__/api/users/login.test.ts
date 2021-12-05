@@ -39,7 +39,7 @@ describe("Login route", () => {
 
     await login(req, res);
 
-    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.status).toHaveBeenCalledWith(401);
     expect(res.end).toHaveBeenCalledTimes(1);
   });
 

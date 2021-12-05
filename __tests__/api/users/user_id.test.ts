@@ -1,12 +1,17 @@
 import user_id from "../../../pages/api/users/[...user_id]";
+import * as jwt from "jsonwebtoken";
 
 describe("User_id route", () => {
   let req;
   let res;
+
+  const JWT_SECRET = process.env.JWT_SECRET || "";
+
   const test_user_id = "60ee1a6a45c7b811a0a9fad8";
   const test_workout_id = "60fadccb19f5372f057b057b";
   const test_team_id = "60fadccb19f5372f057b057f";
   const test_exercise_id = "60bd71989dcf84000890784a";
+  const test_token = jwt.sign({ id: test_user_id }, JWT_SECRET);
 
   beforeEach(() => {
     req = { query: { user_id: [test_user_id] } };
@@ -52,6 +57,7 @@ describe("User_id route", () => {
   test("should return a 201 when adding a saved workout.", async () => {
     req.method = "PUT";
     req.body = JSON.stringify({ addSavedWorkout: test_workout_id });
+    req.headers = { token: test_token };
 
     await user_id(req, res);
 
@@ -62,6 +68,7 @@ describe("User_id route", () => {
   test("should return a 201 when removing a saved workout.", async () => {
     req.method = "PUT";
     req.body = JSON.stringify({ removeSavedWorkout: test_workout_id });
+    req.headers = { token: test_token };
 
     await user_id(req, res);
 
@@ -73,6 +80,7 @@ describe("User_id route", () => {
   test("should return a 201 when inserting a weight.", async () => {
     req.method = "PUT";
     req.body = JSON.stringify({ weight: 100 });
+    req.headers = { token: test_token };
 
     await user_id(req, res);
 
@@ -84,6 +92,7 @@ describe("User_id route", () => {
   test("should return a 201 when following another user.", async () => {
     req.method = "PUT";
     req.body = JSON.stringify({ follow: test_user_id });
+    req.headers = { token: test_token };
 
     await user_id(req, res);
 
@@ -94,6 +103,7 @@ describe("User_id route", () => {
   test("should return a 201 when unfollowing another user.", async () => {
     req.method = "PUT";
     req.body = JSON.stringify({ unfollow: test_user_id });
+    req.headers = { token: test_token };
 
     await user_id(req, res);
 
@@ -105,6 +115,7 @@ describe("User_id route", () => {
   test("should return a 201 when updating bio.", async () => {
     req.method = "PUT";
     req.body = JSON.stringify({ bio: "Such a useful test bot I am." });
+    req.headers = { token: test_token };
 
     await user_id(req, res);
 
@@ -116,6 +127,7 @@ describe("User_id route", () => {
   test("should return a 201 when joining a team.", async () => {
     req.method = "PUT";
     req.body = JSON.stringify({ joinTeam: test_team_id });
+    req.headers = { token: test_token };
 
     await user_id(req, res);
 
@@ -126,6 +138,7 @@ describe("User_id route", () => {
   test("should return a 201 when leaving a team.", async () => {
     req.method = "PUT";
     req.body = JSON.stringify({ leaveTeam: test_team_id });
+    req.headers = { token: test_token };
 
     await user_id(req, res);
 
@@ -137,6 +150,7 @@ describe("User_id route", () => {
   test("should return a 201 when updating profileImgUrl.", async () => {
     req.method = "PUT";
     req.body = JSON.stringify({ profileImgUrl: "Christian2" });
+    req.headers = { token: test_token };
 
     await user_id(req, res);
 
@@ -164,6 +178,7 @@ describe("User_id route", () => {
       workoutNote: "string",
       workout_id: test_workout_id,
     });
+    req.headers = { token: test_token };
 
     await user_id(req, res);
 
@@ -178,6 +193,7 @@ describe("User_id route", () => {
       fieldToUpdate: "DELETE_WORKOUT_FROM_WORKOUT_LOG",
       workoutLogKey: "2000-01-01",
     };
+    req.headers = { token: test_token };
 
     await user_id(req, res);
 

@@ -2,12 +2,12 @@ import { NextApiRequest } from "next";
 import * as jwt from "jsonwebtoken";
 import { ObjectId } from "mongodb";
 
-export function verifyAuthToken(req: NextApiRequest, match?: string | ObjectId) {
-  if (match instanceof ObjectId) {
-    match = match.toString();
+export function verifyAuthToken(req: NextApiRequest, idToMatch?: string | ObjectId) {
+  if (idToMatch instanceof ObjectId) {
+    idToMatch = idToMatch.toString();
   }
 
-  const token = req.headers.token as string;
+  const token = req.headers?.token as string;
   const JWT_SECRET = process.env.JWT_SECRET || "";
 
   try {
@@ -16,7 +16,7 @@ export function verifyAuthToken(req: NextApiRequest, match?: string | ObjectId) 
 
     const verified = jwt.verify(token, JWT_SECRET) as { id: string; iat: number };
 
-    if (match && match !== verified.id) {
+    if (idToMatch && idToMatch !== verified.id) {
       throw new Error("Invalid credentials for specified request");
     }
 
